@@ -10,26 +10,26 @@ display(fileInfo);
 t = 0:seconds(1/fileSampleRate):seconds(fileDuration);
 t = t(1:end-1);
 
-% Read the audio signals from the input file
+% Les lydsporet til testfilen.
 y = audioread(file); 
 
-% Separate the channels and do stereo -> mono
+% Del opp kanalene og transformer stereo -> mono
 avgSpect = doMakeMono(y);
-
-% Split the frames
-framedMatrix = framing(avgSpect, fileSampleRate);
-
-% Todo: STFT each individual frame in framedMatrix
-
-% Todo: Robust hash each individual frame
-
-
-%%%%%%%%% Plotting of signals and spectrograms for debugging %%%%%%%%%
 
 % Plot lydsignalene
 plot(t, avgSpect);
 xlabel('Time');
 ylabel('Frequency');
+
+% Del opp frames
+framedMatrix = framing(avgSpect, fileSampleRate);
+
+% Todo: STFT hver individuell frame
+
+% Todo: Robust hash hver individuell STFTet frame
+
+
+%%%%%%%%% Spektrogram plotting for debugging %%%%%%%%%
 
 % Plot spektrogram
 % plot(right);
