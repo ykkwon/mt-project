@@ -20,21 +20,20 @@ avgSpect = doMakeMono(y);
 framedMatrix = framing(avgSpect, fileSampleRate);
 
 % Todo: STFT each individual frame in framedMatrix
+newArray = fft(framedMatrix(:));
 
-% Todo: Robust hash each individual frame
-
+% Todo: Hash each individual frame
 
 %%%%%%%%% Plotting of signals and spectrograms for debugging %%%%%%%%%
+plot(newArray);
 
 % Plot lydsignalene
-plot(t, avgSpect);
-xlabel('Time');
-ylabel('Frequency');
+% plot(t, avgSpect);
+% xlabel('Time');
+% ylabel('Frequency');
 
 % Plot spektrogram
 % plot(right);
 % plot(left);
 % spectrogram(right,fs,'yaxis'); % Plot den høyre kanalen med STFT(!)
 % spectrogram(right,kaiser(256,5),220,512,fs,'yaxis')
-
-
