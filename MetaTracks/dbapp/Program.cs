@@ -8,6 +8,10 @@ namespace dbapp
 {
     static class Program
     {
+        /*
+        -- Velge film, send til MT_commonlib (Algoritme lager hash)
+        -- Send hash til mt_webapi
+        */
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
