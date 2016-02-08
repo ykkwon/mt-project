@@ -10,9 +10,9 @@ namespace mt_commonlib
 {
     class Fingerprint : IFingerprint
     {
-        static void Main(string[] test)
+        static void Main(string[] args)
         {
-            playFile(@"C:\Users\Kristoffer\Desktop\mt-project\MetaTracks\mt_commonlib\Resources\testFile.mp4");
+            playFile(@"..\..\Resources\testFile.mp4");
             Console.WriteLine(@"Application ended . . .");
             Console.ReadKey();
         }
