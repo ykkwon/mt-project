@@ -10,20 +10,22 @@ namespace mt_commonlib
 {
     internal interface IFingerprint
     {
-        void Receive(Object file);
+        void Receive(Movie movie);
 
-        void ReceiveFingerprint(Object file);
+        void ReceiveFingerprint(Movie movie);
 
         void Send(String hash);
 
-        void Preprocess(Object file);
+        void Preprocess(Movie movie);
 
-        void ComputeSpectrogram(Object file);
+        void ComputeSpectrogram(Movie movie);
 
         void Filter(Array stringArray);
 
         void ComputeWavelets(Array stringArray);
 
         void HashTransform(Array waveletArray);
+
+        void PlayFile(Movie movie);
     }
 }

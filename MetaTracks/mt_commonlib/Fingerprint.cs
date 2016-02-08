@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading;
+using NAudio.MediaFoundation;
 using NAudio.Wave;
 
 namespace mt_commonlib
@@ -10,11 +12,15 @@ namespace mt_commonlib
 {
     class Fingerprint : IFingerprint
     {
+        private static Movie testMovie = new Movie(@"..\..\Resources\testFile.mp4");
+        private static String waString; // Debugging 
+
         static void Main(string[] args)
         {
-            playFile(@"..\..\Resources\testFile.mp4");
+            PlayFile(testMovie);
             Console.WriteLine(@"Application ended . . .");
             Console.ReadKey();
+            //Preprocess(testMovie);
         }
 
         public void ReceiveMovie(Object file)
@@ -32,14 +38,24 @@ namespace mt_commonlib
             throw new NotImplementedException();
         }
 
+        public void Receive(string file)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ReceiveFingerprint(string file)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Send(string hash)
         {
             throw new NotImplementedException();
         }
 
-        public void Preprocess(object file)
+        void IFingerprint.Preprocess(Movie movie)
         {
-            throw new NotImplementedException();
+            Preprocess(movie);
         }
 
         public void ComputeSpectrogram(object file)
@@ -62,14 +78,39 @@ namespace mt_commonlib
             throw new NotImplementedException();
         }
 
+        void IFingerprint.PlayFile(Movie movie)
+        {
+            PlayFile(movie);
+        }
+
+        private static void PlayFile(Movie movie)
+        {
+            {
+                using (var reader = new MediaFoundationReader(movie.Path))
+                using (var waveout = new WaveOutEvent())
+                {
+                    waveout.Init(reader);
+                    waString = waveout.OutputWaveFormat.ToString();
+                    Preprocess(movie);
+                    waveout.Play();
+                    
+                    while (waveout.PlaybackState == PlaybackState.Playing)
+                    {
+                        Thread.Sleep(1000);
+                    }
+
+                }
+            }
+        }
+
         public void Send()
         {
             throw new NotImplementedException();
         }
 
-        public void Preprocess()
+        private static void Preprocess(Movie movie)
         {
-            throw new NotImplementedException();
+            Console.WriteLine(waString);
         }
 
         public void ComputeSpectrogram()
@@ -92,20 +133,19 @@ namespace mt_commonlib
             throw new NotImplementedException();
         }
 
-        public static void playFile(String file)
+        public void Receive(Movie movie)
         {
-            using (var reader = new MediaFoundationReader(file))
-            using (var waveout = new WaveOutEvent())
-            {
-                waveout.Init(reader);
-                waveout.Play();
+            throw new NotImplementedException();
+        }
 
-                while (waveout.PlaybackState == PlaybackState.Playing)
-                {
-                    Thread.Sleep(1000);
-                }
+        public void ReceiveFingerprint(Movie movie)
+        {
+            throw new NotImplementedException();
+        }
 
-            }
+        public void ComputeSpectrogram(Movie movie)
+        {
+            throw new NotImplementedException();
         }
     }
 }
