@@ -63,9 +63,9 @@ namespace mt_commonlib.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] testFile {
+        internal static byte[] testTrailer {
             get {
-                object obj = ResourceManager.GetObject("testFile", resourceCulture);
+                object obj = ResourceManager.GetObject("testTrailer", resourceCulture);
                 return ((byte[])(obj));
             }
         }
