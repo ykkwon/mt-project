@@ -39,6 +39,7 @@ TestResult.xml
 [Rr]eleasePS/
 dlldata.c
 
+
 # DNX
 project.lock.json
 artifacts/
@@ -148,6 +149,7 @@ publish/
 **/packages/*
 # except build/, which is used as an MSBuild target.
 !**/packages/build/
+!**/packages/AWSSDK.Core.3.2.2.0-beta/lib/
 # Uncomment if necessary however generally it will be regenerated when needed
 #!**/packages/repositories.config
 # NuGet v3's project.json files produces more ignoreable files
