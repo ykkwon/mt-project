@@ -1,10 +1,10 @@
 ﻿namespace mt_commonlib
 {
-    public class InputVideo
+    public class Video
     {
         public string FilePath { get; set; }
 
-        public InputVideo(string FilePath)
+        public Video(string FilePath)
         {
             this.FilePath = FilePath;
         }

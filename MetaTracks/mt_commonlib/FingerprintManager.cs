@@ -25,11 +25,11 @@ namespace mt_commonlib
             int desiredFrequency = 5512;
             int desiredChannels = 1; // Mono
             FingerprintManager fpm = new FingerprintManager();
-            InputVideo testVideo = new InputVideo(@"..\..\Resources\testTrailer.mp4");
+            Video testVideo = new Video(@"..\..\Resources\testTrailer.mp4");
             fpm.Mp4ToWav(testVideo, @"..\..\Resources\wavOutput.wav");
-            InputVideo convertedVideo = new InputVideo(@"..\..\Resources\wavOutput.wav");
+            Video convertedVideo = new Video(@"..\..\Resources\wavOutput.wav");
             fpm.Preprocess(convertedVideo, @"..\..\Resources\preprocessedOutput.wav", desiredFrequency, desiredChannels);
-            InputVideo preprocessedVideo = new InputVideo(@"..\..\Resources\preprocessedOutput.wav");
+            Video preprocessedVideo = new Video(@"..\..\Resources\preprocessedOutput.wav");
             
             using (var reader = new MediaFoundationReader(preprocessedVideo.FilePath))
             using (var waveout = new WaveOutEvent())
@@ -48,8 +48,6 @@ namespace mt_commonlib
             }
         }
 
-        
-    
 
         public void ReceiveMovie()
         {
@@ -66,7 +64,7 @@ namespace mt_commonlib
             throw new NotImplementedException();
         }
 
-        public void Preprocess(InputVideo video, string outputFile, int desiredFrequency, int desiredChannels)
+        public void Preprocess(Video video, string outputFile, int desiredFrequency, int desiredChannels)
         {
             using (var reader = new WaveFileReader(video.FilePath))
             {
@@ -101,7 +99,7 @@ namespace mt_commonlib
             throw new NotImplementedException();
         }
 
-        public void Mp4ToWav(InputVideo video, string outputFile)
+        public void Mp4ToWav(Video video, string outputFile)
         {
             using (MediaFoundationReader reader = new MediaFoundationReader(video.FilePath))
             {
