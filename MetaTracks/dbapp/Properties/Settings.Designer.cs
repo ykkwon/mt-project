@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace dbapp.Properties
+namespace dbApp.Properties
 {
 
 
