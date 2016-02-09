@@ -2,11 +2,21 @@
 using System.Resources;
 using System.Threading;
 using NAudio.Wave;
+using Amazon;
+using Amazon.DynamoDBv2;
+using Amazon.DynamoDBv2.DataModel;
+using Amazon.DynamoDBv2.DocumentModel;
+using Amazon.SecurityToken;
+using Amazon.Runtime;
 
 namespace mt_commonlib
 {
     class FingerprintManager
     {
+
+        // Sets up an AmazonDynamoDBClient called client.
+        private static AmazonDynamoDBClient client;  
+        
         public FingerprintManager() { }
 
         static void Main(string[] args)
@@ -59,9 +69,17 @@ namespace mt_commonlib
             throw new NotImplementedException();
         }
 
+        public void DynamoDBConfiguration()
+        {
+            AmazonDynamoDBConfig config = new AmazonDynamoDBConfig();
+            config.ServiceURL = "http://dynamodb.us-west-2.amazonaws.com";
+            client = new AmazonDynamoDBClient(config);
+        }
+
         public void SendToDatabase()
         {
-            throw new NotImplementedException();
+
+            //throw new NotImplementedException();
         }
 
         public void Preprocess(Video video, string outputFile, int desiredFrequency, int desiredChannels)
