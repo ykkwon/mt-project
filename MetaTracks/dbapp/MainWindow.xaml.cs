@@ -1,6 +1,4 @@
-﻿
-
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
 using System;
 using System.Threading;
 using System.Windows;
@@ -22,7 +20,7 @@ namespace dbApp
         private void button_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog open = new OpenFileDialog();
-            open.Filter = "Video File (*.mp3)|*.mp3;";
+            open.Filter = "Video File (*.mp4)|*.mp4;";
 
             if (open.ShowDialog() != true) return;
             FingerprintManager fp = new FingerprintManager(open.FileName);

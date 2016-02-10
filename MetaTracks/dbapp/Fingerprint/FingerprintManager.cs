@@ -1,59 +1,37 @@
 ﻿using System;
 using System.IO;
-using System.Threading;
 using NAudio.Wave;
 using dbApp.Fingerprint;
-using dbApp.Fingerprint.NAudioCode;
 
 namespace dbApp
 {
     // TODO: Confirm that Mp4toWav actually works.
     // TODO: Confirm that Preprocess actually works.
     // TODO: Thread pooled receive.
-    // TODO: Receive.. SOCKETS? 
     // TODO: Possibly GUI with some event handlers.
     // TODO: Plot waveline.
 
     class FingerprintManager
     {
-        private DirectSoundOut output;
-        private MediaFoundationReader reader;
+        private DirectSoundOut _output;
+        private MediaFoundationReader _reader;
         public FingerprintManager(string filepath)
         {
-            //const string resourcePath = @"../../Resources/";
-            string resourcePath = filepath;
-
             Console.WriteLine(filepath);
             const int desiredFrequency = 5512; // 5512 contains all the relevant information
             const int desiredChannels = 1; // Mono
             var testVideo = new Video(filepath);
-            //var testVideo = new Video(resourcePath + @"testTrailer.mp4");
-            CleanAndTrunctuate();
+            CleanAndTrunctuate(); // Remove old output files
             Mp4ToWav(testVideo, filepath + "wavOutput.wav");
-            var convertedVideo = new Video(resourcePath + "wavOutput.wav"); // Video converted to .wav from input multimedia
-            Preprocess(convertedVideo, resourcePath + "preprocessedOutput.wav", desiredFrequency, desiredChannels);
-            var preprocessedVideo = new Video(resourcePath + "preprocessedOutput.wav"); // Preprocessed .wav, reduced to 5512Hz mono
+            var convertedVideo = new Video(filepath + "wavOutput.wav"); // Video converted to .wav from input multimedia
+            Preprocess(convertedVideo, filepath + "preprocessedOutput.wav", desiredFrequency, desiredChannels);
+            var preprocessedVideo = new Video(filepath + "preprocessedOutput.wav"); // Preprocessed .wav, reduced to 5512Hz mono
 
-            reader = new MediaFoundationReader(preprocessedVideo.FilePath);
-            /*
-            using (var waveout = new WaveOutEvent())
-            {
-                waveout.Init(reader);
-                Console.WriteLine(@"Initiating playback.");
-                waveout.Play();
-
-                
-                while (waveout.PlaybackState == PlaybackState.Playing)
-                {
-                    Console.WriteLine(@"Output: " + waveout.OutputWaveFormat + @" Position: " + waveout.GetPosition() + @" Bytes written to waveout.");
-                    Thread.Sleep(5000);
-                }
-                Console.WriteLine(@"Playback ended.");
-            }*/
-            output = new DirectSoundOut();
-            output.Init(reader);
-            output.Play();
-            
+            _reader = new MediaFoundationReader(preprocessedVideo.FilePath);
+            _output = new DirectSoundOut();
+            _output.Init(_reader);
+            _output.Play();
+            DisposeWave();
         }
 
         public void ReceiveMovie()
@@ -148,16 +126,16 @@ namespace dbApp
 
         private void DisposeWave()
         {
-            if (output != null)
+            if (_output != null)
             {
-                if (output.PlaybackState == PlaybackState.Playing) output.Stop();
-                output.Dispose();
-                output = null;
+                if (_output.PlaybackState == PlaybackState.Playing) _output.Stop();
+                _output.Dispose();
+                _output = null;
             }
-            if (reader != null)
+            if (_reader != null)
             {
-                reader.Dispose();
-                reader = null;
+                _reader.Dispose();
+                _reader = null;
             }
         }
     }
