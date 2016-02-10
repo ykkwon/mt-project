@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading;
 using NAudio.Wave;
 using dbApp.Fingerprint;
+using dbApp.Fingerprint.NAudioCode;
 
 namespace dbApp
 {
@@ -52,6 +53,7 @@ namespace dbApp
             output = new DirectSoundOut();
             output.Init(reader);
             output.Play();
+            
         }
 
         public void ReceiveMovie()
@@ -77,7 +79,7 @@ namespace dbApp
                 using (var resampler = new MediaFoundationResampler(reader, outFormat))
                 {
                     resampler.ResamplerQuality = 60;
-                    WaveFileWriter.CreateWaveFile(outputFile, resampler);
+                    Fingerprint.NAudioCode.WaveFileWriter.CreateWaveFile(outputFile, resampler);
                     Console.WriteLine(@"Preprocessing done.");
                 }
             }
@@ -110,7 +112,7 @@ namespace dbApp
             {
                 using (WaveStream pcmStream = WaveFormatConversionStream.CreatePcmStream(reader))
                 {
-                    WaveFileWriter.CreateWaveFile(outputFile, pcmStream);
+                    Fingerprint.NAudioCode.WaveFileWriter.CreateWaveFile(outputFile, pcmStream);
                     Console.WriteLine(@"MP4 to WAV conversion done.");
                 }
             }
