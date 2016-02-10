@@ -1,6 +1,8 @@
 ﻿
 
 using Microsoft.Win32;
+using System;
+using System.Threading;
 using System.Windows;
 
 namespace dbApp
@@ -10,15 +12,20 @@ namespace dbApp
     /// </summary>
     public partial class MainWindow : Window
     {
-        OpenFileDialog open = new OpenFileDialog();
+        
+        //open.Filter = "Video File (*.mp4)";
+            
         public MainWindow()
         {
             InitializeComponent();
         }
         private void button_Click(object sender, RoutedEventArgs e)
         {
-            if (open.ShowDialog() != true) return;
+            OpenFileDialog open = new OpenFileDialog();
+            open.Filter = "Video File (*.mp3)|*.mp3;";
 
+            if (open.ShowDialog() != true) return;
+            FingerprintManager fp = new FingerprintManager(open.FileName);
         }
 
         private void button1_Click(object sender, RoutedEventArgs e)
