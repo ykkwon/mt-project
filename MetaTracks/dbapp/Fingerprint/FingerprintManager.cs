@@ -17,29 +17,36 @@ namespace dbApp.Fingerprint
 
         public FingerprintManager(string filepath)
         {
-            Console.WriteLine(@"Loaded file: " + filepath);
-            const int desiredFrequency = 5512; // 5512 contains all the relevant information
-            const int desiredChannels = 1; // Mono
-            var testVideo = new Video(filepath);
-            Mp4ToWav(testVideo, filepath + "wavOutput.wav");
-            var convertedVideo = new Video(filepath + "wavOutput.wav"); // Video converted to .wav from input multimedia
-            Preprocess(convertedVideo, filepath + "preprocessedOutput.wav", desiredFrequency, desiredChannels);
-            var preprocessedVideo = new Video(filepath + "preprocessedOutput.wav"); // Preprocessed .wav, reduced to 5512Hz mono
-            
-            _reader = new MediaFoundationReader(preprocessedVideo.FilePath);
-            _output = new DirectSoundOut();
-            _output.Init(_reader);
-            _output.Play();
-
-            while (_output.PlaybackState == PlaybackState.Playing)
+            new Thread(() =>
             {
-                var currentTime = _reader.CurrentTime.ToString("mm\\:ss");
-                // Write every 1000 ms
-                Console.WriteLine(currentTime);
-                Thread.Sleep(1000);  
-            }
-            Console.WriteLine(@"Playback has ended.");
-            DisposeWave();
+                Console.WriteLine(@"Loaded file: " + filepath);
+                const int desiredFrequency = 5512; // 5512 contains all the relevant information
+                const int desiredChannels = 1; // Mono
+                var testVideo = new Video(filepath);
+                Mp4ToWav(testVideo, filepath + "wavOutput.wav");
+                var convertedVideo = new Video(filepath + "wavOutput.wav");
+                // Video converted to .wav from input multimedia
+                Preprocess(convertedVideo, filepath + "preprocessedOutput.wav", desiredFrequency, desiredChannels);
+                var preprocessedVideo = new Video(filepath + "preprocessedOutput.wav");
+                // Preprocessed .wav, reduced to 5512Hz mono
+
+                _reader = new MediaFoundationReader(preprocessedVideo.FilePath);
+                _output = new DirectSoundOut();
+                _output.Init(_reader);
+                _output.Play();
+
+                {
+                    while (_output.PlaybackState == PlaybackState.Playing)
+                    {
+                        var currentTime = _reader.CurrentTime.ToString("mm\\:ss");
+                        // Write every 1000 ms
+                        Console.WriteLine(currentTime);
+                        Thread.Sleep(1000);
+                    }
+                    Console.WriteLine(@"Playback has ended.");
+                    DisposeWave();
+                }
+            }).Start();
         }
 
         public void ReceiveMovie()

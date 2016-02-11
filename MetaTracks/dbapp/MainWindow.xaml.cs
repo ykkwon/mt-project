@@ -3,6 +3,7 @@ using System;
 using System.Threading;
 using System.Windows;
 using dbApp.Fingerprint;
+using NAudio.Dmo;
 
 namespace dbApp
 {
@@ -11,6 +12,7 @@ namespace dbApp
     /// </summary>
     public partial class MainWindow : Window
     {
+        private FingerprintManager fp;
         
         //open.Filter = "Video File (*.mp4)";
             
@@ -18,18 +20,24 @@ namespace dbApp
         {
             InitializeComponent();
         }
-        private void button_Click(object sender, RoutedEventArgs e)
-        {
-            OpenFileDialog open = new OpenFileDialog();
-            open.Filter = "Video File (*.mp4)|*.mp4;";
 
-            if (open.ShowDialog() != true) return;
-            FingerprintManager fp = new FingerprintManager(open.FileName);
+        private void openButton_Click(object sender, RoutedEventArgs e)
+        {
+                OpenFileDialog open = new OpenFileDialog();
+                open.Filter = "Video File (*.mp4)|*.mp4;";
+
+                if (open.ShowDialog() != true) return;
+                fp = new FingerprintManager(open.FileName);
         }
 
-        private void button1_Click(object sender, RoutedEventArgs e)
+        private void sendButton_Click(object sender, RoutedEventArgs e)
         {
+            fp.ReceiveMovie();
+        }
 
+        public void UpdateOutput(string print)
+        {
+            output.Content = print;
         }
     }
 }
