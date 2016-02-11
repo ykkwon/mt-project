@@ -20,7 +20,7 @@ namespace dbApp
         private void button_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog open = new OpenFileDialog();
-            open.Filter = "Video File (*.mp4)|*.mp4;";
+            open.Filter = "Video File (*.mp4)|*.wav;";
 
             if (open.ShowDialog() != true) return;
             FingerprintManager fp = new FingerprintManager(open.FileName);

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Windows;
@@ -23,6 +24,13 @@ namespace dbApp
         public FingerprintManager(string filepath)
         {
             Console.WriteLine(@"Loaded file: " + filepath);
+            
+            // Splits Wave File
+            var wavDir = Path.GetDirectoryName(filepath);
+            var splitDir = Path.Combine(wavDir, Path.GetFileNameWithoutExtension(filepath));
+            SplitWavFile(filepath, splitDir);
+            //
+
             const int desiredFrequency = 5512; // 5512 contains all the relevant information
             const int desiredChannels = 1; // Mono
             var testVideo = new Video(filepath);
@@ -36,15 +44,60 @@ namespace dbApp
             _output = new DirectSoundOut();
             _output.Init(_reader);
             _output.Play();
-            while (_output.PlaybackState == PlaybackState.Playing)
+        }
+
+        // Random counter to add to filenames
+        private static int _counter;
+        public static void SplitWavFile(string inPath, string outPath)
+        {
+            using (WaveFileReader reader = new WaveFileReader(inPath))
             {
-                string currentTime = _reader.CurrentTime.ToString("mm\\:ss"); // TODO: Milliseconds
-                // Write every 1000 ms
-                Console.WriteLine(currentTime);
-                Thread.Sleep(1000);  
+                // Total frames over the whole file
+                var totalFrames = reader.Length;
+                // Total frames over 1000 milliseconds
+                var framesPerSecond = (long)(totalFrames / reader.TotalTime.TotalMilliseconds)*1000;
+                
+                long i = 0;
+                while(_counter < (reader.TotalTime.TotalMilliseconds)/1000)
+                {
+                    i++;
+                    _counter++;
+                    // Creates file named filename__counter[x].wav
+                    using (Fingerprint.NAudioCode.WaveFileWriter writer = new Fingerprint.NAudioCode.WaveFileWriter(outPath +"_" + _counter + ".wav", reader.WaveFormat))
+                    {
+                        // Start position is i and end position is the next increment
+                        // If sentence just as a safekeeping measure so we dont run into unexpected errors
+                        if((i += framesPerSecond) <= totalFrames)
+                            SplitWavFile(reader, writer, reader.Position, reader.Position+framesPerSecond);
+                    }
+                }
             }
-            Console.WriteLine(@"Playback has ended.");
-            DisposeWave();
+        }
+
+        private static void SplitWavFile(WaveFileReader reader, Fingerprint.NAudioCode.WaveFileWriter writer, long startPos, long endPos)
+        {
+            reader.Position = startPos;
+            // Creates a new buffer with 1024 bytes
+            byte[] buffer = new byte[1024];
+            while (reader.Position < endPos)
+            {
+                
+                // Bytes still left to read
+                int bytesRequired = (int) (endPos - reader.Position);
+                if (bytesRequired > 0)
+                {
+                    // Bytes to read next, picks the smallest value of bytesRequired or buffer.length
+                    int bytesToRead = Math.Min(bytesRequired, buffer.Length);
+
+                    // Reades bytes from buffer into variable
+                    int bytesRead = reader.Read(buffer, 0, bytesToRead);
+                    if (bytesRead > 0)
+                    {
+                        // Writes bytes from buffer into file
+                        writer.Write(buffer, 0, bytesRead);
+                    }
+                }
+            }
         }
 
         public void ReceiveMovie()
@@ -155,6 +208,11 @@ namespace dbApp
                 _reader.Dispose();
                 _reader = null;
             }
+        }
+
+        public void SendToTable(string hash)
+        {
+            
         }
     }
 }
