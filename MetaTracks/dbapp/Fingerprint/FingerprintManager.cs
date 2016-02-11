@@ -18,29 +18,44 @@ namespace dbApp.Fingerprint
 
         public FingerprintManager(string filepath)
         {
-<<<<<<< HEAD
-            Console.WriteLine(@"Loaded file: " + filepath);
-            
-            // Splits Wave File
-            var wavDir = Path.GetDirectoryName(filepath);
-            var splitDir = Path.Combine(wavDir, Path.GetFileNameWithoutExtension(filepath));
-            SplitWavFile(filepath, splitDir);
-            //
 
-            const int desiredFrequency = 5512; // 5512 contains all the relevant information
-            const int desiredChannels = 1; // Mono
-            var testVideo = new Video(filepath);
-            CleanAndTrunctuate(); // Remove old output files
-            Mp4ToWav(testVideo, filepath + "wavOutput.wav");
-            var convertedVideo = new Video(filepath + "wavOutput.wav"); // Video converted to .wav from input multimedia
-            Preprocess(convertedVideo, filepath + "preprocessedOutput.wav", desiredFrequency, desiredChannels);
-            var preprocessedVideo = new Video(filepath + "preprocessedOutput.wav"); // Preprocessed .wav, reduced to 5512Hz mono
-            
-            _reader = new MediaFoundationReader(preprocessedVideo.FilePath);
-            _output = new DirectSoundOut();
-            _output.Init(_reader);
-            _output.Play();
+            new Thread(() =>
+            {
+                Console.WriteLine(@"Loaded file: " + filepath);
+                
+                // Splits Wave File
+                var wavDir = Path.GetDirectoryName(filepath);
+                var splitDir = Path.Combine(wavDir, Path.GetFileNameWithoutExtension(filepath));
+                SplitWavFile(filepath, splitDir);
+                //
+
+                const int desiredFrequency = 5512; // 5512 contains all the relevant information
+                const int desiredChannels = 1; // Mono
+                var testVideo = new Video(filepath);
+                Mp4ToWav(testVideo, filepath + "wavOutput.wav");
+                var convertedVideo = new Video(filepath + "wavOutput.wav");
+                // Video converted to .wav from input multimedia
+                Preprocess(convertedVideo, filepath + "preprocessedOutput.wav", desiredFrequency, desiredChannels);
+                var preprocessedVideo = new Video(filepath + "preprocessedOutput.wav");
+                // Preprocessed .wav, reduced to 5512Hz mono
+
+                _reader = new MediaFoundationReader(preprocessedVideo.FilePath);
+                _output = new DirectSoundOut();
+                _output.Init(_reader);
+                _output.Play();
+
+                while (_output.PlaybackState == PlaybackState.Playing)
+                {
+                    var currentTime = _reader.CurrentTime.ToString("mm\\:ss");
+                    // Write every 1000 ms
+                    Console.WriteLine(currentTime);
+                    Thread.Sleep(1000);
+                }
+                Console.WriteLine(@"Playback has ended.");
+                DisposeWave();
+            }).Start();
         }
+
 
         // Random counter to add to filenames
         private static int _counter;
@@ -59,7 +74,7 @@ namespace dbApp.Fingerprint
                     i++;
                     _counter++;
                     // Creates file named filename__counter[x].wav
-                    using (Fingerprint.NAudioCode.WaveFileWriter writer = new Fingerprint.NAudioCode.WaveFileWriter(outPath +"_" + _counter + ".wav", reader.WaveFormat))
+                    using (NAudioCode.WaveFileWriter writer = new NAudioCode.WaveFileWriter(outPath +"_" + _counter + ".wav", reader.WaveFormat))
                     {
                         // Start position is i and end position is the next increment
                         // If sentence just as a safekeeping measure so we dont run into unexpected errors
@@ -70,7 +85,7 @@ namespace dbApp.Fingerprint
             }
         }
 
-        private static void SplitWavFile(WaveFileReader reader, Fingerprint.NAudioCode.WaveFileWriter writer, long startPos, long endPos)
+        private static void SplitWavFile(WaveFileReader reader, NAudioCode.WaveFileWriter writer, long startPos, long endPos)
         {
             reader.Position = startPos;
             // Creates a new buffer with 1024 bytes
@@ -94,38 +109,6 @@ namespace dbApp.Fingerprint
                     }
                 }
             }
-=======
-            new Thread(() =>
-            {
-                Console.WriteLine(@"Loaded file: " + filepath);
-                const int desiredFrequency = 5512; // 5512 contains all the relevant information
-                const int desiredChannels = 1; // Mono
-                var testVideo = new Video(filepath);
-                Mp4ToWav(testVideo, filepath + "wavOutput.wav");
-                var convertedVideo = new Video(filepath + "wavOutput.wav");
-                // Video converted to .wav from input multimedia
-                Preprocess(convertedVideo, filepath + "preprocessedOutput.wav", desiredFrequency, desiredChannels);
-                var preprocessedVideo = new Video(filepath + "preprocessedOutput.wav");
-                // Preprocessed .wav, reduced to 5512Hz mono
-
-                _reader = new MediaFoundationReader(preprocessedVideo.FilePath);
-                _output = new DirectSoundOut();
-                _output.Init(_reader);
-                _output.Play();
-
-                {
-                    while (_output.PlaybackState == PlaybackState.Playing)
-                    {
-                        var currentTime = _reader.CurrentTime.ToString("mm\\:ss");
-                        // Write every 1000 ms
-                        Console.WriteLine(currentTime);
-                        Thread.Sleep(1000);
-                    }
-                    Console.WriteLine(@"Playback has ended.");
-                    DisposeWave();
-                }
-            }).Start();
->>>>>>> origin/master
         }
 
         public void ReceiveMovie()
