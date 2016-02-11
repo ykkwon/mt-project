@@ -1,17 +1,12 @@
 ﻿using System;
 using System.IO;
 using System.Threading;
-using System.Windows;
 using NAudio.Wave;
-using dbApp.Fingerprint;
-using NAudio.CoreAudioApi.Interfaces;
+using System.Threading;
 
-namespace dbApp
+namespace dbApp.Fingerprint
 {
-    // TODO: Confirm that Mp4toWav actually works.
-    // TODO: Confirm that Preprocess actually works.
     // TODO: Thread pooled receive.
-    // TODO: Possibly GUI with some event handlers.
     // TODO: Plot waveline.
     // TODO: Thread the MainWindow!
 
@@ -26,7 +21,6 @@ namespace dbApp
             const int desiredFrequency = 5512; // 5512 contains all the relevant information
             const int desiredChannels = 1; // Mono
             var testVideo = new Video(filepath);
-            CleanAndTrunctuate(); // Remove old output files
             Mp4ToWav(testVideo, filepath + "wavOutput.wav");
             var convertedVideo = new Video(filepath + "wavOutput.wav"); // Video converted to .wav from input multimedia
             Preprocess(convertedVideo, filepath + "preprocessedOutput.wav", desiredFrequency, desiredChannels);
@@ -36,9 +30,10 @@ namespace dbApp
             _output = new DirectSoundOut();
             _output.Init(_reader);
             _output.Play();
+
             while (_output.PlaybackState == PlaybackState.Playing)
             {
-                string currentTime = _reader.CurrentTime.ToString("mm\\:ss"); // TODO: Milliseconds
+                var currentTime = _reader.CurrentTime.ToString("mm\\:ss");
                 // Write every 1000 ms
                 Console.WriteLine(currentTime);
                 Thread.Sleep(1000);  
@@ -70,7 +65,7 @@ namespace dbApp
                 using (var resampler = new MediaFoundationResampler(reader, outFormat))
                 {
                     resampler.ResamplerQuality = 60;
-                    Fingerprint.NAudioCode.WaveFileWriter.CreateWaveFile(outputFile, resampler);
+                    NAudioCode.WaveFileWriter.CreateWaveFile(outputFile, resampler);
                     Console.WriteLine(@"Preprocessing done.");
                 }
             }
@@ -106,38 +101,10 @@ namespace dbApp
             {
                 using (WaveStream pcmStream = WaveFormatConversionStream.CreatePcmStream(reader))
                 {
-                    string duration = reader.TotalTime.ToString("mm\\:ss");
-                    Console.WriteLine("Playback duration: " + duration);
-                    Fingerprint.NAudioCode.WaveFileWriter.CreateWaveFile(outputFile, pcmStream);
+                    NAudioCode.WaveFileWriter.CreateWaveFile(outputFile, pcmStream);
                     Console.WriteLine(@"MP4 to WAV conversion done.");
-                }
-            }
-        }
-
-        public void CleanAndTrunctuate()
-        {
-            if (File.Exists(@"..\..\Resources\wavOutput.wav"))
-            {
-                try
-                {
-                    File.Delete(@"..\..\Resources\wavOutput.wav");
-                    Console.WriteLine(@"Old wav output was trunctuated.");
-                }
-                catch (IOException e)
-                {
-                    Console.WriteLine(e.Message);
-                }
-            }
-            if (File.Exists(@"..\..\Resources\preprocessedOutput.wav"))
-            {
-                try
-                {
-                    File.Delete(@"..\..\Resources\preprocessedOutput.wav");
-                    Console.WriteLine(@"Old preprocessed output was trunctuated.");
-                }
-                catch (IOException e)
-                {
-                    Console.WriteLine(e.Message);
+                    var duration = reader.TotalTime.ToString("mm\\:ss");
+                    Console.WriteLine(@"Playback duration: " + duration);
                 }
             }
         }
