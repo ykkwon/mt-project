@@ -13,9 +13,9 @@ namespace dbApp
     public partial class MainWindow : Window
     {
         private FingerprintManager fp;
-        
+
         //open.Filter = "Video File (*.mp4)";
-            
+        private OpenFileDialog open;
             public MainWindow()
         {
             InitializeComponent();
@@ -23,7 +23,7 @@ namespace dbApp
 
         private void openButton_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog open = new OpenFileDialog();
+            open = new OpenFileDialog();
             open.Filter = "Video File (*.mp4)|*.wav;";
 
                 if (open.ShowDialog() != true) return;
@@ -37,7 +37,7 @@ namespace dbApp
 
         private void SplitButton_Click(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            FingerprintManager.SplitWavFile(open.FileName, 1000);
         }
 
         public void WriteToForeground(string output)
