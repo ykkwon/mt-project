@@ -16,7 +16,7 @@ namespace dbApp
         
         //open.Filter = "Video File (*.mp4)";
             
-        public MainWindow()
+            public MainWindow()
         {
             InitializeComponent();
         }
@@ -32,12 +32,17 @@ namespace dbApp
 
         private void sendButton_Click(object sender, RoutedEventArgs e)
         {
-            fp.ReceiveMovie();
+            throw new NotImplementedException();
         }
 
-        public void UpdateOutput(string print)
+        private void SplitButton_Click(object sender, RoutedEventArgs e)
         {
-            output.Content = print;
+            throw new NotImplementedException();
+        }
+
+        public void WriteToForeground(string output)
+        {
+            fg_label.Content = output;
         }
     }
 }
