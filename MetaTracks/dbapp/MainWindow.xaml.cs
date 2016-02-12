@@ -16,18 +16,19 @@ namespace dbApp
 
         //open.Filter = "Video File (*.mp4)";
         private OpenFileDialog open;
-            public MainWindow()
+
+        public MainWindow()
         {
             InitializeComponent();
         }
 
         private void openButton_Click(object sender, RoutedEventArgs e)
         {
-            open = new OpenFileDialog();
-            open.Filter = "Video File (*.mp4)|*.wav;";
-
-                if (open.ShowDialog() != true) return;
-                fp = new FingerprintManager(open.FileName);
+            Console.WriteLine("wut");
+            open = new OpenFileDialog {Filter = "Video File (*.mp4)|*.mp3;"};
+            if (open.ShowDialog() != true) return;
+            var vid = new Video(open.FileName);
+            fp = new FingerprintManager(open.FileName);
         }
 
         private void sendButton_Click(object sender, RoutedEventArgs e)

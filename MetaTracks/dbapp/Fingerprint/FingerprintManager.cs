@@ -23,10 +23,6 @@ namespace dbApp.Fingerprint
             {
                 Console.WriteLine(@"Loaded file: " + filepath);
 
-                // Splits Wave File
-                SplitWavFile(filepath, 1000);
-                //
-
                 const int desiredFrequency = 5512; // 5512 contains all the relevant information
                 const int desiredChannels = 1; // Mono
                 var testVideo = new Video(filepath);
@@ -184,7 +180,7 @@ namespace dbApp.Fingerprint
             }
         }
 
-        private void DisposeWave()
+        public void DisposeWave()
         {
             if (_output != null)
             {
