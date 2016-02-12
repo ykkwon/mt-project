@@ -22,11 +22,9 @@ namespace dbApp.Fingerprint
             new Thread(() =>
             {
                 Console.WriteLine(@"Loaded file: " + filepath);
-                
+
                 // Splits Wave File
-                var wavDir = Path.GetDirectoryName(filepath);
-                var splitDir = Path.Combine(wavDir, Path.GetFileNameWithoutExtension(filepath));
-                SplitWavFile(filepath, splitDir);
+                SplitWavFile(filepath, 1000);
                 //
 
                 const int desiredFrequency = 5512; // 5512 contains all the relevant information
@@ -56,20 +54,28 @@ namespace dbApp.Fingerprint
             }).Start();
         }
 
-
+#region Split wave file
         // Random counter to add to filenames
         private static int _counter;
-        public static void SplitWavFile(string inPath, string outPath)
+        /// <summary>
+        /// Splits a wave file into many parts, the size of each split is determined by ms given
+        /// </summary>
+        /// <param name="inPath"></param>
+        /// <param name="outPath"></param>
+        /// <param name="ms"></param>
+        public static void SplitWavFile(string inPath, int ms)
         {
+            var wavDir = Path.GetDirectoryName(inPath);
+            var outPath = Path.Combine(wavDir, Path.GetFileNameWithoutExtension(inPath));
             using (WaveFileReader reader = new WaveFileReader(inPath))
             {
                 // Total frames over the whole file
                 var totalFrames = reader.Length;
                 // Total frames over 1000 milliseconds
-                var framesPerSecond = (long)(totalFrames / reader.TotalTime.TotalMilliseconds)*1000;
+                var framesPerSecond = (long)(totalFrames / reader.TotalTime.TotalMilliseconds)*ms;
                 
                 long i = 0;
-                while(_counter < (reader.TotalTime.TotalMilliseconds)/1000)
+                while(_counter < (reader.TotalTime.TotalMilliseconds)/ms)
                 {
                     i++;
                     _counter++;
@@ -110,7 +116,7 @@ namespace dbApp.Fingerprint
                 }
             }
         }
-
+#endregion
         public void ReceiveMovie()
         {
             throw new NotImplementedException();

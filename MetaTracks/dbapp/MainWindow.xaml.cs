@@ -13,17 +13,17 @@ namespace dbApp
     public partial class MainWindow : Window
     {
         private FingerprintManager fp;
-        
+
         //open.Filter = "Video File (*.mp4)";
-            
-        public MainWindow()
+        private OpenFileDialog open;
+            public MainWindow()
         {
             InitializeComponent();
         }
 
         private void openButton_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog open = new OpenFileDialog();
+            open = new OpenFileDialog();
             open.Filter = "Video File (*.mp4)|*.wav;";
 
                 if (open.ShowDialog() != true) return;
@@ -32,12 +32,17 @@ namespace dbApp
 
         private void sendButton_Click(object sender, RoutedEventArgs e)
         {
-            fp.ReceiveMovie();
+            throw new NotImplementedException();
         }
 
-        public void UpdateOutput(string print)
+        private void SplitButton_Click(object sender, RoutedEventArgs e)
         {
-            output.Content = print;
+            FingerprintManager.SplitWavFile(open.FileName, 1000);
+        }
+
+        public void WriteToForeground(string output)
+        {
+            fg_label.Content = output;
         }
     }
 }
