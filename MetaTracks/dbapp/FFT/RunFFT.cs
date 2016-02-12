@@ -10,16 +10,20 @@ namespace dbApp.FFT
 {
     class RunFFT
     {
+        public event EventHandler<FftEventArgs> FftCalculated;
+        public event EventHandler<MaxSampleEventArgs> MaximumCalculated;
+
         public RunFFT(string filepath)
         {
             try
             {
-
                 var inputStream = new AudioFileReader(filepath);
-                var aggregator = new SampleAggregator(inputStream);
+                var aggregator = new SampleAggregator(inputStream)
+                {
+                    NotificationCount = inputStream.WaveFormat.SampleRate/100,
+                    PerformFFT = true
+                };
 
-                aggregator.NotificationCount = inputStream.WaveFormat.SampleRate/100;
-                aggregator.PerformFFT = true;
                 aggregator.FftCalculated += (sender, args) => OnFftCalculated(args);
                 aggregator.MaximumCalculated += (sender, args) => OnMaximumCalculated(args);
             }
@@ -29,14 +33,18 @@ namespace dbApp.FFT
             }
         }
 
-        private void OnMaximumCalculated(MaxSampleEventArgs args)
+        protected virtual void OnFftCalculated(FftEventArgs e)
         {
-            throw new NotImplementedException();
-        }
+            EventHandler<FftEventArgs> handler = FftCalculated;
+            handler?.Invoke(this, e);
 
-        private void OnFftCalculated(FftEventArgs args)
+            //Console.WriteLine("fileStream Position: " + fileStream.CurrentTime);
+        }
+        
+        protected virtual void OnMaximumCalculated(MaxSampleEventArgs e)
         {
-            throw new NotImplementedException();
+            EventHandler<MaxSampleEventArgs> handler = MaximumCalculated;
+            handler?.Invoke(this, e);
         }
     }
 }
