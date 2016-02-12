@@ -68,6 +68,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="FFT\RunFFT.cs" />
     <Compile Include="FFT\SampleAggregator.cs" />
     <Compile Include="Fingerprint\Fingerprint.cs" />
     <Compile Include="Fingerprint\FingerprintManager.cs" />
