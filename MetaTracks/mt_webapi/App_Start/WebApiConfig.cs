@@ -9,8 +9,9 @@ namespace mt_webapi
     {
         public static void Register(HttpConfiguration config)
         {
-            // Web API configuration and services
+            // Todo: More configurational code
 
+            // Web API configuration and services
             // Web API routes
             config.MapHttpAttributeRoutes();
 

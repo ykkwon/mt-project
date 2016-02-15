@@ -11,6 +11,7 @@ namespace mt_frontend
     {
         public static void RegisterRoutes(RouteCollection routes)
         {
+            // Todo: More configurational code
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(

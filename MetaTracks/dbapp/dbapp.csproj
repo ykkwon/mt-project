@@ -80,7 +80,6 @@
       <DependentUpon>SpectrumAnalyser.xaml</DependentUpon>
     </Compile>
     <Compile Include="FFT\SpectrumAnalyzerVisualization.cs" />
-    <Compile Include="Fingerprint\Fingerprint.cs" />
     <Compile Include="Fingerprint\FingerprintManager.cs" />
     <Compile Include="Fingerprint\NAudioCode\WaveFileWriter.cs" />
     <Compile Include="Fingerprint\Video.cs" />

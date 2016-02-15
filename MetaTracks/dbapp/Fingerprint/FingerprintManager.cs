@@ -8,17 +8,11 @@ namespace dbApp.Fingerprint
 
     class FingerprintManager
     {
-        #region CONSTRUCTOR
-        public FingerprintManager()
-        {
-        }
-        #endregion
-
-        #region VARIABLES
+        #region NON-DISPOSABLE VARIABLES
         // 5512 contains all the relevant (perceptive) information
-        private static int DesiredFrequency = 5512; 
+        private static int DesiredFrequency = 5512;
         // One channel is mono as opposed to two which is stereo
-        private static int DesiredChannels = 1; 
+        private static int DesiredChannels = 1;
         // Random counter to add to filenames
         private static int _counter;
         #endregion
@@ -39,7 +33,7 @@ namespace dbApp.Fingerprint
                     i++;
                     _counter++;
                     // Creates file named filename__counter[x].wav
-                    using (NAudioCode.WaveFileWriter writer = new NAudioCode.WaveFileWriter(outPath.Remove(outPath.Length-4) + "_" + _counter + ".wav", reader.WaveFormat))
+                    using (NAudioCode.WaveFileWriter writer = new NAudioCode.WaveFileWriter(outPath.Remove(outPath.Length - 4) + "_" + _counter + ".wav", reader.WaveFormat))
                     {
                         // Start position is i and end position is the next increment
                         // If sentence just as a safekeeping measure so we dont run into unexpected errors
@@ -48,7 +42,7 @@ namespace dbApp.Fingerprint
                     }
                 }
             }
-            Console.WriteLine("Splitting done. Split into " + _counter + " chunks.");
+            Console.WriteLine(@"Splitting done. File was split into " + _counter + @" chunks.");
         }
 
         private static void SplitWavFile(WaveFileReader reader, NAudioCode.WaveFileWriter writer, long startPos, long endPos)
@@ -74,24 +68,18 @@ namespace dbApp.Fingerprint
                         writer.Write(buffer, 0, bytesRead);
                     }
                 }
-            } 
+            }
         }
-
 
         public static Video OpenVideo(Video video)
         {
             Console.WriteLine(@"Loaded file: " + video.FilePath);
-            Video convertedVideo = Mp4ToWav(video, video.FilePath.Remove(video.FilePath.Length-4) + "Converted.wav"); // Ugly hack
+            Video convertedVideo = Mp4ToWav(video, video.FilePath.Remove(video.FilePath.Length - 4) + "Converted.wav"); // Ugly hack
             Video preprocessedVideo = Preprocess(convertedVideo, convertedVideo.FilePath, DesiredFrequency, DesiredChannels);
             return preprocessedVideo;
         }
 
-        public void ReceiveFingerprint()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SendToDatabase()
+        public static void SendToDatabase(String[] hashArray)
         {
             throw new NotImplementedException();
         }
@@ -100,30 +88,26 @@ namespace dbApp.Fingerprint
         {
             using (var reader = new WaveFileReader(video.FilePath))
             {
-                var outFormat = new WaveFormat(desiredFrequency, desiredChannels);  
-                    using (var resampler = new MediaFoundationResampler(reader, outFormat))
-                    {
-                        resampler.ResamplerQuality = 60;
-                        WaveFileWriter.CreateWaveFile(video.FilePath.Remove(video.FilePath.Length-13) + "Preprocessed.wav", resampler); // Ugly hack
-                        Console.WriteLine(@"Preprocessing done.");
-                        var preprocessedVideo = new Video(outputFile);
-                        return preprocessedVideo;
-
+                var outFormat = new WaveFormat(desiredFrequency, desiredChannels);
+                using (var resampler = new MediaFoundationResampler(reader, outFormat))
+                {
+                    resampler.ResamplerQuality = 60;
+                    WaveFileWriter.CreateWaveFile(video.FilePath.Remove(video.FilePath.Length - 13) + "Preprocessed.wav", resampler); // Ugly hack
+                    Console.WriteLine(@"Preprocessing done.");
+                    var preprocessedVideo = new Video(outputFile);
+                    return preprocessedVideo;
                 }
-
-                }
-
             }
-        
+        }
+
         public static void Play(Video video)
         {
-            DirectSoundOut _output;
             MediaFoundationReader _reader;
             _reader = new MediaFoundationReader(video.FilePath);
-            _output = new DirectSoundOut();
-            _output.Init(_reader);
-            _output.Play();
-            while (_output.PlaybackState == PlaybackState.Playing)
+            var output = new DirectSoundOut();
+            output.Init(_reader);
+            output.Play();
+            while (output.PlaybackState == PlaybackState.Playing)
             {
                 var currentTime = _reader.CurrentTime.ToString("mm\\:ss");
                 // Write every 1000 ms
@@ -131,25 +115,25 @@ namespace dbApp.Fingerprint
                 Thread.Sleep(1000);
             }
             Console.WriteLine(@"Playback has ended.");
-            DisposeWave(_output, _reader);
+            DisposeWave(output, _reader);
         }
 
-        public void ComputeSpectrogram()
+        public static void ComputeSpectrogram()
         {
             throw new NotImplementedException();
         }
 
-        public void Filter()
+        public static void Filter()
         {
             throw new NotImplementedException();
         }
 
-        public void ComputeWavelets()
+        public static void ComputeWavelets()
         {
             throw new NotImplementedException();
         }
 
-        public void HashTransform()
+        public static void HashTransform()
         {
             throw new NotImplementedException();
         }
@@ -168,26 +152,15 @@ namespace dbApp.Fingerprint
             }
         }
 
-        public static void DisposeWave(DirectSoundOut _output, MediaFoundationReader _reader)
+        public static void DisposeWave(DirectSoundOut output, MediaFoundationReader reader)
         {
-            if (_output != null)
+            if (output != null)
             {
-                if (_output.PlaybackState == PlaybackState.Playing) _output.Stop();
-                _output.Dispose();
-                _output = null;
+                if (output.PlaybackState == PlaybackState.Playing) output.Stop();
+                output.Dispose();
             }
-            if (_reader != null)
-            {
-                _reader.Dispose();
-                _reader = null;
-            }
-        }
-
-        public void SendToTable(string hash)
-        {
-
+            reader?.Dispose();
         }
         #endregion
-
     }
 }
