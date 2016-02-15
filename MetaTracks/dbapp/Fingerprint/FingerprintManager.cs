@@ -42,6 +42,7 @@ namespace dbApp.Fingerprint
                     }
                 }
             }
+            MainWindow.Main.Status = "Splitting done. File was split into " + _counter + @" chunks.";
             Console.WriteLine(@"Splitting done. File was split into " + _counter + @" chunks.");
         }
 
@@ -73,6 +74,7 @@ namespace dbApp.Fingerprint
 
         public static Video OpenVideo(Video video)
         {
+            MainWindow.Main.Status = "Loaded file: " + video.FilePath;
             Console.WriteLine(@"Loaded file: " + video.FilePath);
             Video convertedVideo = Mp4ToWav(video, video.FilePath.Remove(video.FilePath.Length - 4) + "Converted.wav"); // Ugly hack
             Video preprocessedVideo = Preprocess(convertedVideo, convertedVideo.FilePath, DesiredFrequency, DesiredChannels);
@@ -93,6 +95,7 @@ namespace dbApp.Fingerprint
                 {
                     resampler.ResamplerQuality = 60;
                     WaveFileWriter.CreateWaveFile(video.FilePath.Remove(video.FilePath.Length - 13) + "Preprocessed.wav", resampler); // Ugly hack
+                    MainWindow.Main.Status = "Preprocessing done";
                     Console.WriteLine(@"Preprocessing done.");
                     var preprocessedVideo = new Video(outputFile);
                     return preprocessedVideo;
@@ -145,7 +148,8 @@ namespace dbApp.Fingerprint
                 using (WaveStream pcmStream = WaveFormatConversionStream.CreatePcmStream(reader))
                 {
                     NAudioCode.WaveFileWriter.CreateWaveFile(outputFile, pcmStream);
-                    Console.WriteLine(@"MP4 to WAV conversion done.");
+                    MainWindow.Main.Status = "Input video converted to Wave format.";
+                    Console.WriteLine(@"WAV conversion done.");
                     var convertedVideo = new Video(outputFile);
                     return convertedVideo;
                 }
