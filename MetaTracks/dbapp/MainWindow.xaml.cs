@@ -1,9 +1,7 @@
 ﻿using Microsoft.Win32;
 using System;
-using System.Threading;
 using System.Windows;
 using dbApp.Fingerprint;
-using NAudio.Dmo;
 
 namespace dbApp
 {
@@ -13,6 +11,7 @@ namespace dbApp
     public partial class MainWindow : Window
     {
         private FingerprintManager fp;
+        private Video returnedVideo;
 
         //open.Filter = "Video File (*.mp4)";
         private OpenFileDialog open;
@@ -23,11 +22,11 @@ namespace dbApp
 
         private void openButton_Click(object sender, RoutedEventArgs e)
         {
-            open = new OpenFileDialog();
-            open.Filter = "Video File (*.mp4)|*.wav;";
+            open = new OpenFileDialog {Filter = "Video File (*.mp4)|*.mp4;"};
 
-                if (open.ShowDialog() != true) return;
-                fp = new FingerprintManager(open.FileName);
+            if (open.ShowDialog() != true) return;
+                var video = new Video(open.FileName);
+                returnedVideo = FingerprintManager.OpenVideo(video);
         }
 
         private void sendButton_Click(object sender, RoutedEventArgs e)
@@ -37,7 +36,7 @@ namespace dbApp
 
         private void SplitButton_Click(object sender, RoutedEventArgs e)
         {
-            FingerprintManager.SplitWavFile(open.FileName, 1000);
+            FingerprintManager.SplitWavFile(@"C:\Users\Kristoffer\Desktop\TestFolder\testTrailer.mp4CONVERTED.wavCONVERTED.wav", @"C:\Users\Kristoffer\Desktop\TestFolder\testTrailer.mp4CONVERTED.wavCONVERTED.wav");
         }
 
         public void WriteToForeground(string output)

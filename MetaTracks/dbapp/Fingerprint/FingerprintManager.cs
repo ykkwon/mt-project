@@ -1,91 +1,52 @@
 ﻿using System;
-using System.Diagnostics;
-using System.IO;
 using System.Threading;
 using NAudio.Wave;
-using System.Threading;
 
 namespace dbApp.Fingerprint
 {
-    // TODO: Thread pooled receive.
-    // TODO: Plot waveline.
     // TODO: Thread the MainWindow!
+    // TODO: Write relevant information to foreground! 
+    // TODO: Fix pathing!
 
     class FingerprintManager
     {
-        private DirectSoundOut _output;
-        private MediaFoundationReader _reader;
-
-        public FingerprintManager(string filepath)
+        #region CONSTRUCTOR
+        public FingerprintManager()
         {
-
-            new Thread(() =>
-            {
-                Console.WriteLine(@"Loaded file: " + filepath);
-
-                // Splits Wave File
-                SplitWavFile(filepath, 1000);
-                //
-
-                const int desiredFrequency = 5512; // 5512 contains all the relevant information
-                const int desiredChannels = 1; // Mono
-                var testVideo = new Video(filepath);
-                Mp4ToWav(testVideo, filepath + "wavOutput.wav");
-                var convertedVideo = new Video(filepath + "wavOutput.wav");
-                // Video converted to .wav from input multimedia
-                Preprocess(convertedVideo, filepath + "preprocessedOutput.wav", desiredFrequency, desiredChannels);
-                var preprocessedVideo = new Video(filepath + "preprocessedOutput.wav");
-                // Preprocessed .wav, reduced to 5512Hz mono
-
-                _reader = new MediaFoundationReader(preprocessedVideo.FilePath);
-                _output = new DirectSoundOut();
-                _output.Init(_reader);
-                _output.Play();
-
-                while (_output.PlaybackState == PlaybackState.Playing)
-                {
-                    var currentTime = _reader.CurrentTime.ToString("mm\\:ss");
-                    // Write every 1000 ms
-                    Console.WriteLine(currentTime);
-                    Thread.Sleep(1000);
-                }
-                Console.WriteLine(@"Playback has ended.");
-                DisposeWave();
-            }).Start();
         }
+        #endregion
 
-#region Split wave file
+        #region VARIABLES
+        // 5512 contains all the relevant (perceptive) information
+        private static int DesiredFrequency = 5512; 
+        // One channel is mono as opposed to two which is stereo
+        private static int DesiredChannels = 1; 
         // Random counter to add to filenames
         private static int _counter;
-        /// <summary>
-        /// Splits a wave file into many parts, the size of each split is determined by ms given
-        /// </summary>
-        /// <param name="inPath"></param>
-        /// <param name="outPath"></param>
-        /// <param name="ms"></param>
-        public static void SplitWavFile(string inPath, int ms)
+        #endregion
+
+        #region METHODS
+        public static void SplitWavFile(string inPath, string outPath)
         {
-            var wavDir = Path.GetDirectoryName(inPath);
-            var outPath = Path.Combine(wavDir, Path.GetFileNameWithoutExtension(inPath));
             using (WaveFileReader reader = new WaveFileReader(inPath))
             {
                 // Total frames over the whole file
                 var totalFrames = reader.Length;
                 // Total frames over 1000 milliseconds
-                var framesPerSecond = (long)(totalFrames / reader.TotalTime.TotalMilliseconds)*ms;
-                
+                var framesPerSecond = (long)(totalFrames / reader.TotalTime.TotalMilliseconds) * 1000;
+
                 long i = 0;
-                while(_counter < (reader.TotalTime.TotalMilliseconds)/ms)
+                while (_counter < (reader.TotalTime.TotalMilliseconds) / 1000)
                 {
                     i++;
                     _counter++;
                     // Creates file named filename__counter[x].wav
-                    using (NAudioCode.WaveFileWriter writer = new NAudioCode.WaveFileWriter(outPath +"_" + _counter + ".wav", reader.WaveFormat))
+                    using (NAudioCode.WaveFileWriter writer = new NAudioCode.WaveFileWriter(outPath + "_" + _counter + ".wav", reader.WaveFormat))
                     {
                         // Start position is i and end position is the next increment
                         // If sentence just as a safekeeping measure so we dont run into unexpected errors
-                        if((i += framesPerSecond) <= totalFrames)
-                            SplitWavFile(reader, writer, reader.Position, reader.Position+framesPerSecond);
+                        if ((i += framesPerSecond) <= totalFrames)
+                            SplitWavFile(reader, writer, reader.Position, reader.Position + framesPerSecond);
                     }
                 }
             }
@@ -98,9 +59,9 @@ namespace dbApp.Fingerprint
             byte[] buffer = new byte[1024];
             while (reader.Position < endPos)
             {
-                
+
                 // Bytes still left to read
-                int bytesRequired = (int) (endPos - reader.Position);
+                int bytesRequired = (int)(endPos - reader.Position);
                 if (bytesRequired > 0)
                 {
                     // Bytes to read next, picks the smallest value of bytesRequired or buffer.length
@@ -116,10 +77,13 @@ namespace dbApp.Fingerprint
                 }
             }
         }
-#endregion
-        public void ReceiveMovie()
+
+        public static Video OpenVideo(Video video)
         {
-            throw new NotImplementedException();
+                Console.WriteLine(@"Loaded file: " + video.FilePath);
+                var convertedVideo = Mp4ToWav(video, video.FilePath + "CONVERTED.wav");
+                var preprocessedVideo = Preprocess(convertedVideo, video.FilePath, DesiredFrequency, DesiredChannels);
+                return preprocessedVideo;
         }
 
         public void ReceiveFingerprint()
@@ -132,24 +96,44 @@ namespace dbApp.Fingerprint
             throw new NotImplementedException();
         }
 
-        public void Preprocess(Video video, string outputFile, int desiredFrequency, int desiredChannels)
+        public static Video Preprocess(Video video, string outputFile, int desiredFrequency, int desiredChannels)
         {
             using (var reader = new WaveFileReader(video.FilePath))
             {
-                var outFormat = new WaveFormat(desiredFrequency, desiredChannels);
-                using (var resampler = new MediaFoundationResampler(reader, outFormat))
-                {
-                    resampler.ResamplerQuality = 60;
-                    NAudioCode.WaveFileWriter.CreateWaveFile(outputFile, resampler);
-                    Console.WriteLine(@"Preprocessing done.");
+                var outFormat = new WaveFormat(desiredFrequency, desiredChannels);  
+                    using (var resampler = new MediaFoundationResampler(reader, outFormat))
+                    {
+                        resampler.ResamplerQuality = 60;
+                        WaveFileWriter.CreateWaveFile(video.FilePath + "CONVERTED.wav", resampler);
+                        Console.WriteLine(@"Preprocessing done.");
+                        var preprocessedVideo = new Video(outputFile);
+                        return preprocessedVideo;
+
                 }
+
+                }
+
             }
+        
+        public static void Play(Video video)
+        {
+            DirectSoundOut _output;
+            MediaFoundationReader _reader;
+            _reader = new MediaFoundationReader(video.FilePath);
+            _output = new DirectSoundOut();
+            _output.Init(_reader);
+            _output.Play();
+            while (_output.PlaybackState == PlaybackState.Playing)
+            {
+                var currentTime = _reader.CurrentTime.ToString("mm\\:ss");
+                // Write every 1000 ms
+                Console.WriteLine(currentTime);
+                Thread.Sleep(1000);
+            }
+            Console.WriteLine(@"Playback has ended.");
+            DisposeWave(_output, _reader);
         }
 
-        public void SliceToFrames()
-        {
-            
-        }
         public void ComputeSpectrogram()
         {
             throw new NotImplementedException();
@@ -170,7 +154,7 @@ namespace dbApp.Fingerprint
             throw new NotImplementedException();
         }
 
-        public void Mp4ToWav(Video video, string outputFile)
+        public static Video Mp4ToWav(Video video, string outputFile)
         {
             using (MediaFoundationReader reader = new MediaFoundationReader(video.FilePath))
             {
@@ -178,13 +162,14 @@ namespace dbApp.Fingerprint
                 {
                     NAudioCode.WaveFileWriter.CreateWaveFile(outputFile, pcmStream);
                     Console.WriteLine(@"MP4 to WAV conversion done.");
-                    var duration = reader.TotalTime.ToString("mm\\:ss");
-                    Console.WriteLine(@"Playback duration: " + duration);
+ 
+                    var convertedVideo = new Video(outputFile);
+                    return convertedVideo;
                 }
             }
         }
 
-        private void DisposeWave()
+        private static void DisposeWave(DirectSoundOut _output, MediaFoundationReader _reader)
         {
             if (_output != null)
             {
@@ -201,7 +186,9 @@ namespace dbApp.Fingerprint
 
         public void SendToTable(string hash)
         {
-            
+
         }
+        #endregion
+
     }
 }
