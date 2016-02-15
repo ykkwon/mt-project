@@ -168,7 +168,7 @@ namespace dbApp.Fingerprint
             }
         }
 
-        private static void DisposeWave(DirectSoundOut _output, MediaFoundationReader _reader)
+        public static void DisposeWave(DirectSoundOut _output, MediaFoundationReader _reader)
         {
             if (_output != null)
             {

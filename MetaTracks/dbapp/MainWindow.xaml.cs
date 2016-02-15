@@ -15,7 +15,8 @@ namespace dbApp
 
         //open.Filter = "Video File (*.mp4)";
         private OpenFileDialog open;
-            public MainWindow()
+
+        public MainWindow()
         {
                 InitializeComponent();
            
