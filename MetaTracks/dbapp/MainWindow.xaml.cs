@@ -2,6 +2,7 @@
 using System;
 using System.Windows;
 using dbApp.Fingerprint;
+using System.Threading;
 
 namespace dbApp
 {
@@ -10,23 +11,26 @@ namespace dbApp
     /// </summary>
     public partial class MainWindow : Window
     {
-        private FingerprintManager fp;
         private Video returnedVideo;
 
         //open.Filter = "Video File (*.mp4)";
         private OpenFileDialog open;
             public MainWindow()
         {
-            InitializeComponent();
+                InitializeComponent();
+           
         }
 
         private void openButton_Click(object sender, RoutedEventArgs e)
         {
-            open = new OpenFileDialog {Filter = "Video File (*.mp4)|*.mp4;"};
+            (new Thread(() =>
+            {
+                open = new OpenFileDialog { Filter = "Video File (*.mp4)|*.mp4;" };
 
-            if (open.ShowDialog() != true) return;
+                if (open.ShowDialog() != true) return;
                 var video = new Video(open.FileName);
                 returnedVideo = FingerprintManager.OpenVideo(video);
+            })).Start();
         }
 
         private void sendButton_Click(object sender, RoutedEventArgs e)
@@ -36,7 +40,7 @@ namespace dbApp
 
         private void SplitButton_Click(object sender, RoutedEventArgs e)
         {
-            FingerprintManager.SplitWavFile(@"C:\Users\Kristoffer\Desktop\TestFolder\testTrailer.mp4CONVERTED.wavCONVERTED.wav", @"C:\Users\Kristoffer\Desktop\TestFolder\testTrailer.mp4CONVERTED.wavCONVERTED.wav");
+            FingerprintManager.SplitWavFile(returnedVideo.FilePath, returnedVideo.FilePath);
         }
 
         public void WriteToForeground(string output)

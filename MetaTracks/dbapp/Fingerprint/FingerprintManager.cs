@@ -4,9 +4,7 @@ using NAudio.Wave;
 
 namespace dbApp.Fingerprint
 {
-    // TODO: Thread the MainWindow!
     // TODO: Write relevant information to foreground! 
-    // TODO: Fix pathing!
 
     class FingerprintManager
     {
@@ -41,7 +39,7 @@ namespace dbApp.Fingerprint
                     i++;
                     _counter++;
                     // Creates file named filename__counter[x].wav
-                    using (NAudioCode.WaveFileWriter writer = new NAudioCode.WaveFileWriter(outPath + "_" + _counter + ".wav", reader.WaveFormat))
+                    using (NAudioCode.WaveFileWriter writer = new NAudioCode.WaveFileWriter(outPath.Remove(outPath.Length-4) + "_" + _counter + ".wav", reader.WaveFormat))
                     {
                         // Start position is i and end position is the next increment
                         // If sentence just as a safekeeping measure so we dont run into unexpected errors
@@ -50,6 +48,7 @@ namespace dbApp.Fingerprint
                     }
                 }
             }
+            Console.WriteLine("Splitting done. Split into " + _counter + " chunks.");
         }
 
         private static void SplitWavFile(WaveFileReader reader, NAudioCode.WaveFileWriter writer, long startPos, long endPos)
@@ -75,15 +74,16 @@ namespace dbApp.Fingerprint
                         writer.Write(buffer, 0, bytesRead);
                     }
                 }
-            }
+            } 
         }
+
 
         public static Video OpenVideo(Video video)
         {
-                Console.WriteLine(@"Loaded file: " + video.FilePath);
-                var convertedVideo = Mp4ToWav(video, video.FilePath + "CONVERTED.wav");
-                var preprocessedVideo = Preprocess(convertedVideo, video.FilePath, DesiredFrequency, DesiredChannels);
-                return preprocessedVideo;
+            Console.WriteLine(@"Loaded file: " + video.FilePath);
+            Video convertedVideo = Mp4ToWav(video, video.FilePath.Remove(video.FilePath.Length-4) + "Converted.wav"); // Ugly hack
+            Video preprocessedVideo = Preprocess(convertedVideo, convertedVideo.FilePath, DesiredFrequency, DesiredChannels);
+            return preprocessedVideo;
         }
 
         public void ReceiveFingerprint()
@@ -104,7 +104,7 @@ namespace dbApp.Fingerprint
                     using (var resampler = new MediaFoundationResampler(reader, outFormat))
                     {
                         resampler.ResamplerQuality = 60;
-                        WaveFileWriter.CreateWaveFile(video.FilePath + "CONVERTED.wav", resampler);
+                        WaveFileWriter.CreateWaveFile(video.FilePath.Remove(video.FilePath.Length-13) + "Preprocessed.wav", resampler); // Ugly hack
                         Console.WriteLine(@"Preprocessing done.");
                         var preprocessedVideo = new Video(outputFile);
                         return preprocessedVideo;
@@ -162,7 +162,6 @@ namespace dbApp.Fingerprint
                 {
                     NAudioCode.WaveFileWriter.CreateWaveFile(outputFile, pcmStream);
                     Console.WriteLine(@"MP4 to WAV conversion done.");
- 
                     var convertedVideo = new Video(outputFile);
                     return convertedVideo;
                 }
