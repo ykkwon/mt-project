@@ -1,6 +1,11 @@
 ﻿using System;
 using System.Threading;
 using NAudio.Wave;
+using Amazon.DynamoDBv2;
+using Amazon.DynamoDBv2.Model;
+using Amazon.Runtime;
+using Amazon.DynamoDBv2.DocumentModel;
+using System.Collections.Generic;
 
 namespace dbApp.Fingerprint
 {
@@ -15,10 +20,12 @@ namespace dbApp.Fingerprint
         #endregion
 
         #region VARIABLES
+        private static AmazonDynamoDBClient client = new AmazonDynamoDBClient();
+        private static string tableName = "Fingerprints";
         // 5512 contains all the relevant (perceptive) information
-        private static int DesiredFrequency = 5512; 
+        private static int DesiredFrequency = 5512;
         // One channel is mono as opposed to two which is stereo
-        private static int DesiredChannels = 1; 
+        private static int DesiredChannels = 1;
         // Random counter to add to filenames
         private static int _counter;
         #endregion
@@ -39,7 +46,7 @@ namespace dbApp.Fingerprint
                     i++;
                     _counter++;
                     // Creates file named filename__counter[x].wav
-                    using (NAudioCode.WaveFileWriter writer = new NAudioCode.WaveFileWriter(outPath.Remove(outPath.Length-4) + "_" + _counter + ".wav", reader.WaveFormat))
+                    using (NAudioCode.WaveFileWriter writer = new NAudioCode.WaveFileWriter(outPath.Remove(outPath.Length - 4) + "_" + _counter + ".wav", reader.WaveFormat))
                     {
                         // Start position is i and end position is the next increment
                         // If sentence just as a safekeeping measure so we dont run into unexpected errors
@@ -74,47 +81,46 @@ namespace dbApp.Fingerprint
                         writer.Write(buffer, 0, bytesRead);
                     }
                 }
-            } 
+            }
         }
-
 
         public static Video OpenVideo(Video video)
         {
             Console.WriteLine(@"Loaded file: " + video.FilePath);
-            Video convertedVideo = Mp4ToWav(video, video.FilePath.Remove(video.FilePath.Length-4) + "Converted.wav"); // Ugly hack
+            Video convertedVideo = Mp4ToWav(video, video.FilePath.Remove(video.FilePath.Length - 4) + "Converted.wav"); // Ugly hack
             Video preprocessedVideo = Preprocess(convertedVideo, convertedVideo.FilePath, DesiredFrequency, DesiredChannels);
             return preprocessedVideo;
         }
 
-        public void ReceiveFingerprint()
+        public static void SendToDatabase(long hash)
         {
-            throw new NotImplementedException();
+            hash = 1110011001010;
+            Table table = Table.LoadTable(client, tableName);
+            var input = new Document();
+            input["Fingerprint"] = hash;
+            table.PutItem(input);
         }
 
-        public void SendToDatabase()
-        {
-            throw new NotImplementedException();
-        }
 
         public static Video Preprocess(Video video, string outputFile, int desiredFrequency, int desiredChannels)
         {
             using (var reader = new WaveFileReader(video.FilePath))
             {
-                var outFormat = new WaveFormat(desiredFrequency, desiredChannels);  
-                    using (var resampler = new MediaFoundationResampler(reader, outFormat))
-                    {
-                        resampler.ResamplerQuality = 60;
-                        WaveFileWriter.CreateWaveFile(video.FilePath.Remove(video.FilePath.Length-13) + "Preprocessed.wav", resampler); // Ugly hack
-                        Console.WriteLine(@"Preprocessing done.");
-                        var preprocessedVideo = new Video(outputFile);
-                        return preprocessedVideo;
-
-                }
+                var outFormat = new WaveFormat(desiredFrequency, desiredChannels);
+                using (var resampler = new MediaFoundationResampler(reader, outFormat))
+                {
+                    resampler.ResamplerQuality = 60;
+                    WaveFileWriter.CreateWaveFile(video.FilePath.Remove(video.FilePath.Length - 13) + "Preprocessed.wav", resampler); // Ugly hack
+                    Console.WriteLine(@"Preprocessing done.");
+                    var preprocessedVideo = new Video(outputFile);
+                    return preprocessedVideo;
 
                 }
 
             }
-        
+
+        }
+
         public static void Play(Video video)
         {
             DirectSoundOut _output;
@@ -181,11 +187,6 @@ namespace dbApp.Fingerprint
                 _reader.Dispose();
                 _reader = null;
             }
-        }
-
-        public void SendToTable(string hash)
-        {
-
         }
         #endregion
 

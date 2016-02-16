@@ -36,7 +36,7 @@ namespace dbApp
 
         private void sendButton_Click(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            FingerprintManager.SendToDatabase();
         }
 
         private void SplitButton_Click(object sender, RoutedEventArgs e)
