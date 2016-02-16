@@ -92,7 +92,7 @@ namespace dbApp.Fingerprint
             return preprocessedVideo;
         }
 
-        public static void SendToDatabase(long hash)
+        public static void SendToDatabase(long hash, Video[] correspondingTime)
         {
             hash = 1110011001010;
             Table table = Table.LoadTable(client, tableName);

@@ -11,26 +11,26 @@ namespace dbApp
     /// </summary>
     public partial class MainWindow : Window
     {
-        private Video returnedVideo;
-
-        //open.Filter = "Video File (*.mp4)";
-        private OpenFileDialog open;
+        internal static MainWindow Main;
 
         public MainWindow()
         {
-                InitializeComponent();
-           
+            Main = this;
+            InitializeComponent();
         }
+
+        private Video _returnedVideo;
+        private OpenFileDialog _open;
 
         private void openButton_Click(object sender, RoutedEventArgs e)
         {
             (new Thread(() =>
             {
-                open = new OpenFileDialog { Filter = "Video File (*.mp4)|*.mp4;" };
+                _open = new OpenFileDialog { Filter = "Video File (*.mp4)|*.mp4;" };
 
-                if (open.ShowDialog() != true) return;
-                var video = new Video(open.FileName);
-                returnedVideo = FingerprintManager.OpenVideo(video);
+                if (_open.ShowDialog() != true) return;
+                var video = new Video(_open.FileName);
+                _returnedVideo = FingerprintManager.OpenVideo(video);
             })).Start();
         }
 
@@ -41,12 +41,16 @@ namespace dbApp
 
         private void SplitButton_Click(object sender, RoutedEventArgs e)
         {
-            FingerprintManager.SplitWavFile(returnedVideo.FilePath, returnedVideo.FilePath);
+            FingerprintManager.SplitWavFile(_returnedVideo.FilePath, _returnedVideo.FilePath);
         }
 
-        public void WriteToForeground(string output)
+        internal string Status
         {
-            fg_label.Content = output;
+            get { return fg_label.Content.ToString(); }
+            set { Dispatcher.Invoke(new Action(() =>
+            {
+                fg_label.Content += value + "\n";
+            })); }
         }
     }
 }
