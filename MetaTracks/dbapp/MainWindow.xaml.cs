@@ -11,14 +11,13 @@ namespace dbApp
     /// </summary>
     public partial class MainWindow : Window
     {
-        internal static MainWindow Main;
-
         public MainWindow()
         {
             Main = this;
             InitializeComponent();
         }
 
+        internal static MainWindow Main;
         private Video _returnedVideo;
         private OpenFileDialog _open;
 
@@ -26,11 +25,18 @@ namespace dbApp
         {
             (new Thread(() =>
             {
-                _open = new OpenFileDialog { Filter = "Video File (*.mp4)|*.mp4;" };
+                try
+                {
+                    _open = new OpenFileDialog {Filter = "Video File (*.mp4)|*.mp4;"};
 
-                if (_open.ShowDialog() != true) return;
-                var video = new Video(_open.FileName);
-                _returnedVideo = FingerprintManager.OpenVideo(video);
+                    if (_open.ShowDialog() != true) return;
+                    Video video = new Video(_open.FileName);
+                    _returnedVideo = FingerprintManager.OpenVideo(video);
+                }
+                catch (TypeInitializationException exception)
+                {
+                    MainWindow.Main.Status = "Not connected to database. Connect through AWS Explorer.";
+                }
             })).Start();
         }
 
@@ -43,7 +49,15 @@ namespace dbApp
 
         private void SplitButton_Click(object sender, RoutedEventArgs e)
         {
-            FingerprintManager.SplitWavFile(_returnedVideo.FilePath, _returnedVideo.FilePath);
+            try
+            {
+                FingerprintManager.SplitWavFile(_returnedVideo.FilePath, _returnedVideo.FilePath);
+            }
+            catch (NullReferenceException ex)
+            {
+                MainWindow.Main.Status = "Choose an input file to preprocess first.";
+            }
+            
         }
 
         internal string Status
