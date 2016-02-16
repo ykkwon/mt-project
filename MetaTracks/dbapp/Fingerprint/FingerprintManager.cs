@@ -2,10 +2,7 @@
 using System.Threading;
 using NAudio.Wave;
 using Amazon.DynamoDBv2;
-using Amazon.DynamoDBv2.Model;
-using Amazon.Runtime;
 using Amazon.DynamoDBv2.DocumentModel;
-using System.Collections.Generic;
 
 namespace dbApp.Fingerprint
 {
@@ -56,6 +53,10 @@ namespace dbApp.Fingerprint
                 }
             }
             Console.WriteLine("Splitting done. Split into " + _counter + " chunks.");
+            MainWindow.Main.Status = "Splitting done. Split into " + _counter + " chunks.";
+
+
+
         }
 
         private static void SplitWavFile(WaveFileReader reader, NAudioCode.WaveFileWriter writer, long startPos, long endPos)
@@ -87,6 +88,7 @@ namespace dbApp.Fingerprint
         public static Video OpenVideo(Video video)
         {
             Console.WriteLine(@"Loaded file: " + video.FilePath);
+            MainWindow.Main.Status = "Loaded file: " + video.FilePath;
             Video convertedVideo = Mp4ToWav(video, video.FilePath.Remove(video.FilePath.Length - 4) + "Converted.wav"); // Ugly hack
             Video preprocessedVideo = Preprocess(convertedVideo, convertedVideo.FilePath, DesiredFrequency, DesiredChannels);
             return preprocessedVideo;
@@ -112,6 +114,7 @@ namespace dbApp.Fingerprint
                     resampler.ResamplerQuality = 60;
                     WaveFileWriter.CreateWaveFile(video.FilePath.Remove(video.FilePath.Length - 13) + "Preprocessed.wav", resampler); // Ugly hack
                     Console.WriteLine(@"Preprocessing done.");
+                    MainWindow.Main.Status = "Preprocessing done.";
                     var preprocessedVideo = new Video(outputFile);
                     return preprocessedVideo;
 
@@ -168,6 +171,7 @@ namespace dbApp.Fingerprint
                 {
                     NAudioCode.WaveFileWriter.CreateWaveFile(outputFile, pcmStream);
                     Console.WriteLine(@"MP4 to WAV conversion done.");
+                    MainWindow.Main.Status = "Input has been converted to Wave file.";
                     var convertedVideo = new Video(outputFile);
                     return convertedVideo;
                 }

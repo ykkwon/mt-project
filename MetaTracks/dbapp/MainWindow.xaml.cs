@@ -36,7 +36,9 @@ namespace dbApp
 
         private void sendButton_Click(object sender, RoutedEventArgs e)
         {
-            FingerprintManager.SendToDatabase();
+            MainWindow.Main.Status = "Not yet implemented.";
+            //FingerprintManager.SendToDatabase();
+
         }
 
         private void SplitButton_Click(object sender, RoutedEventArgs e)
