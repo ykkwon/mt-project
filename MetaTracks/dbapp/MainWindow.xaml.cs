@@ -42,8 +42,10 @@ namespace dbApp
 
         private void sendButton_Click(object sender, RoutedEventArgs e)
         {
-            MainWindow.Main.Status = "Not yet implemented.";
+            
             FingerprintManager.SendToDatabase();
+            Console.WriteLine("Finished");
+            MainWindow.Main.Status = "Movie has been added to database successfully.";
 
         }
 

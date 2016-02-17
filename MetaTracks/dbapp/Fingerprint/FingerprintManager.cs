@@ -3,6 +3,9 @@ using System.Threading;
 using NAudio.Wave;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DocumentModel;
+using System.Collections.Generic;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace dbApp.Fingerprint
 {
@@ -16,7 +19,9 @@ namespace dbApp.Fingerprint
         }
         #endregion
 
-        #region VARIABLES
+        #region VARIABLE
+        private static List<string> splitVideosList = new List<string>();
+        private static List<string> hashedChunks = new List<string>();
         private static AmazonDynamoDBClient client = new AmazonDynamoDBClient();
         private static string tableName = "Video_Fingerprints";
         // 5512 contains all the relevant (perceptive) information
@@ -30,6 +35,7 @@ namespace dbApp.Fingerprint
         #region METHODS
         public static void SplitWavFile(string inPath, string outPath)
         {
+            
             using (WaveFileReader reader = new WaveFileReader(inPath))
             {
                 // Total frames over the whole file
@@ -42,21 +48,29 @@ namespace dbApp.Fingerprint
                 {
                     i++;
                     _counter++;
+
                     // Creates file named filename__counter[x].wav
                     using (NAudioCode.WaveFileWriter writer = new NAudioCode.WaveFileWriter(outPath.Remove(outPath.Length - 4) + "_" + _counter + ".wav", reader.WaveFormat))
+                        
+
                     {
                         // Start position is i and end position is the next increment
                         // If sentence just as a safekeeping measure so we dont run into unexpected errors
                         if ((i += framesPerSecond) <= totalFrames)
+                        {
+                            var currString = writer.Filename;
+                            splitVideosList.Add(currString);
                             SplitWavFile(reader, writer, reader.Position, reader.Position + framesPerSecond);
+
+                        }
+                        
                     }
                 }
             }
             Console.WriteLine("Splitting done. Split into " + _counter + " chunks.");
             MainWindow.Main.Status = "Splitting done. Split into " + _counter + " chunks.";
-
-
-
+            Console.WriteLine("Initiating hashing");
+            HashTransform(splitVideosList);
         }
 
         private static void SplitWavFile(WaveFileReader reader, NAudioCode.WaveFileWriter writer, long startPos, long endPos)
@@ -96,17 +110,18 @@ namespace dbApp.Fingerprint
 
         public static void SendToDatabase()
         {
+            Console.WriteLine("Sending hashes to database");
+            MainWindow.Main.Status = "Sending hashes to database";
             string[] names = new string[]{ "The Force Awakens", "The Force Awakens", "The Force Awakens", "The Force Awakens"};
             string[] numbers = new string[] { "1", "2", "3", "4" };
-            string[] fingerprints = new string[] { "123456", "234567", "345678", "456789" };
-           // hash = 1110011001010;
+            //string[] fingerprints = new string[] { "123456", "234567", "345678", "456789" };
 
             Table table = Table.LoadTable(client, tableName);
             var input = new Document();
             var number = new Document();
             var fingerprintsInput = new Document();
             int i = 1;
-            foreach (string inputs in fingerprints)
+            foreach (string inputs in hashedChunks)
             {
                 input["Fingerprints"] = inputs;
                 input["Timestamp"] = i++;
@@ -116,7 +131,6 @@ namespace dbApp.Fingerprint
 
 
         }
-
 
         public static Video Preprocess(Video video, string outputFile, int desiredFrequency, int desiredChannels)
         {
@@ -172,9 +186,59 @@ namespace dbApp.Fingerprint
             throw new NotImplementedException();
         }
 
-        public void HashTransform()
+        public static void HashTransform(List<string> videoChunks)
         {
-            throw new NotImplementedException();
+            using (MD5 md5Hash = MD5.Create())
+            {
+                foreach (string item in videoChunks)
+                {
+                    var hash = GetMd5Hash(md5Hash, item);
+                    hashedChunks.Add(hash);
+                }
+                for (int i = 0; i < hashedChunks.Count; i++)
+                {
+                    Console.WriteLine(hashedChunks[i]);
+                }
+            }
+        }
+
+        static string GetMd5Hash(MD5 md5Hash, string input)
+        {
+
+            // Convert the input string to a byte array and compute the hash.
+            byte[] data = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(input));
+
+            // Create a new Stringbuilder to collect the bytes
+            // and create a string.
+            StringBuilder sBuilder = new StringBuilder();
+
+            // Loop through each byte of the hashed data 
+            // and format each one as a hexadecimal string.
+            for (int i = 0; i < data.Length; i++)
+            {
+                sBuilder.Append(data[i].ToString("x2"));
+            }
+
+            // Return the hexadecimal string.
+            return sBuilder.ToString();
+        }
+
+        static bool VerifyMd5Hash(MD5 md5Hash, string input, string hash)
+        {
+            // Hash the input.
+            string hashOfInput = GetMd5Hash(md5Hash, input);
+
+            // Create a StringComparer an compare the hashes.
+            StringComparer comparer = StringComparer.OrdinalIgnoreCase;
+
+            if (0 == comparer.Compare(hashOfInput, hash))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public static Video Mp4ToWav(Video video, string outputFile)
