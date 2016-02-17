@@ -20,9 +20,16 @@ namespace dbApp
         internal static MainWindow Main;
         private Video _returnedVideo;
         private OpenFileDialog _open;
+        private string entryName; 
 
         private void openButton_Click(object sender, RoutedEventArgs e)
         {
+            var dialog = new Popup();
+            if (dialog.ShowDialog() == true)
+            {
+                entryName = dialog.ResponseText;
+            }
+
             (new Thread(() =>
             {
                 try
@@ -43,7 +50,7 @@ namespace dbApp
         private void sendButton_Click(object sender, RoutedEventArgs e)
         {
             
-            FingerprintManager.SendToDatabase();
+            FingerprintManager.SendToDatabase(entryName);
             Console.WriteLine("Finished");
             MainWindow.Main.Status = "Movie has been added to database successfully.";
 

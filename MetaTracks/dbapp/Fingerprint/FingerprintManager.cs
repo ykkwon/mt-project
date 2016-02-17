@@ -108,13 +108,10 @@ namespace dbApp.Fingerprint
             return preprocessedVideo;
         }
 
-        public static void SendToDatabase()
+        public static void SendToDatabase(String entryName)
         {
             Console.WriteLine("Sending hashes to database");
             MainWindow.Main.Status = "Sending hashes to database";
-            string[] names = new string[]{ "The Force Awakens", "The Force Awakens", "The Force Awakens", "The Force Awakens"};
-            string[] numbers = new string[] { "1", "2", "3", "4" };
-            //string[] fingerprints = new string[] { "123456", "234567", "345678", "456789" };
 
             Table table = Table.LoadTable(client, tableName);
             var input = new Document();
@@ -125,7 +122,8 @@ namespace dbApp.Fingerprint
             {
                 input["Fingerprints"] = inputs;
                 input["Timestamp"] = i++;
-                input["Name"] = "The Force Awakens";
+                input["Name"] = entryName;
+                input["Type"] = "";
                 table.PutItem(input);
             }
 
