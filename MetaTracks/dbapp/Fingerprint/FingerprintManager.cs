@@ -18,7 +18,7 @@ namespace dbApp.Fingerprint
 
         #region VARIABLES
         private static AmazonDynamoDBClient client = new AmazonDynamoDBClient();
-        private static string tableName = "Fingerprints";
+        private static string tableName = "Video_Fingerprints";
         // 5512 contains all the relevant (perceptive) information
         private static int DesiredFrequency = 5512;
         // One channel is mono as opposed to two which is stereo
@@ -94,13 +94,27 @@ namespace dbApp.Fingerprint
             return preprocessedVideo;
         }
 
-        public static void SendToDatabase(long hash, Video[] correspondingTime)
+        public static void SendToDatabase()
         {
-            hash = 1110011001010;
+            string[] names = new string[]{ "The Force Awakens", "The Force Awakens", "The Force Awakens", "The Force Awakens"};
+            string[] numbers = new string[] { "1", "2", "3", "4" };
+            string[] fingerprints = new string[] { "123456", "234567", "345678", "456789" };
+           // hash = 1110011001010;
+
             Table table = Table.LoadTable(client, tableName);
             var input = new Document();
-            input["Fingerprint"] = hash;
-            table.PutItem(input);
+            var number = new Document();
+            var fingerprintsInput = new Document();
+            int i = 1;
+            foreach (string inputs in fingerprints)
+            {
+                input["Fingerprints"] = inputs;
+                input["Timestamp"] = i++;
+                input["Name"] = "The Force Awakens";
+                table.PutItem(input);
+            }
+
+
         }
 
 
