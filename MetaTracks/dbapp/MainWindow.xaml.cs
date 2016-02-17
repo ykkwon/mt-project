@@ -77,5 +77,11 @@ namespace dbApp
                 fg_label.Content += value + "\n";
             })); }
         }
+
+        private void purgebutton_Click(object sender, RoutedEventArgs e)
+        {
+            //FingerprintManager.DeleteTable();
+            FingerprintManager.CreateTable();
+        }
     }
 }

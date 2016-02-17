@@ -6,6 +6,7 @@ using Amazon.DynamoDBv2.DocumentModel;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
+using Amazon.DynamoDBv2.Model;
 
 namespace dbApp.Fingerprint
 {
@@ -23,7 +24,8 @@ namespace dbApp.Fingerprint
         private static List<string> splitVideosList = new List<string>();
         private static List<string> hashedChunks = new List<string>();
         private static AmazonDynamoDBClient client = new AmazonDynamoDBClient();
-        private static string tableName = "Video_Fingerprints";
+        // private static string tableName = "Video_Fingerprints";
+        private static string tableName = "FPTest";
         // 5512 contains all the relevant (perceptive) information
         private static int DesiredFrequency = 5512;
         // One channel is mono as opposed to two which is stereo
@@ -115,12 +117,10 @@ namespace dbApp.Fingerprint
 
             Table table = Table.LoadTable(client, tableName);
             var input = new Document();
-            var number = new Document();
-            var fingerprintsInput = new Document();
             int i = 1;
             foreach (string inputs in hashedChunks)
             {
-                input["Fingerprints"] = inputs;
+                input["Fingerprint"] = inputs;
                 input["Timestamp"] = i++;
                 input["Name"] = entryName;
                 input["Type"] = "";
@@ -267,6 +267,160 @@ namespace dbApp.Fingerprint
                 _reader.Dispose();
                 _reader = null;
             }
+        }
+
+        public static void CreateTable()
+        {
+
+            // Attribute definitions
+            var attributeDefinitions = new List<AttributeDefinition>()
+            {
+                {new AttributeDefinition {AttributeName = "Fingerprint", AttributeType = "S"}},
+                {new AttributeDefinition {AttributeName = "Timestamp", AttributeType = "N"}},
+                {new AttributeDefinition {AttributeName = "Title", AttributeType = "S"}},
+                {new AttributeDefinition {AttributeName = "Type", AttributeType = "S"}}
+            };
+
+            // Key schema for table
+            var tableKeySchema = new List<KeySchemaElement>() {
+                {
+                    new KeySchemaElement {
+                        AttributeName= "Fingerprint",
+                        KeyType = "HASH"  //Partition key
+                    }
+                },
+                {
+                    new KeySchemaElement {
+                        AttributeName = "Timestamp",
+                        KeyType = "RANGE"  //Sort key
+                    }
+                }
+            };
+
+            // Initial provisioned throughput settings for the indexes
+            var ptIndex = new ProvisionedThroughput
+            {
+                ReadCapacityUnits = 5,
+                WriteCapacityUnits = 5,
+            };
+
+            // CreateDateIndex
+            var createDateIndex = new GlobalSecondaryIndex()
+            {
+                IndexName = "FingerprintIndex",
+                ProvisionedThroughput = ptIndex,
+                KeySchema = {
+                    new KeySchemaElement {
+                        AttributeName = "Fingerprint", KeyType = "HASH"  //Partition key
+                    },
+                    new KeySchemaElement {
+                        AttributeName = "Timestamp", KeyType = "RANGE"  //Sort key
+                    }
+                },
+                Projection = new Projection
+                {
+                    ProjectionType = "ALL"
+                }
+            };
+
+            // TitleIndex
+            var titleIndex = new GlobalSecondaryIndex()
+            {
+                IndexName = "TitleIndex",
+                ProvisionedThroughput = ptIndex,
+                KeySchema = {
+                    new KeySchemaElement {
+                        AttributeName = "Title", KeyType = "HASH"  //Partition key
+                    },
+                    new KeySchemaElement {
+                        AttributeName = "Type", KeyType = "RANGE"  //Sort key
+                    }
+                },
+                Projection = new Projection
+                {
+                    ProjectionType = "ALL"
+                }
+            };
+
+            var TimestampTitleIndex = new GlobalSecondaryIndex()
+            {
+                IndexName = "Timestamp-Title-index",
+                ProvisionedThroughput = ptIndex,
+                KeySchema = {
+                    new KeySchemaElement {
+                        AttributeName = "Timestamp", KeyType = "HASH"  //Partition key
+                    },
+                    new KeySchemaElement {
+                        AttributeName = "Title", KeyType = "RANGE"  //Sort key
+                    }
+                },
+                Projection = new Projection
+                {
+                    ProjectionType = "ALL"
+                }
+            };
+
+
+
+            var createTableRequest = new CreateTableRequest
+            {
+                TableName = tableName,
+                ProvisionedThroughput = new ProvisionedThroughput
+                {
+                    ReadCapacityUnits = (long)1,
+                    WriteCapacityUnits = (long)1
+                },
+                AttributeDefinitions = attributeDefinitions,
+                KeySchema = tableKeySchema,
+                GlobalSecondaryIndexes = { createDateIndex, titleIndex, TimestampTitleIndex }
+            };
+
+            Console.WriteLine("Creating table " + tableName + "...");
+            client.CreateTable(createTableRequest);
+
+            WaitUntilTableReady(tableName);
+            Console.WriteLine("** Completed creating table **");
+
+        }
+
+        private static void WaitUntilTableReady(string tableName)
+        {
+            string status = null;
+            // Let us wait until table is created. Call DescribeTable.
+            do
+            {
+                System.Threading.Thread.Sleep(5000); // Wait 5 seconds.
+                try
+                {
+                    var res = client.DescribeTable(new DescribeTableRequest
+                    {
+                        TableName = tableName
+                    });
+
+                    Console.WriteLine("Table name: {0}, status: {1}",
+                                   res.Table.TableName,
+                                   res.Table.TableStatus);
+                    status = res.Table.TableStatus;
+                }
+                catch (ResourceNotFoundException)
+                {
+                    // DescribeTable is eventually consistent. So you might
+                    // get resource not found. So we handle the potential exception.
+                }
+            } while (status != "ACTIVE");
+        }
+
+        public static void DeleteTable()
+        {
+            Console.WriteLine("\n*** Deleting table ***");
+            var request = new DeleteTableRequest
+            {
+                TableName = tableName
+            };
+
+            var response = client.DeleteTable(request);
+
+            Console.WriteLine("Table is being deleted...");
         }
         #endregion
 
