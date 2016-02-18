@@ -52,8 +52,6 @@ namespace dbApp
             (new Thread(() =>
             {
                 FingerprintManager.SendToDatabase(entryName);
-                Console.WriteLine("Finished");
-                MainWindow.Main.Status = "Movie has been added to database successfully.";
             })).Start();
         }
 
@@ -96,7 +94,7 @@ namespace dbApp
 
         private void ProgressBar_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            
+           
         }
     }
 }

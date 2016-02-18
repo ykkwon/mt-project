@@ -116,18 +116,29 @@ namespace dbApp.Fingerprint
             Table table = Table.LoadTable(client, tableName);
             var input = new Document();
             int i = 1;
+            DateTime now = DateTime.Now;
+            
+            Console.WriteLine("Started at: " + now);
+            MainWindow.Main.Status = "Started at: " + now;
             foreach (string chunks in hashedChunks)
             {
+                Console.WriteLine("Hash " + i + " of " + hashedChunks.Count);
                 input["Fingerprint"] = chunks;
                 input["Timestamp"] = i++;
                 input["Title"] = entryName;
                 input["Type"] = "N/A";
+                
 
                 DocumentBatchWrite dbw = new DocumentBatchWrite(table);
                 dbw.AddDocumentToPut(input);
                 dbw.Execute();
                 //table.PutItem(input); // Deprecated, slow
             }
+            DateTime then = DateTime.Now;
+            Console.WriteLine("Finished at: " + then);
+            MainWindow.Main.Status = "Movie has been added to database successfully.";
+            MainWindow.Main.Status = "Finished at: " + then;
+            MainWindow.Main.Status = "Elapsed: " + ((int)then.Second - (int)now.Second) + " seconds.";
         }
 
         public static Video Preprocess(Video video, string outputFile, int desiredFrequency, int desiredChannels)
