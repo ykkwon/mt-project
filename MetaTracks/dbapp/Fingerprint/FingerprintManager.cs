@@ -10,7 +10,8 @@ using Amazon.DynamoDBv2.Model;
 
 namespace dbApp.Fingerprint
 {
-    // TODO: Write relevant information to foreground! 
+    // TODO: BatchWrite to DynamoDB
+    // TODO: Add Type to input
 
     class FingerprintManager
     {
@@ -24,8 +25,7 @@ namespace dbApp.Fingerprint
         private static List<string> splitVideosList = new List<string>();
         private static List<string> hashedChunks = new List<string>();
         private static AmazonDynamoDBClient client = new AmazonDynamoDBClient();
-        // private static string tableName = "Video_Fingerprints";
-        private static string tableName = "FPTest";
+        private static string tableName = "Video_Fingerprints";
         // 5512 contains all the relevant (perceptive) information
         private static int DesiredFrequency = 5512;
         // One channel is mono as opposed to two which is stereo
@@ -123,7 +123,8 @@ namespace dbApp.Fingerprint
                 input["Fingerprint"] = inputs;
                 input["Timestamp"] = i++;
                 input["Name"] = entryName;
-                input["Type"] = "";
+                input["Title"] = "N/A";
+                input["Type"] = "N/A";
                 table.PutItem(input);
             }
 

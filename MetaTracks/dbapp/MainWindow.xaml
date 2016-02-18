@@ -15,6 +15,7 @@
         <Button x:Name="sendButton" Content="Send File" HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="200" Height="40" Click="sendButton_Click" Background="White" BorderBrush="White" Margin="378,0,7,221" Grid.Column="1" ToolTip="Send the hash provided by the preprocessing and splitting to the database."/>
         <Button x:Name="splitButton" Content="Split file" HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="200" Height="40" Click="SplitButton_Click" Background="White" BorderBrush="White" Margin="173,0,212,221" Grid.Column="1" ToolTip="Split the .wav file which was previously preprocessed"/>
         <Label x:Name="fg_label" Content="" HorizontalAlignment="Left" Margin="10,55,0,0" VerticalAlignment="Top" RenderTransformOrigin="-1.079,-0.423" Grid.ColumnSpan="2" Height="179" Width="607" Background="#FF111111" FontWeight="Bold" FontSize="13.333" Foreground="White" Opacity="0.8"/>
-        <Button x:Name="purgebutton" Content="PURGE DB" HorizontalAlignment="Left" VerticalAlignment="Top" Width="134" Height="22" Grid.Column="1" Margin="209,239,0,0" Click="purgebutton_Click" Background="#FFFF1D1D" FontWeight="Bold"/>
+        <Button x:Name="purgebutton" Content="PURGE DB" HorizontalAlignment="Left" VerticalAlignment="Top" Width="95" Height="22" Grid.Column="1" Margin="173,239,0,0" Click="purgebutton_Click" Background="#FFFF1D1D" FontWeight="Bold"/>
+        <Button x:Name="createbutton" Content="CREATE DB" HorizontalAlignment="Left" VerticalAlignment="Top" Width="95" Height="22" Grid.Column="1" Margin="278,239,0,0" Click="createbutton_Click" Background="#FF5BFF1D" FontWeight="Bold"/>
     </Grid>
 </Window>

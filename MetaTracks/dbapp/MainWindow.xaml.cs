@@ -80,7 +80,11 @@ namespace dbApp
 
         private void purgebutton_Click(object sender, RoutedEventArgs e)
         {
-            //FingerprintManager.DeleteTable();
+            FingerprintManager.DeleteTable();    
+        }
+
+        private void createbutton_Click(object sender, RoutedEventArgs e)
+        {
             FingerprintManager.CreateTable();
         }
     }
