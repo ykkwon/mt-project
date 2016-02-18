@@ -116,13 +116,17 @@ namespace dbApp.Fingerprint
             Table table = Table.LoadTable(client, tableName);
             var input = new Document();
             int i = 1;
-            foreach (string inputs in hashedChunks)
+            foreach (string chunks in hashedChunks)
             {
-                input["Fingerprints"] = inputs;
+                input["Fingerprint"] = chunks;
                 input["Timestamp"] = i++;
                 input["Title"] = entryName;
                 input["Type"] = "N/A";
-                table.PutItem(input);
+
+                DocumentBatchWrite dbw = new DocumentBatchWrite(table);
+                dbw.AddDocumentToPut(input);
+                dbw.Execute();
+                //table.PutItem(input); // Deprecated, slow
             }
         }
 

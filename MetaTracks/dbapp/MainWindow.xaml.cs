@@ -85,11 +85,18 @@ namespace dbApp
         private void purgebutton_Click(object sender, RoutedEventArgs e)
         {
             FingerprintManager.DeleteTable();
+            MainWindow.Main.Status = "Table has been deleted. Don't forget to create it again.";
         }
 
         private void createbutton_Click(object sender, RoutedEventArgs e)
         {
             FingerprintManager.CreateTable();
+            MainWindow.Main.Status = "Table has been created.";
+        }
+
+        private void ProgressBar_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            
         }
     }
 }
