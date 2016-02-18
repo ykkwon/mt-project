@@ -20,7 +20,7 @@ namespace dbApp
         internal static MainWindow Main;
         private Video _returnedVideo;
         private OpenFileDialog _open;
-        private string entryName; 
+        private string entryName;
 
         private void openButton_Click(object sender, RoutedEventArgs e)
         {
@@ -34,7 +34,7 @@ namespace dbApp
             {
                 try
                 {
-                    _open = new OpenFileDialog {Filter = "Video File (*.mp4)|*.mp4;"};
+                    _open = new OpenFileDialog { Filter = "Video File (*.mp4)|*.mp4;" };
 
                     if (_open.ShowDialog() != true) return;
                     Video video = new Video(_open.FileName);
@@ -49,11 +49,12 @@ namespace dbApp
 
         private void sendButton_Click(object sender, RoutedEventArgs e)
         {
-            
-            FingerprintManager.SendToDatabase(entryName);
-            Console.WriteLine("Finished");
-            MainWindow.Main.Status = "Movie has been added to database successfully.";
-
+            (new Thread(() =>
+            {
+                FingerprintManager.SendToDatabase(entryName);
+                Console.WriteLine("Finished");
+                MainWindow.Main.Status = "Movie has been added to database successfully.";
+            })).Start();
         }
 
         private void SplitButton_Click(object sender, RoutedEventArgs e)
@@ -66,21 +67,24 @@ namespace dbApp
             {
                 MainWindow.Main.Status = "Choose an input file to preprocess first.";
             }
-            
+
         }
 
         internal string Status
         {
             get { return fg_label.Content.ToString(); }
-            set { Dispatcher.Invoke(new Action(() =>
+            set
             {
-                fg_label.Content += value + "\n";
-            })); }
+                Dispatcher.Invoke(new Action(() =>
+          {
+              fg_label.Content += value + "\n";
+          }));
+            }
         }
 
         private void purgebutton_Click(object sender, RoutedEventArgs e)
         {
-            FingerprintManager.DeleteTable();    
+            FingerprintManager.DeleteTable();
         }
 
         private void createbutton_Click(object sender, RoutedEventArgs e)

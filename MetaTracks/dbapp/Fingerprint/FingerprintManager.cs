@@ -16,12 +16,10 @@ namespace dbApp.Fingerprint
     class FingerprintManager
     {
         #region CONSTRUCTOR
-        public FingerprintManager()
-        {
-        }
+        public FingerprintManager() { }
         #endregion
 
-        #region VARIABLE
+        #region VARIABLES
         private static List<string> splitVideosList = new List<string>();
         private static List<string> hashedChunks = new List<string>();
         private static AmazonDynamoDBClient client = new AmazonDynamoDBClient();
@@ -120,15 +118,12 @@ namespace dbApp.Fingerprint
             int i = 1;
             foreach (string inputs in hashedChunks)
             {
-                input["Fingerprint"] = inputs;
+                input["Fingerprints"] = inputs;
                 input["Timestamp"] = i++;
-                input["Name"] = entryName;
-                input["Title"] = "N/A";
+                input["Title"] = entryName;
                 input["Type"] = "N/A";
                 table.PutItem(input);
             }
-
-
         }
 
         public static Video Preprocess(Video video, string outputFile, int desiredFrequency, int desiredChannels)
@@ -269,7 +264,9 @@ namespace dbApp.Fingerprint
                 _reader = null;
             }
         }
+        #endregion
 
+        #region DATABASE OPERATIONS
         public static void CreateTable()
         {
 
@@ -424,6 +421,5 @@ namespace dbApp.Fingerprint
             Console.WriteLine("Table is being deleted...");
         }
         #endregion
-
     }
 }
