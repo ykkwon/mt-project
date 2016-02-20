@@ -34,7 +34,7 @@ namespace CentralFingerprintDatabase.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError("", "Login data is incorrect!");
+                    ModelState.AddModelError("", "");
                 }
             }
             return View(user);

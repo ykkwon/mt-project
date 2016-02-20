@@ -8,21 +8,24 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
+    <link rel="stylesheet" type="text/css" href="~/Content/shared.css" />
 </head>
+
 <body>
-    <div style="width: auto; background-color: #728ea7;">
+  
+    <div class="hyperlinks">
         @if (Request.IsAuthenticated)
         {
-            <strong>@Html.Encode(User.Identity.Name)</strong>
+            @Html.Encode(User.Identity.Name)
             @Html.ActionLink("Sign Out", "Logout", "User")
         }
+
         else {
             @Html.ActionLink("Register", "Register", "User")
-            <span> | </span>
+            <span>       </span>
             @Html.ActionLink("Sign In", "Login", "User")
         }
     </div>
-
     @RenderBody()
     @RenderSection("scripts", required: false)
 </body>
