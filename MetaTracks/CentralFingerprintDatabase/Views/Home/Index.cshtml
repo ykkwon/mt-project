@@ -1,7 +1,9 @@
 ﻿@{
-    Layout = null;
+    ViewBag.Title = "Console";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<link rel="stylesheet" type="text/css" href="~/Content/mc.css"/>
 <!DOCTYPE html>
 
 <html>
@@ -10,8 +12,18 @@
     <title>Index</title>
 </head>
 <body>
-    <div>
-        <h1>Console</h1> 
-    </div>
+
+<nav class="navigation">
+    <p>Navigation could be here</p>
+</nav>
+
+<section class="left">
+    <p>"dbApp" could be here.</p></section>
+
+<section class="right">
+    <p>Server application with status on running consumer threads could be here.</p></section>
+
+<footer></footer>
+
 </body>
 </html>

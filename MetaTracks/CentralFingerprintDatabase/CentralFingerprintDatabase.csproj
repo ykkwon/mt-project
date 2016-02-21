@@ -122,6 +122,8 @@
       <DependentUpon>cfdb.mdf</DependentUpon>
     </Content>
     <Content Include="Content\login.css" />
+    <Content Include="Content\mc.css" />
+    <Content Include="Content\reset.css" />
     <Content Include="Content\shared.css" />
     <Content Include="Global.asax" />
     <Content Include="scripts\ai.0.15.0-build58334.js" />

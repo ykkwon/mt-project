@@ -30,7 +30,7 @@ namespace CentralFingerprintDatabase.Models
         /// <returns>True if user exist and password is correct</returns>
         public bool IsValid(string _username, string _password)
         {
-            using (var cn = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\krist\Desktop\mt-project\MetaTracks\CentralFingerprintDatabase\App_Data\cfdb.mdf;Integrated Security=True"))
+            using (var cn = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\cfdb.mdf;Integrated Security=True"))
             {
                 string _sql = @"SELECT [Username] FROM [dbo].[System_Users] " +
                        @"WHERE [Username] = @u AND [Password] = @p";

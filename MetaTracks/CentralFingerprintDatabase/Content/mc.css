@@ -1,0 +1,29 @@
+﻿body {
+    
+}
+
+.navigation {
+    height: 50px;    
+    width: 100%;
+    background-color: gray;
+    text-align: center;
+    padding-top: 20px;  
+}
+
+.left {
+    text-align: center;
+    padding-top: 300px;
+    float: left;
+    width: 50%;
+    height: 1000px;
+    background-color: lightblue; 
+}
+
+.right {
+    text-align: center;
+    padding-top: 300px;
+    float: right;
+    width: 50%;
+    height: 1000px;
+    background-color: lightgray;
+}
