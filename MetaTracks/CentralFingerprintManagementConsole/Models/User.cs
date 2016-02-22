@@ -11,7 +11,7 @@ namespace CentralFingerprintManagementConsole.Models
     public class User
     {
         [Required]
-        [Display(Name = "User name")]
+        [Display(Name = "Username")]
         public string UserName { get; set; }
 
         [Required]

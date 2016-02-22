@@ -23,22 +23,67 @@ textarea {
     max-width: 280px;
 }
 
-.user-loggedin-footer{
+.user-loggedin-footer {
     text-align: center;
     background: #4cff00;
-	width:100%;
-	height:auto;
-	position:absolute;
-	bottom:0;
-	left:0;
+    width: 100%;
+    padding-top: 5px;
+    height: auto;
+    position: absolute;
+    bottom: 0;
+    left: 0;
 }
 
-.user-notl-footer{
+.user-notl-footer {
     text-align: center;
     background: #ca2828;
-	width:100%;
-	height:auto;
-	position:absolute;
-	bottom:0;
-	left:0;
+    width: 100%;
+    padding-top: 5px;
+    height: auto;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
+.wrapper {
+    margin-top: 80px;
+    margin-bottom: 20px;
+}
+
+.form-signin {
+    max-width: 420px;
+    padding: 30px 38px 66px;
+    margin: 0 auto;
+    background-color: #eee;
+    border: 3px dotted rgba(0,0,0,0.1);
+}
+
+.form-signin-heading {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.form-control {
+    margin: 0 auto;
+    position: relative;
+    font-size: 16px;
+    height: auto;
+    padding: 10px;
+}
+
+input[type="text"] {
+    margin-bottom: 0px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+input[type="password"] {
+    margin-bottom: 20px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+.btn {
+    margin: 0 auto;
+    width: 25%;
 }

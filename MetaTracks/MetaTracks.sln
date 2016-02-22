@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mt_webapi", "mt_webapi\mt_w
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dbApp", "dbApp\dbApp.csproj", "{44B204BB-D200-4125-AF8D-5FF253946F0C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FingerprintManagementConsole", "FingerprintManagementConsole\FingerprintManagementConsole.csproj", "{61BC51DD-42F5-4041-9923-61FB7E3221D0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CentralFingerprintManagementConsole", "CentralFingerprintManagementConsole\CentralFingerprintManagementConsole.csproj", "{0FB35C17-FA2F-4C09-9DDC-AC5C81C72032}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +29,10 @@ Global
 		{44B204BB-D200-4125-AF8D-5FF253946F0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{44B204BB-D200-4125-AF8D-5FF253946F0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{44B204BB-D200-4125-AF8D-5FF253946F0C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{61BC51DD-42F5-4041-9923-61FB7E3221D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{61BC51DD-42F5-4041-9923-61FB7E3221D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{61BC51DD-42F5-4041-9923-61FB7E3221D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{61BC51DD-42F5-4041-9923-61FB7E3221D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0FB35C17-FA2F-4C09-9DDC-AC5C81C72032}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0FB35C17-FA2F-4C09-9DDC-AC5C81C72032}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0FB35C17-FA2F-4C09-9DDC-AC5C81C72032}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0FB35C17-FA2F-4C09-9DDC-AC5C81C72032}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

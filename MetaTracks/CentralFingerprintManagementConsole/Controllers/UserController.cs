@@ -30,7 +30,7 @@ namespace CentralFingerprintManagementConsole.Controllers
                     }
                     else
                     {
-                        ModelState.AddModelError("", "Login data is incorrect!");
+                        ModelState.AddModelError("", "Some required information is missing or incomplete. Please correct your entries and try again.");
                     }
                 }
                 return View(user);
