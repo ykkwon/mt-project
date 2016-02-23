@@ -19,7 +19,7 @@ namespace CentralFingerprintManagementConsole.Controllers
             }
 
             [HttpPost]
-            public ActionResult Login(CentralFingerprintManagementConsole.Models.User user)
+            public ActionResult Login(WebAPI.Models.User user)
             {
                 if (ModelState.IsValid)
                 {

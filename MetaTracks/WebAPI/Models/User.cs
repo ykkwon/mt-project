@@ -6,7 +6,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 
-namespace CentralFingerprintManagementConsole.Models
+namespace WebAPI.Models
 {
     public class User
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace CentralFingerprintManagementConsole.Helpers
+namespace WebAPI.Helpers
 {
     public class SHA1
     {
