@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
@@ -30,6 +31,52 @@ namespace WebAPI.Models
         /// <returns>True if user exist and password is correct</returns>
         public bool IsValid(string _username, string _password)
         {
+            string connStr = "server=webapidb.cv2ggww0l9ib.us-;user=glennskjong;database=system_users;port=3306;password=Security1;";
+            using (var conn = new MySqlConnection(connStr))
+            {
+                
+                string _mysql = "SELECT Username FROM System_Users WHERE Username = @u AND Password = @p";
+                try
+                {
+                    Console.WriteLine("Connecting to MySQL...");
+
+                    var cmd = new MySqlCommand(_mysql, conn);
+                    cmd.Parameters
+                        .Add(new MySqlParameter("@u", MySqlDbType.VarChar))
+                        .Value = _username;
+                    cmd.Parameters
+                        .Add(new MySqlParameter("@p", MySqlDbType.VarChar))
+                        .Value = _password;
+                    conn.Open();
+                    var reader = cmd.ExecuteReader();
+                    if (reader.HasRows)
+                    {
+                        reader.Dispose();
+                        cmd.Dispose();
+                        conn.Close();
+                        return true;
+                    }
+                    else
+                    {
+                        reader.Dispose();
+                        cmd.Dispose();
+                        conn.Close();
+                        return false;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                }
+                return false;
+                Console.WriteLine("Done.");
+            }
+        }
+    }
+}
+        /**
+        public bool IsValid(string _username, string _password)
+        {
             using (var cn = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\cfmcdb.mdf;Integrated Security=True"))
 
             {
@@ -58,4 +105,4 @@ namespace WebAPI.Models
             }
         }
     }
-}
+    **/
