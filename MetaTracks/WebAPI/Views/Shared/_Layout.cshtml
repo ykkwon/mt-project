@@ -25,7 +25,7 @@
                 <ul class="nav navbar-nav">
                     @if (Request.IsAuthenticated)
                     {
-                        <li>@Html.ActionLink("API", "Index", "Help", new { area = "" }, null)</li>
+                        <li>@Html.ActionLink("API", "Index", "Help")</li>
                         <li>@Html.ActionLink("Database activity", "Index", "Activity")</li>
                         <li>@Html.ActionLink("Sign Out", "Logout", "User")</li>
                     }

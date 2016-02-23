@@ -1,13 +1,14 @@
 ﻿using System.Web.Mvc;
 using System.Web.Security;
 
-namespace CentralFingerprintManagementConsole.Controllers
+namespace WebAPI.Controllers
 {
         public class UserController : Controller
         {
-            //
-            // GET: /User/
-            public ActionResult Index()
+        //
+        // GET: /User/
+        [Authorize]
+        public ActionResult Index()
             {
                 return View();
             }

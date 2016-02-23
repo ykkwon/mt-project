@@ -4,11 +4,11 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace CentralFingerprintManagementConsole.Controllers
+namespace WebAPI.Controllers
 {
-    public class ActivityController : Controller
+    public class HelpController : Controller
     {
-        // GET: Activity
+        // GET: Help
         [Authorize]
         public ActionResult Index()
         {
