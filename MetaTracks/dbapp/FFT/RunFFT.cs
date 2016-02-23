@@ -1,50 +1,61 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Windows;
+using System.Windows.Threading;
+using dbApp.Fingerprint;
 using NAudio.Wave;
 
 namespace dbApp.FFT
 {
     class RunFFT
     {
-        public event EventHandler<FftEventArgs> FftCalculated;
-        public event EventHandler<MaxSampleEventArgs> MaximumCalculated;
+        private static int fftLength = 8192;
+        private SampleAggregator sampleAggregator = new SampleAggregator(fftLength);
+        private IWaveIn waveIn;
 
-        public RunFFT(string filepath)
+
+        public RunFFT(Video vid)
         {
-            try
+            sampleAggregator.FftCalculated += new EventHandler<FftEventArgs>(FftCalculated);
+            sampleAggregator.PerformFFT = true;
+            waveIn = new WasapiLoopbackCapture();
+            waveIn.DataAvailable += OnDataAvailable;
+            waveIn.StartRecording();
+            Console.WriteLine("RunFFT Constructor " + vid.FilePath);
+        }
+
+        void OnDataAvailable(object sender, WaveInEventArgs e)
+        {
+            Console.WriteLine("OnDataAvailable -- RunFFT.cs");
+            if (!Dispatcher.CurrentDispatcher.CheckAccess())
             {
-                var inputStream = new AudioFileReader(filepath);
-                var aggregator = new SampleAggregator(inputStream)
+                Dispatcher.CurrentDispatcher.BeginInvoke(new EventHandler<WaveInEventArgs>(OnDataAvailable), sender, e);
+            }
+            else
+            {
+                byte[] buffer = e.Buffer;
+                int bytesRecored = e.BytesRecorded;
+                int bufferIncrement = waveIn.WaveFormat.BlockAlign;
+
+                for (int i = 0; i < bytesRecored; i += bufferIncrement)
                 {
-                    NotificationCount = inputStream.WaveFormat.SampleRate/100,
-                    PerformFFT = true
-                };
-
-                aggregator.FftCalculated += (sender, args) => OnFftCalculated(args);
-                aggregator.MaximumCalculated += (sender, args) => OnMaximumCalculated(args);
+                    float sample32 = BitConverter.ToSingle(buffer, i);
+                    sampleAggregator.Add(sample32);
+                }
             }
-            catch (Exception e)
+        }
+
+        void FftCalculated(object sender, FftEventArgs e)
+        {
+            Console.WriteLine("FFTCalculated");
+            for (var i = 0; i < e.Result.Length; i++)
             {
-                MessageBox.Show(e.Message, "Problem has occured in fftrun");
+                Console.WriteLine("FFT output.");
+                Console.WriteLine(e.Result[i].X);
+                Console.WriteLine(e.Result[i].Y);
             }
         }
 
-        protected virtual void OnFftCalculated(FftEventArgs e)
-        {
-            EventHandler<FftEventArgs> handler = FftCalculated;
-            handler?.Invoke(this, e);
-
-            //Console.WriteLine("fileStream Position: " + fileStream.CurrentTime);
-        }
-        
-        protected virtual void OnMaximumCalculated(MaxSampleEventArgs e)
-        {
-            EventHandler<MaxSampleEventArgs> handler = MaximumCalculated;
-            handler?.Invoke(this, e);
-        }
     }
 }
