@@ -14,5 +14,7 @@ namespace WebAPI.Helpers
             var combined = encoder.GetBytes(value ?? "");
             return BitConverter.ToString(hash.ComputeHash(combined)).ToLower().Replace("-", "");
         }
+
+
     }
 }

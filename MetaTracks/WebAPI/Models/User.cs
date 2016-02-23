@@ -23,58 +23,48 @@ namespace WebAPI.Models
         [Display(Name = "Remember on this computer")]
         public bool RememberMe { get; set; }
 
-        /// <summary>
-        /// Checks if user with given password exists in the database
-        /// </summary>
-        /// <param name="_username">User name</param>
-        /// <param name="_password">User password</param>
-        /// <returns>True if user exist and password is correct</returns>
+
         public bool IsValid(string _username, string _password)
         {
-            string connStr = "server=webapidb.cv2ggww0l9ib.us-;user=glennskjong;database=system_users;port=3306;password=Security1;";
-            using (var conn = new MySqlConnection(connStr))
-            {
-                
-                string _mysql = "SELECT Username FROM System_Users WHERE Username = @u AND Password = @p";
-                try
-                {
-                    Console.WriteLine("Connecting to MySQL...");
+            MySqlConnectionStringBuilder connStr = new MySqlConnectionStringBuilder();
+            connStr.Server = "webapidb.cv2ggww0l9ib.us-west-2.rds.amazonaws.com";
+            connStr.Port = 3306;
+            connStr.Database = "system_users";
+            connStr.UserID = "glennskjong";
+            connStr.Password = "Security1";
+            connStr.CharacterSet = "utf8";
 
-                    var cmd = new MySqlCommand(_mysql, conn);
-                    cmd.Parameters
-                        .Add(new MySqlParameter("@u", MySqlDbType.VarChar))
-                        .Value = _username;
-                    cmd.Parameters
-                        .Add(new MySqlParameter("@p", MySqlDbType.VarChar))
-                        .Value = _password;
-                    conn.Open();
-                    var reader = cmd.ExecuteReader();
-                    if (reader.HasRows)
-                    {
-                        reader.Dispose();
-                        cmd.Dispose();
-                        conn.Close();
-                        return true;
-                    }
-                    else
-                    {
-                        reader.Dispose();
-                        cmd.Dispose();
-                        conn.Close();
-                        return false;
-                    }
-                }
-                catch (Exception ex)
+            using (var conn = new MySqlConnection(connStr.ToString()))
+            {
+                string _query = "SELECT Username FROM System_Users WHERE Username = @u AND Password = @p";
+
+                var cmd = new MySqlCommand(_query, conn);
+                cmd.Parameters
+                    .Add(new MySqlParameter("@u", MySqlDbType.VarChar))
+                    .Value = _username;
+                cmd.Parameters
+                    .Add(new MySqlParameter("@p", MySqlDbType.VarChar))
+                    .Value = Helpers.SHA1.Encode(_password);
+                conn.Open();
+                var reader = cmd.ExecuteReader();
+                if (reader.HasRows)
                 {
-                    Console.WriteLine(ex.ToString());
+                    reader.Dispose();
+                    cmd.Dispose();
+                    return true;
                 }
-                return false;
-                Console.WriteLine("Done.");
+                else
+                {
+                    reader.Dispose();
+                    cmd.Dispose();
+                    return false;
+                }
             }
         }
     }
 }
-        /**
+
+/**
         public bool IsValid(string _username, string _password)
         {
             using (var cn = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\cfmcdb.mdf;Integrated Security=True"))
