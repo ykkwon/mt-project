@@ -27,7 +27,7 @@ namespace WebAPI.Models
         public bool IsValid(string _username, string _password)
         {
             MySqlConnectionStringBuilder connStr = new MySqlConnectionStringBuilder();
-            connStr.Server = "webapidb.cv2ggww0l9ib.us-west-2.rds.amazonaws.com";
+            connStr.Server = "webapidb.c7tab1cc7vsa.eu-west-1.rds.amazonaws.com";
             connStr.Port = 3306;
             connStr.Database = "system_users";
             connStr.UserID = "glennskjong";
