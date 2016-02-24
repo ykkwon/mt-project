@@ -24,9 +24,9 @@ namespace WebAPI.Models
             return fingerprints;
         }
 
-        public Fingerprint Get(int id)
+        public string Get(int id)
         {
-            return fingerprints.Find(p => p.Id == id);
+            return fingerprints.Find(p => p.Id == id).Hash.ToString();
         }
 
         public Fingerprint Add(Fingerprint item)

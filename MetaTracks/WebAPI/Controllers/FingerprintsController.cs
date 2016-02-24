@@ -21,7 +21,7 @@ namespace WebAPI.Controllers
 
         public string GetProduct(int id)
         {
-            Fingerprint item = repository.Get(id);
+            string item = repository.Get(id);
             if (item == null)
             {
                 throw new HttpResponseException(HttpStatusCode.NotFound);

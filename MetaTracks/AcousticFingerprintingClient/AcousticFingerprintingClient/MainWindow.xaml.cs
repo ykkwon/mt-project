@@ -48,7 +48,7 @@ namespace AcousticFingerprintingClient
                 if (response.IsSuccessStatusCode)
                 {
                     Fingerprint value = await response.Content.ReadAsAsync<Fingerprint>();
-                    Console.WriteLine("{0}\t${1}\t{2}", value.Id, value.Title, value.Hash);
+                    Console.WriteLine(value.Hash);
                 }
                 else
                 {

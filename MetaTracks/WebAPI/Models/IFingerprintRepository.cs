@@ -10,7 +10,7 @@ namespace WebAPI.Models
     
     {
         IEnumerable<Fingerprint> GetAll();
-        Fingerprint Get(int id);
+        string Get(int id);
         Fingerprint Add(Fingerprint item);
         bool Update(Fingerprint item);
     }
