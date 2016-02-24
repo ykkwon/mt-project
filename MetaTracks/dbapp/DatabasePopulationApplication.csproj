@@ -68,10 +68,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="FFT\SpectrumAnalyser.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -80,13 +76,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="FFT\IVisualizationPlugin.cs" />
     <Compile Include="FFT\RunFFT.cs" />
     <Compile Include="FFT\SampleAggregator.cs" />
-    <Compile Include="FFT\SpectrumAnalyser.xaml.cs">
-      <DependentUpon>SpectrumAnalyser.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="FFT\SpectrumAnalyzerVisualization.cs" />
     <Compile Include="Fingerprint\FingerprintManager.cs" />
     <Compile Include="Fingerprint\NAudioCode\WaveFileWriter.cs" />
     <Compile Include="Fingerprint\Video.cs" />
