@@ -19,14 +19,14 @@ namespace WebAPI.Controllers
             return repository.GetAll();
         }
 
-        public Fingerprint GetProduct(int id)
+        public string GetProduct(int id)
         {
             Fingerprint item = repository.Get(id);
             if (item == null)
             {
                 throw new HttpResponseException(HttpStatusCode.NotFound);
             }
-            return item;
+            return item.ToString();
         }
     }
 
