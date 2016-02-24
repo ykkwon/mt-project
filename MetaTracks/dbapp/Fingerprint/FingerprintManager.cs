@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
 using Amazon.DynamoDBv2.Model;
+using dbApp.FFT;
 
 namespace dbApp.Fingerprint
 {
@@ -105,6 +106,10 @@ namespace dbApp.Fingerprint
             MainWindow.Main.Status = "Loaded file: " + video.FilePath;
             Video convertedVideo = Mp4ToWav(video, video.FilePath.Remove(video.FilePath.Length - 4) + "Converted.wav"); // Ugly hack
             Video preprocessedVideo = Preprocess(convertedVideo, convertedVideo.FilePath, DesiredFrequency, DesiredChannels);
+
+            // Start FFT
+            RunFFT.StartFFT(preprocessedVideo);
+            //
             return preprocessedVideo;
         }
 
