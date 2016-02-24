@@ -13,5 +13,6 @@ namespace dbApp
     /// </summary>
     public partial class App : Application
     {
+        // Disposable
     }
 }
