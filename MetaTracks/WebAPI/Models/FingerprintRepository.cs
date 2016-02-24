@@ -1,59 +1,47 @@
-﻿using System;
+﻿using Amazon.DynamoDBv2;
+using Amazon.DynamoDBv2.DocumentModel;
+using Amazon.DynamoDBv2.Model;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace WebAPI.Models
 {
     public class FingerprintRepository : IFingerprintRepository
     {
-        private List<Fingerprint> fingerprints = new List<Fingerprint>();
-        private int _nextId = 1;
 
         public FingerprintRepository()
         {
-            {
-                Add(new Fingerprint { Id = 1, Hash = "12345678", Title = "For a Few Dollars More", Type = "Movie"});
-                Add(new Fingerprint { Id = 2, Hash = "23456789", Title = "Interstellar", Type = "Movie" });
-                Add(new Fingerprint { Id = 3, Hash = "34567890", Title = "Top Secret!", Type = "Movie" });
-            }
+           
         }
 
-        public IEnumerable<Fingerprint> GetAll()
+        public string GetFingerprintByHash(string hash)
         {
-            return fingerprints;
-        }
-
-        public string Get(int id)
-        {
-            return fingerprints.Find(p => p.Id == id).Hash.ToString();
-        }
-
-        public Fingerprint Add(Fingerprint item)
-        {
-            if (item == null)
+        AmazonDynamoDBClient client = new AmazonDynamoDBClient();
+        Dictionary<string, AttributeValue> lastKeyEvaluated = null;
+            do
             {
-                throw new ArgumentNullException("item");
-            }
-            item.Id = _nextId++;
-            fingerprints.Add(item);
-            return item;
-        }
+                var request = new ScanRequest
+                {
+                    TableName = "Video_Fingerprints",
+                    Limit = 2,
+                    ExclusiveStartKey = lastKeyEvaluated,
+                    ExpressionAttributeValues = new Dictionary<string, AttributeValue> {
+                        {":fingerprint", new AttributeValue { N = "0" }}
+                    },
+                    FilterExpression = ":fingerprint = Fingerprint",
 
-        public bool Update(Fingerprint item)
-        {
-            if (item == null)
-            {
-                throw new ArgumentNullException("item");
-            }
-            int index = fingerprints.FindIndex(p => p.Id == item.Id);
-            if (index == -1)
-            {
-                return false;
-            }
-            fingerprints.RemoveAt(index);
-            fingerprints.Add(item);
-            return true;
+                    ProjectionExpression = "Fingerprint, Title"
+                };
+
+                var response = client.Scan(request);
+
+                foreach (Dictionary<string, AttributeValue> item in response.Items)
+                {
+                    return item.ToString();
+                }
+                lastKeyEvaluated = response.LastEvaluatedKey;
+
+            } while (lastKeyEvaluated != null && lastKeyEvaluated.Count != 0);
+            return "Test";
         }
     }
 }
