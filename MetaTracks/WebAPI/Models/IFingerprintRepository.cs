@@ -6,6 +6,7 @@ namespace WebAPI.Models
     interface IFingerprintRepository
     
     {
-        string GetFingerprintByHash(string hash);
+        string GetSingleFingerprintByHash(string hash);
+        List<string> GetFingerprintsByTitle(string title);
     }
 }

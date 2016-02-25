@@ -1,0 +1,12 @@
+﻿@model List<string>
+
+@{
+    ViewBag.Title = "Get fingerprints by title";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Found several fingerprints: </h1>
+@foreach (var item in Model)
+{
+    @Html.DisplayTextFor(modelitem => item)
+}

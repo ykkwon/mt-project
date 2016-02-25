@@ -1,4 +1,5 @@
-﻿using Amazon.DynamoDBv2;
+﻿using System;
+using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
 using Amazon.DynamoDBv2.DocumentModel;
 using Amazon.DynamoDBv2.Model;
@@ -9,30 +10,44 @@ namespace WebAPI.Models
 {
     public class FingerprintRepository : IFingerprintRepository
     {
+        static AmazonDynamoDBClient client = new AmazonDynamoDBClient();
+        static string tableName = "Video_Fingerprints";
+        Table table = Table.LoadTable(client, tableName);
+        ScanFilter scanFilter = new ScanFilter();
 
         public FingerprintRepository()
         {
 
         }
 
-        public string GetFingerprintByHash(string hash)
+        public string GetSingleFingerprintByHash(string hash)
         {
-            AmazonDynamoDBClient client = new AmazonDynamoDBClient();
-            var tableName = "Video_Fingerprints";
-            Table table = Table.LoadTable(client, tableName);
-
-            ScanFilter scanFilter = new ScanFilter();
             scanFilter.AddCondition("Fingerprint", ScanOperator.Equal, hash);
-            Search ageSearch = table.Scan(scanFilter);
-            List<Document> fingerprintItems = ageSearch.GetRemaining();
+            Search hashSearch = table.Scan(scanFilter);
+            List<Document> fingerprintItems = hashSearch.GetRemaining();
             if (fingerprintItems.Count != 0)
             {
-                return "Found a match.";
+                return hash;
             }
-            else
+            return "No match.";
+        }
+
+        public List<string> GetFingerprintsByTitle(string title)
+        {
+            scanFilter.AddCondition("Title", ScanOperator.Equal, title);
+            Search titleSearch = table.Scan(scanFilter);
+            List<string> stringList = new List<string>();
+            List <Document> titleItems = titleSearch.GetRemaining();
+            foreach (Document doc in titleItems)
             {
-                return "No match.";
+                string newDoc = doc.ToJson();
+                stringList.Add(newDoc);
             }
+            if (titleItems.Count != 0)
+            {
+                return stringList;
+            }
+            return null;
         }
     }
 }

@@ -1,0 +1,9 @@
+﻿@model string
+
+@{
+    ViewBag.Title = "Get single fingerprint by hash";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Found the following fingerprint(s): </h1>
+@Html.DisplayText(Model)

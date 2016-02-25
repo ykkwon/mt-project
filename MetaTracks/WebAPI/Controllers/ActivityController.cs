@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace CentralFingerprintManagementConsole.Controllers
+namespace WebAPI.Controllers
 {
     public class ActivityController : Controller
     {
