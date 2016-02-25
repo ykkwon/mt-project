@@ -1,4 +1,6 @@
-﻿using System.Net;
+﻿using Amazon.DynamoDBv2.DocumentModel;
+using System.Collections.Generic;
+using System.Net;
 using System.Web.Http;
 using System.Web.Mvc;
 using WebAPI.Models;
