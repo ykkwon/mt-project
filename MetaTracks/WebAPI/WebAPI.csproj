@@ -163,7 +163,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Fingerprints\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -172,7 +171,6 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\ActivityController.cs" />
     <Compile Include="Controllers\FingerprintsController.cs" />
-    <Compile Include="Controllers\HelpController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
@@ -228,7 +226,8 @@
     <Content Include="Views\Activity\Index.cshtml" />
     <Content Include="Views\User\Login.cshtml" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
-    <Content Include="Views\Help\Index.cshtml" />
+    <Content Include="Views\Fingerprints\GetSingleFingerprint.cshtml" />
+    <Content Include="Views\Fingerprints\Index.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

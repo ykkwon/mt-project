@@ -9,6 +9,14 @@ namespace WebAPI.Controllers
 {
     public class FingerprintsController : Controller
     {
+        [System.Web.Mvc.Authorize]
+        public ActionResult Index()
+        {
+            ViewBag.Title = "Fingerprints";
+
+            return View();
+        }
+
         IFingerprintRepository repo = new FingerprintRepository();
         public string GetSingleFingerprint(string inputHash)
         { 
