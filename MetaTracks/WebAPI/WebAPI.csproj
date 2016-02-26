@@ -226,8 +226,9 @@
     <Content Include="Views\Activity\Index.cshtml" />
     <Content Include="Views\User\Login.cshtml" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
-    <None Include="Views\Fingerprints\GetFingerprintsByTitle.cshtml" />
+    <Content Include="Views\Fingerprints\Index.cshtml" />
     <Content Include="Views\Fingerprints\GetSingleFingerprintByHash.cshtml" />
+    <Content Include="Views\Fingerprints\GetFingerprintsByTitle.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

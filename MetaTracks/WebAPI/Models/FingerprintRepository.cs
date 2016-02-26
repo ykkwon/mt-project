@@ -1,9 +1,5 @@
-﻿using System;
-using Amazon.DynamoDBv2;
-using Amazon.DynamoDBv2.DataModel;
+﻿using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DocumentModel;
-using Amazon.DynamoDBv2.Model;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace WebAPI.Models
@@ -15,21 +11,18 @@ namespace WebAPI.Models
         Table table = Table.LoadTable(client, tableName);
         ScanFilter scanFilter = new ScanFilter();
 
-        public FingerprintRepository()
-        {
-
-        }
-
-        public string GetSingleFingerprintByHash(string hash)
+        public List<string> GetSingleFingerprintByHash(string hash)
         {
             scanFilter.AddCondition("Fingerprint", ScanOperator.Equal, hash);
             Search hashSearch = table.Scan(scanFilter);
             List<Document> fingerprintItems = hashSearch.GetRemaining();
+            List<string> stringList = new List<string>();
             if (fingerprintItems.Count != 0)
             {
-                return hash;
+               stringList.Add(fingerprintItems.Count.ToString());
+               return stringList;
             }
-            return "No match.";
+            return null;
         }
 
         public List<string> GetFingerprintsByTitle(string title)

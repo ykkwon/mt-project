@@ -1,4 +1,4 @@
-﻿@model string
+﻿@model List<string>
 
 @{
     ViewBag.Title = "Get single fingerprint by hash";
@@ -6,4 +6,7 @@
 }
 
 <h1>Found the following fingerprint(s): </h1>
-@Html.DisplayText(Model)
+@foreach (var item in Model)
+{
+    @Html.DisplayTextFor(modelitem => item)
+}

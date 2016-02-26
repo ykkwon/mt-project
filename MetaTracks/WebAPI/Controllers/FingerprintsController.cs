@@ -1,30 +1,28 @@
-﻿using Amazon.DynamoDBv2.DocumentModel;
-using System.Collections.Generic;
-using System.Net;
-using System.Web.Http;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using WebAPI.Models;
 
 namespace WebAPI.Controllers
 {
     public class FingerprintsController : Controller
     {
-        IFingerprintRepository repository = new FingerprintRepository();
+        readonly IFingerprintRepository _repository = new FingerprintRepository();
 
-        [System.Web.Mvc.Authorize]
- 
-        public ActionResult GetSingleFingerprintByHash(string inputHash)
-        { 
-            return PartialView(repository.GetSingleFingerprintByHash(inputHash));
+        [Authorize]
+        public ActionResult Index()
+        {
+            return View();
         }
 
-        [System.Web.Mvc.Authorize]
-
+        [Authorize]
         public ActionResult GetFingerprintsByTitle(string inputTitle)
         {
-            return PartialView(repository.GetFingerprintsByTitle(inputTitle));
+            return PartialView(_repository.GetFingerprintsByTitle(inputTitle));
+        }
+
+        [Authorize]
+        public ActionResult GetSingleFingerprintByHash(string inputHash)
+        {
+            return PartialView(_repository.GetSingleFingerprintByHash(inputHash));
         }
     }
-
-   
 }

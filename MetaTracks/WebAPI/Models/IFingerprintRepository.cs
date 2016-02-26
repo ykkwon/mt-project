@@ -1,12 +1,11 @@
-﻿using Amazon.DynamoDBv2.DocumentModel;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace WebAPI.Models
 {
-    interface IFingerprintRepository
+    internal interface IFingerprintRepository
     
     {
-        string GetSingleFingerprintByHash(string hash);
+        List<string> GetSingleFingerprintByHash(string hash);
         List<string> GetFingerprintsByTitle(string title);
     }
 }
