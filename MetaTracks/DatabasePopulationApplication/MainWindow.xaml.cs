@@ -42,6 +42,7 @@ namespace dbApp
                 }
                 catch (TypeInitializationException exception)
                 {
+                    Console.WriteLine(exception);
                     MainWindow.Main.Status = "Not connected to database. Connect through AWS Explorer.";
                 }
             })).Start();
@@ -63,6 +64,7 @@ namespace dbApp
             }
             catch (NullReferenceException ex)
             {
+                Console.WriteLine(ex);
                 MainWindow.Main.Status = "Choose an input file to preprocess first.";
             }
 
