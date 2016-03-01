@@ -30,43 +30,45 @@ namespace dbApp.Fingerprint
         private static int DesiredChannels = 1;
         // Random counter to add to filenames
         private static int _counter;
+        // needed for splitWavFile methods, checks previous position of reader.Position
+        private static long prevPos = 0;
         #endregion
 
         #region METHODS
+
         public static void SplitWavFile(string inPath, string outPath)
         {
-            
+            // Robust splitting variable
+            int robustSplit = 32;
+
             using (WaveFileReader reader = new WaveFileReader(inPath))
             {
                 // Total frames over the whole file
                 var totalFrames = reader.Length;
+
                 // Total frames over 1000 milliseconds
-                var framesPerSecond = (long)(totalFrames / reader.TotalTime.TotalMilliseconds) * 1000;
-
-                long i = 0;
-                while (_counter < (reader.TotalTime.TotalMilliseconds) / 1000)
+                var framesPerSecond = (long)((totalFrames / reader.TotalTime.TotalMilliseconds) * 1000);
+                
+                while ( reader.Position < reader.Length)
                 {
-                    i++;
                     _counter++;
+                    
+                    // if reader.position == 0, splitpos = 0 -- else splitpos = Math.Max(0, (prevPos + (framesPerSecond / robustSplit)));
+                    var splitPosition = reader.Position == 0 ? 0 : Math.Max(0, (prevPos + (framesPerSecond / robustSplit)));
 
+                    reader.Position = splitPosition;
+                    
                     // Creates file named filename__counter[x].wav
                     using (NAudioCode.WaveFileWriter writer = new NAudioCode.WaveFileWriter(outPath.Remove(outPath.Length - 4) + "_" + _counter + ".wav", reader.WaveFormat))
-                        
-
                     {
-                        // Start position is i and end position is the next increment
-                        // If sentence just as a safekeeping measure so we dont run into unexpected errors
-                        if ((i += framesPerSecond) <= totalFrames)
-                        {
-                            var currString = writer.Filename;
-                            splitVideosList.Add(currString);
-                            SplitWavFile(reader, writer, reader.Position, reader.Position + framesPerSecond);
-
-                        }
-                        
+                        var currString = writer.Filename;
+                        splitVideosList.Add(currString);
+                        // Runs splitting method, passes in the reader, writer
+                        SplitWavFile(reader, writer, reader.Position, Math.Min(reader.Position + framesPerSecond, totalFrames));
                     }
                 }
             }
+
             Console.WriteLine("Splitting done. Split into " + _counter + " chunks.");
             MainWindow.Main.Status = "Splitting done. Split into " + _counter + " chunks.";
             Console.WriteLine("Initiating hashing");
@@ -76,6 +78,7 @@ namespace dbApp.Fingerprint
         private static void SplitWavFile(WaveFileReader reader, NAudioCode.WaveFileWriter writer, long startPos, long endPos)
         {
             reader.Position = startPos;
+            prevPos = reader.Position;
             // Creates a new buffer with 1024 bytes
             byte[] buffer = new byte[1024];
             while (reader.Position < endPos)
@@ -83,6 +86,7 @@ namespace dbApp.Fingerprint
 
                 // Bytes still left to read
                 int bytesRequired = (int)(endPos - reader.Position);
+                //Console.WriteLine("startpos: " + startPos + " - " + reader.Position);
                 if (bytesRequired > 0)
                 {
                     // Bytes to read next, picks the smallest value of bytesRequired or buffer.length
