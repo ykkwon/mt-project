@@ -5,18 +5,22 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:dbApp"
         mc:Ignorable="d"
-        Title="Database Population Application" Height="319.907" Width="869.069" ResizeMode="NoResize" Background="#FF989299">
-    <Grid Margin="10,10,0,10" HorizontalAlignment="Left" Width="627">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="42"/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-        <Button x:Name="openButton" Content="Preprocess" HorizontalAlignment="Center" VerticalAlignment="Top" Width="200" Height="40" Click="openButton_Click" Background="White" BorderBrush="White" Grid.ColumnSpan="2" Margin="10,0,417,0" ToolTip="Open a file to convert and resample it."/>
-        <Button x:Name="sendButton" Content="Send File" HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="200" Height="40" Click="sendButton_Click" Background="White" BorderBrush="White" Margin="583,0,-198,221" Grid.Column="1" ToolTip="Send the hash provided by the preprocessing and splitting to the database."/>
-        <Button x:Name="splitButton" Content="Split file" HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="200" Height="40" Click="SplitButton_Click" Background="White" BorderBrush="White" Margin="378,0,7,221" Grid.Column="1" ToolTip="Split the .wav file which was previously preprocessed"/>
-        <Label x:Name="fg_label" Content="" HorizontalAlignment="Left" Margin="10,55,-198,0" VerticalAlignment="Top" RenderTransformOrigin="-1.079,-0.423" Grid.ColumnSpan="2" Height="179" Width="815" Background="#FF111111" FontWeight="Bold" FontSize="13.333" Foreground="White" Opacity="0.8"/>
-        <Button x:Name="purgebutton" Content="PURGE DB" HorizontalAlignment="Left" VerticalAlignment="Top" Width="95" Height="22" Margin="10,239,0,0" Click="purgebutton_Click" Background="#FFFF1D1D" FontWeight="Bold" Grid.ColumnSpan="2"/>
-        <Button x:Name="createbutton" Content="CREATE DB" HorizontalAlignment="Left" VerticalAlignment="Top" Width="95" Height="22" Grid.Column="1" Margin="68,239,0,0" Click="createbutton_Click" Background="#FF5BFF1D" FontWeight="Bold"/>
-        <Button x:Name="spectrogramButton" Content="Plot Spectrogram" HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="200" Height="40" Click="spectrogramButton_Click" Background="White" BorderBrush="White" Margin="173,0,212,221" Grid.Column="1" ToolTip=""/>
+        Title="Database Population Application" Height="568.432" Width="1003.069" ResizeMode="NoResize" Background="#FF292929" WindowStyle="None">
+    <Grid HorizontalAlignment="Left" Height="558" VerticalAlignment="Top" Width="1003">
+        <Button x:Name="openButton" Content="Preprocess file" HorizontalAlignment="Left" VerticalAlignment="Top" Width="240" Height="40" Background="#FF343436" Click="openButton_Click" RenderTransformOrigin="0.504,1.525" Margin="10,106.03,0,0" Foreground="White" FontWeight="Bold"/>
+        <Button x:Name="sendButton" Content="Send hashes to database" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="240" Margin="10,0,0,232" Height="40" Background="#FF343436" Click="sendButton_Click" Foreground="White" FontWeight="Bold"/>
+        <Button x:Name="waveletButton" Content="Wavelet transformation" HorizontalAlignment="Left" Width="240" Margin="10,241,0,277" Background="#FF343436" Click="waveletButton_Click" Foreground="White" FontWeight="Bold"/>
+        <Button x:Name="spectrogramButton" Content="Generate spectrograms" HorizontalAlignment="Left" VerticalAlignment="Top" Width="240" Margin="10,196.03,0,0" Height="40" Background="#FF343436" Click="spectrogramButton_Click" Foreground="White" FontWeight="Bold"/>
+        <Button x:Name="SplitButton" Content="Split file" HorizontalAlignment="Left" VerticalAlignment="Top" Width="240" Margin="10,151.03,0,0" Height="40" Background="#FF343436" Click="SplitButton_Click" Foreground="White" FontWeight="Bold"/>
+        <Label x:Name="fg_label" Content="" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="452" Width="705" BorderBrush="#FF464646" BorderThickness="1" Margin="268,0,0,0" Foreground="White" FontSize="14.667"/>
+        <Button x:Name="createbutton" Content="Recreate database" HorizontalAlignment="Left" Margin="10,518,0,0" VerticalAlignment="Top" Width="240" Height="40" Background="#FF37C551" Click="createbutton_Click"/>
+        <Button x:Name="purgebutton" Content="Purge database" HorizontalAlignment="Left" Margin="10,473,0,0" VerticalAlignment="Top" Width="240" Height="40" Background="#FFF55555" Click="purgebutton_Click"/>
+        <Rectangle Height="87.333" Margin="-132.667,-12,-25.375,0" VerticalAlignment="Top" Stroke="White" StrokeThickness="0.5" Fill="#FF383838"/>
+        <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Height="75" TextWrapping="Wrap" Text="Database Population Application" VerticalAlignment="Top" Width="475" Margin="10,10,0,0" Foreground="White" FontFamily="Segoe UI Emoji" FontSize="21.333"/>
+        <Button x:Name="closeButton" Content="X" HorizontalAlignment="Left" VerticalAlignment="Top" Width="25" Margin="978,0,0,0" RenderTransformOrigin="0.46,0.35" Height="25" Click="closeButton_Click" BorderBrush="{x:Null}" Foreground="White" FontSize="16">
+            <Button.Background>
+                <ImageBrush/>
+            </Button.Background>
+        </Button>
     </Grid>
 </Window>

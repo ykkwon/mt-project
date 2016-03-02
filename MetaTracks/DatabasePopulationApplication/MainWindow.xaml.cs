@@ -105,11 +105,6 @@ namespace dbApp
             MainWindow.Main.Status = "Table has been created.";
         }
 
-        private void ProgressBar_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-           
-        }
-
         private void spectrogramButton_Click(object sender, RoutedEventArgs e)
         {
             try { 
@@ -119,6 +114,16 @@ namespace dbApp
             {
                 Console.WriteLine("No file loaded.");
             }
+        }
+
+        private void waveletButton_Click(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void closeButton_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
     }
 }

@@ -39,6 +39,7 @@ namespace dbApp.Fingerprint
 
         public static void SplitWavFile(string inPath, string outPath)
         {
+            MainWindow.Main.Status = "Starting file split.";
             // Robust splitting variable
             int robustSplit = 32;
 
@@ -140,6 +141,7 @@ namespace dbApp.Fingerprint
 
         public static Media Preprocess(Media inputMedia)
         {
+            MainWindow.Main.Status = "Starting preprocessing of input file.";
             {
                 using (var reader = new WaveFileReader(inputMedia.FilePath))
                 {
@@ -149,6 +151,7 @@ namespace dbApp.Fingerprint
                     {
                         resampler.ResamplerQuality = 60;
                         WaveFileWriter.CreateWaveFile(preprocessedVideo.FilePath, resampler);
+                        MainWindow.Main.Status = "Preprocessing done. Wrote file to: " + preprocessedVideo.FilePath;
                         Console.WriteLine(@"Preprocessing done. Wrote file to: " + preprocessedVideo.FilePath);
                     }
                     
@@ -179,6 +182,7 @@ namespace dbApp.Fingerprint
 
         public static void plotSpectrogram(string filePath)
         {
+            MainWindow.Main.Status = "Sending preprocessed file to MATLAB.";
             Console.WriteLine("Sending to MATLAB: " + filePath);
             MLApp.MLApp matlab = new MLApp.MLApp();
 
@@ -196,6 +200,7 @@ namespace dbApp.Fingerprint
             // Display result 
             object[] res = result as object[];
             Console.WriteLine(res[0]);
+            MainWindow.Main.Status = "Returned from MATLAB: " + (res[0]).ToString();
 
         }
 
@@ -266,6 +271,7 @@ namespace dbApp.Fingerprint
 
         public static Media FileToWav(Media inputMedia, Media outputMedia)
         {
+            MainWindow.Main.Status = "Converting input to Wave file.";
             outputMedia.FilePath = inputMedia.DirPath + "/Converted.wav";
             {
                 using (MediaFoundationReader reader = new MediaFoundationReader(inputMedia.FilePath))
@@ -274,7 +280,7 @@ namespace dbApp.Fingerprint
                     {
                         WaveFileWriter.CreateWaveFile(outputMedia.FilePath, pcmStream);
                         Console.WriteLine(@"Conversion done.");
-
+                        MainWindow.Main.Status = "Conversion done..";
                         var convertedMedia = new Media(outputMedia.FilePath);
                         return convertedMedia;
                     }
