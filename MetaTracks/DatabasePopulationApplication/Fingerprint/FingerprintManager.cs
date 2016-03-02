@@ -88,12 +88,16 @@ namespace dbApp.Fingerprint
                 // Bytes still left to read
                 int bytesRequired = (int)(endPos - reader.Position);
 
-                //Console.WriteLine("startpos: " + startPos + " - " + reader.Position);
+                Console.WriteLine("startpos: " + startPos + " - " + reader.Position);
                 if (bytesRequired > 0)
                 {
                     // Bytes to read next, picks the smallest value of bytesRequired or buffer.length
                     int bytesToRead = Math.Min(bytesRequired, buffer.Length);
-                    if (bytesToRead % reader.BlockAlign != 0) bytesToRead++;
+
+                    //if (bytesToRead % reader.BlockAlign != 0) bytesToRead++;
+                    // Make sure we dont go out of sync
+                    bytesToRead += (bytesToRead % reader.BlockAlign);
+                    
                     // Reades bytes from buffer into variable
                     int bytesRead = reader.Read(buffer, 0, bytesToRead);
                     if (bytesRead > 0)
@@ -182,6 +186,7 @@ namespace dbApp.Fingerprint
 
         public static void plotSpectrogram(string filePath)
         {
+            /*
             MainWindow.Main.Status = "Sending preprocessed file to MATLAB.";
             Console.WriteLine("Sending to MATLAB: " + filePath);
             MLApp.MLApp matlab = new MLApp.MLApp();
@@ -201,7 +206,7 @@ namespace dbApp.Fingerprint
             object[] res = result as object[];
             Console.WriteLine(res[0]);
             MainWindow.Main.Status = "Returned from MATLAB: " + (res[0]).ToString();
-
+            */
         }
 
         public void Filter()
