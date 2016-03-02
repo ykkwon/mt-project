@@ -1,5 +1,6 @@
 ﻿using Microsoft.Win32;
 using System;
+using System.Collections.Generic;
 using System.Windows;
 using dbApp.Fingerprint;
 using System.Threading;
@@ -23,6 +24,7 @@ namespace dbApp
         private Media _preprocessedMedia;
         private OpenFileDialog _open;
         private string _entryName;
+        private List<string> _splitVideosList; 
 
         private void openButton_Click(object sender, RoutedEventArgs e)
         {
@@ -38,7 +40,7 @@ namespace dbApp
                 {
                     _open = new OpenFileDialog
                     {
-                        Filter = "MP4 Video File (*.mp4)|*.mp4;|AVI Video File (*.avi)|*.avi;",
+                        Filter = "MP4 Video File (*.mp4)|*.mp4;|AVI Video File (*.avi)|*.avi;|All files (*.*)|(*.*);",
                     };
                     _open.ShowDialog();
 
@@ -74,7 +76,7 @@ namespace dbApp
             {
                 try
             {
-                FingerprintManager.SplitWavFile(_preprocessedMedia, _preprocessedMedia);
+                _splitVideosList = FingerprintManager.SplitWavFile(_preprocessedMedia, _preprocessedMedia);
             }
             catch (NullReferenceException ex)
             {
@@ -140,8 +142,7 @@ namespace dbApp
 
         private void hashButton_Click(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
-            //HashTransform(splitVideosList);
+            FingerprintManager.HashTransform(_splitVideosList);
         }
     }
-}
+}   

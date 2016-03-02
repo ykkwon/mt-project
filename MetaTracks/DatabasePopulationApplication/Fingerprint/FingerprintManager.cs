@@ -29,12 +29,14 @@ namespace dbApp.Fingerprint
 
         #region METHODS
 
-        public static void SplitWavFile(Media inMedia, Media outMedia)
+        public static List<string> SplitWavFile(Media inMedia, Media outMedia)
         {
 
             // Robust splitting variable
+            MainWindow.Main.Status = "Initiating splitting of preprocessed video.";
             int robustSplit = 32;
-
+            string folderName = inMedia.FilePath + "/../SplitOutput/";
+            System.IO.Directory.CreateDirectory(folderName);
             using (WaveFileReader reader = new WaveFileReader(inMedia.FilePath))
             {
                 // Total frames over the whole file
@@ -53,18 +55,19 @@ namespace dbApp.Fingerprint
                     reader.Position = splitPosition;
 
                     // Creates file named filename__counter[x].wav
-                    using (NAudioCode.WaveFileWriter writer = new NAudioCode.WaveFileWriter(outMedia.FilePath + "_" + _counter + ".wav", reader.WaveFormat))
+                    using (NAudioCode.WaveFileWriter writer = new NAudioCode.WaveFileWriter(outMedia.FilePath + "/../SplitOutput/" + "Split_" + _counter + ".wav", reader.WaveFormat))
                     {
                         var currString = writer.Filename;
                         SplitVideosList.Add(currString);
                         // Runs splitting method, passes in the reader, writer
                         SplitWavFile(reader, writer, reader.Position, Math.Min(reader.Position + framesPerSecond, totalFrames));
                     }
+                   
                 }
             }
-
             Console.WriteLine("Splitting done. Split into " + _counter + " chunks.");
             MainWindow.Main.Status = "Splitting done. Split into " + _counter + " chunks.";
+            return SplitVideosList;
         }
 
         private static void SplitWavFile(WaveFileReader reader, NAudioCode.WaveFileWriter writer, long startPos, long endPos)
@@ -125,7 +128,6 @@ namespace dbApp.Fingerprint
                 DocumentBatchWrite dbw = new DocumentBatchWrite(table);
                 dbw.AddDocumentToPut(input);
                 dbw.Execute();
-                //table.PutItem(input); // Deprecated, slow
             }
             DateTime then = DateTime.Now;
             Console.WriteLine("Finished at: " + then);
@@ -173,7 +175,6 @@ namespace dbApp.Fingerprint
 
         public static void PlotSpectrogram(string filePath)
         {
-            /*
             MainWindow.Main.Status = "Sending preprocessed file to MATLAB.";
             Console.WriteLine("Sending to MATLAB: " + filePath);
             MLApp.MLApp matlab = new MLApp.MLApp();
@@ -184,16 +185,18 @@ namespace dbApp.Fingerprint
             matlab.Execute(@"cd " + startupPath + "../../../MATLAB");
 
             // Define the output 
-            object result = null;
+            object result;
 
             // Call the MATLAB function myfunc
             matlab.Feval("myfunc", 1, out result, filePath);
 
             // Display result 
             object[] res = result as object[];
-            Console.WriteLine(res[0]);
-            MainWindow.Main.Status = "Returned from MATLAB: " + (res[0]).ToString();
-            */
+            if (res != null)
+            {
+                Console.WriteLine(res[0]);
+                MainWindow.Main.Status = "Returned from MATLAB: " + (res[0]);
+            }
         }
 
         public void Filter()
@@ -208,6 +211,7 @@ namespace dbApp.Fingerprint
 
         public static void HashTransform(List<string> videoChunks)
         {
+            MainWindow.Main.Status = "Starting hash generation.";
             using (MD5 md5Hash = MD5.Create())
             {
                 foreach (string item in videoChunks)
@@ -219,7 +223,10 @@ namespace dbApp.Fingerprint
                 {
                     Console.WriteLine(HashedChunks[i]);
                 }
+                MainWindow.Main.Status = "Hash generation done. Generated " + 
+                    HashedChunks.Count + " hashes.";
             }
+            
         }
 
         static string GetMd5Hash(MD5 md5Hash, string input)
