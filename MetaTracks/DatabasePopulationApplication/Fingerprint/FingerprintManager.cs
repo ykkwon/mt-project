@@ -81,7 +81,7 @@ namespace dbApp.Fingerprint
             reader.Position = startPos;
             prevPos = reader.Position;
             // Creates a new buffer with 1024 bytes
-            byte[] buffer = new byte[1024];
+            byte[] buffer = new byte[reader.BlockAlign * 100];
             while (reader.Position < endPos)
             {
 
