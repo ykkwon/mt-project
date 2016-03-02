@@ -3,34 +3,33 @@ using System;
 using System.Windows;
 using dbApp.Fingerprint;
 using System.Threading;
-using System.Windows.Input;
 
 namespace dbApp
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow
     {
         public MainWindow()
         {
             Main = this;
             InitializeComponent();
-            this.MouseDown += delegate { DragMove(); };
+            MouseDown += delegate { DragMove(); };
         }
 
         internal static MainWindow Main;
-        private Media convertedMedia;
-        private Media preprocessedMedia;
+        private Media _convertedMedia;
+        private Media _preprocessedMedia;
         private OpenFileDialog _open;
-        private string entryName;
+        private string _entryName;
 
         private void openButton_Click(object sender, RoutedEventArgs e)
         {
             var dialog = new Popup();
             if (dialog.ShowDialog() == true)
             {
-                entryName = dialog.ResponseText;
+                _entryName = dialog.ResponseText;
             }
 
             (new Thread(() =>
@@ -49,8 +48,8 @@ namespace dbApp
                     Console.WriteLine("Converting input to Wave format.");
                     // Use the same file path as input media, to write to the same folder. 
                     var outputMedia = new Media(_open.FileName);
-                    convertedMedia = FingerprintManager.FileToWav(media, outputMedia);
-                    preprocessedMedia = FingerprintManager.Preprocess(convertedMedia);
+                    _convertedMedia = FingerprintManager.FileToWav(media, outputMedia);
+                    _preprocessedMedia = FingerprintManager.Preprocess(_convertedMedia);
 
                 }
                 catch (TypeInitializationException exception)
@@ -65,7 +64,7 @@ namespace dbApp
         {
             (new Thread(() =>
             {
-                FingerprintManager.SendToDatabase(entryName);
+                FingerprintManager.SendToDatabase(_entryName);
             })).Start();
         }
 
@@ -75,12 +74,12 @@ namespace dbApp
             {
                 try
             {
-                FingerprintManager.SplitWavFile(preprocessedMedia, preprocessedMedia);
+                FingerprintManager.SplitWavFile(_preprocessedMedia, _preprocessedMedia);
             }
             catch (NullReferenceException ex)
             {
                 Console.WriteLine(ex);
-                MainWindow.Main.Status = "Choose an input file to preprocess first.";
+                Main.Status = "Choose an input file to preprocess first.";
             }})).Start();
 
         }
@@ -90,10 +89,10 @@ namespace dbApp
             get { return fg_label.Content.ToString(); }
             set
             {
-                Dispatcher.Invoke(new Action(() =>
-          {
-              fg_label.Content += value + "\n";
-          }));
+                Dispatcher.Invoke(() =>
+                {
+                    fg_label.Content += value + "\n";
+                });
             }
         }
 
@@ -120,7 +119,7 @@ namespace dbApp
             (new Thread(() =>
             {
                 try { 
-            FingerprintManager.plotSpectrogram(preprocessedMedia.FilePath);
+            FingerprintManager.PlotSpectrogram(_preprocessedMedia.FilePath);
             }
             catch(NullReferenceException)
             {

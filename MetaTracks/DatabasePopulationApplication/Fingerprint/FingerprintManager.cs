@@ -7,39 +7,31 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
 using Amazon.DynamoDBv2.Model;
-using System.IO;
 
 namespace dbApp.Fingerprint
 {
-    // TODO: BatchWrite to DynamoDB
-    // TODO: Add Type to input
-
     class FingerprintManager
     {
-        #region CONSTRUCTOR
-        public FingerprintManager() { }
-        #endregion
-
         #region VARIABLES
-        private static List<string> splitVideosList = new List<string>();
-        private static List<string> hashedChunks = new List<string>();
-        private static AmazonDynamoDBClient client = new AmazonDynamoDBClient();
+        private static readonly List<string> SplitVideosList = new List<string>();
+        private static readonly List<string> HashedChunks = new List<string>();
+        private static readonly AmazonDynamoDBClient Client = new AmazonDynamoDBClient();
         private static string tableName = "Video_Fingerprints";
         // 5512 contains all the relevant (perceptive) information
-        private static int DesiredFrequency = 5512;
+        public static int DesiredFrequency { get; } = 5512;
         // One channel is mono as opposed to two which is stereo
-        private static int DesiredChannels = 1;
+        public static int DesiredChannels { get; } = 1;
         // Random counter to add to filenames
         private static int _counter;
         // needed for splitWavFile methods, checks previous position of reader.Position
-        private static long prevPos = 0;
+        private static long _prevPos;
         #endregion
 
         #region METHODS
 
         public static void SplitWavFile(Media inMedia, Media outMedia)
         {
-           
+
             // Robust splitting variable
             int robustSplit = 32;
 
@@ -50,21 +42,21 @@ namespace dbApp.Fingerprint
 
                 // Total frames over 1000 milliseconds
                 var framesPerSecond = (long)((totalFrames / reader.TotalTime.TotalMilliseconds) * 1000);
-                
-                while ( reader.Position < reader.Length)
+
+                while (reader.Position < reader.Length)
                 {
                     _counter++;
-                    
+
                     // if reader.position == 0, splitpos = 0 -- else splitpos = Math.Max(0, (prevPos + (framesPerSecond / robustSplit)));
-                    var splitPosition = reader.Position == 0 ? 0 : Math.Max(0, (prevPos + (framesPerSecond / robustSplit)));
+                    var splitPosition = reader.Position == 0 ? 0 : Math.Max(0, (_prevPos + (framesPerSecond / robustSplit)));
 
                     reader.Position = splitPosition;
-                    
+
                     // Creates file named filename__counter[x].wav
                     using (NAudioCode.WaveFileWriter writer = new NAudioCode.WaveFileWriter(outMedia.FilePath + "_" + _counter + ".wav", reader.WaveFormat))
                     {
                         var currString = writer.Filename;
-                        splitVideosList.Add(currString);
+                        SplitVideosList.Add(currString);
                         // Runs splitting method, passes in the reader, writer
                         SplitWavFile(reader, writer, reader.Position, Math.Min(reader.Position + framesPerSecond, totalFrames));
                     }
@@ -73,13 +65,12 @@ namespace dbApp.Fingerprint
 
             Console.WriteLine("Splitting done. Split into " + _counter + " chunks.");
             MainWindow.Main.Status = "Splitting done. Split into " + _counter + " chunks.";
-            Console.WriteLine("Initiating hashing");
         }
 
         private static void SplitWavFile(WaveFileReader reader, NAudioCode.WaveFileWriter writer, long startPos, long endPos)
         {
             reader.Position = startPos;
-            prevPos = reader.Position;
+            _prevPos = reader.Position;
             // Creates a new buffer with 1024 bytes
             byte[] buffer = new byte[reader.BlockAlign * 100];
             while (reader.Position < endPos)
@@ -88,7 +79,7 @@ namespace dbApp.Fingerprint
                 // Bytes still left to read
                 int bytesRequired = (int)(endPos - reader.Position);
 
-                Console.WriteLine("startpos: " + startPos + " - " + reader.Position);
+                //Console.WriteLine("startpos: " + startPos + " - " + reader.Position);
                 if (bytesRequired > 0)
                 {
                     // Bytes to read next, picks the smallest value of bytesRequired or buffer.length
@@ -97,7 +88,7 @@ namespace dbApp.Fingerprint
                     //if (bytesToRead % reader.BlockAlign != 0) bytesToRead++;
                     // Make sure we dont go out of sync
                     bytesToRead += (bytesToRead % reader.BlockAlign);
-                    
+
                     // Reades bytes from buffer into variable
                     int bytesRead = reader.Read(buffer, 0, bytesToRead);
                     if (bytesRead > 0)
@@ -115,21 +106,21 @@ namespace dbApp.Fingerprint
             Console.WriteLine("Sending hashes to database");
             MainWindow.Main.Status = "Sending hashes to database";
 
-            Table table = Table.LoadTable(client, tableName);
+            Table table = Table.LoadTable(Client, tableName);
             var input = new Document();
             int i = 1;
             DateTime now = DateTime.Now;
-            
+
             Console.WriteLine("Started at: " + now);
             MainWindow.Main.Status = "Started at: " + now;
-            foreach (string chunks in hashedChunks)
+            foreach (string chunks in HashedChunks)
             {
-                Console.WriteLine("Hash " + i + " of " + hashedChunks.Count);
+                Console.WriteLine("Hash " + i + " of " + HashedChunks.Count);
                 input["Fingerprint"] = chunks;
                 input["Timestamp"] = i++;
                 input["Title"] = entryName;
                 input["Type"] = "N/A";
-                
+
 
                 DocumentBatchWrite dbw = new DocumentBatchWrite(table);
                 dbw.AddDocumentToPut(input);
@@ -140,7 +131,7 @@ namespace dbApp.Fingerprint
             Console.WriteLine("Finished at: " + then);
             MainWindow.Main.Status = "Movie has been added to database successfully.";
             MainWindow.Main.Status = "Finished at: " + then;
-            MainWindow.Main.Status = "Elapsed: " + ((int)then.Second - (int)now.Second) + " seconds.";
+            MainWindow.Main.Status = "Elapsed: " + (then.Second - now.Second) + " seconds.";
         }
 
         public static Media Preprocess(Media inputMedia)
@@ -158,33 +149,29 @@ namespace dbApp.Fingerprint
                         MainWindow.Main.Status = "Preprocessing done. Wrote file to: " + preprocessedVideo.FilePath;
                         Console.WriteLine(@"Preprocessing done. Wrote file to: " + preprocessedVideo.FilePath);
                     }
-                    
-                    return preprocessedVideo;   
+                    return preprocessedVideo;
                 }
-                //File.Delete(inputMedia.FilePath);
             }
         }
 
         public static void Play(Media media)
         {
-            DirectSoundOut _output;
-            MediaFoundationReader _reader;
-            _reader = new MediaFoundationReader(media.FilePath);
-            _output = new DirectSoundOut();
-            _output.Init(_reader);
-            _output.Play();
-            while (_output.PlaybackState == PlaybackState.Playing)
+            var reader = new MediaFoundationReader(media.FilePath);
+            var output = new DirectSoundOut();
+            output.Init(reader);
+            output.Play();
+            while (output.PlaybackState == PlaybackState.Playing)
             {
-                var currentTime = _reader.CurrentTime.ToString("mm\\:ss");
+                var currentTime = reader.CurrentTime.ToString("mm\\:ss");
                 // Write every 1000 ms
                 Console.WriteLine(currentTime);
                 Thread.Sleep(1000);
             }
             Console.WriteLine(@"Playback has ended.");
-            DisposeWave(_output, _reader);
+            DisposeWave(output, reader);
         }
 
-        public static void plotSpectrogram(string filePath)
+        public static void PlotSpectrogram(string filePath)
         {
             /*
             MainWindow.Main.Status = "Sending preprocessed file to MATLAB.";
@@ -226,11 +213,11 @@ namespace dbApp.Fingerprint
                 foreach (string item in videoChunks)
                 {
                     var hash = GetMd5Hash(md5Hash, item);
-                    hashedChunks.Add(hash);
+                    HashedChunks.Add(hash);
                 }
-                for (int i = 0; i < hashedChunks.Count; i++)
+                for (int i = 0; i < HashedChunks.Count; i++)
                 {
-                    Console.WriteLine(hashedChunks[i]);
+                    Console.WriteLine(HashedChunks[i]);
                 }
             }
         }
@@ -256,7 +243,7 @@ namespace dbApp.Fingerprint
             return sBuilder.ToString();
         }
 
-        static bool VerifyMd5Hash(MD5 md5Hash, string input, string hash)
+        public static bool VerifyMd5Hash(MD5 md5Hash, string input, string hash)
         {
             // Hash the input.
             string hashOfInput = GetMd5Hash(md5Hash, input);
@@ -293,18 +280,16 @@ namespace dbApp.Fingerprint
             }
         }
 
-        public static void DisposeWave(DirectSoundOut _output, MediaFoundationReader _reader)
+        public static void DisposeWave(DirectSoundOut output, MediaFoundationReader reader)
         {
-            if (_output != null)
+            if (output != null)
             {
-                if (_output.PlaybackState == PlaybackState.Playing) _output.Stop();
-                _output.Dispose();
-                _output = null;
+                if (output.PlaybackState == PlaybackState.Playing) output.Stop();
+                output.Dispose();
             }
-            if (_reader != null)
+            if (reader != null)
             {
-                _reader.Dispose();
-                _reader = null;
+                reader.Dispose();
             }
         }
         #endregion
@@ -383,7 +368,7 @@ namespace dbApp.Fingerprint
                 }
             };
 
-            var TimestampTitleIndex = new GlobalSecondaryIndex()
+            var timestampTitleIndex = new GlobalSecondaryIndex()
             {
                 IndexName = "Timestamp-Title-index",
                 ProvisionedThroughput = ptIndex,
@@ -408,34 +393,34 @@ namespace dbApp.Fingerprint
                 TableName = tableName,
                 ProvisionedThroughput = new ProvisionedThroughput
                 {
-                    ReadCapacityUnits = (long)1,
-                    WriteCapacityUnits = (long)1
+                    ReadCapacityUnits = 1,
+                    WriteCapacityUnits = 1
                 },
                 AttributeDefinitions = attributeDefinitions,
                 KeySchema = tableKeySchema,
-                GlobalSecondaryIndexes = { createDateIndex, titleIndex, TimestampTitleIndex }
+                GlobalSecondaryIndexes = { createDateIndex, titleIndex, timestampTitleIndex }
             };
 
             Console.WriteLine("Creating table " + tableName + "...");
-            client.CreateTable(createTableRequest);
+            Client.CreateTable(createTableRequest);
 
             WaitUntilTableReady(tableName);
             Console.WriteLine("** Completed creating table **");
 
         }
 
-        private static void WaitUntilTableReady(string tableName)
+        private static void WaitUntilTableReady(string dbTableName)
         {
             string status = null;
             // Let us wait until table is created. Call DescribeTable.
             do
             {
-                System.Threading.Thread.Sleep(5000); // Wait 5 seconds.
+                Thread.Sleep(5000); // Wait 5 seconds.
                 try
                 {
-                    var res = client.DescribeTable(new DescribeTableRequest
+                    var res = Client.DescribeTable(new DescribeTableRequest
                     {
-                        TableName = tableName
+                        TableName = dbTableName
                     });
 
                     Console.WriteLine("Table name: {0}, status: {1}",
@@ -459,7 +444,7 @@ namespace dbApp.Fingerprint
                 TableName = tableName
             };
 
-            var response = client.DeleteTable(request);
+            Client.DeleteTable(request);
 
             Console.WriteLine("Table is being deleted...");
         }
