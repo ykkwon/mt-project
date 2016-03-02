@@ -3,6 +3,7 @@ using System;
 using System.Windows;
 using dbApp.Fingerprint;
 using System.Threading;
+using System.Windows.Input;
 
 namespace dbApp
 {
@@ -15,6 +16,7 @@ namespace dbApp
         {
             Main = this;
             InitializeComponent();
+            this.MouseDown += delegate { DragMove(); };
         }
 
         internal static MainWindow Main;
@@ -37,7 +39,7 @@ namespace dbApp
                 {
                     _open = new OpenFileDialog
                     {
-                        Filter = "Video File (*.mp4)|*.mp4;",
+                        Filter = "MP4 Video File (*.mp4)|*.mp4;|AVI Video File (*.avi)|*.avi;",
                     };
                     _open.ShowDialog();
 
@@ -54,7 +56,7 @@ namespace dbApp
                 catch (TypeInitializationException exception)
                 {
                     Console.WriteLine(exception);
-                    MainWindow.Main.Status = "Not connected to database. Connect through AWS Explorer.";
+                    Main.Status = "Not connected to database. Connect through AWS Explorer.";
                 }
             })).Start();
         }
@@ -69,15 +71,17 @@ namespace dbApp
 
         private void SplitButton_Click(object sender, RoutedEventArgs e)
         {
-            try
+            (new Thread(() =>
             {
-                FingerprintManager.SplitWavFile(preprocessedMedia.FilePath, convertedMedia.FilePath);
+                try
+            {
+                FingerprintManager.SplitWavFile(preprocessedMedia, preprocessedMedia);
             }
             catch (NullReferenceException ex)
             {
                 Console.WriteLine(ex);
                 MainWindow.Main.Status = "Choose an input file to preprocess first.";
-            }
+            }})).Start();
 
         }
 
@@ -95,25 +99,34 @@ namespace dbApp
 
         private void purgebutton_Click(object sender, RoutedEventArgs e)
         {
-            FingerprintManager.DeleteTable();
-            MainWindow.Main.Status = "Table has been deleted. Don't forget to create it again.";
+            (new Thread(() =>
+            {
+                FingerprintManager.DeleteTable();
+                Main.Status = "Table has been deleted. Don't forget to create it again.";
+            })).Start();
         }
 
         private void createbutton_Click(object sender, RoutedEventArgs e)
         {
+            (new Thread(() =>
+            {
             FingerprintManager.CreateTable();
-            MainWindow.Main.Status = "Table has been created.";
+            Main.Status = "Table has been created.";
+            })).Start();
         }
 
         private void spectrogramButton_Click(object sender, RoutedEventArgs e)
         {
-            try { 
+            (new Thread(() =>
+            {
+                try { 
             FingerprintManager.plotSpectrogram(preprocessedMedia.FilePath);
             }
             catch(NullReferenceException)
             {
                 Console.WriteLine("No file loaded.");
             }
+            })).Start();
         }
 
         private void waveletButton_Click(object sender, RoutedEventArgs e)
@@ -124,6 +137,12 @@ namespace dbApp
         private void closeButton_Click(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        private void hashButton_Click(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
+            //HashTransform(splitVideosList);
         }
     }
 }

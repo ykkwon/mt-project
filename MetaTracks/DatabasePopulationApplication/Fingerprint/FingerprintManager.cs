@@ -37,13 +37,13 @@ namespace dbApp.Fingerprint
 
         #region METHODS
 
-        public static void SplitWavFile(string inPath, string outPath)
+        public static void SplitWavFile(Media inMedia, Media outMedia)
         {
-            MainWindow.Main.Status = "Starting file split.";
+           
             // Robust splitting variable
             int robustSplit = 32;
 
-            using (WaveFileReader reader = new WaveFileReader(inPath))
+            using (WaveFileReader reader = new WaveFileReader(inMedia.FilePath))
             {
                 // Total frames over the whole file
                 var totalFrames = reader.Length;
@@ -61,7 +61,7 @@ namespace dbApp.Fingerprint
                     reader.Position = splitPosition;
                     
                     // Creates file named filename__counter[x].wav
-                    using (NAudioCode.WaveFileWriter writer = new NAudioCode.WaveFileWriter(outPath.Remove(outPath.Length - 4) + "_" + _counter + ".wav", reader.WaveFormat))
+                    using (NAudioCode.WaveFileWriter writer = new NAudioCode.WaveFileWriter(outMedia.FilePath + "_" + _counter + ".wav", reader.WaveFormat))
                     {
                         var currString = writer.Filename;
                         splitVideosList.Add(currString);
@@ -74,7 +74,6 @@ namespace dbApp.Fingerprint
             Console.WriteLine("Splitting done. Split into " + _counter + " chunks.");
             MainWindow.Main.Status = "Splitting done. Split into " + _counter + " chunks.";
             Console.WriteLine("Initiating hashing");
-            HashTransform(splitVideosList);
         }
 
         private static void SplitWavFile(WaveFileReader reader, NAudioCode.WaveFileWriter writer, long startPos, long endPos)
@@ -88,12 +87,13 @@ namespace dbApp.Fingerprint
 
                 // Bytes still left to read
                 int bytesRequired = (int)(endPos - reader.Position);
+
                 //Console.WriteLine("startpos: " + startPos + " - " + reader.Position);
                 if (bytesRequired > 0)
                 {
                     // Bytes to read next, picks the smallest value of bytesRequired or buffer.length
                     int bytesToRead = Math.Min(bytesRequired, buffer.Length);
-
+                    if (bytesToRead % reader.BlockAlign != 0) bytesToRead++;
                     // Reades bytes from buffer into variable
                     int bytesRead = reader.Read(buffer, 0, bytesToRead);
                     if (bytesRead > 0)
