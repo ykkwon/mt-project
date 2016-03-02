@@ -18,7 +18,8 @@ namespace dbApp
         }
 
         internal static MainWindow Main;
-        private Video _returnedVideo;
+        private Media convertedMedia;
+        private Media preprocessedMedia;
         private OpenFileDialog _open;
         private string entryName;
 
@@ -34,11 +35,21 @@ namespace dbApp
             {
                 try
                 {
-                    _open = new OpenFileDialog { Filter = "Video File (*.mp4)|*.mp4;" };
+                    _open = new OpenFileDialog
+                    {
+                        Filter = "Video File (*.mp4)|*.mp4;",
+                    };
+                    _open.ShowDialog();
 
-                    if (_open.ShowDialog() != true) return;
-                    Video video = new Video(_open.FileName);
-                    _returnedVideo = FingerprintManager.OpenVideo(video);
+                    Media media = new Media(_open.FileName);
+                    Console.WriteLine("File path: " + media.FilePath);
+                    Console.WriteLine("File name: " + media.FileName);
+                    Console.WriteLine("Converting input to Wave format.");
+                    // Use the same file path as input media, to write to the same folder. 
+                    var outputMedia = new Media(_open.FileName);
+                    convertedMedia = FingerprintManager.FileToWav(media, outputMedia);
+                    preprocessedMedia = FingerprintManager.Preprocess(convertedMedia);
+
                 }
                 catch (TypeInitializationException exception)
                 {
@@ -60,7 +71,7 @@ namespace dbApp
         {
             try
             {
-                FingerprintManager.SplitWavFile(_returnedVideo.FilePath, _returnedVideo.FilePath);
+                FingerprintManager.SplitWavFile(preprocessedMedia.FilePath, convertedMedia.FilePath);
             }
             catch (NullReferenceException ex)
             {
@@ -97,6 +108,17 @@ namespace dbApp
         private void ProgressBar_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
            
+        }
+
+        private void spectrogramButton_Click(object sender, RoutedEventArgs e)
+        {
+            try { 
+            FingerprintManager.plotSpectrogram(preprocessedMedia.FilePath);
+            }
+            catch(NullReferenceException)
+            {
+                Console.WriteLine("No file loaded.");
+            }
         }
     }
 }

@@ -15,7 +15,7 @@ namespace dbApp.FFT
         private IWaveIn waveIn;
 
 
-        public RunFFT(Video vid)
+        public RunFFT(Media vid)
         {
             sampleAggregator.FftCalculated += new EventHandler<FftEventArgs>(FftCalculated);
             sampleAggregator.PerformFFT = true;

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
 using Amazon.DynamoDBv2.Model;
+using System.IO;
 
 namespace dbApp.Fingerprint
 {
@@ -103,14 +104,6 @@ namespace dbApp.Fingerprint
             }
         }
 
-        public static Video OpenVideo(Video video)
-        {
-            Console.WriteLine(@"Loaded file: " + video.FilePath);
-            MainWindow.Main.Status = "Loaded file: " + video.FilePath;
-            Video convertedVideo = Mp4ToWav(video, video.FilePath.Remove(video.FilePath.Length - 4) + "Converted.wav"); // Ugly hack
-            Video preprocessedVideo = Preprocess(convertedVideo, convertedVideo.FilePath, DesiredFrequency, DesiredChannels);
-            return preprocessedVideo;
-        }
 
         public static void SendToDatabase(String entryName)
         {
@@ -145,31 +138,31 @@ namespace dbApp.Fingerprint
             MainWindow.Main.Status = "Elapsed: " + ((int)then.Second - (int)now.Second) + " seconds.";
         }
 
-        public static Video Preprocess(Video video, string outputFile, int desiredFrequency, int desiredChannels)
+        public static Media Preprocess(Media inputMedia)
         {
-            using (var reader = new WaveFileReader(video.FilePath))
             {
-                var outFormat = new WaveFormat(desiredFrequency, desiredChannels);
-                using (var resampler = new MediaFoundationResampler(reader, outFormat))
+                using (var reader = new WaveFileReader(inputMedia.FilePath))
                 {
-                    resampler.ResamplerQuality = 60;
-                    WaveFileWriter.CreateWaveFile(video.FilePath.Remove(video.FilePath.Length - 13) + "Preprocessed.wav", resampler); // Ugly hack
-                    Console.WriteLine(@"Preprocessing done.");
-                    MainWindow.Main.Status = "Preprocessing done.";
-                    var preprocessedVideo = new Video(outputFile);
-                    return preprocessedVideo;
-
+                    var preprocessedVideo = new Media(inputMedia.DirPath + "/Preprocessed.wav");
+                    var outFormat = new WaveFormat(5512, 1);
+                    using (var resampler = new MediaFoundationResampler(reader, outFormat))
+                    {
+                        resampler.ResamplerQuality = 60;
+                        WaveFileWriter.CreateWaveFile(preprocessedVideo.FilePath, resampler);
+                        Console.WriteLine(@"Preprocessing done. Wrote file to: " + preprocessedVideo.FilePath);
+                    }
+                    
+                    return preprocessedVideo;   
                 }
-
+                //File.Delete(inputMedia.FilePath);
             }
-
         }
 
-        public static void Play(Video video)
+        public static void Play(Media media)
         {
             DirectSoundOut _output;
             MediaFoundationReader _reader;
-            _reader = new MediaFoundationReader(video.FilePath);
+            _reader = new MediaFoundationReader(media.FilePath);
             _output = new DirectSoundOut();
             _output.Init(_reader);
             _output.Play();
@@ -184,9 +177,26 @@ namespace dbApp.Fingerprint
             DisposeWave(_output, _reader);
         }
 
-        public void ComputeSpectrogram()
+        public static void plotSpectrogram(string filePath)
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Sending to MATLAB: " + filePath);
+            MLApp.MLApp matlab = new MLApp.MLApp();
+
+            // Change to the directory where the function is located 
+            string startupPath = Environment.CurrentDirectory;
+            Console.WriteLine(startupPath);
+            matlab.Execute(@"cd " + startupPath + "../../../MATLAB");
+
+            // Define the output 
+            object result = null;
+
+            // Call the MATLAB function myfunc
+            matlab.Feval("myfunc", 1, out result, filePath);
+
+            // Display result 
+            object[] res = result as object[];
+            Console.WriteLine(res[0]);
+
         }
 
         public void Filter()
@@ -254,17 +264,20 @@ namespace dbApp.Fingerprint
             }
         }
 
-        public static Video Mp4ToWav(Video video, string outputFile)
+        public static Media FileToWav(Media inputMedia, Media outputMedia)
         {
-            using (MediaFoundationReader reader = new MediaFoundationReader(video.FilePath))
+            outputMedia.FilePath = inputMedia.DirPath + "/Converted.wav";
             {
-                using (WaveStream pcmStream = WaveFormatConversionStream.CreatePcmStream(reader))
+                using (MediaFoundationReader reader = new MediaFoundationReader(inputMedia.FilePath))
                 {
-                    NAudioCode.WaveFileWriter.CreateWaveFile(outputFile, pcmStream);
-                    Console.WriteLine(@"MP4 to WAV conversion done.");
-                    MainWindow.Main.Status = "Input has been converted to Wave file.";
-                    var convertedVideo = new Video(outputFile);
-                    return convertedVideo;
+                    using (WaveStream pcmStream = WaveFormatConversionStream.CreatePcmStream(reader))
+                    {
+                        WaveFileWriter.CreateWaveFile(outputMedia.FilePath, pcmStream);
+                        Console.WriteLine(@"Conversion done.");
+
+                        var convertedMedia = new Media(outputMedia.FilePath);
+                        return convertedMedia;
+                    }
                 }
             }
         }

@@ -5,14 +5,16 @@ using NAudio.Wave;
 
 namespace dbApp.Fingerprint
 {
-    public class Video
+    class Media
     {
         public string FilePath { get; set; }
         public string DirPath { get; set; }
+        public string FileName { get; set; }
 
-        public Video(string FilePath)
+        public Media(string filePath)
         {
-            this.FilePath = FilePath;
+            this.FilePath = filePath;
+            this.FileName = Path.GetFileName(this.FilePath);
             this.DirPath = Path.GetDirectoryName(this.FilePath);
         }
     }
