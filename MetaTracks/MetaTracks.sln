@@ -5,9 +5,9 @@ VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAPI", "WebAPI\WebAPI.csproj", "{B276AC87-EA03-46CE-8F02-E7E8D1D8E2EA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AcousticFingerprintingClient", "AcousticFingerprintingClient\AcousticFingerprintingClient\AcousticFingerprintingClient.csproj", "{665B09A5-9463-4276-97BC-CBA190EB94C6}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabasePopulationApplication", "DatabasePopulationApplication\DatabasePopulationApplication.csproj", "{44B204BB-D200-4125-AF8D-5FF253946F0C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsApp", "..\..\WindowsApp\WindowsApp\WindowsApp.csproj", "{F654A3C5-030A-4A2C-803B-7777018C5A39}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,14 +19,14 @@ Global
 		{B276AC87-EA03-46CE-8F02-E7E8D1D8E2EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B276AC87-EA03-46CE-8F02-E7E8D1D8E2EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B276AC87-EA03-46CE-8F02-E7E8D1D8E2EA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{665B09A5-9463-4276-97BC-CBA190EB94C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{665B09A5-9463-4276-97BC-CBA190EB94C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{665B09A5-9463-4276-97BC-CBA190EB94C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{665B09A5-9463-4276-97BC-CBA190EB94C6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{44B204BB-D200-4125-AF8D-5FF253946F0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{44B204BB-D200-4125-AF8D-5FF253946F0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{44B204BB-D200-4125-AF8D-5FF253946F0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{44B204BB-D200-4125-AF8D-5FF253946F0C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F654A3C5-030A-4A2C-803B-7777018C5A39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F654A3C5-030A-4A2C-803B-7777018C5A39}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F654A3C5-030A-4A2C-803B-7777018C5A39}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F654A3C5-030A-4A2C-803B-7777018C5A39}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
