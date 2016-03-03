@@ -4,6 +4,7 @@ using NAudio.Wave;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DocumentModel;
 using System.Collections.Generic;
+using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using Amazon.DynamoDBv2.Model;
@@ -34,7 +35,7 @@ namespace dbApp.Fingerprint
 
             // Robust splitting variable
             MainWindow.Main.Status = "Initiating splitting of preprocessed video.";
-            int robustSplit = 32;
+            int robustSplit = 2;
             string folderName = inMedia.FilePath + "/../SplitOutput/";
             System.IO.Directory.CreateDirectory(folderName);
             using (WaveFileReader reader = new WaveFileReader(inMedia.FilePath))
@@ -62,7 +63,7 @@ namespace dbApp.Fingerprint
                         // Runs splitting method, passes in the reader, writer
                         SplitWavFile(reader, writer, reader.Position, Math.Min(reader.Position + framesPerSecond, totalFrames));
                     }
-                   
+
                 }
             }
             Console.WriteLine("Splitting done. Split into " + _counter + " chunks.");
@@ -102,7 +103,6 @@ namespace dbApp.Fingerprint
                 }
             }
         }
-
 
         public static void SendToDatabase(String entryName)
         {
@@ -173,29 +173,27 @@ namespace dbApp.Fingerprint
             DisposeWave(output, reader);
         }
 
-        public static void PlotSpectrogram(string filePath)
+        public static void PlotSpectrogram(List<string> splitVideosInput, string filePath)
         {
-            MainWindow.Main.Status = "Sending preprocessed file to MATLAB.";
-            Console.WriteLine("Sending to MATLAB: " + filePath);
-            MLApp.MLApp matlab = new MLApp.MLApp();
-
-            // Change to the directory where the function is located 
-            string startupPath = Environment.CurrentDirectory;
-            Console.WriteLine(startupPath);
-            matlab.Execute(@"cd " + startupPath + "../../../MATLAB");
-
-            // Define the output 
-            object result;
-
-            // Call the MATLAB function myfunc
-            matlab.Feval("myfunc", 1, out result, filePath);
-
-            // Display result 
-            object[] res = result as object[];
-            if (res != null)
             {
-                Console.WriteLine(res[0]);
-                MainWindow.Main.Status = "Returned from MATLAB: " + (res[0]);
+                MainWindow.Main.Status = "Sending preprocessed file to MATLAB.";
+                MLApp.MLApp matlab = new MLApp.MLApp();
+                string targetDirectory = filePath + "/SplitOutput/";
+                Console.WriteLine(targetDirectory);
+                string[] fileEntries = Directory.GetFiles(targetDirectory);
+                string startupPath = Environment.CurrentDirectory;
+                
+                var pos = 0;
+                matlab.Execute(@"cd " + startupPath + "'../../../MATLAB'");
+
+                for (int i = 0; i < fileEntries.Length; i++)
+                {
+                    object result = null;
+                    Console.WriteLine("Processing: " + fileEntries[i]);
+                    matlab.Feval("myfunc", 2, out result, fileEntries.GetValue(i), pos);
+                    Console.WriteLine(result);
+                    pos++;
+                }
             }
         }
 
@@ -223,10 +221,10 @@ namespace dbApp.Fingerprint
                 {
                     Console.WriteLine(HashedChunks[i]);
                 }
-                MainWindow.Main.Status = "Hash generation done. Generated " + 
+                MainWindow.Main.Status = "Hash generation done. Generated " +
                     HashedChunks.Count + " hashes.";
             }
-            
+
         }
 
         static string GetMd5Hash(MD5 md5Hash, string input)

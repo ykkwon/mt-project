@@ -121,7 +121,7 @@ namespace dbApp
             (new Thread(() =>
             {
                 try { 
-            FingerprintManager.PlotSpectrogram(_preprocessedMedia.FilePath);
+            FingerprintManager.PlotSpectrogram(_splitVideosList, _preprocessedMedia.DirPath);
             }
             catch(NullReferenceException)
             {

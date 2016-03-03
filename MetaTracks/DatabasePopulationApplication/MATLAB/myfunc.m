@@ -1,7 +1,8 @@
-function [x] = myfunc(a) 
+function [x, pos] = myfunc(a, pos) 
 
 [d,sr] = audioread(a);
-sg = subplot(313);
-specgram(d(:,1),1024,sr);
-saveas(sg,'filename.jpg');
-x = 'filename.jpg';
+
+f = figure('visible','off');
+    specgram(d(:,1),1024,sr);
+    saveas(f, sprintf('File_%d.jpg',pos));
+x = 'Done';
