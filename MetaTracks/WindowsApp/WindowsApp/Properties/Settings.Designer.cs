@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace AcousticFingerprintingClient.Properties
+namespace WindowsApp.Properties
 {
 
 
