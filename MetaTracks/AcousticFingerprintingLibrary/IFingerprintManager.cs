@@ -12,7 +12,7 @@ namespace AcousticFingerprintingLibrary
         /// <param name="inputMedia">Input Media (.mp4 or .avi)</param>
         /// <param name="outputMedia">Output Media (wave .wav)</param>
         /// <returns></returns>
-        Media ConvertToWav(Media inputMedia, Media outputMedia);
+        Media ConvertToWav(Media inputMedia);
 
         /// <summary>
         /// Will flatten channels (surround to mono) and downsample the input media.
@@ -38,7 +38,7 @@ namespace AcousticFingerprintingLibrary
         /// <param name="reader">Wave file reader</param>
         /// <param name="writer">Wave file writer</param>
         /// <returns></returns>
-        Media SplitWavFile(WaveFileReader reader, WaveFileWriter writer, long startPos, long endPos);
+        void SplitWavFile(WaveFileReader reader, WaveFileWriter writer, long startPos, long endPos);
 
         /// <summary>
         /// Carry out STFT (Short-Time Fourier Transform) and plot the accompanying spectrogram for each file in splitMediaInput.
