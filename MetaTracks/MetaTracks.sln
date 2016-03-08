@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAPI", "WebAPI\WebAPI.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabasePopulationApplication", "DatabasePopulationApplication\DatabasePopulationApplication.csproj", "{44B204BB-D200-4125-AF8D-5FF253946F0C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsApp", "..\..\WindowsApp\WindowsApp\WindowsApp.csproj", "{F654A3C5-030A-4A2C-803B-7777018C5A39}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsApp", "WindowsApp\WindowsApp\WindowsApp.csproj", "{F654A3C5-030A-4A2C-803B-7777018C5A39}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
