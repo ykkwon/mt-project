@@ -18,6 +18,7 @@ namespace AcousticFingerprintingLibrary
                     using (var pcmStream = WaveFormatConversionStream.CreatePcmStream(reader))
                     {
                         // Create a new wave file using PCM WaveStream
+                        
                         WaveFileWriter.CreateWaveFile(outputPath, pcmStream);
                         var convertedMedia = new Media(outputPath);
                         return convertedMedia;
@@ -102,7 +103,6 @@ namespace AcousticFingerprintingLibrary
         {
             {
                 reader.Position = startPos;
-                var prevPos = reader.Position;
                 // Creates a new buffer with 1024 bytes
                 byte[] buffer = new byte[reader.BlockAlign*100];
                 while (reader.Position < endPos)
@@ -135,37 +135,53 @@ namespace AcousticFingerprintingLibrary
 
         public List<string> PlotSpectrogram(List<string> splitMediaInput)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
+        }
+
+        public List<string> BandFilter()
+        {
+            throw new NotImplementedException();
         }
 
         public List<string> CalculateEnergyBins()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
+        }
+
+        public List<string> Normalize()
+        {
+            throw new NotImplementedException();
         }
 
         public List<string> CalculateTopTWavelets()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public List<string> ComputeWavelets(List<string> spectrogramList)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public List<string> HashTransform(List<string> waveletInput)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
-        public void SendToDatabase(AmazonDynamoDBClient client, string tableName, string entryName)
+        public void PlayMedia(Media media)
         {
-            throw new System.NotImplementedException();
+            {
+                var reader = new MediaFoundationReader(media.FilePath);
+                var output = new DirectSoundOut();
+                // Initialize reader
+                output.Init(reader);
+                // Start playback
+                output.Play();
+                // Dispose after playback
+                reader.Dispose();
+                output.Dispose();
+            }
         }
 
-        public string DatabaseCompare(AmazonDynamoDBClient client, string hash)
-        {
-            throw new System.NotImplementedException();
-        }
     }
 }

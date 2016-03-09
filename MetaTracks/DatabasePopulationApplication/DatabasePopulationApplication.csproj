@@ -85,8 +85,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="FFT_old\RunFFT.cs" />
-    <Compile Include="FFT_old\SampleAggregator.cs" />
     <Compile Include="Fingerprint\FingerprintManager.cs" />
     <Compile Include="Fingerprint\NAudioCode\WaveFileWriter.cs" />
     <Compile Include="Fingerprint\Media.cs" />
