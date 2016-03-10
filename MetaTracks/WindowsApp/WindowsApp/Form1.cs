@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Windows.Forms;
 using NAudio.Wave;
 
@@ -28,7 +24,7 @@ namespace WindowsApp
 
         }
 
-        
+
         // Refresh Sources button function
         // will find any in audio sources that exists and its capabilities
         // like name and how many channels it has
@@ -76,9 +72,10 @@ namespace WindowsApp
             int deviceNumber = sourceList.SelectedItems[0].Index;
 
             sourceStream = new NAudio.Wave.WaveIn(); // sets up the sourceStream
-            sourceStream.DeviceNumber = deviceNumber;  // Set the devicenumber
+            sourceStream.DeviceNumber = deviceNumber; // Set the devicenumber
             // Set a wave format and sets the sampleRate and asks how many channels are available to the device
-            sourceStream.WaveFormat = new NAudio.Wave.WaveFormat(44100, NAudio.Wave.WaveIn.GetCapabilities(deviceNumber).Channels); 
+            sourceStream.WaveFormat = new NAudio.Wave.WaveFormat(44100,
+                NAudio.Wave.WaveIn.GetCapabilities(deviceNumber).Channels);
 
             // Creates a WaveInProvider to bridge the gap between the 
             // waveIn object and the DirectSoundOUt
@@ -113,9 +110,10 @@ namespace WindowsApp
             int deviceNumber = sourceList.SelectedItems[0].Index;
 
             sourceStream = new NAudio.Wave.WaveIn(); // sets up the sourceStream
-            sourceStream.DeviceNumber = deviceNumber;  // Set the devicenumber
+            sourceStream.DeviceNumber = deviceNumber; // Set the devicenumber
             // Set a wave format and sets the sampleRate and asks how many channels are available to the device
-            sourceStream.WaveFormat = new NAudio.Wave.WaveFormat(44100, NAudio.Wave.WaveIn.GetCapabilities(deviceNumber).Channels);
+            sourceStream.WaveFormat = new NAudio.Wave.WaveFormat(44100,
+                NAudio.Wave.WaveIn.GetCapabilities(deviceNumber).Channels);
             //sourceStream.WaveFormat = new NAudio.Wave.WaveFormat(5512, 1);
             sourceStream.DataAvailable += new EventHandler<NAudio.Wave.WaveInEventArgs>(sourceStream_DataAvailable);
             waveWriter = new NAudio.Wave.WaveFileWriter(save.FileName, sourceStream.WaveFormat);
@@ -168,6 +166,21 @@ namespace WindowsApp
             this.Close();
         }
 
+        private async void button6_Click(object sender, EventArgs e)
+        {
+            {
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri("http://localhost:58293/Fingerprints/GetFingerprintsByTitle?inputTitle=Braveheart%20Trailer");
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
+                    // HTTP GET
+                    HttpResponseMessage response = await client.GetAsync(client.BaseAddress);
+                    Console.WriteLine(response.Content.Headers);    
+
+                }
+            }
+        }
     }
 }

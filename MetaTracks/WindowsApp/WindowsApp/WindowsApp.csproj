@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{F654A3C5-030A-4A2C-803B-7777018C5A39}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WindowsApp</RootNamespace>
     <AssemblyName>WindowsApp</AssemblyName>
@@ -32,7 +32,11 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Build.Tasks.v4.0" />
     <Reference Include="NAudio">
       <HintPath>..\NAudio.dll</HintPath>
     </Reference>
