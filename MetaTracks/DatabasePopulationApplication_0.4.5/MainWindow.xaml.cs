@@ -1,11 +1,11 @@
-﻿using Microsoft.Win32;
-using System;
-using System.Collections.Generic;
-using System.Windows;
-using dbApp.Fingerprint;
+﻿using System;
 using System.Threading;
+using System.Windows;
+using AcousticFingerprintingLibrary;
+using dbApp;
+using Microsoft.Win32;
 
-namespace dbApp
+namespace DatabasePopulationApplication_0._4._5
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -20,11 +20,12 @@ namespace dbApp
         }
 
         internal static MainWindow Main;
+        // From acoustic fingerprinting client
+        FingerprintManager fm = new FingerprintManager();
+        private string _entryName;
+        private OpenFileDialog _open;
         private Media _convertedMedia;
         private Media _preprocessedMedia;
-        private OpenFileDialog _open;
-        private string _entryName;
-        private List<string> _splitVideosList; 
 
         private void openButton_Click(object sender, RoutedEventArgs e)
         {
@@ -44,20 +45,18 @@ namespace dbApp
                     };
                     _open.ShowDialog();
 
-                    Media media = new Media(_open.FileName);
-                    Console.WriteLine("File path: " + media.FilePath);
-                    Console.WriteLine("File name: " + media.FileName);
+                    var inputMedia = new Media(_open.FileName);
+                    Console.WriteLine("File path: " + inputMedia.FilePath);
+                    Console.WriteLine("File name: " + inputMedia.FileName);
                     Console.WriteLine("Converting input to Wave format.");
-                    // Use the same file path as input media, to write to the same folder. 
-                    var outputMedia = new Media(_open.FileName);
-                    _convertedMedia = FingerprintManager.FileToWav(media, outputMedia);
-                    _preprocessedMedia = FingerprintManager.Preprocess(_convertedMedia);
+                    _convertedMedia = fm.ConvertToWav(inputMedia);
+                    _preprocessedMedia = fm.Preprocess(_convertedMedia, 5512);
 
                 }
                 catch (TypeInitializationException exception)
                 {
                     Console.WriteLine(exception);
-                    Main.Status = "Not connected to database. Connect through AWS Explorer.";
+                    //Main.Status = "Not connected to database. Connect through AWS Explorer.";
                 }
             })).Start();
         }
@@ -66,7 +65,8 @@ namespace dbApp
         {
             (new Thread(() =>
             {
-                FingerprintManager.SendToDatabase(_entryName);
+                throw new NotImplementedException();
+                //fm.SendToDatabase(_entryName);
             })).Start();
         }
 
@@ -75,35 +75,41 @@ namespace dbApp
             (new Thread(() =>
             {
                 try
-            {
-                _splitVideosList = FingerprintManager.SplitWavFile(_preprocessedMedia, _preprocessedMedia);
-            }
-            catch (NullReferenceException ex)
-            {
-                Console.WriteLine(ex);
-                Main.Status = "Choose an input file to preprocess first.";
-            }})).Start();
+                {
+                    throw new NotImplementedException();
+                    //_splitVideosList = FingerprintManager.SplitWavFile(_preprocessedMedia, _preprocessedMedia);
+                }
+                catch (NullReferenceException ex)
+                {
+                    Console.WriteLine(ex);
+                   // Main.Status = "Choose an input file to preprocess first.";
+                }
+            })).Start();
 
         }
 
+        /**
         internal string Status
         {
             get { return fg_label.Content.ToString(); }
             set
             {
-                Dispatcher.Invoke(() =>
+                System.Windows.Threading.Dispatcher.Invoke(() =>
                 {
                     fg_label.Content += value + "\n";
                 });
             }
         }
+    **/
 
         private void purgebutton_Click(object sender, RoutedEventArgs e)
         {
             (new Thread(() =>
             {
-                FingerprintManager.DeleteTable();
-                Main.Status = "Table has been deleted. Don't forget to create it again.";
+
+                throw new NotImplementedException();
+                //FingerprintManager.DeleteTable();
+                //Main.Status = "Table has been deleted. Don't forget to create it again.";
             })).Start();
         }
 
@@ -111,8 +117,8 @@ namespace dbApp
         {
             (new Thread(() =>
             {
-            FingerprintManager.CreateTable();
-            Main.Status = "Table has been created.";
+                //FingerprintManager.CreateTable();
+                //Main.Status = "Table has been created.";
             })).Start();
         }
 
@@ -120,13 +126,15 @@ namespace dbApp
         {
             (new Thread(() =>
             {
-                try { 
-            FingerprintManager.PlotSpectrogram(_splitVideosList, _preprocessedMedia.DirPath);
-            }
-            catch(NullReferenceException)
-            {
-                Console.WriteLine("No file loaded.");
-            }
+                try
+                {
+                    throw new NotImplementedException();
+                    //FingerprintManager.PlotSpectrogram(_splitVideosList, _preprocessedMedia.DirPath);
+                }
+                catch (NullReferenceException)
+                {
+                    Console.WriteLine("No file loaded.");
+                }
             })).Start();
         }
 
@@ -142,7 +150,9 @@ namespace dbApp
 
         private void hashButton_Click(object sender, RoutedEventArgs e)
         {
-            FingerprintManager.HashTransform(_splitVideosList);
+
+            throw new NotImplementedException();
+            //FingerprintManager.HashTransform(_splitVideosList);
         }
     }
-}   
+}
