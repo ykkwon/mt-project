@@ -46,7 +46,7 @@
       <HintPath>..\..\..\..\..\..\Program Files (x86)\AWS SDK for .NET\past-releases\Version-2\Net45\AWSSDK.dll</HintPath>
     </Reference>
     <Reference Include="NAudio">
-      <HintPath>..\packages\NAudio.1.7.3\lib\net35\NAudio.dll</HintPath>
+      <HintPath>..\WindowsApp\NAudio.dll</HintPath>
     </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

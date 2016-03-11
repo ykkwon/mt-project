@@ -8,7 +8,7 @@
         Title="Windows Application" Height="568.432" Width="1003.069" ResizeMode="NoResize" Background="#FF292929" WindowStyle="None">
     <Grid>
         <Rectangle x:Name="handle" Height="87" Margin="-62,-12,-58,0" VerticalAlignment="Top" Stroke="White" StrokeThickness="0.5" Fill="#FF383838" IsManipulationEnabled="True"/>
-        <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Height="75" TextWrapping="Wrap" Text="Database Population Application" VerticalAlignment="Top" Width="475" Margin="10,10,0,0" Foreground="White" FontFamily="Segoe UI Emoji" FontSize="21.333"/>
+        <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Height="75" TextWrapping="Wrap" Text="Acoustic Fingerprint Application" VerticalAlignment="Top" Width="475" Margin="10,10,0,0" Foreground="White" FontFamily="Segoe UI Emoji" FontSize="21.333"/>
         <Button x:Name="closeButton" Content="X" HorizontalAlignment="Left" VerticalAlignment="Top" Width="25" Margin="978,0,0,0" RenderTransformOrigin="0.46,0.35" Height="25" Click="closeButton_Click" BorderBrush="{x:Null}" Foreground="White" FontSize="16">
             <Button.Background>
                 <ImageBrush/>
@@ -18,6 +18,15 @@
         <Button x:Name="refreshButton_Copy" Content="Start" HorizontalAlignment="Left" VerticalAlignment="Top" Width="240" Height="40" Background="#FF343436" Click="refreshButton_Click" RenderTransformOrigin="0.504,1.525" Margin="10,178,0,0" Foreground="White" FontWeight="Bold"/>
         <Button x:Name="refreshButton_Copy1" Content="To Wave" HorizontalAlignment="Left" VerticalAlignment="Top" Width="240" Height="40" Background="#FF343436" Click="refreshButton_Click" RenderTransformOrigin="0.504,1.525" Margin="10,223,0,0" Foreground="White" FontWeight="Bold"/>
         <Button x:Name="refreshButton_Copy2" Content="Send to database" HorizontalAlignment="Left" VerticalAlignment="Top" Width="240" Height="40" Background="#FF343436" Click="refreshButton_Click" RenderTransformOrigin="0.504,1.525" Margin="10,268,0,0" Foreground="White" FontWeight="Bold"/>
-        <Button x:Name="refreshButton_Copy3" Content="Stop" HorizontalAlignment="Left" VerticalAlignment="Top" Width="240" Height="40" Background="#FF343436" Click="refreshButton_Click" RenderTransformOrigin="0.504,1.525" Margin="10,313,0,0" Foreground="White" FontWeight="Bold"/>
+        <Button x:Name="refreshButton_Copy3" Content="Stop" HorizontalAlignment="Left" VerticalAlignment="Top" Width="240" Height="40" Background="#FF343436" Click="refreshButton_Click" RenderTransformOrigin="0.504,1.525" Margin="10,518,0,0" Foreground="White" FontWeight="Bold"/>
+        <ListView x:Name="sourceList" Margin="451,106,10,260">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Id" DisplayMemberBinding="{Binding Id}"/>
+                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <Label x:Name="label" Content="Console test" HorizontalAlignment="Left" Margin="451,313,0,0" VerticalAlignment="Top" Height="245" Width="542" Background="White"/>
     </Grid>
 </Window>
