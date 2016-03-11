@@ -15,15 +15,15 @@
             </Button.Background>
         </Button>
         <Button x:Name="refreshButton" Content="Refresh sources" HorizontalAlignment="Left" VerticalAlignment="Top" Width="240" Height="40" Background="#FF343436" Click="refreshButton_Click" RenderTransformOrigin="0.504,1.525" Margin="10,106.03,0,0" Foreground="White" FontWeight="Bold"/>
-        <Button x:Name="refreshButton_Copy" Content="Start" HorizontalAlignment="Left" VerticalAlignment="Top" Width="240" Height="40" Background="#FF343436" Click="refreshButton_Click" RenderTransformOrigin="0.504,1.525" Margin="10,178,0,0" Foreground="White" FontWeight="Bold"/>
-        <Button x:Name="refreshButton_Copy1" Content="To Wave" HorizontalAlignment="Left" VerticalAlignment="Top" Width="240" Height="40" Background="#FF343436" Click="refreshButton_Click" RenderTransformOrigin="0.504,1.525" Margin="10,223,0,0" Foreground="White" FontWeight="Bold"/>
-        <Button x:Name="refreshButton_Copy2" Content="Send to database" HorizontalAlignment="Left" VerticalAlignment="Top" Width="240" Height="40" Background="#FF343436" Click="refreshButton_Click" RenderTransformOrigin="0.504,1.525" Margin="10,268,0,0" Foreground="White" FontWeight="Bold"/>
-        <Button x:Name="refreshButton_Copy3" Content="Stop" HorizontalAlignment="Left" VerticalAlignment="Top" Width="240" Height="40" Background="#FF343436" Click="refreshButton_Click" RenderTransformOrigin="0.504,1.525" Margin="10,518,0,0" Foreground="White" FontWeight="Bold"/>
-        <ListView x:Name="sourceList" Margin="451,106,10,260">
+        <Button x:Name="startButton" Content="Start" HorizontalAlignment="Left" VerticalAlignment="Top" Width="240" Height="40" Background="#FF343436" Click="startButton_Click" RenderTransformOrigin="0.504,1.525" Margin="10,178,0,0" Foreground="White" FontWeight="Bold"/>
+        <Button x:Name="toWaveButton" Content="To Wave" HorizontalAlignment="Left" VerticalAlignment="Top" Width="240" Height="40" Background="#FF343436" Click="toWaveButton_Click" RenderTransformOrigin="0.504,1.525" Margin="10,223,0,0" Foreground="White" FontWeight="Bold"/>
+        <Button x:Name="sendButton" Content="Send to database" HorizontalAlignment="Left" VerticalAlignment="Top" Width="240" Height="40" Background="#FF343436" Click="sendButton_Click" RenderTransformOrigin="0.504,1.525" Margin="10,268,0,0" Foreground="White" FontWeight="Bold"/>
+        <Button x:Name="stopButton" Content="Stop" HorizontalAlignment="Left" VerticalAlignment="Top" Width="240" Height="40" Background="#FF343436" Click="stopButton_Click" RenderTransformOrigin="0.504,1.525" Margin="10,518,0,0" Foreground="White" FontWeight="Bold"/>
+        <ListView x:Name="sourceList" Margin="451,106,10,260" SelectionChanged="sourceList_SelectionChanged">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Id" DisplayMemberBinding="{Binding Id}"/>
-                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}"/>
+                    <GridViewColumn Header="Device" DisplayMemberBinding="{Binding Device}" Width="200"/>
+                    <GridViewColumn Header="Channels" DisplayMemberBinding="{Binding Channels}" Width="100"/>
                 </GridView>
             </ListView.View>
         </ListView>
