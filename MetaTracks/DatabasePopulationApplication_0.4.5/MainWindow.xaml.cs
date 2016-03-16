@@ -1,7 +1,12 @@
 ﻿using System;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Threading;
 using System.Windows;
 using AcousticFingerprintingLibrary;
+using AcousticFingerprintingLibrary.SoundFingerprint;
+using AcousticFingerprintingLibrary.SoundFingerprint.AudioProxies;
 using dbApp;
 using Microsoft.Win32;
 
@@ -24,6 +29,7 @@ namespace DatabasePopulationApplication_0._4._5
         FingerprintManager fm = new FingerprintManager();
         private string _entryName;
         private OpenFileDialog _open;
+        private string filename;
         private Media _convertedMedia;
         private Media _preprocessedMedia;
 
@@ -39,6 +45,7 @@ namespace DatabasePopulationApplication_0._4._5
             {
                 try
                 {
+                    /*
                     _open = new OpenFileDialog
                     {
                         Filter = "MP4 Video File (*.mp4)|*.mp4;|AVI Video File (*.avi)|*.avi;|All files (*.*)|(*.*);",
@@ -51,7 +58,13 @@ namespace DatabasePopulationApplication_0._4._5
                     Console.WriteLine("Converting input to Wave format.");
                     _convertedMedia = fm.ConvertToWav(inputMedia);
                     _preprocessedMedia = fm.Preprocess(_convertedMedia, 5512);
+                    */
 
+                    OpenFileDialog ofd = new OpenFileDialog();
+                    ofd.ShowDialog();
+                    filename = ofd.FileName;
+
+                    drawSpectrogram();
                 }
                 catch (TypeInitializationException exception)
                 {
@@ -59,6 +72,29 @@ namespace DatabasePopulationApplication_0._4._5
                     //Main.Status = "Not connected to database. Connect through AWS Explorer.";
                 }
             })).Start();
+        }
+
+        private void drawSpectrogram()
+        {
+            SaveFileDialog sfd = new SaveFileDialog
+            {
+                Filter = "(*.jpg)|*.jpg", //Resources.FileFilterJPeg,
+                FileName = Path.GetFileNameWithoutExtension(filename) + "_spectrum_" + ".jpg"
+            };
+            int width = 1000;
+            int height = 800;
+            //
+            sfd.ShowDialog();
+            using (BassProxy proxy = new BassProxy())
+            {
+                Fingerprinter manager = new Fingerprinter();
+
+                float[][] data = manager.CreateSpectrogram(proxy, Path.GetFullPath(filename), 0, 0);
+                Bitmap image = Imaging.GetSpectrogramImage(data, width, height);
+                image.Save(sfd.FileName, ImageFormat.Jpeg);
+                image.Dispose();
+            }
+            //
         }
 
         private void sendButton_Click(object sender, RoutedEventArgs e)
