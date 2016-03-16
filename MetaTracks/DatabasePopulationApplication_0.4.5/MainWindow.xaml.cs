@@ -7,6 +7,7 @@ using System.Windows;
 using AcousticFingerprintingLibrary;
 using AcousticFingerprintingLibrary.SoundFingerprint;
 using AcousticFingerprintingLibrary.SoundFingerprint.AudioProxies;
+using AcousticFingerprintingLibrary.SoundFingerprint.AudioProxies.Strides;
 using dbApp;
 using Microsoft.Win32;
 
@@ -97,6 +98,26 @@ namespace DatabasePopulationApplication_0._4._5
             //
         }
 
+        private void drawWavelets()
+        {
+            SaveFileDialog sfd = new SaveFileDialog
+            {
+                Filter = "(*.jpg)|*.jpg", //Resources.FileFilterJPeg,
+                FileName = Path.GetFileNameWithoutExtension(filename) + "_wavelets_" + ".jpg"
+            };
+            sfd.ShowDialog();
+            string path = Path.GetFullPath(sfd.FileName);
+            using (IAudio proxy = new BassProxy())
+            {
+                Fingerprinter manager = new Fingerprinter();
+                // 1102?
+                StaticStride stride = new StaticStride((int)1102);
+                Image image = Imaging.GetWaveletSpectralImage(Path.GetFullPath(filename), stride, proxy, manager);
+                image.Save(path);
+                image.Dispose();
+            }
+        }
+
         private void sendButton_Click(object sender, RoutedEventArgs e)
         {
             (new Thread(() =>
@@ -176,7 +197,7 @@ namespace DatabasePopulationApplication_0._4._5
 
         private void waveletButton_Click(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            drawWavelets();
         }
 
         private void closeButton_Click(object sender, RoutedEventArgs e)

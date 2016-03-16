@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
+using AcousticFingerprintingLibrary;
+using AcousticFingerprintingLibrary.SoundFingerprint;
+using AcousticFingerprintingLibrary.SoundFingerprint.AudioProxies;
+using AcousticFingerprintingLibrary.SoundFingerprint.AudioProxies.Strides;
+
 namespace DatabasePopulationApplication_0._4._5
 {
     /// <summary>
@@ -21,11 +26,11 @@ namespace DatabasePopulationApplication_0._4._5
         /// <param name = "height">Height of the image</param>
         public static Image GetFingerprintImage(bool[] data, int width, int height)
         {
-#if SAFE
-    // create new image
+            #if SAFE
+            // create new image
             if (data == null)
                 throw new ArgumentException("Bitmap data was not supplied");
-#endif
+            #endif
             Bitmap image = new Bitmap(width, height, PixelFormat.Format16bppRgb565);
             //Scale the data and write to image
             for (int i = 0; i < width /*128*/; i++)
@@ -104,12 +109,12 @@ namespace DatabasePopulationApplication_0._4._5
         /// </remarks>
         public static Bitmap GetSpectrogramImage(float[][] spectrum, int width, int height)
         {
-#if SAFE
+            #if SAFE
             if (width < 0)
                 throw new ArgumentException("width should be bigger than 0");
             if (height < 0)
                 throw new ArgumentException("height should be bigger than 0");
-#endif
+            #endif
             Bitmap image = new Bitmap(width, height);
             Graphics graphics = Graphics.FromImage(image);
             /*Fill Back color*/
@@ -152,6 +157,81 @@ namespace DatabasePopulationApplication_0._4._5
             if (color > 255)
                 color = 255;
             return Color.FromArgb(color, color, color);
+        }
+
+        /// <summary>
+        ///   Gets the spectrum of the wavelet decomposition before extracting top wavelets and binary transformation
+        /// </summary>
+        /// <param name = "pathToFile">Path to file to be drawn</param>
+        /// <param name = "stride">Stride within the fingerprint creation</param>
+        /// <param name = "proxy">Proxy manager</param>
+        /// <param name = "manager">Fingerprint manager</param>
+        /// <returns>Image to be saved</returns>
+        public static Image GetWaveletSpectralImage(string pathToFile,
+                                                    IStride stride,
+                                                    IAudio proxy,
+                                                    Fingerprinter manager)
+        {
+            List<float[][]> wavelets = new List<float[][]>();
+            float[][] spectrum = manager.CreateLogSpectrogram(proxy, pathToFile, 0, 0);
+            int specLen = spectrum.GetLength(0);
+            int start = stride.GetFirstStride() / manager.Overlap;
+            int logbins = manager.LogBins;
+            int fingerprintLength = manager.FingerprintLength;
+            int overlap = manager.Overlap;
+            while (start + fingerprintLength < specLen)
+            {
+                float[][] frames = new float[fingerprintLength][];
+                for (int i = 0; i < fingerprintLength; i++)
+                {
+                    frames[i] = new float[logbins];
+                    Array.Copy(spectrum[start + i], frames[i], logbins);
+                }
+                start += fingerprintLength + stride.GetStride() / overlap;
+                wavelets.Add(frames);
+            }
+
+            const int imagesPerRow = 5; /*5 bitmap images per line*/
+            const int spaceBetweenImages = 10; /*10 pixel space between images*/
+            int width = wavelets[0].GetLength(0);
+            int height = wavelets[0][0].Length;
+            int fingersCount = wavelets.Count;
+            int rowCount = (int)Math.Ceiling((float)fingersCount / imagesPerRow);
+
+            int imageWidth = imagesPerRow * (width + spaceBetweenImages) + spaceBetweenImages;
+            int imageHeight = rowCount * (height + spaceBetweenImages) + spaceBetweenImages;
+
+            Bitmap image = new Bitmap(imageWidth, imageHeight, PixelFormat.Format16bppRgb565);
+            /*Change the background of the bitmap*/
+            for (int i = 0; i < imageWidth; i++)
+                for (int j = 0; j < imageHeight; j++)
+                    image.SetPixel(i, j, Color.White);
+
+            double maxValue = wavelets.Max((wavelet) => (wavelet.Max((column) => column.Max())));
+            int verticalOffset = spaceBetweenImages;
+            int horizontalOffset = spaceBetweenImages;
+            int count = 0;
+            double max = wavelets.Max(wav => wav.Max(w => w.Max(v => Math.Abs(v))));
+            foreach (float[][] wavelet in wavelets)
+            {
+                for (int i = 0; i < width /*128*/; i++)
+                {
+                    for (int j = 0; j < height /*32*/; j++)
+                    {
+                        Color color = ValueToBlackWhiteColor(wavelet[i][j], max / 4);
+                        image.SetPixel(i + horizontalOffset, j + verticalOffset, color);
+                    }
+                }
+                count++;
+                if (count % imagesPerRow == 0)
+                {
+                    verticalOffset += height + spaceBetweenImages;
+                    horizontalOffset = spaceBetweenImages;
+                }
+                else
+                    horizontalOffset += width + spaceBetweenImages;
+            }
+            return image;
         }
     }
 }

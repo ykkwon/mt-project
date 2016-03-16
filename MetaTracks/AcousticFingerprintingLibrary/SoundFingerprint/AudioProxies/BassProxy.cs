@@ -4,7 +4,7 @@ using Un4seen.Bass;
 using Un4seen.Bass.AddOn.Fx;
 using Un4seen.Bass.AddOn.Mix;
 using Un4seen.Bass.AddOn.Tags;
-using Un4seen.Bass.Misc;
+//using Un4seen.Bass.Misc;
 
 namespace AcousticFingerprintingLibrary.SoundFingerprint.AudioProxies
 {

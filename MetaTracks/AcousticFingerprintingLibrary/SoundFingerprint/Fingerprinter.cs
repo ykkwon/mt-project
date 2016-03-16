@@ -253,6 +253,50 @@ namespace AcousticFingerprintingLibrary.SoundFingerprint
             return frames;
         }
 
+        /// <summary>
+        ///   Create log-spectrogram (spaced according to manager's parameters)
+        /// </summary>
+        /// <param name = "proxy">Proxy used in generating the spectrogram</param>
+        /// <param name = "filename">Filename to be processed</param>
+        /// <param name = "milliseconds">Milliseconds to be analyzed</param>
+        /// <param name = "startmilliseconds">Starting point</param>
+        /// <returns>Logarithmically spaced bins within the power spectrum</returns>
+        public float[][] CreateLogSpectrogram(IAudio proxy, string filename, int milliseconds, int startmilliseconds)
+        {
+            //read 5512 Hz, Mono, PCM, with a specific proxy
+            float[] samples = proxy.ReadMonoFromFile(filename, SampleRate, milliseconds, startmilliseconds);
+            return CreateLogSpectrogram(samples);
+        }
+
+        /// <summary>
+        ///   Create logarithmically spaced spectrogram out of the input samples (spaced according to manager's parameters)
+        /// </summary>
+        /// <param name = "samples">Samples of a song</param>
+        /// <returns>Logarithmically spaced bins within the power spectrum</returns>
+        public float[][] CreateLogSpectrogram(float[] samples)
+        {
+            NormalizeInPlace(samples);
+            int overlap = Overlap;
+            int wdftSize = WdftSize;
+            int width = (samples.Length - wdftSize) / overlap; /*width of the image*/
+            float[][] frames = new float[width][];
+            float[] complexSignal = new float[2 * wdftSize]; /*even - Re, odd - Img*/
+            for (int i = 0; i < width; i++)
+            {
+                //take 371 ms each 11.6 ms (2048 samples each 64 samples)
+                for (int j = 0; j < wdftSize /*2048*/; j++)
+                {
+                    complexSignal[2 * j] = (float)(_windowArray[j] * samples[i * overlap + j]); /*Weight by Hann Window*/
+                    complexSignal[2 * j + 1] = 0;
+                }
+                //FFT transform for gathering the spectrum
+                Fourier.FFT(complexSignal, wdftSize, FourierDirection.Forward);
+                frames[i] = ExtractLogBins(complexSignal);
+            }
+            return frames;
+        }
+
+
         // normalize power (volume) of a wave file.
         // minimum and maximum rms to normalize from.
         private const float MINRMS = 0.1f;
@@ -284,6 +328,47 @@ namespace AcousticFingerprintingLibrary.SoundFingerprint
                 samples[i] = Math.Max(samples[i], -1);
             }
         }
+        #endregion
+        
+
+        #region Frequency Manipulation
+
+        /// <summary>
+        ///   Logarithmic spacing of a frequency in a linear domain
+        /// </summary>
+        /// <param name = "spectrum">Spectrum to space</param>
+        /// <returns>Logarithmically spaced signal</returns>
+        public float[] ExtractLogBins(float[] spectrum)
+        {
+            int logBins = LogBins; /*Local copy for performance reasons*/
+            #if SAFE
+            if (spectrum == null)
+                throw new ArgumentNullException("spectrum");
+            if (MinFrequency >= MaxFrequency)
+                throw new ArgumentException("Minimal frequency cannot be bigger or equal to Maximum frequency");
+            if (SampleRate <= 0)
+                throw new ArgumentException("sampleRate cannot be less or equal to zero");
+            #endif
+            int wdftSize = WdftSize;
+            float[] sumFreq = new float[logBins]; /*32*/
+            for (int i = 0; i < logBins; i++)
+            {
+                int lowBound = _logFrequenciesIndex[i];
+                int hiBound = _logFrequenciesIndex[i + 1];
+
+                for (int k = lowBound; k < hiBound; k++)
+                {
+                    double re = spectrum[2 * k];
+                    double img = spectrum[2 * k + 1];
+                    //re /= (float) wdftSize / 2;    //normalize img/re part
+                    //img /= (float)wdftSize / 2;    //doesn't introduce any change in final image (linear normalization)
+                    sumFreq[i] += (float)(Math.Sqrt(re * re + img * img));
+                }
+                sumFreq[i] = sumFreq[i] / (hiBound - lowBound);
+            }
+            return sumFreq;
+        }
+
         #endregion
     }
 }

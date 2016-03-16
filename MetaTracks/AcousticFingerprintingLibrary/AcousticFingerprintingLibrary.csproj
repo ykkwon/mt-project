@@ -42,6 +42,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SoundFingerprint\AudioProxies\BassProxy.cs" />
     <Compile Include="SoundFingerprint\AudioProxies\IAudio.cs" />
+    <Compile Include="SoundFingerprint\AudioProxies\Strides\IStride.cs" />
+    <Compile Include="SoundFingerprint\AudioProxies\Strides\StaticStride.cs" />
     <Compile Include="SoundFingerprint\FFT\Complex.cs" />
     <Compile Include="SoundFingerprint\FFT\ComplexF.cs" />
     <Compile Include="SoundFingerprint\FFT\Fourier.cs" />
@@ -60,7 +62,7 @@
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\BASS.NET\v4.0\Bass.Net.dll</HintPath>
     </Reference>
     <Reference Include="NAudio">
-      <HintPath>F:\Dropbox\Bacheloroppgave 2016 MetaTracks\c# References\NAudio.dll</HintPath>
+      <HintPath>..\..\..\..\..\Dropbox\c# Libraries\NAudio-Release\NAudio.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup />
