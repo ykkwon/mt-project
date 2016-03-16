@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Web.Mvc;
 using WebAPI.Models;
 
@@ -27,16 +28,16 @@ namespace WebAPI.Controllers
 
         }
 
-        public ActionResult GetSingleFingerprintByHash(string inputHash)
+        public string GetSingleFingerprintByHash(string inputHash)
         {
-            if (_repository.GetSingleFingerprintByHash(inputHash) != null)
+            var returnedString = _repository.GetSingleFingerprintByHash(inputHash);
+            if (returnedString != null)
             {
-                return PartialView(_repository.GetSingleFingerprintByHash(inputHash));
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.OK);
+                message.Content = new StringContent(returnedString, Encoding.UTF8);
+                return message.Content.ReadAsStringAsync().Result;
             }
-            else
-            {
-                return null;
-            }
+            return null;
         }
     }
 }

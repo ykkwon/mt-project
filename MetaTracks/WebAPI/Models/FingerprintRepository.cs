@@ -11,7 +11,7 @@ namespace WebAPI.Models
         Table table = Table.LoadTable(client, tableName);
         ScanFilter scanFilter = new ScanFilter();
 
-        public List<string> GetSingleFingerprintByHash(string hash)
+        public string GetSingleFingerprintByHash(string hash)
         {
             scanFilter.AddCondition("Fingerprint", ScanOperator.Equal, hash);
             Search hashSearch = table.Scan(scanFilter);
@@ -19,12 +19,11 @@ namespace WebAPI.Models
             List<Document> fingerprintItems = hashSearch.GetRemaining();
             foreach (Document doc in fingerprintItems)
             {
-                string newDoc = doc.ToJson();
-                stringList.Add(newDoc);
+                stringList.Add(doc.ToJson());
             }
             if (fingerprintItems.Count != 0)
             {
-                return stringList;
+                return stringList[0];
             }
             return null;
         }

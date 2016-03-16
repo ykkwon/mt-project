@@ -6,14 +6,14 @@ using NAudio.Wave;
 using Microsoft.Win32;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using AcousticFingerprintingLibrary;
+using Newtonsoft.Json;
 
 namespace WindowsApplication_0._4._5
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow
     {
         public MainWindow()
         {
@@ -24,10 +24,11 @@ namespace WindowsApplication_0._4._5
 
         private string _entryName;
         internal static MainWindow Main;
-        private WaveIn sourceStream = null;
-        private DirectSoundOut waveOut = null;
-        private WaveFileWriter waveWriter = null;
+        private WaveIn _sourceStream;
+        private DirectSoundOut _waveOut;
+        private WaveFileWriter _waveWriter;
         List<WaveInCapabilities> sources = new List<WaveInCapabilities>();
+        private dynamic _json;
 
         private void closeButton_Click(object sender, RoutedEventArgs e)
         {
@@ -81,28 +82,28 @@ namespace WindowsApplication_0._4._5
             // Gets the device number of the selected source
             // ask sourcelist for the first selected item
             int deviceNumber = sourceList.SelectedIndex;
-            Console.WriteLine("Device number:" + deviceNumber);
+            Console.WriteLine(@"Device number:" + deviceNumber);
 
-            sourceStream = new WaveIn(); // sets up the sourceStream
-            sourceStream.DeviceNumber = deviceNumber; // Set the devicenumber
+            _sourceStream = new WaveIn(); // sets up the sourceStream
+            _sourceStream.DeviceNumber = deviceNumber; // Set the devicenumber
             // Set a wave format and sets the sampleRate and asks how many channels are available to the device
-            sourceStream.WaveFormat = new NAudio.Wave.WaveFormat(44100,
-                NAudio.Wave.WaveIn.GetCapabilities(deviceNumber).Channels);
+            _sourceStream.WaveFormat = new WaveFormat(44100,
+                WaveIn.GetCapabilities(deviceNumber).Channels);
 
             // Creates a WaveInProvider to bridge the gap between the 
             // waveIn object and the DirectSoundOUt
-            WaveInProvider waveIn = new NAudio.Wave.WaveInProvider(sourceStream);
+            WaveInProvider waveIn = new WaveInProvider(_sourceStream);
 
             // Create wave out device
-            waveOut = new NAudio.Wave.DirectSoundOut();
+            _waveOut = new DirectSoundOut();
             // initialize the wave out 
-            waveOut.Init(waveIn);
+            _waveOut.Init(waveIn);
 
             Main.Status = "Starting recording with playback.";
             // Creates a buffer 
-            sourceStream.StartRecording();
+            _sourceStream.StartRecording();
             // Playback
-            waveOut.Play();
+            _waveOut.Play();
         }
 
         private void toWaveButton_Click(object sender, RoutedEventArgs e)
@@ -123,27 +124,27 @@ namespace WindowsApplication_0._4._5
             int deviceNumber = sourceList.SelectedIndex;
  
 
-            Console.WriteLine("Device number:" + deviceNumber);
+            Console.WriteLine(@"Device number:" + deviceNumber);
 
-            sourceStream = new WaveIn(); // sets up the sourceStream
-            sourceStream.DeviceNumber = deviceNumber; // Set the devicenumber
+            _sourceStream = new WaveIn(); // sets up the sourceStream
+            _sourceStream.DeviceNumber = deviceNumber; // Set the devicenumber
             // Set a wave format and sets the sampleRate and asks how many channels are available to the device
-            sourceStream.WaveFormat = new NAudio.Wave.WaveFormat(44100,
-                NAudio.Wave.WaveIn.GetCapabilities(deviceNumber).Channels);
-            sourceStream.WaveFormat = new NAudio.Wave.WaveFormat(5512, 1);
-            sourceStream.DataAvailable += new EventHandler<NAudio.Wave.WaveInEventArgs>(sourceStream_DataAvailable);
-            waveWriter = new NAudio.Wave.WaveFileWriter(save.FileName, sourceStream.WaveFormat);
+            _sourceStream.WaveFormat = new WaveFormat(44100,
+                WaveIn.GetCapabilities(deviceNumber).Channels);
+            _sourceStream.WaveFormat = new WaveFormat(5512, 1);
+            _sourceStream.DataAvailable += sourceStream_DataAvailable;
+            _waveWriter = new WaveFileWriter(save.FileName, _sourceStream.WaveFormat);
             Main.Status = "Starting recording to wave file without playback.";
-            sourceStream.StartRecording();
+            _sourceStream.StartRecording();
         }
 
-        private void sourceStream_DataAvailable(object sender, NAudio.Wave.WaveInEventArgs e)
+        private void sourceStream_DataAvailable(object sender, WaveInEventArgs e)
         {
-            if (waveWriter == null) return;
+            if (_waveWriter == null) return;
 
             // eventuelt deprecated function: waveWriter.WriteData(e.Buffer, 0, e.BytesRecorded);
-            waveWriter.Write(e.Buffer, 0, e.BytesRecorded);
-            waveWriter.Flush();
+            _waveWriter.Write(e.Buffer, 0, e.BytesRecorded);
+            _waveWriter.Flush();
         }
 
         private async void sendButton_Click(object sender, RoutedEventArgs e)
@@ -154,6 +155,7 @@ namespace WindowsApplication_0._4._5
                 {
                     _entryName = dialog.ResponseText;
                 }
+
                 using (var client = new HttpClient())
                 {
                     var inputString =
@@ -166,10 +168,13 @@ namespace WindowsApplication_0._4._5
 
                     // HTTP GET
                     HttpResponseMessage response = await client.GetAsync(client.BaseAddress);
-                    Main.Status = "Response header: " + response.Content.Headers;
+                    var responseString = response.Content.ReadAsStringAsync().Result;
                     Main.Status = response.Content.Headers.ContentLength != 0 ? "Found a match." : "No match.";
+                    _json = JsonConvert.DeserializeObject(responseString, typeof(object));
+                    Main.Status = "JSON: " + _json;
                 }
             }
+            
         }
 
         private void stopButton_Click(object sender, RoutedEventArgs e)
@@ -177,25 +182,25 @@ namespace WindowsApplication_0._4._5
 
             Main.Status = "Stopping and disposing recording.";
             // check if it is playing if it is then stop it and dispose of it
-            if (waveOut != null)
+            if (_waveOut != null)
             {
-                waveOut.Stop();
-                waveOut.Dispose();
-                waveOut = null;
+                _waveOut.Stop();
+                _waveOut.Dispose();
+                _waveOut = null;
             }
 
             // check if the sourceStream is Recording, if so then stop recording 
-            if (sourceStream != null)
+            if (_sourceStream != null)
             {
-                sourceStream.StopRecording();
-                sourceStream.Dispose();
-                sourceStream = null;
+                _sourceStream.StopRecording();
+                _sourceStream.Dispose();
+                _sourceStream = null;
             }
 
-            if (waveWriter != null)
+            if (_waveWriter != null)
             {
-                waveWriter.Dispose();
-                waveWriter = null;
+                _waveWriter.Dispose();
+                _waveWriter = null;
             }
         }
         internal string Status
