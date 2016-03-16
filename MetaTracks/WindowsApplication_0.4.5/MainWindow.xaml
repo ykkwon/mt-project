@@ -7,6 +7,10 @@
         mc:Ignorable="d"
         Title="Windows Application" Height="568.432" Width="1003.069" ResizeMode="NoResize" Background="#FF292929" WindowStyle="None">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="113*"/>
+            <RowDefinition Height="29*"/>
+        </Grid.RowDefinitions>
         <Rectangle x:Name="handle" Height="87" Margin="-62,-12,-58,0" VerticalAlignment="Top" Stroke="White" StrokeThickness="0.5" Fill="#FF383838" IsManipulationEnabled="True"/>
         <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Height="75" TextWrapping="Wrap" Text="Acoustic Fingerprint Application" VerticalAlignment="Top" Width="475" Margin="10,10,0,0" Foreground="White" FontFamily="Segoe UI Emoji" FontSize="21.333"/>
         <Button x:Name="closeButton" Content="X" HorizontalAlignment="Left" VerticalAlignment="Top" Width="25" Margin="978,0,0,0" RenderTransformOrigin="0.46,0.35" Height="25" Click="closeButton_Click" BorderBrush="{x:Null}" Foreground="White" FontSize="16">
@@ -14,12 +18,12 @@
                 <ImageBrush/>
             </Button.Background>
         </Button>
-        <Button x:Name="refreshButton" Content="Refresh sources" HorizontalAlignment="Left" VerticalAlignment="Top" Width="240" Height="40" Background="#FF343436" Click="refreshButton_Click" RenderTransformOrigin="0.504,1.525" Margin="10,106.03,0,0" Foreground="White" FontWeight="Bold"/>
+        <Button x:Name="refreshButton" Content="Refresh sources" HorizontalAlignment="Left" VerticalAlignment="Top" Width="240" Height="40" Background="#FF343436" Click="refreshButton_Click" RenderTransformOrigin="0.504,1.525" Margin="10,106,0,0" Foreground="White" FontWeight="Bold"/>
         <Button x:Name="startButton" Content="Start" HorizontalAlignment="Left" VerticalAlignment="Top" Width="240" Height="40" Background="#FF343436" Click="startButton_Click" RenderTransformOrigin="0.504,1.525" Margin="10,178,0,0" Foreground="White" FontWeight="Bold"/>
         <Button x:Name="toWaveButton" Content="To Wave" HorizontalAlignment="Left" VerticalAlignment="Top" Width="240" Height="40" Background="#FF343436" Click="toWaveButton_Click" RenderTransformOrigin="0.504,1.525" Margin="10,223,0,0" Foreground="White" FontWeight="Bold"/>
         <Button x:Name="sendButton" Content="Send to database" HorizontalAlignment="Left" VerticalAlignment="Top" Width="240" Height="40" Background="#FF343436" Click="sendButton_Click" RenderTransformOrigin="0.504,1.525" Margin="10,268,0,0" Foreground="White" FontWeight="Bold"/>
-        <Button x:Name="stopButton" Content="Stop" HorizontalAlignment="Left" VerticalAlignment="Top" Width="240" Height="40" Background="#FF343436" Click="stopButton_Click" RenderTransformOrigin="0.504,1.525" Margin="10,518,0,0" Foreground="White" FontWeight="Bold"/>
-        <ListView x:Name="sourceList" Margin="276,106,25,260" SelectionChanged="sourceList_SelectionChanged">
+        <Button x:Name="stopButton" Content="Stop" HorizontalAlignment="Left" VerticalAlignment="Top" Width="240" Height="40" Background="#FF343436" Click="stopButton_Click" RenderTransformOrigin="0.504,1.525" Margin="10,66,0,0" Foreground="White" FontWeight="Bold" Grid.Row="1"/>
+        <ListView x:Name="sourceList" Margin="276,106,25,144" SelectionChanged="sourceList_SelectionChanged" Background="#FF292929" Foreground="White" FontSize="14.667">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Device" DisplayMemberBinding="{Binding Device}" Width="200"/>
@@ -27,6 +31,6 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <Label x:Name="label" Content="" HorizontalAlignment="Left" Margin="276,313,0,0" VerticalAlignment="Top" Height="245" Width="702" Background="White"/>
+        <Label x:Name="label" Content="" HorizontalAlignment="Left" Margin="276,313,0,0" VerticalAlignment="Top" Height="240" Width="702" Background="#FF292929" Grid.RowSpan="2" BorderBrush="White" Foreground="White" FontSize="14.667"/>
     </Grid>
 </Window>

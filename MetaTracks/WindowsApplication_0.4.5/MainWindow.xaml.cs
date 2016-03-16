@@ -35,6 +35,7 @@ namespace WindowsApplication_0._4._5
         private void refreshButton_Click(object sender, RoutedEventArgs e)
         {
             {
+                Main.Status = "Refreshing input sources";
                 // Creates a list that holds all in audio devices
                 
 
@@ -95,6 +96,7 @@ namespace WindowsApplication_0._4._5
             // initialize the wave out 
             waveOut.Init(waveIn);
 
+            Main.Status = "Starting recording with playback.";
             // Creates a buffer 
             sourceStream.StartRecording();
             // Playback
@@ -129,7 +131,7 @@ namespace WindowsApplication_0._4._5
             sourceStream.WaveFormat = new NAudio.Wave.WaveFormat(5512, 1);
             sourceStream.DataAvailable += new EventHandler<NAudio.Wave.WaveInEventArgs>(sourceStream_DataAvailable);
             waveWriter = new NAudio.Wave.WaveFileWriter(save.FileName, sourceStream.WaveFormat);
-
+            Main.Status = "Starting recording to wave file without playback.";
             sourceStream.StartRecording();
         }
 
@@ -147,12 +149,15 @@ namespace WindowsApplication_0._4._5
             {
                 using (var client = new HttpClient())
                 {
+
+                    Main.Status = "Sending HTTP GET.";
                     client.BaseAddress = new Uri("http://localhost:58293/Fingerprints/GetFingerprintsByTitle?inputTitle=Braveheart%20Trailer");
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                     // HTTP GET
                     HttpResponseMessage response = await client.GetAsync(client.BaseAddress);
+                    Main.Status = "Response header: " + response.Content.Headers;
                     Console.WriteLine(response.Content.Headers);
 
                 }
@@ -161,6 +166,8 @@ namespace WindowsApplication_0._4._5
 
         private void stopButton_Click(object sender, RoutedEventArgs e)
         {
+
+            Main.Status = "Stopping and disposing recording.";
             // check if it is playing if it is then stop it and dispose of it
             if (waveOut != null)
             {
@@ -181,6 +188,17 @@ namespace WindowsApplication_0._4._5
             {
                 waveWriter.Dispose();
                 waveWriter = null;
+            }
+        }
+        internal string Status
+        {
+            get { return label.Content.ToString(); }
+            set
+            {
+                Dispatcher.Invoke(() =>
+                {
+                    label.Content += value + "\n";
+                });
             }
         }
     }

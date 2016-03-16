@@ -40,7 +40,7 @@
   <ItemGroup>
     <Reference Include="NAudio, Version=1.7.3.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\WindowsApp\NAudio.dll</HintPath>
+      <HintPath>..\..\..\..\Dropbox\Bacheloroppgave 2016 MetaTracks\c# References\NAudio.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
