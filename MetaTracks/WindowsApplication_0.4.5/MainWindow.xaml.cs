@@ -159,7 +159,7 @@ namespace WindowsApplication_0._4._5
                 using (var client = new HttpClient())
                 {
                     var inputString =
-                    String.Format("http://localhost:58293/Fingerprints/GetSingleFingerprintByHash?inputHash=" + "{0}",
+                    String.Format("http://webapi-1.bwjyuhcr5p.eu-west-1.elasticbeanstalk.com/Fingerprints/GetSingleFingerprintByHash?inputHash=" + "{0}",
                     _entryName);
                     Main.Status = "Sending HTTP GET.";
                     client.BaseAddress = new Uri(inputString);

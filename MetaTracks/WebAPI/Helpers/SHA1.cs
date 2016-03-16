@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace WebAPI.Helpers
 {
-    public class SHA1
+    public class Sha1
     {
         public static string Encode(string value)
         {

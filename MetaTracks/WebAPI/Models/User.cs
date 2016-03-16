@@ -1,11 +1,5 @@
 ﻿using MySql.Data.MySqlClient;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Data;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Web;
 
 namespace WebAPI.Models
 {
@@ -24,7 +18,7 @@ namespace WebAPI.Models
         public bool RememberMe { get; set; }
 
 
-        public bool IsValid(string _username, string _password)
+        public bool IsValid(string username, string password)
         {
             MySqlConnectionStringBuilder connStr = new MySqlConnectionStringBuilder();
             connStr.Server = "webapidb.c7tab1cc7vsa.eu-west-1.rds.amazonaws.com";
@@ -41,10 +35,10 @@ namespace WebAPI.Models
                 var cmd = new MySqlCommand(_query, conn);
                 cmd.Parameters
                     .Add(new MySqlParameter("@u", MySqlDbType.VarChar))
-                    .Value = _username;
+                    .Value = username;
                 cmd.Parameters
                     .Add(new MySqlParameter("@p", MySqlDbType.VarChar))
-                    .Value = Helpers.SHA1.Encode(_password);
+                    .Value = Helpers.Sha1.Encode(password);
                 conn.Open();
                 var reader = cmd.ExecuteReader();
                 if (reader.HasRows)

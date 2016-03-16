@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Amazon.DynamoDBv2;
-using Amazon.DynamoDBv2.DocumentModel;
 using Amazon.DynamoDBv2.Model;
 
 namespace AcousticFingerprintingLibrary
@@ -43,7 +42,7 @@ namespace AcousticFingerprintingLibrary
 
         public void CompareHashToDatabase()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public void CreateTestTable()
@@ -160,6 +159,7 @@ namespace AcousticFingerprintingLibrary
 
         public void WaitUntilTableReady(string TableName)
         {
+            if (TableName == null) throw new ArgumentNullException(nameof(TableName));
             throw new NotImplementedException();
             /**
             string status = null;
@@ -185,9 +185,9 @@ namespace AcousticFingerprintingLibrary
                     // get resource not found. So we handle the potential exception.
                 }
             } while (status != "ACTIVE");
-        **/    
-    }
-        
+        **/
+        }
+
         public void RemoveTestTable()
         { 
             var request = new DeleteTableRequest
