@@ -21,6 +21,8 @@ namespace WindowsApplication_0._4._5
             InitializeComponent();
             MouseDown += delegate { DragMove(); };
         }
+
+        private string _entryName;
         internal static MainWindow Main;
         private WaveIn sourceStream = null;
         private DirectSoundOut waveOut = null;
@@ -147,19 +149,25 @@ namespace WindowsApplication_0._4._5
         private async void sendButton_Click(object sender, RoutedEventArgs e)
         {
             {
+                var dialog = new Popup();
+                if (dialog.ShowDialog() == true)
+                {
+                    _entryName = dialog.ResponseText;
+                }
                 using (var client = new HttpClient())
                 {
-
+                    var inputString =
+                    String.Format("http://localhost:58293/Fingerprints/GetSingleFingerprintByHash?inputHash=" + "{0}",
+                    _entryName);
                     Main.Status = "Sending HTTP GET.";
-                    client.BaseAddress = new Uri("http://localhost:58293/Fingerprints/GetFingerprintsByTitle?inputTitle=Braveheart%20Trailer");
+                    client.BaseAddress = new Uri(inputString);
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                     // HTTP GET
                     HttpResponseMessage response = await client.GetAsync(client.BaseAddress);
                     Main.Status = "Response header: " + response.Content.Headers;
-                    Console.WriteLine(response.Content.Headers);
-
+                    Main.Status = response.Content.Headers.ContentLength != 0 ? "Found a match." : "No match.";
                 }
             }
         }

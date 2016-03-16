@@ -15,12 +15,16 @@ namespace WebAPI.Models
         {
             scanFilter.AddCondition("Fingerprint", ScanOperator.Equal, hash);
             Search hashSearch = table.Scan(scanFilter);
-            List<Document> fingerprintItems = hashSearch.GetRemaining();
             List<string> stringList = new List<string>();
+            List<Document> fingerprintItems = hashSearch.GetRemaining();
+            foreach (Document doc in fingerprintItems)
+            {
+                string newDoc = doc.ToJson();
+                stringList.Add(newDoc);
+            }
             if (fingerprintItems.Count != 0)
             {
-               stringList.Add(fingerprintItems.Count.ToString());
-               return stringList;
+                return stringList;
             }
             return null;
         }

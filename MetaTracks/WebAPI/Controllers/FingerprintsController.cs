@@ -29,7 +29,14 @@ namespace WebAPI.Controllers
 
         public ActionResult GetSingleFingerprintByHash(string inputHash)
         {
-            return PartialView(_repository.GetSingleFingerprintByHash(inputHash));
+            if (_repository.GetSingleFingerprintByHash(inputHash) != null)
+            {
+                return PartialView(_repository.GetSingleFingerprintByHash(inputHash));
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }
