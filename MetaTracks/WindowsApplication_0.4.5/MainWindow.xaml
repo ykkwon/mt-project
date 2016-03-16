@@ -19,7 +19,7 @@
         <Button x:Name="toWaveButton" Content="To Wave" HorizontalAlignment="Left" VerticalAlignment="Top" Width="240" Height="40" Background="#FF343436" Click="toWaveButton_Click" RenderTransformOrigin="0.504,1.525" Margin="10,223,0,0" Foreground="White" FontWeight="Bold"/>
         <Button x:Name="sendButton" Content="Send to database" HorizontalAlignment="Left" VerticalAlignment="Top" Width="240" Height="40" Background="#FF343436" Click="sendButton_Click" RenderTransformOrigin="0.504,1.525" Margin="10,268,0,0" Foreground="White" FontWeight="Bold"/>
         <Button x:Name="stopButton" Content="Stop" HorizontalAlignment="Left" VerticalAlignment="Top" Width="240" Height="40" Background="#FF343436" Click="stopButton_Click" RenderTransformOrigin="0.504,1.525" Margin="10,518,0,0" Foreground="White" FontWeight="Bold"/>
-        <ListView x:Name="sourceList" Margin="451,106,10,260" SelectionChanged="sourceList_SelectionChanged">
+        <ListView x:Name="sourceList" Margin="276,106,25,260" SelectionChanged="sourceList_SelectionChanged">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Device" DisplayMemberBinding="{Binding Device}" Width="200"/>
@@ -27,6 +27,6 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <Label x:Name="label" Content="Console test" HorizontalAlignment="Left" Margin="451,313,0,0" VerticalAlignment="Top" Height="245" Width="542" Background="White"/>
+        <Label x:Name="label" Content="" HorizontalAlignment="Left" Margin="276,313,0,0" VerticalAlignment="Top" Height="245" Width="702" Background="White"/>
     </Grid>
 </Window>

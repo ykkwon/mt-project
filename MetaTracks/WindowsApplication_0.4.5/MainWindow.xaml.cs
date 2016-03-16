@@ -6,6 +6,7 @@ using NAudio.Wave;
 using Microsoft.Win32;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using AcousticFingerprintingLibrary;
 
 namespace WindowsApplication_0._4._5
 {
@@ -125,11 +126,20 @@ namespace WindowsApplication_0._4._5
             // Set a wave format and sets the sampleRate and asks how many channels are available to the device
             sourceStream.WaveFormat = new NAudio.Wave.WaveFormat(44100,
                 NAudio.Wave.WaveIn.GetCapabilities(deviceNumber).Channels);
-            //sourceStream.WaveFormat = new NAudio.Wave.WaveFormat(5512, 1);
-            //sourceStream.DataAvailable += new EventHandler<NAudio.Wave.WaveInEventArgs>(sourceStream_DataAvailable);
+            sourceStream.WaveFormat = new NAudio.Wave.WaveFormat(5512, 1);
+            sourceStream.DataAvailable += new EventHandler<NAudio.Wave.WaveInEventArgs>(sourceStream_DataAvailable);
             waveWriter = new NAudio.Wave.WaveFileWriter(save.FileName, sourceStream.WaveFormat);
 
             sourceStream.StartRecording();
+        }
+
+        private void sourceStream_DataAvailable(object sender, NAudio.Wave.WaveInEventArgs e)
+        {
+            if (waveWriter == null) return;
+
+            // eventuelt deprecated function: waveWriter.WriteData(e.Buffer, 0, e.BytesRecorded);
+            waveWriter.Write(e.Buffer, 0, e.BytesRecorded);
+            waveWriter.Flush();
         }
 
         private async void sendButton_Click(object sender, RoutedEventArgs e)
