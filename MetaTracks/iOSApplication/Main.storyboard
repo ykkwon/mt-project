@@ -51,10 +51,30 @@
                                 </variation>
                                 <connections/>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="14" translatesAutoresizingMaskIntoConstraints="NO">
+                                <rect key="frame" x="137" y="214" width="46" height="30"/>
+                                <state key="normal" title="Stop recording">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
+                                    <rect key="frame" x="97" y="214" width="126" height="30"/>
+                                </variation>
+                            </button>
                         </subviews>
+                        <variation key="default">
+                            <mask key="subviews">
+                                <exclude reference="14"/>
+                            </mask>
+                        </variation>
+                        <variation key="heightClass=regular-widthClass=compact">
+                            <mask key="subviews">
+                                <include reference="14"/>
+                            </mask>
+                        </variation>
                     </view>
                     <connections>
                         <outlet property="RecordButton" destination="8" id="name-outlet-8"/>
+                        <outlet property="StopButton" destination="14" id="name-outlet-14"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

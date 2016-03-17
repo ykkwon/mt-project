@@ -14,8 +14,17 @@ namespace iOSApplication
         {
             base.ViewDidLoad();
 
-            RecordButton.TouchUpInside += (object sender, EventArgs e) => {
-                Record.WriteToForeground();
+            RecordButton.TouchUpInside += (object sender, EventArgs e) =>
+            {
+                for (int i = 0; i < 100; i++)
+                {
+                    Record.PrepareRecording(i);
+                }
+            };
+
+            StopButton.TouchUpInside += (object sender, EventArgs e) =>
+            {
+                Record.StopRecording();
             };
         }
 
