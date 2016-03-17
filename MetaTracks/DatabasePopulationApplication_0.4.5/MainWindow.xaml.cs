@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Windows;
 using AcousticFingerprintingLibrary;
@@ -64,8 +66,6 @@ namespace DatabasePopulationApplication_0._4._5
                     OpenFileDialog ofd = new OpenFileDialog();
                     ofd.ShowDialog();
                     filename = ofd.FileName;
-
-                    drawSpectrogram();
                 }
                 catch (TypeInitializationException exception)
                 {
@@ -73,6 +73,78 @@ namespace DatabasePopulationApplication_0._4._5
                     //Main.Status = "Not connected to database. Connect through AWS Explorer.";
                 }
             })).Start();
+        }
+
+        private void drawFingerprints()
+        {
+            if (true)
+            {
+                SaveFileDialog sfd = new SaveFileDialog
+                {
+                    Filter = "(*.jpg)|*.jpg", //Resources.FileFilterJPeg,
+                    FileName = Path.GetFileNameWithoutExtension(filename) + "_spectrum_" + ".jpg"
+                };
+
+                sfd.ShowDialog();
+                string path = Path.GetFullPath(sfd.FileName);
+                using (IAudio proxy = new BassProxy())
+                {
+                    Fingerprinter manager = new Fingerprinter();
+                    // Not 100% sure what stridenumber means
+                    StaticStride stride = new StaticStride((int)1102);
+
+                    int totalFingerprints = 0;
+
+                    List<bool[]> fingerprints = manager.CreateFingerprints(proxy, Path.GetFullPath(filename), stride);
+
+                    int width = manager.FingerprintLength;
+                    int height = manager.LogBins;
+                    Bitmap image = Imaging.GetFingerprintsImage(fingerprints, width, height);
+                    image.Save(path);
+                    image.Dispose();
+                }
+            }
+            // if each picture is in own file
+            /*
+            else
+            {
+                FolderBrowserDialog fbd = new FolderBrowserDialog();
+                if (fbd.ShowDialog() == DialogResult.OK)
+                {
+                    string path = fbd.SelectedPath;
+                    string fileName = Path.GetFileName(_tbPathToFile.Text);
+                    FadeControls(false);
+                    Action action = () =>
+                    {
+                        using (IAudio proxy = new BassProxy())
+                        {
+                            FingerprintManager manager = new FingerprintManager();
+                            StaticStride stride = new StaticStride((int)_nudStride.Value);
+                            List<bool[]> result = manager.CreateFingerprints(proxy, Path.GetFullPath(_tbPathToFile.Text), stride);
+                            int i = -1;
+                            int width = manager.FingerprintLength;
+                            int height = manager.LogBins;
+                            foreach (bool[] item in result)
+                            {
+                                Image image = Imaging.GetFingerprintImage(item, width, height);
+                                image.Save(path + "\\" + fileName + i++ + ".jpg", ImageFormat.Jpeg);
+                            }
+                        }
+                    };
+                    action.BeginInvoke((result) =>
+                    {
+                        FadeControls(true);
+                        MessageBox.Show(Resources.ImageIsDrawn, Resources.Finished, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        action.EndInvoke(result);
+                    }
+                        , action);
+                }
+            }*/
+        }
+
+        private string Selector(bool itemin)
+        {
+            return itemin.ToString();
         }
 
         private void drawSpectrogram()
@@ -185,8 +257,7 @@ namespace DatabasePopulationApplication_0._4._5
             {
                 try
                 {
-                    throw new NotImplementedException();
-                    //FingerprintManager.PlotSpectrogram(_splitVideosList, _preprocessedMedia.DirPath);
+                    drawSpectrogram();
                 }
                 catch (NullReferenceException)
                 {
@@ -207,8 +278,8 @@ namespace DatabasePopulationApplication_0._4._5
 
         private void hashButton_Click(object sender, RoutedEventArgs e)
         {
-
-            throw new NotImplementedException();
+            drawFingerprints();
+            //throw new NotImplementedException();
             //FingerprintManager.HashTransform(_splitVideosList);
         }
     }
