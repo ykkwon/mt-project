@@ -16,28 +16,18 @@ namespace iOSApplication
         static NSError _error;
         static NSUrl _url;
         static NSDictionary _settings;
+        static Fingerprinter fp = new Fingerprinter();
+    
 
         public static void StopRecording()
         {
-            new Thread(() =>
-            {
-                if (_recorder.Recording)
-                {
-                    _recorder.Stop();
-                }
-                Console.WriteLine("Recorder is not currently running.");
-            }).Start();
+            _recorder.Stop();
         }
 
-        public static void PrepareRecording(int fileIterator)
+        public static string PrepareRecording(int fileIterator)
         {
-            new Thread(() =>
-            {
-                var audioSession = AVAudioSession.SharedInstance();
-                audioSession.SetCategory(AVAudioSessionCategory.PlayAndRecord);
                 string fileName = string.Format("Myfile{0}.wav", fileIterator);
                 string audioFilePath = Path.Combine("/Users/metatracks/Desktop", fileName);
-                Console.WriteLine("Audio File Path: " + audioFilePath);
 
                 _url = NSUrl.FromFilename(audioFilePath);
                 //set up the NSObject Array of values that will be combined with the keys to make the NSDictionary
@@ -69,22 +59,36 @@ namespace iOSApplication
                 _recorder = AVAudioRecorder.Create(_url, new AudioSettings(_settings), out _error);
                 //Set Recorder to Prepare To Record
                 _recorder.PrepareToRecord();
-                DoRecord();
-            }).Start();
+                return audioFilePath;
         }
 
         public static void DoRecord()
         {
-            (new Thread(() =>
-            {
-                {
-                    // This writes data to the wave file.
-                    _recorder.Record();
-                    Thread.Sleep(1000);
-                    _recorder.Stop();
-                    Console.WriteLine("Finished recording.");
-                }
-            })).Start();
+            // This writes data to the wave file.
+            _recorder.Record();
+            Thread.Sleep(1000);
+            _recorder.Stop();
+            Console.WriteLine("Finished recording.");
+            
+
         }
-    }
+
+        public static void RunRecord()
+        {
+            for (int i = 0; i < int.MaxValue; i++)
+            {
+                var thisFile = PrepareRecording(i);
+                DoRecord();
+
+                using (BassProxy proxy = new BassProxy())
+                {
+                    Fingerprinter manager = new Fingerprinter();
+
+                    float[][] data = manager.CreateSpectrogram(proxy, Path.GetFullPath(thisFile), 0, 0);
+                    Console.WriteLine("DATA: " + data.Length);
+                }
+
+            }
+        }
+}
 }

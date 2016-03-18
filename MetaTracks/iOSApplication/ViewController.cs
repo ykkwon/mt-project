@@ -1,5 +1,6 @@
-﻿using System;
-
+﻿using AVFoundation;
+using System;
+using System.Threading;
 using UIKit;
 
 namespace iOSApplication
@@ -13,20 +14,22 @@ namespace iOSApplication
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
+            var audioSession = AVAudioSession.SharedInstance();
+            audioSession.SetCategory(AVAudioSessionCategory.PlayAndRecord);
+            Thread newThread = new Thread(Record.RunRecord);
 
-            RecordButton.TouchUpInside += (object sender, EventArgs e) =>
-            {
-                for (int i = 0; i < 100; i++)
-                {
-                    Record.PrepareRecording(i);
-                }
+            RecordButton.TouchUpInside += (object sender, EventArgs e) => { 
+                newThread.Start();
             };
+    
 
             StopButton.TouchUpInside += (object sender, EventArgs e) =>
             {
-                Record.StopRecording();
+                newThread.Abort();
             };
         }
+
+
 
         public override void DidReceiveMemoryWarning()
         {
