@@ -63,7 +63,7 @@ namespace AcousticFingerprintingLibrary.SoundFingerprint.DataAccess
         {
             if (soundFile == null) return; /*SoundFile is not eligible*/
             /*Create fingerprints that will be used as initial fingerprints to be queried*/
-            List<bool[]> dbFingers = _manager.CreateFingerprints(samples, stride);
+            List<bool[]> dbFingers = _manager.CreateFingerprintsFloat(samples, stride);
             _storage.InsertSoundFile(soundFile); /*Insert SoundFile into the storage*/
             /*Get fingerprint's hash signature, and associate it to a specific SoundFile*/
             List<HashSignature> creationalsignatures = GetSignatures(dbFingers, soundFile, hashTables, hashKeys);

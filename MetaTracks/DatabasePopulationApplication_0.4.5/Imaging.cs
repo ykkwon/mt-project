@@ -139,9 +139,6 @@ namespace DatabasePopulationApplication_0._4._5
                 prevX = (int)x;
             }
 
-            FontFamily font = new FontFamily("Courier New");
-            Font f = new Font(font, 10);
-
             return image;
         }
 
@@ -173,7 +170,7 @@ namespace DatabasePopulationApplication_0._4._5
                                                     Fingerprinter manager)
         {
             List<float[][]> wavelets = new List<float[][]>();
-            float[][] spectrum = manager.CreateLogSpectrogram(proxy, pathToFile, 0, 0);
+            float[][] spectrum = manager.CreateLogSpectrogramFloat(proxy, pathToFile, 0, 0, stride);
             int specLen = spectrum.GetLength(0);
             int start = stride.GetFirstStride() / manager.Overlap;
             int logbins = manager.LogBins;

@@ -51,6 +51,7 @@
     <Compile Include="SoundFingerprint\FFT\ComplexF.cs" />
     <Compile Include="SoundFingerprint\FFT\Fourier.cs" />
     <Compile Include="SoundFingerprint\FFT\FourierDirection.cs" />
+    <Compile Include="SoundFingerprint\Fingerprint.cs" />
     <Compile Include="SoundFingerprint\Fingerprinter.cs" />
     <Compile Include="SoundFingerprint\Hashing\IPermutations.cs" />
     <Compile Include="SoundFingerprint\Hashing\MinHash.cs" />

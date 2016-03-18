@@ -41,12 +41,11 @@ namespace AcousticFingerprintingLibrary.SoundFingerprint.AudioProxies
             //Call to avoid the freeware splash screen. Didn't see it, but maybe it will appear if the Forms are used :D
             BassNet.Registration("gleb.godonoga@gmail.com", "2X155323152222");
             //Dummy calls made for loading the assemblies
-            int bassVersion = Bass.BASS_GetVersion();
+            //int bassVersion = Bass.BASS_GetVersion();
             int bassMixVersion = BassMix.BASS_Mixer_GetVersion();
-            int bassfxVersion = BassFx.BASS_FX_GetVersion();
-            int plg = Bass.BASS_PluginLoad("bassflac.dll");
-            if (plg == 0)
-                throw new Exception(Bass.BASS_ErrorGetCode().ToString());
+            //int bassfxVersion = BassFx.BASS_FX_GetVersion();
+            //int plg = Bass.BASS_PluginLoad("bassflac.dll");
+            //if (plg == 0)throw new Exception(Bass.BASS_ErrorGetCode().ToString());
             if (!Bass.BASS_Init(-1, DEFAULT_SAMPLE_RATE, BASSInit.BASS_DEVICE_DEFAULT | BASSInit.BASS_DEVICE_MONO, IntPtr.Zero)) //Set Sample Rate / MONO
                 throw new Exception(Bass.BASS_ErrorGetCode().ToString());
             if (!Bass.BASS_SetConfig(BASSConfig.BASS_CONFIG_MIXER_FILTER, 50)) /*Set filter for anti aliasing*/

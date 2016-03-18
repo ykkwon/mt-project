@@ -124,6 +124,7 @@ namespace AcousticFingerprintingLibrary.SoundFingerprint
         /// </summary>
         public int FingerprintLength { get; set; }
 
+        public int StrideSize { get; set; }
         #endregion
 
         public Fingerprinter()
@@ -140,6 +141,7 @@ namespace AcousticFingerprintingLibrary.SoundFingerprint
             TopWavelets = 200;
             SampleRate = 5512;
             LogBase = Math.E;
+            StrideSize = 1102;
             _logFrequenciesIndex = GetLogFrequenciesIndex(SampleRate, MinFrequency, MaxFrequency, LogBins, WdftSize, LogBase);
             _windowArray = WindowFunction.GetWindow(WdftSize);
         }
@@ -264,11 +266,18 @@ namespace AcousticFingerprintingLibrary.SoundFingerprint
         /// <param name = "milliseconds">Milliseconds to be analyzed</param>
         /// <param name = "startmilliseconds">Starting point</param>
         /// <returns>Logarithmically spaced bins within the power spectrum</returns>
-        public float[][] CreateLogSpectrogram(IAudio proxy, string filename, int milliseconds, int startmilliseconds)
+        public List<SpectralImage> CreateLogSpectrogram(IAudio proxy, string filename, int milliseconds, int startmilliseconds, IStride stride)
         {
             //read 5512 Hz, Mono, PCM, with a specific proxy
             float[] samples = proxy.ReadMonoFromFile(filename, SampleRate, milliseconds, startmilliseconds);
-            return CreateLogSpectrogram(samples);
+            return CreateLogSpectrogram(samples, stride);
+        }
+
+        public float[][] CreateLogSpectrogramFloat(IAudio proxy, string filename, int milliseconds, int startmilliseconds, IStride stride)
+        {
+            //read 5512 Hz, Mono, PCM, with a specific proxy
+            float[] samples = proxy.ReadMonoFromFile(filename, SampleRate, milliseconds, startmilliseconds);
+            return CreateLogSpectrogramFloat(samples, stride);
         }
 
         /// <summary>
@@ -276,7 +285,7 @@ namespace AcousticFingerprintingLibrary.SoundFingerprint
         /// </summary>
         /// <param name = "samples">Samples of a song</param>
         /// <returns>Logarithmically spaced bins within the power spectrum</returns>
-        public float[][] CreateLogSpectrogram(float[] samples)
+        public List<SpectralImage> CreateLogSpectrogram(float[] samples, IStride stride)
         {
             NormalizeInPlace(samples);
             int overlap = Overlap;
@@ -296,6 +305,65 @@ namespace AcousticFingerprintingLibrary.SoundFingerprint
                 Fourier.FFT(complexSignal, wdftSize, FourierDirection.Forward);
                 frames[i] = ExtractLogBins(complexSignal);
             }
+            return CutLogarithmizedSpectrum(frames, SampleRate, stride);
+        }
+        public float[][] CreateLogSpectrogramFloat(float[] samples, IStride stride)
+        {
+            NormalizeInPlace(samples);
+            int overlap = Overlap;
+            int wdftSize = WdftSize;
+            int width = (samples.Length - wdftSize) / overlap; /*width of the image*/
+            float[][] frames = new float[width][];
+            float[] complexSignal = new float[2 * wdftSize]; /*even - Re, odd - Img*/
+            for (int i = 0; i < width; i++)
+            {
+                //take 371 ms each 11.6 ms (2048 samples each 64 samples)
+                for (int j = 0; j < wdftSize /*2048*/; j++)
+                {
+                    complexSignal[2 * j] = (float)(_windowArray[j] * samples[i * overlap + j]); /*Weight by Hann Window*/
+                    complexSignal[2 * j + 1] = 0;
+                }
+                //FFT transform for gathering the spectrum
+                Fourier.FFT(complexSignal, wdftSize, FourierDirection.Forward);
+                frames[i] = ExtractLogBins(complexSignal);
+            }
+            return frames;
+        }
+
+        protected List<SpectralImage> CutLogarithmizedSpectrum(float[][] frames, int sampleRate, IStride stride)
+        {
+            var strideBetweenConsecutiveImages = stride;//configuration.Stride;
+            int overlap = Overlap;
+            int index = (int)((float)strideBetweenConsecutiveImages.GetFirstStride() / overlap);
+            int numberOfLogBins = frames[0].Length;
+            var spectralImages = new List<SpectralImage>();
+
+            int width = frames.GetLength(0);
+            int fingerprintImageLength = FingerprintLength;
+            int sequenceNumber = 0;
+            while (index + fingerprintImageLength <= width)
+            {
+                float[][] spectralImage = AllocateMemoryForFingerprintImage(fingerprintImageLength, numberOfLogBins);
+                for (int i = 0; i < fingerprintImageLength; i++)
+                {
+                    Array.Copy(frames[index + i], spectralImage[i], numberOfLogBins);
+                }
+
+                spectralImages.Add(new SpectralImage { Image = spectralImage, Timestamp = index * ((double)overlap / sampleRate), SequenceNumber = ++sequenceNumber });
+                index += fingerprintImageLength + (int)((float)strideBetweenConsecutiveImages.GetStride() / overlap);
+            }
+
+            return spectralImages;
+        }
+
+        private float[][] AllocateMemoryForFingerprintImage(int fingerprintLength, int logBins)
+        {
+            float[][] frames = new float[fingerprintLength][];
+            for (int i = 0; i < fingerprintLength; i++)
+            {
+                frames[i] = new float[logBins];
+            }
+
             return frames;
         }
 
@@ -342,9 +410,14 @@ namespace AcousticFingerprintingLibrary.SoundFingerprint
         /// <param name = "milliseconds">Milliseconds to analyze</param>
         /// <param name = "startmilliseconds">Starting point of analysis</param>
         /// <returns>Fingerprint signatures</returns>
-        public List<bool[]> CreateFingerprints(IAudio proxy, string filename, IStride stride, int milliseconds, int startmilliseconds)
+        public List<Fingerprint> CreateFingerprints(IAudio proxy, string filename, IStride stride, int milliseconds, int startmilliseconds)
         {
-            float[][] spectrum = CreateLogSpectrogram(proxy, filename, milliseconds, startmilliseconds);
+            var spectrum = CreateLogSpectrogram(proxy, filename, milliseconds, startmilliseconds, stride);
+            return CreateFingerprints(spectrum, stride);
+        }
+        public List<bool[]> CreateFingerprintsFloat(IAudio proxy, string filename, IStride stride, int milliseconds, int startmilliseconds)
+        {
+            var spectrum = CreateLogSpectrogramFloat(proxy, filename, milliseconds, startmilliseconds, stride);
             return CreateFingerprints(spectrum, stride);
         }
 
@@ -354,9 +427,15 @@ namespace AcousticFingerprintingLibrary.SoundFingerprint
         /// <param name = "samples">Samples from a song</param>
         /// <param name = "stride">Stride between 2 consecutive fingerprints</param>
         /// <returns>Fingerprint signatures</returns>
-        public List<bool[]> CreateFingerprints(float[] samples, IStride stride)
+        public List<bool[]> CreateFingerprintsFloat(float[] samples, IStride stride)
         {
-            float[][] spectrum = CreateLogSpectrogram(samples);
+            float[][] spectrum = CreateLogSpectrogramFloat(samples, stride);
+            return CreateFingerprints(spectrum, stride);
+        }
+
+        public List<Fingerprint> CreateFingerprints(float[] samples, IStride stride)
+        {
+            var spectrum = CreateLogSpectrogram(samples, stride);
             return CreateFingerprints(spectrum, stride);
         }
 
@@ -369,7 +448,7 @@ namespace AcousticFingerprintingLibrary.SoundFingerprint
         /// <returns>List of fingerprint signatures</returns>
         public List<bool[]> CreateFingerprints(IAudio proxy, string filename, IStride stride)
         {
-            return CreateFingerprints(proxy, filename, stride, 0, 0);
+            return CreateFingerprintsFloat(proxy, filename, stride, 0, 0);
         }
 
         /// <summary>
@@ -403,6 +482,32 @@ namespace AcousticFingerprintingLibrary.SoundFingerprint
                 index++;
             }
             return fingerprints;
+        }
+
+        public List<Fingerprint> CreateFingerprints(List<SpectralImage> spectrum, IStride stride)
+        {
+            var fingerprints = new List<Fingerprint>();
+            foreach (var spectralImage in spectrum)
+            {
+                WaveletDecomposition.DecomposeImageInPlace(spectralImage.Image);
+                bool[] image = ExtractTopWavelets(spectralImage.Image);
+                if (!IsBlack(image))
+                {
+                    fingerprints.Add(new Fingerprint { Signature = image, Timestamp = spectralImage.Timestamp, SequenceNumber = spectralImage.SequenceNumber });
+                }
+            }
+
+            return fingerprints;
+        }
+
+        // If image is blank return true
+        private bool IsBlack(IEnumerable<bool> image)
+        {
+            foreach (var b in image)
+            {
+                if (b != false) return false;
+            }
+            return true;
         }
         #endregion
 
