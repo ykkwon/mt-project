@@ -10,7 +10,7 @@ namespace AcousticFingerprintingLibrary.SoundFingerprint.AudioProxies.Strides
         /// <summary>
         ///   First stride
         /// </summary>
-        private readonly int _firstStride;
+        public int FirstStride { get; protected set; }
 
         /// <summary>
         ///   Stride size
@@ -24,7 +24,7 @@ namespace AcousticFingerprintingLibrary.SoundFingerprint.AudioProxies.Strides
         public StaticStride(int strideSize)
         {
             _strideSize = strideSize;
-            _firstStride = 0;
+            FirstStride = 0;
         }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace AcousticFingerprintingLibrary.SoundFingerprint.AudioProxies.Strides
         /// <param name = "firstStride">First stride</param>
         public StaticStride(int strideSize, int firstStride) : this(strideSize)
         {
-            _firstStride = firstStride;
+            FirstStride = firstStride;
         }
 
         #region IStride Members
@@ -54,7 +54,7 @@ namespace AcousticFingerprintingLibrary.SoundFingerprint.AudioProxies.Strides
         /// <returns></returns>
         public int GetFirstStride()
         {
-            return _firstStride;
+            return FirstStride;
         }
 
         #endregion
