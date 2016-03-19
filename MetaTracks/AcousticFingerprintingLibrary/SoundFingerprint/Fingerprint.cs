@@ -18,17 +18,6 @@ namespace AcousticFingerprintingLibrary.SoundFingerprint
         
     }
 
-    public class SpectralImage
-    {
-        public float[][] Image { get; set; }
-
-        // Number of spectrum in sequence (first? 2nd? last?)
-        public int SequenceNumber { get; set; }
-
-        // Where in soundfile spectrum is taken
-        public double Timestamp { get; set; }
-    }
-
     public class HashedFingerprint
     {
         public HashedFingerprint(byte[] subFingerprint, long[] hashBins, int sequenceNumber, double sequenceAt)

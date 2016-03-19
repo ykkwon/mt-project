@@ -52,7 +52,8 @@ namespace DatabasePopulationApplication_0._4._5
         /// <param name = "width">Width of the image</param>
         /// <param name = "height">Height of the image</param>
         /// <returns>Bitmap representation of the fingerprints. All fingerprints in one file</returns>
-        public static Bitmap GetFingerprintsImage(List<bool[]> data, int width, int height)
+        public static Bitmap GetFingerprintsImage(List<Fingerprint> data, int width, int height)
+        //public static Bitmap GetFingerprintsImage(List<bool[]> data, int width, int height)
         {
             const int imagesPerRow = 5; /*5 bitmap images per line*/
             const int spaceBetweenImages = 10; /*10 pixel space between images*/
@@ -74,7 +75,7 @@ namespace DatabasePopulationApplication_0._4._5
             int count = 0;
             for (int z = 0; z < data.Count; z++)
             {
-                bool[] finger = data[z];
+                bool[] finger = data[z].Signature;
                 for (int i = 0; i < width /*128*/; i++)
                 {
                     for (int j = 0; j < height /*32*/; j++)
@@ -170,7 +171,7 @@ namespace DatabasePopulationApplication_0._4._5
                                                     Fingerprinter manager)
         {
             List<float[][]> wavelets = new List<float[][]>();
-            float[][] spectrum = manager.CreateLogSpectrogramFloat(proxy, pathToFile, 0, 0, stride);
+            float[][] spectrum = manager.CreateLogSpectrogram(proxy, pathToFile, 0, 0, stride);
             int specLen = spectrum.GetLength(0);
             int start = stride.GetFirstStride() / manager.Overlap;
             int logbins = manager.LogBins;

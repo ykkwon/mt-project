@@ -82,7 +82,7 @@ namespace DatabasePopulationApplication_0._4._5
                 SaveFileDialog sfd = new SaveFileDialog
                 {
                     Filter = "(*.jpg)|*.jpg", //Resources.FileFilterJPeg,
-                    FileName = Path.GetFileNameWithoutExtension(filename) + "_spectrum_" + ".jpg"
+                    FileName = Path.GetFileNameWithoutExtension(filename) + "_fingerprint_" + ".jpg"
                 };
 
                 sfd.ShowDialog();
@@ -91,11 +91,14 @@ namespace DatabasePopulationApplication_0._4._5
                 {
                     Fingerprinter manager = new Fingerprinter();
                     // Not 100% sure what stridenumber means
-                    StaticStride stride = new StaticStride((int)1102);
+                    int strideSize = 1102;
+                    int samplesPerFingerprint = 128*64; // 128 = width of fingerprint, 64 = overlap
+                    var stride = new IncrementalStaticStride(strideSize, samplesPerFingerprint);
 
                     int totalFingerprints = 0;
 
-                    List<bool[]> fingerprints = manager.CreateFingerprints(proxy, Path.GetFullPath(filename), stride);
+                    //List<bool[]> fingerprints = manager.CreateFingerprints(proxy, Path.GetFullPath(filename), stride);
+                    List<Fingerprint> fingerprints = manager.CreateFingerprints(proxy, Path.GetFullPath(filename), stride);
 
                     int width = manager.FingerprintLength;
                     int height = manager.LogBins;

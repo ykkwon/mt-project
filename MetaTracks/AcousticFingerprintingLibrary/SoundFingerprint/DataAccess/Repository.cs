@@ -63,7 +63,8 @@ namespace AcousticFingerprintingLibrary.SoundFingerprint.DataAccess
         {
             if (soundFile == null) return; /*SoundFile is not eligible*/
             /*Create fingerprints that will be used as initial fingerprints to be queried*/
-            List<bool[]> dbFingers = _manager.CreateFingerprintsFloat(samples, stride);
+            //List<bool[]> dbFingers = _manager.CreateFingerprints(samples, stride);
+            List<Fingerprint> dbFingers = _manager.CreateFingerprints(samples, stride);
             _storage.InsertSoundFile(soundFile); /*Insert SoundFile into the storage*/
             /*Get fingerprint's hash signature, and associate it to a specific SoundFile*/
             List<HashSignature> creationalsignatures = GetSignatures(dbFingers, soundFile, hashTables, hashKeys);
@@ -78,14 +79,13 @@ namespace AcousticFingerprintingLibrary.SoundFingerprint.DataAccess
 
 
         // ReSharper disable ReturnTypeCanBeEnumerable.Local
-        private List<HashSignature> GetSignatures(IEnumerable<bool[]> fingerprints, SoundFile soundFile, int hashTables,
-            int hashKeys)
-            // ReSharper restore ReturnTypeCanBeEnumerable.Local
+        private List<HashSignature> GetSignatures(IEnumerable<Fingerprint> fingerprints, SoundFile soundFile, int hashTables, int hashKeys)
+        //private List<HashSignature> GetSignatures(IEnumerable<bool[]> fingerprints, SoundFile soundFile, int hashTables, int hashKeys)
         {
             List<HashSignature> signatures = new List<HashSignature>();
-            foreach (bool[] fingerprint in fingerprints)
+            foreach (var fingerprint in fingerprints)
             {
-                int[] signature = _hasher.ComputeMinHashSignature(fingerprint);
+                int[] signature = _hasher.ComputeMinHashSignature(fingerprint.Signature);
                 /*Compute min-hash signature out of fingerprint*/
                 Dictionary<int, long> buckets = _hasher.GroupMinHashToLSHBuckets(signature, hashTables, hashKeys);
                 /*Group Min-Hash signature into LSH buckets*/
