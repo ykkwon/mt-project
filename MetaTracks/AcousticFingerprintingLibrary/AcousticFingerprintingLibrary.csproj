@@ -68,10 +68,10 @@
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\AWS SDK for .NET\past-releases\Version-2\Net45\AWSSDK.dll</HintPath>
     </Reference>
     <Reference Include="Bass.Net">
-      <HintPath>..\..\..\..\..\Dropbox\Bacheloroppgave 2016 MetaTracks\c# References\Bass.Net.dll</HintPath>
+      <HintPath>F:\Dropbox\Bacheloroppgave 2016 MetaTracks\c# References\Bass.Net.dll</HintPath>
     </Reference>
     <Reference Include="NAudio">
-      <HintPath>..\..\..\..\..\Dropbox\Bacheloroppgave 2016 MetaTracks\c# References\NAudio.dll</HintPath>
+      <HintPath>F:\Dropbox\Bacheloroppgave 2016 MetaTracks\c# References\NAudio.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup />
