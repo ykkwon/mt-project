@@ -104,6 +104,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Record.cs" />
     <Compile Include="ViewController.designer.cs">
       <DependentUpon>ViewController.cs</DependentUpon>
     </Compile>
@@ -112,8 +113,13 @@
     <InterfaceDefinition Include="Resources\LaunchScreen.xib" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="AWSSDK">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\AWS SDK for .NET\past-releases\Version-2\Net45\AWSSDK.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Bass.Net.iOS">
       <HintPath>..\..\..\..\..\..\Program Files (x86)\BASS.NET\iOS\Bass.Net.iOS.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
@@ -127,6 +133,7 @@
     <ProjectReference Include="..\AcousticFingerprintingLibrary\AcousticFingerprintingLibrary.csproj">
       <Project>{8ff0d86b-5c16-4f25-819c-27e41f8be074}</Project>
       <Name>AcousticFingerprintingLibrary</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />

@@ -123,6 +123,7 @@
     <ProjectReference Include="..\AcousticFingerprintingLibrary\AcousticFingerprintingLibrary.csproj">
       <Project>{8ff0d86b-5c16-4f25-819c-27e41f8be074}</Project>
       <Name>AcousticFingerprintingLibrary</Name>
+      <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
