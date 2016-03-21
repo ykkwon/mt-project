@@ -169,6 +169,7 @@ namespace WindowsApplication_0._4._5
                     // HTTP GET
                     HttpResponseMessage response = await client.GetAsync(client.BaseAddress);
                     var responseString = response.Content.ReadAsStringAsync().Result;
+
                     Main.Status = response.Content.Headers.ContentLength != 0 ? "Found a match." : "No match.";
                     _json = JsonConvert.DeserializeObject(responseString, typeof(object));
                     Main.Status = "JSON: " + _json;
