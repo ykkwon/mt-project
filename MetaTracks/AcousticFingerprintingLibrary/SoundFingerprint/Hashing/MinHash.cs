@@ -57,7 +57,8 @@ namespace AcousticFingerprintingLibrary.SoundFingerprint.Hashing
         /// <param name = "permutations">Storage from which to read the permutations</param>
         public MinHash(IPermutations permutations)
         {
-            _permutations = permutations.GetPermutations(); /*Read the permutation from the database*/
+            _permutations = DefaultPermutations.GetDefaultPermutations();
+                //permutations.GetPermutations(); /*Read the permutation from the database*/
 
             if (_permutations == null || _permutations.Length == 0)
                 throw new Exception("Permutations are null or not enough to create the Min Hash signature");
@@ -102,6 +103,29 @@ namespace AcousticFingerprintingLibrary.SoundFingerprint.Hashing
             }
             return minHash; /*Array of 100 elements with bit turned ON if permutation captured successfully a TRUE bit*/
         }
+
+
+        public byte[] ComputeMinHashSignatureByte(bool[] fingerprint)
+        {
+            bool[] signature = fingerprint;
+            int[][] perms = _permutations;
+            byte[] minHash = new byte[perms.Length]; /*100*/
+            for (int i = 0; i < perms.Length /*100*/; i++)
+            {
+                minHash[i] = 255; /*The probability of occurrence of 1 after position 255 is very insignificant*/
+                for (int j = 0; j < perms[i].Length /*256*/; j++)
+                {
+                    if (signature[perms[i][j]])
+                    {
+                        minHash[i] = (byte)j; /*Looking for first occurrence of '1'*/
+                        break;
+                    }
+                }
+            }
+
+            return minHash; /*Array of 100 elements with bit turned ON if permutation captured successfully a TRUE bit*/
+        }
+
 
         /// <summary>
         ///   Compute LSH hash buckets which will be inserted into hash tables.

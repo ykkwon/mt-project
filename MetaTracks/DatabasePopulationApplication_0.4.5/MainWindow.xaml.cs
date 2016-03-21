@@ -99,7 +99,7 @@ namespace DatabasePopulationApplication_0._4._5
 
                     //List<bool[]> fingerprints = manager.CreateFingerprints(proxy, Path.GetFullPath(filename), stride);
                     List<Fingerprint> fingerprints = manager.CreateFingerprints(proxy, Path.GetFullPath(filename), stride);
-
+                    manager.GetHashSimilarity(stride, stride, proxy, filename, "C:\\Users\\Kristian\\Desktop\\c# musikkfile\\Pokemon_BlueRed_-_Route_1.wav");
                     int width = manager.FingerprintLength;
                     int height = manager.LogBins;
                     Bitmap image = Imaging.GetFingerprintsImage(fingerprints, width, height);
