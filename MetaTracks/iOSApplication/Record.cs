@@ -31,7 +31,7 @@ namespace iOSApplication
         public static string PrepareRecording(int fileIterator)
         {
             string fileName = string.Format("Myfile{0}.wav", fileIterator);
-            string audioFilePath = Path.Combine("/Users/metatracks/Desktop", fileName);
+            string audioFilePath = Path.Combine(Path.GetTempPath(), fileName);
 
             _url = NSUrl.FromFilename(audioFilePath);
             //set up the NSObject Array of values that will be combined with the keys to make the NSDictionary

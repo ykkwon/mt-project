@@ -106,28 +106,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Record.cs" />
-    <Compile Include="SoundFingerprint\AudioProxies\BassProxy.cs" />
-    <Compile Include="SoundFingerprint\AudioProxies\IAudio.cs" />
-    <Compile Include="SoundFingerprint\AudioProxies\Strides\IncrementalStaticStride.cs" />
-    <Compile Include="SoundFingerprint\AudioProxies\Strides\IStride.cs" />
-    <Compile Include="SoundFingerprint\AudioProxies\Strides\StaticStride.cs" />
-    <Compile Include="SoundFingerprint\DataAccess\HashType.cs" />
-    <Compile Include="SoundFingerprint\DataAccess\IStorage.cs" />
-    <Compile Include="SoundFingerprint\DataAccess\Repository.cs" />
-    <Compile Include="SoundFingerprint\FFT\Complex.cs" />
-    <Compile Include="SoundFingerprint\FFT\ComplexF.cs" />
-    <Compile Include="SoundFingerprint\FFT\Fourier.cs" />
-    <Compile Include="SoundFingerprint\FFT\FourierDirection.cs" />
-    <Compile Include="SoundFingerprint\Fingerprint.cs" />
-    <Compile Include="SoundFingerprint\Fingerprinter.cs" />
-    <Compile Include="SoundFingerprint\Hashing\IPermutations.cs" />
-    <Compile Include="SoundFingerprint\Hashing\MinHash.cs" />
-    <Compile Include="SoundFingerprint\Model\HashSignature.cs" />
-    <Compile Include="SoundFingerprint\Model\SoundFile.cs" />
-    <Compile Include="SoundFingerprint\Wavelets\HaarWavelet.cs" />
-    <Compile Include="SoundFingerprint\Wavelets\IWaveletDecomposition.cs" />
-    <Compile Include="SoundFingerprint\Windows\HanningWindow.cs" />
-    <Compile Include="SoundFingerprint\Windows\IWindowFunction.cs" />
     <Compile Include="ViewController.designer.cs">
       <DependentUpon>ViewController.cs</DependentUpon>
     </Compile>
