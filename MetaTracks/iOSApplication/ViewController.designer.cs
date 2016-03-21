@@ -16,18 +16,22 @@ namespace iOSApplication
 	{
 		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
+		UILabel Console { get; set; }
+
+		[Outlet]
+		[GeneratedCode ("iOS Designer", "1.0")]
 		UIButton RecordButton { get; set; }
 
 		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
 		UIButton StopButton { get; set; }
 
-		[Action ("RecordButton_TouchUpInside:")]
-		[GeneratedCode ("iOS Designer", "1.0")]
-		partial void RecordButton_TouchUpInside (UIButton sender);
-
 		void ReleaseDesignerOutlets ()
 		{
+			if (Console != null) {
+				Console.Dispose ();
+				Console = null;
+			}
 			if (RecordButton != null) {
 				RecordButton.Dispose ();
 				RecordButton = null;

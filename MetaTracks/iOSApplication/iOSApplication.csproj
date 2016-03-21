@@ -22,7 +22,8 @@
     <MtouchArch>i386</MtouchArch>
     <MtouchLink>Full</MtouchLink>
     <MtouchDebug>True</MtouchDebug>
-    <MtouchSdkVersion>9.2</MtouchSdkVersion>
+    <MtouchSdkVersion>
+    </MtouchSdkVersion>
     <MtouchProfiling>False</MtouchProfiling>
     <MtouchFastDev>False</MtouchFastDev>
     <MtouchUseLlvm>False</MtouchUseLlvm>
@@ -32,7 +33,7 @@
     <OptimizePNGs>True</OptimizePNGs>
     <MtouchFloat32>False</MtouchFloat32>
     <MtouchI18n />
-    <MtouchExtraArgs>-gcc_flags "-framework AudioToolbox -L${ProjectDir} -iOSApplication -force_load ${ProjectDir}/libbass.a"</MtouchExtraArgs>
+    <MtouchExtraArgs>-nosymbolstrip -nostrip -gcc_flags "-framework AudioToolbox -L${ProjectDir} -iOSApplication -force_load ${ProjectDir}/libbass.a -force_load ${ProjectDir}/libbassmix.a"</MtouchExtraArgs>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>none</DebugType>
@@ -102,9 +103,32 @@
     <None Include="libbass.a">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="libbassmix.a" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Record.cs" />
+    <Compile Include="SoundFingerprint\AudioProxies\BassProxy.cs" />
+    <Compile Include="SoundFingerprint\AudioProxies\IAudio.cs" />
+    <Compile Include="SoundFingerprint\AudioProxies\Strides\IncrementalStaticStride.cs" />
+    <Compile Include="SoundFingerprint\AudioProxies\Strides\IStride.cs" />
+    <Compile Include="SoundFingerprint\AudioProxies\Strides\StaticStride.cs" />
+    <Compile Include="SoundFingerprint\DataAccess\HashType.cs" />
+    <Compile Include="SoundFingerprint\DataAccess\IStorage.cs" />
+    <Compile Include="SoundFingerprint\DataAccess\Repository.cs" />
+    <Compile Include="SoundFingerprint\FFT\Complex.cs" />
+    <Compile Include="SoundFingerprint\FFT\ComplexF.cs" />
+    <Compile Include="SoundFingerprint\FFT\Fourier.cs" />
+    <Compile Include="SoundFingerprint\FFT\FourierDirection.cs" />
+    <Compile Include="SoundFingerprint\Fingerprint.cs" />
+    <Compile Include="SoundFingerprint\Fingerprinter.cs" />
+    <Compile Include="SoundFingerprint\Hashing\IPermutations.cs" />
+    <Compile Include="SoundFingerprint\Hashing\MinHash.cs" />
+    <Compile Include="SoundFingerprint\Model\HashSignature.cs" />
+    <Compile Include="SoundFingerprint\Model\SoundFile.cs" />
+    <Compile Include="SoundFingerprint\Wavelets\HaarWavelet.cs" />
+    <Compile Include="SoundFingerprint\Wavelets\IWaveletDecomposition.cs" />
+    <Compile Include="SoundFingerprint\Windows\HanningWindow.cs" />
+    <Compile Include="SoundFingerprint\Windows\IWindowFunction.cs" />
     <Compile Include="ViewController.designer.cs">
       <DependentUpon>ViewController.cs</DependentUpon>
     </Compile>
@@ -113,17 +137,86 @@
     <InterfaceDefinition Include="Resources\LaunchScreen.xib" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Accessibility">
+      <HintPath>..\..\..\..\..\..\Windows\Microsoft.NET\Framework\v4.0.30319\Accessibility.dll</HintPath>
+    </Reference>
     <Reference Include="AWSSDK">
       <HintPath>..\..\..\..\..\..\Program Files (x86)\AWS SDK for .NET\past-releases\Version-2\Net45\AWSSDK.dll</HintPath>
-      <Private>False</Private>
     </Reference>
-    <Reference Include="Bass.Net.iOS">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\BASS.NET\iOS\Bass.Net.iOS.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="Bass.Net">
+      <HintPath>..\..\..\..\Dropbox\Bacheloroppgave 2016 MetaTracks\Bass.Net.dll</HintPath>
     </Reference>
+    <Reference Include="FSharp.Core" />
+    <Reference Include="I18N" />
+    <Reference Include="I18N.CJK" />
+    <Reference Include="I18N.MidEast" />
+    <Reference Include="I18N.Other" />
+    <Reference Include="I18N.Rare" />
+    <Reference Include="I18N.West" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Mono.CSharp" />
+    <Reference Include="Mono.Data.Sqlite" />
+    <Reference Include="Mono.Data.Tds" />
+    <Reference Include="Mono.Dynamic.Interpreter" />
+    <Reference Include="Mono.Security" />
+    <Reference Include="MonoTouch.Dialog-1" />
+    <Reference Include="MonoTouch.NUnitLite" />
+    <Reference Include="NAudio">
+      <HintPath>..\..\..\..\Dropbox\Bacheloroppgave 2016 MetaTracks\c# References\NAudio.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK-1.0" />
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration">
+      <HintPath>..\..\..\..\..\..\Windows\Microsoft.NET\Framework\v4.0.30319\System.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.Services.Client" />
+    <Reference Include="System.Deployment">
+      <HintPath>..\..\..\..\..\..\Windows\Microsoft.NET\Framework\v4.0.30319\System.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Diagnostics.Contracts">
+      <HintPath>..\..\..\..\..\..\Windows\Microsoft.NET\Framework\v4.0.30319\System.Diagnostics.Contracts.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Diagnostics.Debug">
+      <HintPath>..\..\..\..\..\..\Windows\Microsoft.NET\Framework\v4.0.30319\System.Diagnostics.Debug.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Diagnostics.Tools">
+      <HintPath>..\..\..\..\..\..\Windows\Microsoft.NET\Framework\v4.0.30319\System.Diagnostics.Tools.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Diagnostics.Tracing">
+      <HintPath>..\..\..\..\..\..\Windows\Microsoft.NET\Framework\v4.0.30319\System.Diagnostics.Tracing.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Drawing">
+      <HintPath>..\..\..\..\..\..\Windows\Microsoft.NET\Framework\v4.0.30319\System.Drawing.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Json" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Runtime.Serialization.Formatters.Soap">
+      <HintPath>..\..\..\..\..\..\Windows\Microsoft.NET\Framework\v4.0.30319\System.Runtime.Serialization.Formatters.Soap.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security">
+      <HintPath>..\..\..\..\..\..\Windows\Microsoft.NET\Framework\v4.0.30319\System.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Internals" />
+    <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Windows" />
+    <Reference Include="System.Windows.Forms">
+      <HintPath>..\..\..\..\..\..\Windows\Microsoft.NET\Framework\v4.0.30319\System.Windows.Forms.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml.Serialization" />
     <Reference Include="Xamarin.iOS" />
   </ItemGroup>
   <ItemGroup>
