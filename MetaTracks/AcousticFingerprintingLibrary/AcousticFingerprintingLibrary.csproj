@@ -54,6 +54,8 @@
     <Compile Include="SoundFingerprint\FFT\FourierDirection.cs" />
     <Compile Include="SoundFingerprint\Fingerprint.cs" />
     <Compile Include="SoundFingerprint\Fingerprinter.cs" />
+    <Compile Include="SoundFingerprint\Hashing\DefaultPermutations.cs" />
+    <Compile Include="SoundFingerprint\Hashing\FilePermutations.cs" />
     <Compile Include="SoundFingerprint\Hashing\IPermutations.cs" />
     <Compile Include="SoundFingerprint\Hashing\MinHash.cs" />
     <Compile Include="SoundFingerprint\Model\HashSignature.cs" />
@@ -68,10 +70,10 @@
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\AWS SDK for .NET\past-releases\Version-2\Net45\AWSSDK.dll</HintPath>
     </Reference>
     <Reference Include="Bass.Net">
-      <HintPath>F:\Dropbox\Bacheloroppgave 2016 MetaTracks\c# References\Bass.Net.dll</HintPath>
+      <HintPath>..\..\..\..\..\Dropbox\Bacheloroppgave 2016 MetaTracks\c# References\Bass.Net.dll</HintPath>
     </Reference>
     <Reference Include="NAudio">
-      <HintPath>F:\Dropbox\Bacheloroppgave 2016 MetaTracks\c# References\NAudio.dll</HintPath>
+      <HintPath>..\..\..\..\..\Dropbox\Bacheloroppgave 2016 MetaTracks\c# References\NAudio.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup />
