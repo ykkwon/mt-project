@@ -70,7 +70,7 @@ namespace iOSApplication
         {
             // This writes data to the wave file.
             _recorder.Record();
-            Thread.Sleep(1000);
+            Thread.Sleep(3000);
             _recorder.Stop();
         }
 
@@ -89,16 +89,13 @@ namespace iOSApplication
         public static void ConsumeWaveFile(string filePath)
         {
             bassInitMethod();
-                Console.WriteLine(filePath);
-            float[] hest = ReadMonoFromFile(filePath, 5512, 0, 0);
-            
+            float[] monoArray = ReadMonoFromFile(filePath, 5512, 0, 0);
             Fingerprinter manager = new Fingerprinter();
             int strideSize = 1102;
             int samplesPerFingerprint = 128*64;
             IStride stride = new IncrementalStaticStride(1102, 128*64);
-            var pergud = manager.CreateFingerprints(hest, stride);
-            
-            int ewqeqwe = 0;
+            var fingerprints = manager.CreateFingerprints(monoArray, stride);
+            Console.WriteLine("Fingerprints: " + fingerprints[0].ToString());
         }
 
         public static void bassInitMethod()

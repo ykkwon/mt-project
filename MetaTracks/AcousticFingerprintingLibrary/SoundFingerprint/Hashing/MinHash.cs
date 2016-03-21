@@ -57,7 +57,7 @@ namespace AcousticFingerprintingLibrary.SoundFingerprint.Hashing
         /// <param name = "permutations">Storage from which to read the permutations</param>
         public MinHash(IPermutations permutations)
         {
-            _permutations = DefaultPermutations.GetDefaultPermutations();
+            //_permutations = DefaultPermutations.GetDefaultPermutations();
                 //permutations.GetPermutations(); /*Read the permutation from the database*/
 
             if (_permutations == null || _permutations.Length == 0)
