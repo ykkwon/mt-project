@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Windows;
 using AcousticFingerprintingLibrary;
@@ -30,7 +29,9 @@ namespace DatabasePopulationApplication_0._4._5
         internal static MainWindow Main;
         // From acoustic fingerprinting client
         FingerprintManager fm = new FingerprintManager();
+        //FingerprintDatabaseManager fdm = new FingerprintDatabaseManager();
         private string _entryName;
+        private string _typeName;
         private OpenFileDialog _open;
         private string filename;
         private Media _convertedMedia;
@@ -38,17 +39,31 @@ namespace DatabasePopulationApplication_0._4._5
 
         private void openButton_Click(object sender, RoutedEventArgs e)
         {
-            var dialog = new Popup();
-            if (dialog.ShowDialog() == true)
+            var nameDialog = new Popup();
+            if (nameDialog.ShowDialog() == true)
             {
-                _entryName = dialog.ResponseText;
+                _entryName = nameDialog.ResponseText;
+            }
+            else
+            {
+                return;
+            }
+
+            var typeDialog = new Popup();
+            if (typeDialog.ShowDialog() == true)
+            {
+                _typeName = typeDialog.ResponseText;
+            }
+            else
+            {
+                return;
             }
 
             (new Thread(() =>
             {
                 try
                 {
-                    /*
+
                     _open = new OpenFileDialog
                     {
                         Filter = "MP4 Video File (*.mp4)|*.mp4;|AVI Video File (*.avi)|*.avi;|All files (*.*)|(*.*);",
@@ -56,12 +71,12 @@ namespace DatabasePopulationApplication_0._4._5
                     _open.ShowDialog();
 
                     var inputMedia = new Media(_open.FileName);
-                    Console.WriteLine("File path: " + inputMedia.FilePath);
-                    Console.WriteLine("File name: " + inputMedia.FileName);
-                    Console.WriteLine("Converting input to Wave format.");
+                    Console.WriteLine(@"File path: " + inputMedia.FilePath);
+                    Console.WriteLine(@"File name: " + inputMedia.FileName);
+                    Console.WriteLine(@"Converting input to Wave format.");
                     _convertedMedia = fm.ConvertToWav(inputMedia);
                     _preprocessedMedia = fm.Preprocess(_convertedMedia, 5512);
-                    */
+
 
                     OpenFileDialog ofd = new OpenFileDialog();
                     ofd.ShowDialog();
@@ -70,18 +85,18 @@ namespace DatabasePopulationApplication_0._4._5
                 catch (TypeInitializationException exception)
                 {
                     Console.WriteLine(exception);
-                    //Main.Status = "Not connected to database. Connect through AWS Explorer.";
+                    Main.Status = "Not connected to database. Connect through AWS Explorer.";
                 }
             })).Start();
         }
 
-        private void drawFingerprints()
+        private void DrawFingerprints()
         {
             if (true)
             {
                 SaveFileDialog sfd = new SaveFileDialog
                 {
-                    Filter = "(*.jpg)|*.jpg", //Resources.FileFilterJPeg,
+                    Filter = "(*.jpg)|*.jpg",
                     FileName = Path.GetFileNameWithoutExtension(filename) + "_fingerprint_" + ".jpg"
                 };
 
@@ -98,8 +113,10 @@ namespace DatabasePopulationApplication_0._4._5
                     int totalFingerprints = 0;
 
                     //List<bool[]> fingerprints = manager.CreateFingerprints(proxy, Path.GetFullPath(filename), stride);
-                    List<Fingerprint> fingerprints = manager.CreateFingerprints(proxy, Path.GetFullPath(filename), stride);
-                    manager.GetHashSimilarity(stride, stride, proxy, filename, "C:\\Users\\Kristian\\Desktop\\c# musikkfile\\Pokemon_BlueRed_-_Route_1.wav");
+                    List<Fingerprint> fingerprints = manager.CreateFingerprints(proxy, Path.GetFullPath(filename),
+                        stride);
+                    manager.GetHashSimilarity(stride, stride, proxy, filename,
+                        "C:\\Users\\Kristian\\Desktop\\c# musikkfile\\Pokemon_BlueRed_-_Route_1.wav");
                     int width = manager.FingerprintLength;
                     int height = manager.LogBins;
                     Bitmap image = Imaging.GetFingerprintsImage(fingerprints, width, height);
@@ -186,7 +203,7 @@ namespace DatabasePopulationApplication_0._4._5
             {
                 Fingerprinter manager = new Fingerprinter();
                 // 1102?
-                StaticStride stride = new StaticStride((int)1102);
+                StaticStride stride = new StaticStride((int) 1102);
                 Image image = Imaging.GetWaveletSpectralImage(Path.GetFullPath(filename), stride, proxy, manager);
                 image.Save(path);
                 image.Dispose();
@@ -197,8 +214,8 @@ namespace DatabasePopulationApplication_0._4._5
         {
             (new Thread(() =>
             {
-                throw new NotImplementedException();
-                //fm.SendToDatabase(_entryName);
+                Main.Status = "Not implemented.";
+                //fdm.SendFullFileToDatabase(_entryName);
             })).Start();
         }
 
@@ -208,47 +225,56 @@ namespace DatabasePopulationApplication_0._4._5
             {
                 try
                 {
-                    throw new NotImplementedException();
+                    Main.Status = "Not implemented.";
                     //_splitVideosList = FingerprintManager.SplitWavFile(_preprocessedMedia, _preprocessedMedia);
                 }
                 catch (NullReferenceException ex)
                 {
                     Console.WriteLine(ex);
-                   // Main.Status = "Choose an input file to preprocess first.";
+                    // Main.Status = "Choose an input file to preprocess first.";
                 }
             })).Start();
 
         }
 
-        /**
+
         internal string Status
         {
             get { return fg_label.Content.ToString(); }
             set
             {
-                System.Windows.Threading.Dispatcher.Invoke(() =>
+                Dispatcher.Invoke(() =>
                 {
                     fg_label.Content += value + "\n";
                 });
             }
         }
-    **/
+
+
 
         private void purgebutton_Click(object sender, RoutedEventArgs e)
         {
-            (new Thread(() =>
-            {
 
-                throw new NotImplementedException();
-                //FingerprintManager.DeleteTable();
-                //Main.Status = "Table has been deleted. Don't forget to create it again.";
-            })).Start();
+            Confirmation dialog = new Confirmation();
+            dialog.ShowDialog();
+            if (dialog.DialogResult == true)
+            {
+                Main.Status = "Purging database.";
+            }
+            if (dialog.DialogResult == false)
+            {
+                Main.Status = "I am glad to see that you changed your mind.";
+            }
+            //FingerprintManager.DeleteTable();
+            //Main.Status = "Table has been deleted. Don't forget to create it again.";
         }
+    
 
         private void createbutton_Click(object sender, RoutedEventArgs e)
         {
             (new Thread(() =>
             {
+
                 //FingerprintManager.CreateTable();
                 //Main.Status = "Table has been created.";
             })).Start();
@@ -281,7 +307,7 @@ namespace DatabasePopulationApplication_0._4._5
 
         private void hashButton_Click(object sender, RoutedEventArgs e)
         {
-            drawFingerprints();
+            DrawFingerprints();
             //throw new NotImplementedException();
             //FingerprintManager.HashTransform(_splitVideosList);
         }
