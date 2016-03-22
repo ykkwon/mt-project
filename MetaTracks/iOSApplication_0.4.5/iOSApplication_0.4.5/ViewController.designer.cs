@@ -9,15 +9,11 @@ using System;
 using System.CodeDom.Compiler;
 using UIKit;
 
-namespace iOSApplication
+namespace iOSApplication_0._4._5
 {
 	[Register ("ViewController")]
 	partial class ViewController
 	{
-		[Outlet]
-		[GeneratedCode ("iOS Designer", "1.0")]
-		UILabel Console { get; set; }
-
 		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
 		UIButton RecordButton { get; set; }
@@ -28,10 +24,6 @@ namespace iOSApplication
 
 		void ReleaseDesignerOutlets ()
 		{
-			if (Console != null) {
-				Console.Dispose ();
-				Console = null;
-			}
 			if (RecordButton != null) {
 				RecordButton.Dispose ();
 				RecordButton = null;
