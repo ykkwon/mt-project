@@ -52,12 +52,14 @@ namespace AcousticFingerprintingLibrary.SoundFingerprint.Hashing
         private readonly int _permutationsCount;
 
         /// <summary>
-        ///   Public constructor
+        ///   Public constructor 
+        ///  perm length = 100, int[255] in each
         /// </summary>
         /// <param name = "permutations">Storage from which to read the permutations</param>
-        public MinHash(IPermutations permutations)
+        public MinHash(/*IPermutations permutations*/bool trueorfalse)
         {
-            //_permutations = DefaultPermutations.GetDefaultPermutations();
+            if(trueorfalse) _permutations = DefaultPermutations.GetDefaultPermutations();
+            else _permutations = DefaultPermutations.GeneratePermutations(20*5, 255, 0, 8192);
                 //permutations.GetPermutations(); /*Read the permutation from the database*/
 
             if (_permutations == null || _permutations.Length == 0)
@@ -136,6 +138,26 @@ namespace AcousticFingerprintingLibrary.SoundFingerprint.Hashing
         /// <param name = "numberOfMinHashesPerKey">Number of min hashes per key [N = 4]</param>
         /// <returns>Collection of Pairs with Key = Hash table index, Value = Hash bucket</returns>
         public Dictionary<int, long> GroupMinHashToLSHBuckets(int[] minHashes, int numberOfHashTables, int numberOfMinHashesPerKey)
+        {
+            Dictionary<int, long> result = new Dictionary<int, long>();
+            const int maxNumber = 8; /*Int64 biggest value for MinHash*/
+            if (numberOfMinHashesPerKey > maxNumber)
+                throw new ArgumentException("numberOfMinHashesPerKey cannot be bigger than 8");
+            for (int i = 0; i < numberOfHashTables /*hash functions*/; i++)
+            {
+                byte[] array = new byte[maxNumber];
+                for (int j = 0; j < numberOfMinHashesPerKey /*r min hash signatures*/; j++)
+                {
+                    array[j] = (byte)minHashes[i * numberOfMinHashesPerKey + j];
+                }
+                long hashbucket = BitConverter.ToInt64(array, 0); //actual value of the signature
+                hashbucket = ((A * hashbucket + B) % PRIME_P) % HASH_BUCKET_SIZE;
+                result.Add(i, hashbucket);
+            }
+            return result;
+        }
+
+        public Dictionary<int, long> GroupMinHashToLSHBucketsByte(byte[] minHashes, int numberOfHashTables, int numberOfMinHashesPerKey)
         {
             Dictionary<int, long> result = new Dictionary<int, long>();
             const int maxNumber = 8; /*Int64 biggest value for MinHash*/

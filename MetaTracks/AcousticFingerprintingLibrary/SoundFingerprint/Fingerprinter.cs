@@ -446,7 +446,7 @@ namespace AcousticFingerprintingLibrary.SoundFingerprint
         public float[] ExtractLogBins(float[] spectrum)
         {
             int logBins = LogBins; /*Local copy for performance reasons*/
-#if SAFE
+            #if SAFE
             if (spectrum == null)
                 throw new ArgumentNullException("spectrum");
             if (MinFrequency >= MaxFrequency)
@@ -801,22 +801,19 @@ namespace AcousticFingerprintingLibrary.SoundFingerprint
 
         public void GetHashSimilarity(IStride dbstride, IStride queryStride, IAudio proxy, string path, string path2)
         {
-            double sum = 0;
-            int hashesCount = 0;
-            int startindex = 0;
 
             List<Fingerprint> listDb = CreateFingerprints(proxy, path, dbstride);
             List<Fingerprint> listQuery = CreateFingerprints(proxy, path2, queryStride);
-            MinHash minHash = new MinHash(null);
-            List<byte[]> minHashDb = new List<byte[]>();
-            List<byte[]> minHashQuery = new List<byte[]>();
+            MinHash minHash = new MinHash(true);
+            List<int[]> minHashDb = new List<int[]>();
+            List<int[]> minHashQuery = new List<int[]>();
             foreach (var fing in listDb)
             {
-                minHashDb.Add(minHash.ComputeMinHashSignatureByte(fing.Signature));
+                minHashDb.Add(minHash.ComputeMinHashSignature(fing.Signature));
             }
             foreach (var fing in listQuery)
             {
-                minHashQuery.Add(minHash.ComputeMinHashSignatureByte(fing.Signature));
+                minHashQuery.Add(minHash.ComputeMinHashSignature(fing.Signature));
             }
 
             /*Calculate Min Hash signature similarity by comparing 2 consecutive signatures*/
@@ -834,16 +831,42 @@ namespace AcousticFingerprintingLibrary.SoundFingerprint
                     {
                         if (minHashDb[i][k] == minHashQuery[j][k])
                             similarMinHashValues++;
-
-                        totalSimilar++;
+                        
                     }
                 }
             }
-
-            double result = similarMinHashValues / (double)(countDb * minHashSignatureLen);
-            double total = similarMinHashValues/(double)totalSimilar;
-            int lol = 0;
+            var lshBuckets = new Dictionary<int, long>();
+            foreach (var fing in minHashDb)
+            {
+                lshBuckets = minHash.GroupMinHashToLSHBuckets(fing, 25, 4);
+            }
+            double result = similarMinHashValues / (double)(countDb * minHashSignatureLen * countQuery);
         }
+
+        public List<HashedFingerprint> GetFingerHashes(IStride stride, List<Fingerprint> listdb, string path)
+        {
+            List<Fingerprint> listDb = listdb;
+            MinHash minHash = new MinHash(false);
+            List<byte[]> minhashdb = new List<byte[]>();
+            foreach (var fing in listDb)
+            {
+                minhashdb.Add(minHash.ComputeMinHashSignatureByte(fing.Signature));
+            }
+            var lshBuckets = new Dictionary<int, long>();
+            foreach (var fing in minhashdb)
+            {
+                lshBuckets = minHash.GroupMinHashToLSHBucketsByte(fing, 20, 5);
+                int wqeqweqweqwewq = 0;
+            }
+
+            List<HashedFingerprint> hashedFinger = new List<HashedFingerprint>();
+            for (int index = 0; index < listDb.Count; index++)
+            {
+                hashedFinger.Add(new HashedFingerprint(minhashdb[index], lshBuckets.Values.ToArray(), listDb[index].SequenceNumber, listDb[index].Timestamp));
+            }
+
+            return hashedFinger;
+        } 
 
         #endregion
         
