@@ -5,7 +5,7 @@ using Amazon.DynamoDBv2.Model;
 
 namespace AcousticFingerprintingLibrary
 {
-    class FingerprintDatabaseManager : IFingerprintDatabaseManager
+    public class FingerprintDatabaseManager : IFingerprintDatabaseManager
     {
         private static readonly AmazonDynamoDBClient Client = new AmazonDynamoDBClient();
         private static string tableName = "Video_Fingerprints";

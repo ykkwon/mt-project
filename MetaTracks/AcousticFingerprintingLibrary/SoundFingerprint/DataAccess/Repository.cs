@@ -44,7 +44,7 @@ namespace AcousticFingerprintingLibrary.SoundFingerprint.DataAccess
             _permutations = permutations;
             _storage = storage;
             _manager = new Fingerprinter();
-            _hasher = new MinHash(_permutations);
+            //_hasher = new MinHash(_permutations);
         }
 
         /// <summary>

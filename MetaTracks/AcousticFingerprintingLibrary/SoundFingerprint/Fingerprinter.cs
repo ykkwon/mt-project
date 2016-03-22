@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using AcousticFingerprintingLibrary.SoundFingerprint.AudioProxies;
 using AcousticFingerprintingLibrary.SoundFingerprint.AudioProxies.Strides;
 using AcousticFingerprintingLibrary.SoundFingerprint.FFT;
+using AcousticFingerprintingLibrary.SoundFingerprint.Hashing;
 using AcousticFingerprintingLibrary.SoundFingerprint.Wavelets;
 using AcousticFingerprintingLibrary.SoundFingerprint.Windows;
 
@@ -24,7 +25,7 @@ namespace AcousticFingerprintingLibrary.SoundFingerprint
         /// <summary>
         ///   Human auditory threshold
         /// </summary>
-        public const double HUMAN_AUDITORY_THRESHOLD = 2 * 0.000001; /*2*10^-5 Pa*/
+        public const double HUMAN_AUDITORY_THRESHOLD = 2*0.000001; /*2*10^-5 Pa*/
 
         #region Properties
 
@@ -125,6 +126,7 @@ namespace AcousticFingerprintingLibrary.SoundFingerprint
         public int FingerprintLength { get; set; }
 
         public int StrideSize { get; set; }
+
         #endregion
 
         public Fingerprinter()
@@ -134,7 +136,7 @@ namespace AcousticFingerprintingLibrary.SoundFingerprint
             LogBins = 32;
             FingerprintLength = 128;
             Overlap = 64;
-            SamplesPerFingerprint = FingerprintLength * Overlap;
+            SamplesPerFingerprint = FingerprintLength*Overlap;
             WdftSize = 2048;
             MinFrequency = 318;
             MaxFrequency = 2000;
@@ -142,9 +144,11 @@ namespace AcousticFingerprintingLibrary.SoundFingerprint
             SampleRate = 5512;
             LogBase = Math.E;
             StrideSize = 1102;
-            _logFrequenciesIndex = GetLogFrequenciesIndex(SampleRate, MinFrequency, MaxFrequency, LogBins, WdftSize, LogBase);
+            _logFrequenciesIndex = GetLogFrequenciesIndex(SampleRate, MinFrequency, MaxFrequency, LogBins, WdftSize,
+                LogBase);
             _windowArray = WindowFunction.GetWindow(WdftSize);
         }
+
         #region LogFrequencies
 
         /// <summary>
@@ -157,7 +161,8 @@ namespace AcousticFingerprintingLibrary.SoundFingerprint
         /// <param name = "fftSize">FFT Size</param>
         /// <param name = "logBase">Log base of the logarithm to be spaced</param>
         /// <returns>Gets an array of indexes</returns>
-        public int[] GetLogFrequenciesIndex(int sampleRate, int minFreq, int maxFreq, int logBins, int fftSize, double logBase)
+        public int[] GetLogFrequenciesIndex(int sampleRate, int minFreq, int maxFreq, int logBins, int fftSize,
+            double logBase)
         {
             if (_logFrequenciesIndex == null)
                 GenerateLogFrequencies(sampleRate, minFreq, maxFreq, logBins, fftSize, logBase);
@@ -173,21 +178,23 @@ namespace AcousticFingerprintingLibrary.SoundFingerprint
         /// <param name = "logBins">Number of logarithmically spaced bins</param>
         /// <param name = "fftSize">FFT Size</param>
         /// <param name = "logarithmicBase">Logarithm base</param>
-        private void GenerateLogFrequencies(int sampleRate, int minFreq, int maxFreq, int logBins, int fftSize, double logarithmicBase)
+        private void GenerateLogFrequencies(int sampleRate, int minFreq, int maxFreq, int logBins, int fftSize,
+            double logarithmicBase)
         {
             if (_logFrequenciesIndex == null)
             {
                 double logMin = Math.Log(minFreq, logarithmicBase);
                 double logMax = Math.Log(maxFreq, logarithmicBase);
-                double delta = (logMax - logMin) / logBins;
+                double delta = (logMax - logMin)/logBins;
 
                 int[] indexes = new int[logBins + 1];
                 double accDelta = 0;
                 for (int i = 0; i <= logBins /*32 octaves*/; ++i)
                 {
-                    float freq = (float)Math.Pow(logarithmicBase, logMin + accDelta);
+                    float freq = (float) Math.Pow(logarithmicBase, logMin + accDelta);
                     accDelta += delta; // accDelta = delta * i
-                    indexes[i] = FreqToIndex(freq, sampleRate, fftSize); /*Find the start index in array from which to start the summation*/
+                    indexes[i] = FreqToIndex(freq, sampleRate, fftSize);
+                        /*Find the start index in array from which to start the summation*/
                 }
                 _logFrequenciesIndex = indexes;
             }
@@ -208,10 +215,13 @@ namespace AcousticFingerprintingLibrary.SoundFingerprint
         /// </remarks>
         private static int FreqToIndex(float freq, int sampleRate, int spectrumLength)
         {
-            float fraction = freq / ((float)sampleRate / 2); /*N sampled points in time correspond to [0, N/2] frequency range */
-            int i = (int)Math.Round((spectrumLength / 2 + 1) * fraction); /*DFT N points defines [N/2 + 1] frequency points*/
+            float fraction = freq/((float) sampleRate/2);
+                /*N sampled points in time correspond to [0, N/2] frequency range */
+            int i = (int) Math.Round((spectrumLength/2 + 1)*fraction);
+                /*DFT N points defines [N/2 + 1] frequency points*/
             return i;
         }
+
         #endregion
 
         #region Spectrograms
@@ -231,27 +241,27 @@ namespace AcousticFingerprintingLibrary.SoundFingerprint
             NormalizeInPlace(samples);
             int overlap = Overlap;
             int wdftSize = WdftSize;
-            int width = (samples.Length - wdftSize) / overlap; /*width of the image*/
+            int width = (samples.Length - wdftSize)/overlap; /*width of the image*/
             float[][] frames = new float[width][];
-            float[] complexSignal = new float[2 * wdftSize]; /*even - Re, odd - Img*/
+            float[] complexSignal = new float[2*wdftSize]; /*even - Re, odd - Img*/
             for (int i = 0; i < width; i++)
             {
                 //take 371 ms each 11.6 ms (2048 samples each 64 samples)
                 for (int j = 0; j < wdftSize /*2048*/; j++)
                 {
-                    complexSignal[2 * j] = (float)(_windowArray[j] * samples[i * overlap + j]); /*Weight by Hann Window*/
-                    complexSignal[2 * j + 1] = 0;
+                    complexSignal[2*j] = (float) (_windowArray[j]*samples[i*overlap + j]); /*Weight by Hann Window*/
+                    complexSignal[2*j + 1] = 0;
                 }
                 //FFT transform for gathering the spectrum
                 Fourier.FFT(complexSignal, wdftSize, FourierDirection.Forward);
-                float[] band = new float[wdftSize / 2 + 1];
-                for (int j = 0; j < wdftSize / 2 + 1; j++)
+                float[] band = new float[wdftSize/2 + 1];
+                for (int j = 0; j < wdftSize/2 + 1; j++)
                 {
-                    double re = complexSignal[2 * j];
-                    double img = complexSignal[2 * j + 1];
-                    re /= (float)wdftSize / 2;
-                    img /= (float)wdftSize / 2;
-                    band[j] = (float)Math.Sqrt(re * re + img * img);
+                    double re = complexSignal[2*j];
+                    double img = complexSignal[2*j + 1];
+                    re /= (float) wdftSize/2;
+                    img /= (float) wdftSize/2;
+                    band[j] = (float) Math.Sqrt(re*re + img*img);
                 }
                 frames[i] = band;
             }
@@ -266,27 +276,29 @@ namespace AcousticFingerprintingLibrary.SoundFingerprint
         /// <param name = "milliseconds">Milliseconds to be analyzed</param>
         /// <param name = "startmilliseconds">Starting point</param>
         /// <returns>Logarithmically spaced bins within the power spectrum</returns>
-        public float[][] CreateLogSpectrogram(IAudio proxy, string filename, int milliseconds, int startmilliseconds, IStride stride)
+        public float[][] CreateLogSpectrogram(IAudio proxy, string filename, int milliseconds, int startmilliseconds,
+            IStride stride)
         {
             //read 5512 Hz, Mono, PCM, with a specific proxy
             float[] samples = proxy.ReadMonoFromFile(filename, SampleRate, milliseconds, startmilliseconds);
             return CreateLogSpectrogram(samples, stride);
         }
+
         public float[][] CreateLogSpectrogram(float[] samples, IStride stride)
         {
             NormalizeInPlace(samples);
             int overlap = Overlap;
             int wdftSize = WdftSize;
-            int width = (samples.Length - wdftSize) / overlap; /*width of the image*/
+            int width = (samples.Length - wdftSize)/overlap; /*width of the image*/
             float[][] frames = new float[width][];
-            float[] complexSignal = new float[2 * wdftSize]; /*even - Re, odd - Img*/
+            float[] complexSignal = new float[2*wdftSize]; /*even - Re, odd - Img*/
             for (int i = 0; i < width; i++)
             {
                 //take 371 ms each 11.6 ms (2048 samples each 64 samples)
                 for (int j = 0; j < wdftSize /*2048*/; j++)
                 {
-                    complexSignal[2 * j] = (float)(_windowArray[j] * samples[i * overlap + j]); /*Weight by Hann Window*/
-                    complexSignal[2 * j + 1] = 0;
+                    complexSignal[2*j] = (float) (_windowArray[j]*samples[i*overlap + j]); /*Weight by Hann Window*/
+                    complexSignal[2*j + 1] = 0;
                 }
                 //FFT transform for gathering the spectrum
                 Fourier.FFT(complexSignal, wdftSize, FourierDirection.Forward);
@@ -300,6 +312,7 @@ namespace AcousticFingerprintingLibrary.SoundFingerprint
         // minimum and maximum rms to normalize from.
         private const float MINRMS = 0.1f;
         private const float MAXRMS = 3;
+
         /// <summary>
         ///   Normalizing the input power (volume)
         /// </summary>
@@ -310,10 +323,10 @@ namespace AcousticFingerprintingLibrary.SoundFingerprint
             int nsamples = samples.Length;
             for (int i = 0; i < nsamples; i++)
             {
-                squares += samples[i] * samples[i];
+                squares += samples[i]*samples[i];
             }
             // we don't want to normalize by the real RMS, because excessive clipping will occur
-            float rms = (float)Math.Sqrt(squares / nsamples) * 10;
+            float rms = (float) Math.Sqrt(squares/nsamples)*10;
 
             if (rms < MINRMS)
                 rms = MINRMS;
@@ -327,8 +340,11 @@ namespace AcousticFingerprintingLibrary.SoundFingerprint
                 samples[i] = Math.Max(samples[i], -1);
             }
         }
+
         #endregion
+
         #region Fingerprinting
+
         /// <summary>
         ///   Create fingerprints according to the Google's researchers algorithm
         /// </summary>
@@ -338,9 +354,11 @@ namespace AcousticFingerprintingLibrary.SoundFingerprint
         /// <param name = "milliseconds">Milliseconds to analyze</param>
         /// <param name = "startmilliseconds">Starting point of analysis</param>
         /// <returns>Fingerprint signatures</returns>
-        public List<Fingerprint> CreateFingerprints(IAudio proxy, string filename, IStride stride, int milliseconds, int startmilliseconds)
+        public List<Fingerprint> CreateFingerprints(IAudio proxy, string filename, IStride stride, int milliseconds,
+            int startmilliseconds)
         {
             var spectrum = CreateLogSpectrogram(proxy, filename, milliseconds, startmilliseconds, stride);
+            
             return CreateFingerprints(spectrum, stride);
         }
 
@@ -379,7 +397,7 @@ namespace AcousticFingerprintingLibrary.SoundFingerprint
             int fingerprintLength = FingerprintLength; /*128*/
             int overlap = Overlap; /*64*/
             int logbins = LogBins;
-            int start = stride.GetFirstStride() / overlap;
+            int start = stride.GetFirstStride()/overlap;
             int sampleRate = SampleRate;
 
             int sequenceNumber = 0;
@@ -397,19 +415,25 @@ namespace AcousticFingerprintingLibrary.SoundFingerprint
                     frames[i] = new float[logbins];
                     Array.Copy(spectrum[start + i], frames[i], logbins);
                 }
-                
+
                 WaveletDecomposition.DecomposeImageInPlace(frames); /*Compute wavelets*/
 
                 bool[] image = ExtractTopWavelets(frames);
                 fingerprints.Add(image);
                 index++;
-                fingerPrints.Add(new Fingerprint { SequenceNumber = ++sequenceNumber, Signature = image, Timestamp = start * ((double)overlap / sampleRate) });
+                fingerPrints.Add(new Fingerprint
+                {
+                    SequenceNumber = ++sequenceNumber,
+                    Signature = image,
+                    Timestamp = start*((double) overlap/sampleRate)
+                });
                 var strid = stride.GetStride(); //1102, prøve -7090?
-                start += fingerprintLength + (strid / overlap);
+                start += fingerprintLength + (strid/overlap);
             }
             //return fingerprints;
             return fingerPrints;
         }
+
         #endregion
 
         #region Frequency Manipulation
@@ -439,13 +463,13 @@ namespace AcousticFingerprintingLibrary.SoundFingerprint
 
                 for (int k = lowBound; k < hiBound; k++)
                 {
-                    double re = spectrum[2 * k];
-                    double img = spectrum[2 * k + 1];
+                    double re = spectrum[2*k];
+                    double img = spectrum[2*k + 1];
                     //re /= (float) wdftSize / 2;    //normalize img/re part
                     //img /= (float)wdftSize / 2;    //doesn't introduce any change in final image (linear normalization)
-                    sumFreq[i] += (float)(Math.Sqrt(re * re + img * img));
+                    sumFreq[i] += (float) (Math.Sqrt(re*re + img*img));
                 }
-                sumFreq[i] = sumFreq[i] / (hiBound - lowBound);
+                sumFreq[i] = sumFreq[i]/(hiBound - lowBound);
             }
             return sumFreq;
         }
@@ -467,7 +491,7 @@ namespace AcousticFingerprintingLibrary.SoundFingerprint
         public bool[] ExtractTopWavelets(float[][] frames)
         {
             int topWavelets = TopWavelets; /*Local copy for performance reasons*/
-            #if SAFE
+#if SAFE
             if (frames == null)
                 throw new ArgumentNullException("frames");
             for (int j = 0; j < frames.GetLength(0); j++)
@@ -479,12 +503,12 @@ namespace AcousticFingerprintingLibrary.SoundFingerprint
             int rows = frames.GetLength(0); /*128*/
             int cols = frames[0].Length; /*32*/
 
-            if (topWavelets >= rows * cols)
+            if (topWavelets >= rows*cols)
                 throw new ArgumentException("TopWaveletes cannot exceed the length of concatenated array");
 
-            float[] concatenated = new float[rows * cols]; /* 128 * 32 */
+            float[] concatenated = new float[rows*cols]; /* 128 * 32 */
             for (int row = 0; row < rows; row++)
-                Array.Copy(frames[row], 0, concatenated, row * frames[row].Length, frames[row].Length);
+                Array.Copy(frames[row], 0, concatenated, row*frames[row].Length, frames[row].Length);
 
             Int32[] indexes = Enumerable.Range(0, concatenated.Length).ToArray();
             AbsComparator abs = new AbsComparator();
@@ -494,16 +518,18 @@ namespace AcousticFingerprintingLibrary.SoundFingerprint
             Math.Abs(concatenated[2]).CompareTo(2);
             return result;
         }
+
         #endregion
 
         #region Sorting code taken from C# .NET sourcecode
+
         private void ArraySort(Array keys, Array items, AbsComparator comparer)
         {
             if (keys == null)
                 throw new ArgumentNullException("keys");
 
             Sort(keys, items, keys.GetLowerBound(0), keys.Length, comparer);
-            
+
         }
 
         public static void Sort(Array keys, Array items, int index, int length, AbsComparator comparer)
@@ -532,7 +558,8 @@ namespace AcousticFingerprintingLibrary.SoundFingerprint
                     SorterObjectArray sorter = new SorterObjectArray(objKeys, objItems, comparer);
                     sorter.QuickSort(index, index + length - 1);
                 }
-                else {
+                else
+                {
                     SorterGenericArray sorter = new SorterGenericArray(keys, items, comparer);
                     sorter.QuickSort(index, index + length - 1);
                 }
@@ -543,6 +570,7 @@ namespace AcousticFingerprintingLibrary.SoundFingerprint
         {
             return low + ((hi - low) >> 1);
         }
+
         private struct SorterObjectArray
         {
             private Object[] keys;
@@ -560,7 +588,7 @@ namespace AcousticFingerprintingLibrary.SoundFingerprint
             {
                 if (a != b)
                 {
-                    if (comparer.Compare((float)keys[a], (float)keys[b]) > 0)
+                    if (comparer.Compare((float) keys[a], (float) keys[b]) > 0)
                     {
                         Object temp = keys[a];
                         keys[a] = keys[b];
@@ -589,7 +617,7 @@ namespace AcousticFingerprintingLibrary.SoundFingerprint
                     // data that is made up of multiple sorted runs appended together.
                     int middle = GetMedian(i, j);
                     SwapIfGreaterWithItems(i, middle); // swap the low with the mid point
-                    SwapIfGreaterWithItems(i, j);      // swap the low with the high 
+                    SwapIfGreaterWithItems(i, j); // swap the low with the high 
                     SwapIfGreaterWithItems(middle, j); // swap the middle with the high
 
                     Object x = keys[middle];
@@ -597,8 +625,8 @@ namespace AcousticFingerprintingLibrary.SoundFingerprint
                     {
                         // Add a try block here to detect IComparers (or their 
                         // underlying IComparables, etc) that are bogus.
-                            while (comparer.Compare((float)keys[i], (float)x) < 0) i++;
-                            while (comparer.Compare((float)x, (float)keys[j]) < 0) j--;
+                        while (comparer.Compare((float) keys[i], (float) x) < 0) i++;
+                        while (comparer.Compare((float) x, (float) keys[j]) < 0) j--;
                         if (i > j) break;
                         if (i < j)
                         {
@@ -620,7 +648,8 @@ namespace AcousticFingerprintingLibrary.SoundFingerprint
                         if (left < j) QuickSort(left, j);
                         left = i;
                     }
-                    else {
+                    else
+                    {
                         if (i < right) QuickSort(i, right);
                         right = j;
                     }
@@ -648,7 +677,7 @@ namespace AcousticFingerprintingLibrary.SoundFingerprint
             {
                 if (a != b)
                 {
-                    if (comparer.Compare((float)keys.GetValue(a), (float)keys.GetValue(b)) > 0)
+                    if (comparer.Compare((float) keys.GetValue(a), (float) keys.GetValue(b)) > 0)
                     {
                         Object key = keys.GetValue(a);
                         keys.SetValue(keys.GetValue(b), a);
@@ -676,7 +705,7 @@ namespace AcousticFingerprintingLibrary.SoundFingerprint
                     // data that is made up of multiple sorted runs appended together.
                     int middle = GetMedian(i, j);
                     SwapIfGreaterWithItems(i, middle); // swap the low with the mid point
-                    SwapIfGreaterWithItems(i, j);      // swap the low with the high
+                    SwapIfGreaterWithItems(i, j); // swap the low with the high
                     SwapIfGreaterWithItems(middle, j); // swap the middle with the high
 
                     Object x = keys.GetValue(middle);
@@ -684,8 +713,8 @@ namespace AcousticFingerprintingLibrary.SoundFingerprint
                     {
                         // Add a try block here to detect IComparers (or their 
                         // underlying IComparables, etc) that are bogus.
-                        while (comparer.Compare((float)keys.GetValue(i), (float)x) < 0) i++;
-                        while (comparer.Compare((float)x, (float)keys.GetValue(j)) < 0) j--;
+                        while (comparer.Compare((float) keys.GetValue(i), (float) x) < 0) i++;
+                        while (comparer.Compare((float) x, (float) keys.GetValue(j)) < 0) j--;
                         if (i > j) break;
                         if (i < j)
                         {
@@ -707,13 +736,15 @@ namespace AcousticFingerprintingLibrary.SoundFingerprint
                         if (left < j) QuickSort(left, j);
                         left = i;
                     }
-                    else {
+                    else
+                    {
                         if (i < right) QuickSort(i, right);
                         right = j;
                     }
                 } while (left < right);
             }
         }
+
         #endregion
 
 
@@ -731,15 +762,15 @@ namespace AcousticFingerprintingLibrary.SoundFingerprint
             //   Negative Numbers = 01
             //   Positive Numbers = 10
             //   Zeros            = 00      
-            bool[] result = new bool[concatenated.Length * 2]; /*Concatenated float array*/
+            bool[] result = new bool[concatenated.Length*2]; /*Concatenated float array*/
             for (int i = 0; i < topWavelets; i++)
             {
                 int index = indexes[i];
                 double value = concatenated[i];
                 if (value > 0) /*positive wavelet*/
-                    result[index * 2] = true;
+                    result[index*2] = true;
                 else if (value < 0) /*negative wavelet*/
-                    result[index * 2 + 1] = true;
+                    result[index*2 + 1] = true;
             }
             return result;
         }
@@ -751,44 +782,117 @@ namespace AcousticFingerprintingLibrary.SoundFingerprint
         /// <returns>Array of doubles with positive [10], negatives [01], and zeros [00]</returns>
         public static double[] DecodeFingerprint(bool[] signature)
         {
-            int len = signature.Length / 2;
+            int len = signature.Length/2;
             double[] result = new double[len];
-            for (int i = 0; i < len * 2; i += 2)
+            for (int i = 0; i < len*2; i += 2)
             {
                 if (signature[i]) // positive if first is true
-                    result[i / 2] = 1;
+                    result[i/2] = 1;
                 else if (signature[i + 1]) // negative if second is true
-                    result[i / 2] = -1;
+                    result[i/2] = -1;
                 //otherwise '0'
             }
             return result;
         }
 
         #endregion
-    }
 
-    /// <summary>
-    ///   Absolute value comparator
-    /// </summary>
-    public class AbsComparator : IComparer<float>
-    {
-        #region IComparer<float> Members
+        #region Hashing
 
-        /// <summary>
-        ///   Compare descending
-        /// </summary>
-        /// <param name = "x">X (first item)</param>
-        /// <param name = "y">Y (second item)</param>
-        /// <returns>Return details related to magnitude comparison</returns>
-        public int Compare(float x, float y)
+        public void GetHashSimilarity(IStride dbstride, IStride queryStride, IAudio proxy, string path, string path2)
         {
-            // Math.Abs(y).CompareTo(Math.Abs(x)); returns -1 or 1
-            // If X is bigger, return -1, if Y is bigger return 1
-            return Math.Abs(y).CompareTo(Math.Abs(x));
+
+            List<Fingerprint> listDb = CreateFingerprints(proxy, path, dbstride);
+            List<Fingerprint> listQuery = CreateFingerprints(proxy, path2, queryStride);
+            MinHash minHash = new MinHash(true);
+            List<int[]> minHashDb = new List<int[]>();
+            List<int[]> minHashQuery = new List<int[]>();
+            foreach (var fing in listDb)
+            {
+                minHashDb.Add(minHash.ComputeMinHashSignature(fing.Signature));
+            }
+            foreach (var fing in listQuery)
+            {
+                minHashQuery.Add(minHash.ComputeMinHashSignature(fing.Signature));
+            }
+
+            /*Calculate Min Hash signature similarity by comparing 2 consecutive signatures*/
+            int countDb = minHashDb.Count;
+            int countQuery = minHashQuery.Count;
+            int minHashSignatureLen = minHashDb[0].Length;
+
+            int similarMinHashValues = 0;
+            int totalSimilar = 0;
+            for (int i = 0; i < countDb; i++)
+            {
+                for (int j = 0; j < countQuery; j++)
+                {
+                    for (int k = 0; k < minHashSignatureLen; k++)
+                    {
+                        if (minHashDb[i][k] == minHashQuery[j][k])
+                            similarMinHashValues++;
+                        
+                    }
+                }
+            }
+            var lshBuckets = new Dictionary<int, long>();
+            foreach (var fing in minHashDb)
+            {
+                lshBuckets = minHash.GroupMinHashToLSHBuckets(fing, 25, 4);
+            }
+            double result = similarMinHashValues / (double)(countDb * minHashSignatureLen * countQuery);
         }
 
-        #endregion
-    }
+        public List<HashedFingerprint> GetFingerHashes(IStride stride, List<Fingerprint> listdb, string path)
+        {
+            List<Fingerprint> listDb = listdb;
+            MinHash minHash = new MinHash(false);
+            List<byte[]> minhashdb = new List<byte[]>();
+            foreach (var fing in listDb)
+            {
+                minhashdb.Add(minHash.ComputeMinHashSignatureByte(fing.Signature));
+            }
+            var lshBuckets = new Dictionary<int, long>();
+            foreach (var fing in minhashdb)
+            {
+                lshBuckets = minHash.GroupMinHashToLSHBucketsByte(fing, 20, 5);
+                int wqeqweqweqwewq = 0;
+            }
 
-    
+            List<HashedFingerprint> hashedFinger = new List<HashedFingerprint>();
+            for (int index = 0; index < listDb.Count; index++)
+            {
+                hashedFinger.Add(new HashedFingerprint(minhashdb[index], lshBuckets.Values.ToArray(), listDb[index].SequenceNumber, listDb[index].Timestamp));
+            }
+
+            return hashedFinger;
+        } 
+
+        #endregion
+        
+
+        /// <summary>
+        ///   Absolute value comparator
+        /// </summary>
+        public class AbsComparator : IComparer<float>
+        {
+            #region IComparer<float> Members
+
+            /// <summary>
+            ///   Compare descending
+            /// </summary>
+            /// <param name = "x">X (first item)</param>
+            /// <param name = "y">Y (second item)</param>
+            /// <returns>Return details related to magnitude comparison</returns>
+            public int Compare(float x, float y)
+            {
+                // Math.Abs(y).CompareTo(Math.Abs(x)); returns -1 or 1
+                // If X is bigger, return -1, if Y is bigger return 1
+                return Math.Abs(y).CompareTo(Math.Abs(x));
+            }
+
+            #endregion
+        }
+
+    }
 }

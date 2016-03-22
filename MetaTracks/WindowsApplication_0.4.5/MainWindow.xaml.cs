@@ -28,7 +28,7 @@ namespace WindowsApplication_0._4._5
         private DirectSoundOut _waveOut;
         private WaveFileWriter _waveWriter;
         List<WaveInCapabilities> sources = new List<WaveInCapabilities>();
-        private dynamic _json;
+        private string _json;
 
         private void closeButton_Click(object sender, RoutedEventArgs e)
         {
@@ -55,20 +55,28 @@ namespace WindowsApplication_0._4._5
                 // Adds each resource to the listView in the form
                 foreach (var source in sources)
                 {
-                    sourceList.Items.Add(new MyItem { Device = source.ProductName, Channels = source.Channels.ToString()});
+                    sourceList.Items.Add(new InputDevice() { DeviceName = source.ProductName, Channels = source.Channels.ToString()});
                 }
             }
 
         }
 
-        public class MyItem
+        public class InputDevice
         {
-            public string Device { get; set; }
+            public string DeviceName { get; set; }
 
             public string Channels { get; set; }
         }
 
-        private void sourceList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        public class MovieInformation
+        {
+            public string Type { get; set; }
+            public string Timestamp { get; set; }
+            public string Fingerprint { get; set; }
+            public string Title { get; set; }
+        }
+
+    private void sourceList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             sourceList.SelectedItem = this;
         }
@@ -169,9 +177,10 @@ namespace WindowsApplication_0._4._5
                     // HTTP GET
                     HttpResponseMessage response = await client.GetAsync(client.BaseAddress);
                     var responseString = response.Content.ReadAsStringAsync().Result;
+
                     Main.Status = response.Content.Headers.ContentLength != 0 ? "Found a match." : "No match.";
-                    _json = JsonConvert.DeserializeObject(responseString, typeof(object));
-                    Main.Status = "JSON: " + _json;
+                    MovieInformation info = JsonConvert.DeserializeObject<MovieInformation>(responseString);
+                    Main.Status = "You are watching the " + info.Type + " " + info.Title + " at " + info.Timestamp;
                 }
             }
             

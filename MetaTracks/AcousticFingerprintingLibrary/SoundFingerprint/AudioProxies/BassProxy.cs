@@ -76,6 +76,11 @@ namespace AcousticFingerprintingLibrary.SoundFingerprint.AudioProxies
             GC.SuppressFinalize(this);
         }
 
+        float[] IAudio.ReadMonoFromFile(string filename, int samplerate, int milliseconds, int startmilliseconds)
+        {
+            return ReadMonoFromFile(filename, samplerate, milliseconds, startmilliseconds);
+        }
+
         /// <summary>
         ///   Read mono from file
         /// </summary>
@@ -88,7 +93,7 @@ namespace AcousticFingerprintingLibrary.SoundFingerprint.AudioProxies
         ///   Seeking capabilities of Bass where not used because of the possible
         ///   timing errors on different formats.
         /// </remarks>
-        public float[] ReadMonoFromFile(string filename, int samplerate, int milliseconds, int startmillisecond)
+        public static float[] ReadMonoFromFile(string filename, int samplerate, int milliseconds, int startmillisecond)
         {
             int totalmilliseconds = milliseconds <= 0 ? Int32.MaxValue : milliseconds + startmillisecond;
             float[] data = null;
