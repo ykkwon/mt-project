@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace dbApp
 {
@@ -24,9 +25,9 @@ namespace dbApp
             DialogResult = true;
         }
 
-        private void textBox_TextChanged(object sender, System.Windows.RoutedEventArgs e)
+        private void textBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-
+  
         }
     }
 }   

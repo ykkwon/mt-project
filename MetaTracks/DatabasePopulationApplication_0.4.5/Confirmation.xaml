@@ -1,0 +1,19 @@
+﻿<Window x:Class="dbApp.Confirmation"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:dbApp"
+        mc:Ignorable="d"
+        Title="Confirm action" Height="170" Width="300">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0*"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="272" Height="81" Grid.Column="1" FontSize="13.333" Text="Are you sure you want to delete the entire 'Video_Fingerprints' table? &#xD;&#xA;&#xD;&#xA;&#x9;THIS CAN NOT BE UNDONE."/>
+        <Button x:Name="YesButton" Grid.ColumnSpan="2" Content="Yes&#xD;&#xA;" HorizontalAlignment="Left" Margin="152,107,0,0" VerticalAlignment="Top" Width="130" Height="22" Click="YesButton_OnClick"/>
+        <Button x:Name="NoButton" Grid.ColumnSpan="2" Content="No&#xA;" HorizontalAlignment="Left" Margin="10,107,0,0" VerticalAlignment="Top" Width="130" Height="22" Click="NoButton_OnClick"/>
+
+    </Grid>
+</Window>
