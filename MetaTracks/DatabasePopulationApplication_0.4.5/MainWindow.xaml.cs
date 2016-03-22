@@ -113,17 +113,9 @@ namespace DatabasePopulationApplication_0._4._5
                     int totalFingerprints = 0;
 
                     //List<bool[]> fingerprints = manager.CreateFingerprints(proxy, Path.GetFullPath(filename), stride);
-<<<<<<< HEAD
                     List<Fingerprint> fingerprints = manager.CreateFingerprints(proxy, Path.GetFullPath(filename), stride);
                     //manager.GetHashSimilarity(stride, stride, proxy, filename, "C:\\Users\\Kristian\\Desktop\\c# musikkfile\\Pokemon_BlueRed_-_Route_1.wav");
                     var test = manager.GetFingerHashes(stride, fingerprints, path);
-                    // GetFingerHashes(IStride stride, IAudio proxy, string path)
-=======
-                    List<Fingerprint> fingerprints = manager.CreateFingerprints(proxy, Path.GetFullPath(filename),
-                        stride);
-                    manager.GetHashSimilarity(stride, stride, proxy, filename,
-                        "C:\\Users\\Kristian\\Desktop\\c# musikkfile\\Pokemon_BlueRed_-_Route_1.wav");
->>>>>>> origin/master
                     int width = manager.FingerprintLength;
                     int height = manager.LogBins;
                     Bitmap image = Imaging.GetFingerprintsImage(fingerprints, width, height);
