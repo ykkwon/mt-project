@@ -114,7 +114,7 @@
       <HintPath>..\..\AcousticFingerprintingLibrary_0.4.5\bin\Debug\AcousticFingerprintingLibrary_0.4.5.dll</HintPath>
     </Reference>
     <Reference Include="Bass.Net.iOS">
-      <HintPath>..\..\..\..\..\Dropbox\Bacheloroppgave 2016 MetaTracks\Bass.net ExampleCodes\iOS\Bass.Net.iOS.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\Dropbox\Bacheloroppgave 2016 MetaTracks\Bass.net ExampleCodes\iOS\Bass.Net.iOS.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

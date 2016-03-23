@@ -842,23 +842,25 @@ namespace AcousticFingerprintingLibrary_0._4._5.SoundFingerprint
         public List<HashedFingerprint> GetFingerHashes(IStride stride, List<Fingerprint> listdb, string path)
         {
             List<Fingerprint> listDb = listdb;
-            MinHash minHash = new MinHash(false);
+            MinHash minHash = new MinHash(true);
             List<byte[]> minhashdb = new List<byte[]>();
             foreach (var fing in listDb)
             {
                 minhashdb.Add(minHash.ComputeMinHashSignatureByte(fing.Signature));
             }
-            var lshBuckets = new Dictionary<int, long>();
+            var lshBuckets = new List<long[]>();
             foreach (var fing in minhashdb)
             {
-                lshBuckets = minHash.GroupMinHashToLSHBucketsByte(fing, 20, 5);
-                int wqeqweqweqwewq = 0;
+                lshBuckets.Add(minHash.GroupMinHashToLSHBucketsByte(fing, 20, 5).Values.ToArray());
+                int wut = 0;
             }
 
             List<HashedFingerprint> hashedFinger = new List<HashedFingerprint>();
             for (int index = 0; index < listDb.Count; index++)
             {
-                hashedFinger.Add(new HashedFingerprint(minhashdb[index], lshBuckets.Values.ToArray(), listDb[index].SequenceNumber, listDb[index].Timestamp));
+                var hashfinger = new HashedFingerprint(minhashdb[index], lshBuckets[index], listDb[index].SequenceNumber,
+                    listDb[index].Timestamp);
+                hashedFinger.Add(hashfinger);
             }
 
             return hashedFinger;

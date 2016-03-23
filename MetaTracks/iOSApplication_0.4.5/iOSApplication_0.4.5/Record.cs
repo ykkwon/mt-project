@@ -7,6 +7,7 @@ using AcousticFingerprintingLibrary_0._4._5.SoundFingerprint.AudioProxies.Stride
 using Foundation;
 using Un4seen.Bass;
 using AcousticFingerprintingLibrary_0._4._5.SoundFingerprint.AudioProxies;
+using Un4seen.Bass.AddOn.Mix;
 
 namespace iOSApplication_0._4._5
 {
@@ -82,7 +83,16 @@ namespace iOSApplication_0._4._5
             IStride stride = new IncrementalStaticStride(1102, 128 * 64);
             // Create an array of fingerprints to be hashed.
             var preliminaryFingerprints = manager.CreateFingerprints(monoArray, stride);
-            Console.WriteLine("Preliminary: " + preliminaryFingerprints.Count);
+            var test = manager.GetFingerHashes(stride, preliminaryFingerprints, null);
+            //Console.WriteLine("Preliminary: " + preliminaryFingerprints.Count + " ---- " + test[1].HashBins[1]);
+            foreach (var fingerprint in test)
+            {/*
+                for (int i = 0; i < fingerprint.HashBins.Length; i++)
+                {
+                    Console.WriteLine(fingerprint.HashBins[i]);
+                }*/
+                Console.WriteLine( " --------------- TIMESTAMP:" + fingerprint.Timestamp);
+            }
             //SendToApi(preliminaryFingerprints);
         }
 
@@ -100,9 +110,18 @@ namespace iOSApplication_0._4._5
         public static void InitializeComponents()
         {
             // Register Bass.NET license
-            BassNet.Registration("kristian.stoylen93@gmail.com", "2X20371028152222");
+            //BassNet.Registration("kristian.stoylen93@gmail.com", "2X20371028152222");
             // Initialize BASS 
-            Bass.BASS_Init(-1, 44100, BASSInit.BASS_DEVICE_DEFAULT, IntPtr.Zero);
+            //Bass.BASS_Init(-1, 44100, BASSInit.BASS_DEVICE_DEFAULT, IntPtr.Zero);
+            //
+            //int bassMixVersion = BassMix.BASS_Mixer_GetVersion();
+
+            //if (!Bass.BASS_Init(-1, 44100, BASSInit.BASS_DEVICE_DEFAULT | BASSInit.BASS_DEVICE_MONO, IntPtr.Zero)) //Set Sample Rate / MONO
+            //    throw new Exception(Bass.BASS_ErrorGetCode().ToString());
+            //if (!Bass.BASS_SetConfig(BASSConfig.BASS_CONFIG_FLOATDSP, true)) /*Set floating parameters to be passed*/
+            //    throw new Exception(Bass.BASS_ErrorGetCode().ToString());
+            
+            //
             // Create a new native iOS audio session
             var audioSession = AVAudioSession.SharedInstance();
             audioSession.SetCategory(AVAudioSessionCategory.PlayAndRecord);

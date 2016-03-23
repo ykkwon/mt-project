@@ -63,7 +63,7 @@ namespace DatabasePopulationApplication_0._4._5
             {
                 try
                 {
-
+                    /*
                     _open = new OpenFileDialog
                     {
                         Filter = "MP4 Video File (*.mp4)|*.mp4;|AVI Video File (*.avi)|*.avi;|All files (*.*)|(*.*);",
@@ -76,7 +76,7 @@ namespace DatabasePopulationApplication_0._4._5
                     Console.WriteLine(@"Converting input to Wave format.");
                     _convertedMedia = fm.ConvertToWav(inputMedia);
                     _preprocessedMedia = fm.Preprocess(_convertedMedia, 5512);
-
+                    */
 
                     OpenFileDialog ofd = new OpenFileDialog();
                     ofd.ShowDialog();
