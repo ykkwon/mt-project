@@ -1,12 +1,12 @@
-﻿using System;
+﻿using AcousticFingerprintingLibrary_0._4._5.SoundFingerprint;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
-using AcousticFingerprintingLibrary;
-using AcousticFingerprintingLibrary.SoundFingerprint;
-using AcousticFingerprintingLibrary.SoundFingerprint.AudioProxies;
-using AcousticFingerprintingLibrary.SoundFingerprint.AudioProxies.Strides;
+using AcousticFingerprintingLibrary_0._4._5.SoundFingerprint.AudioProxies;
+using AcousticFingerprintingLibrary_0._4._5.SoundFingerprint.AudioProxies.Strides;
+
 
 namespace DatabasePopulationApplication_0._4._5
 {

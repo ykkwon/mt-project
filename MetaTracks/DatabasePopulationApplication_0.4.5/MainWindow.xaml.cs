@@ -5,10 +5,10 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Threading;
 using System.Windows;
-using AcousticFingerprintingLibrary;
-using AcousticFingerprintingLibrary.SoundFingerprint;
-using AcousticFingerprintingLibrary.SoundFingerprint.AudioProxies;
-using AcousticFingerprintingLibrary.SoundFingerprint.AudioProxies.Strides;
+using AcousticFingerprintingLibrary_0._4._5;
+using AcousticFingerprintingLibrary_0._4._5.SoundFingerprint;
+using AcousticFingerprintingLibrary_0._4._5.SoundFingerprint.AudioProxies;
+using AcousticFingerprintingLibrary_0._4._5.SoundFingerprint.AudioProxies.Strides;
 using dbApp;
 using Microsoft.Win32;
 

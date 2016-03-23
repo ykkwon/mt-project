@@ -110,11 +110,19 @@
     <InterfaceDefinition Include="Resources\LaunchScreen.xib" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="AcousticFingerprintingLibrary">
-      <HintPath>..\..\AcousticFingerprintingLibrary\bin\Debug\AcousticFingerprintingLibrary.dll</HintPath>
+    <Reference Include="AcousticFingerprintingLibrary_0.4.5">
+      <HintPath>..\..\AcousticFingerprintingLibrary_0.4.5\bin\Debug\AcousticFingerprintingLibrary_0.4.5.dll</HintPath>
     </Reference>
     <Reference Include="Bass.Net.iOS">
       <HintPath>..\..\..\..\..\Dropbox\Bacheloroppgave 2016 MetaTracks\Bass.net ExampleCodes\iOS\Bass.Net.iOS.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing">
+      <HintPath>..\..\..\..\..\..\..\Windows\Microsoft.NET\Framework\v4.0.30319\System.Drawing.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows.Forms">
+      <HintPath>..\..\..\..\..\..\..\Windows\WinSxS\msil_system.windows.forms_b77a5c561934e089_4.0.10586.0_none_3ff01dc8cb77944e\System.Windows.Forms.dll</HintPath>
     </Reference>
     <Reference Include="Xamarin.iOS" />
   </ItemGroup>

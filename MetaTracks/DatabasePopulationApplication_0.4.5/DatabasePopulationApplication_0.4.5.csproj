@@ -35,6 +35,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AcousticFingerprintingLibrary_0.4.5">
+      <HintPath>..\AcousticFingerprintingLibrary_0.4.5\bin\Debug\AcousticFingerprintingLibrary_0.4.5.dll</HintPath>
+    </Reference>
+    <Reference Include="AWSSDK">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\AWS SDK for .NET\past-releases\Version-2\Net45\AWSSDK.dll</HintPath>
+    </Reference>
+    <Reference Include="Bass.Net">
+      <HintPath>..\..\..\..\Dropbox\Bacheloroppgave 2016 MetaTracks\Bass.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="NAudio">
+      <HintPath>..\..\..\..\Dropbox\Bacheloroppgave 2016 MetaTracks\c# References\NAudio.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -64,6 +76,10 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="FingerprintDatabaseManager.cs" />
+    <Compile Include="FingerprintManager.cs" />
+    <Compile Include="IFingerprintDatabaseManager.cs" />
+    <Compile Include="IFingerprintManager.cs" />
     <Compile Include="Imaging.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -82,6 +98,7 @@
     <Compile Include="Confirmation.xaml.cs">
       <DependentUpon>Confirmation.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Media.cs" />
     <Compile Include="Popup.xaml.cs">
       <DependentUpon>Popup.xaml</DependentUpon>
     </Compile>
@@ -101,6 +118,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -112,9 +130,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AcousticFingerprintingLibrary\AcousticFingerprintingLibrary.csproj">
-      <Project>{8ff0d86b-5c16-4f25-819c-27e41f8be074}</Project>
-      <Name>AcousticFingerprintingLibrary</Name>
+    <ProjectReference Include="..\WindowsApplication_0.4.5\WindowsApplication_0.4.5.csproj">
+      <Project>{19F54949-DDCA-43BC-B558-50AD1D5DDDCE}</Project>
+      <Name>WindowsApplication_0.4.5</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

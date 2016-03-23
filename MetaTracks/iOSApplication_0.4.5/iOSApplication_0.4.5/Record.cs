@@ -2,8 +2,11 @@
 using System;
 using System.IO;
 using System.Threading;
+using AcousticFingerprintingLibrary_0._4._5.SoundFingerprint;
+using AcousticFingerprintingLibrary_0._4._5.SoundFingerprint.AudioProxies.Strides;
 using Foundation;
 using Un4seen.Bass;
+using AcousticFingerprintingLibrary_0._4._5.SoundFingerprint.AudioProxies;
 
 namespace iOSApplication_0._4._5
 {
@@ -73,10 +76,17 @@ namespace iOSApplication_0._4._5
 
         public static void ConsumeWaveFile(string filePath)
         {
-
+            // Read all the mono values from the input file.
+            var monoArray = BassProxy.ReadMonoFromFile(filePath, 5512, 0, 0);
+            Fingerprinter manager = new Fingerprinter();
+            IStride stride = new IncrementalStaticStride(1102, 128 * 64);
+            // Create an array of fingerprints to be hashed.
+            var preliminaryFingerprints = manager.CreateFingerprints(monoArray, stride);
+            Console.WriteLine("Preliminary: " + preliminaryFingerprints.Count);
+            //SendToApi(preliminaryFingerprints);
         }
 
-        public static void SendToWebApi()
+        public static void SendToApi()
         {
             
         }
