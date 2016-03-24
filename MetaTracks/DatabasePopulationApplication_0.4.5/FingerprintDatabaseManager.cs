@@ -1,202 +1,85 @@
 ﻿using System;
 using System.Collections.Generic;
-using AcousticFingerprintingLibrary_0._4._5;
-using Amazon.DynamoDBv2;
-using Amazon.DynamoDBv2.Model;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using MySql.Data.MySqlClient;
 
 namespace DatabasePopulationApplication_0._4._5
 {
-    public class FingerprintDatabaseManager : IFingerprintDatabaseManager
+    class FingerprintDatabaseManager
     {
-        private static readonly AmazonDynamoDBClient Client = new AmazonDynamoDBClient();
-        private static string tableName = "Video_Fingerprints";
-
-        public void SendFullFileToDatabase()
+        public void confirmConnection()
         {
-            throw new NotImplementedException();
-         /**
-            Table table = Table.LoadTable(Client, tableName);
-            var input = new Document();
-            int i = 1;
-            DateTime now = DateTime.Now;
-            
-            foreach (string chunks in HashedChunks)
+            string cs = @"server=webapidb.c7tab1cc7vsa.eu-west-1.rds.amazonaws.com;userid=glennskjong;
+           password=Security1;database=system_users";
+
+            MySqlConnection conn = null;
+
+            try
             {
-                Console.WriteLine("Hash " + i + " of " + HashedChunks.Count);
-                input["Fingerprint"] = chunks;
-                input["Timestamp"] = i++;
-                input["Title"] = entryName;
-                input["Type"] = "N/A";
-
-
-                DocumentBatchWrite dbw = new DocumentBatchWrite(table);
-                dbw.AddDocumentToPut(input);
-                dbw.Execute();
+                conn = new MySqlConnection(cs);
+                conn.Open();
+                Console.WriteLine("MySQL version : {0}", conn.ServerVersion);
             }
-            DateTime then = DateTime.Now;
-            Console.WriteLine("Finished at: " + then);
-            MainWindow.Main.Status = "Movie has been added to database successfully.";
-            MainWindow.Main.Status = "Finished at: " + then;
-            MainWindow.Main.Status = "Elapsed: " + (then.Second - now.Second) + " seconds.";
-        **/
+            catch (MySqlException ex)
+            {
+                Console.WriteLine("Error: {0}", ex.ToString());
+
+            }
+
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
+                }
+            }
         }
 
-        public void CompareHashToDatabase()
+        public void insertFingerprints(string title, double timestamp, int sequenceNumber, long hash)
         {
-            throw new NotImplementedException();
-        }
-
-        public void CreateTestTable()
-        {
-
-            // Attribute definitions
-            var attributeDefinitions = new List<AttributeDefinition>()
             {
-                {new AttributeDefinition {AttributeName = "Fingerprint", AttributeType = "S"}},
-                {new AttributeDefinition {AttributeName = "Timestamp", AttributeType = "N"}},
-                {new AttributeDefinition {AttributeName = "Title", AttributeType = "S"}},
-                {new AttributeDefinition {AttributeName = "Type", AttributeType = "S"}}
-            };
+                string cs = @"server=webapidb.c7tab1cc7vsa.eu-west-1.rds.amazonaws.com;userid=glennskjong;
+           password=Security1;database=system_users";
 
-            // Key schema for table
-            var tableKeySchema = new List<KeySchemaElement>() {
-                {
-                    new KeySchemaElement {
-                        AttributeName= "Fingerprint",
-                        KeyType = "HASH"  //Partition key
-                    }
-                },
-                {
-                    new KeySchemaElement {
-                        AttributeName = "Timestamp",
-                        KeyType = "RANGE"  //Sort key
-                    }
-                }
-            };
+                MySqlConnection conn = null;
 
-            // Initial provisioned throughput settings for the indexes
-            var ptIndex = new ProvisionedThroughput
-            {
-                ReadCapacityUnits = 5,
-                WriteCapacityUnits = 5,
-            };
-
-            // CreateDateIndex
-            var createDateIndex = new GlobalSecondaryIndex()
-            {
-                IndexName = "FingerprintIndex",
-                ProvisionedThroughput = ptIndex,
-                KeySchema = {
-                    new KeySchemaElement {
-                        AttributeName = "Fingerprint", KeyType = "HASH"  //Partition key
-                    },
-                    new KeySchemaElement {
-                        AttributeName = "Timestamp", KeyType = "RANGE"  //Sort key
-                    }
-                },
-                Projection = new Projection
-                {
-                    ProjectionType = "ALL"
-                }
-            };
-
-            // TitleIndex
-            var titleIndex = new GlobalSecondaryIndex()
-            {
-                IndexName = "TitleIndex",
-                ProvisionedThroughput = ptIndex,
-                KeySchema = {
-                    new KeySchemaElement {
-                        AttributeName = "Title", KeyType = "HASH"  //Partition key
-                    },
-                    new KeySchemaElement {
-                        AttributeName = "Type", KeyType = "RANGE"  //Sort key
-                    }
-                },
-                Projection = new Projection
-                {
-                    ProjectionType = "ALL"
-                }
-            };
-
-            var timestampTitleIndex = new GlobalSecondaryIndex()
-            {
-                IndexName = "Timestamp-Title-index",
-                ProvisionedThroughput = ptIndex,
-                KeySchema = {
-                    new KeySchemaElement {
-                        AttributeName = "Timestamp", KeyType = "HASH"  //Partition key
-                    },
-                    new KeySchemaElement {
-                        AttributeName = "Title", KeyType = "RANGE"  //Sort key
-                    }
-                },
-                Projection = new Projection
-                {
-                    ProjectionType = "ALL"
-                }
-            };
-
-
-
-            var createTableRequest = new CreateTableRequest
-            {
-                TableName = tableName,
-                ProvisionedThroughput = new ProvisionedThroughput
-                {
-                    ReadCapacityUnits = 1,
-                    WriteCapacityUnits = 1
-                },
-                AttributeDefinitions = attributeDefinitions,
-                KeySchema = tableKeySchema,
-                GlobalSecondaryIndexes = { createDateIndex, titleIndex, timestampTitleIndex }
-            };
-            
-            Client.CreateTable(createTableRequest);
-            //WaitUntilTableReady(tableName);
-            
-
-        }
-
-        public void WaitUntilTableReady(string TableName)
-        {
-            if (TableName == null) throw new ArgumentNullException(nameof(TableName));
-            throw new NotImplementedException();
-            /**
-            string status = null;
-            // Let us wait until table is created. Call DescribeTable.
-            do
-            {
-                Thread.Sleep(5000);
                 try
                 {
-                    var res = Client.DescribeTable(new DescribeTableRequest
-                    {
-                        TableName = dbTableName
-                    });
-                    
-                    Console.WriteLine("Table name: {0}, status: {1}",
-                                   res.Table.TableName,
-                                   res.Table.TableStatus);
-                    status = res.Table.TableStatus;
+                    conn = new MySqlConnection(cs);
+                    conn.Open();
+                    Console.WriteLine("MySQL version : {0}", conn.ServerVersion);
+
+
+                    MySqlCommand cmd = new MySqlCommand();
+                    cmd.Connection = conn;
+                    cmd.CommandText = "INSERT INTO fingerprintTable VALUES(@id, @title, @timestamp, @sequenceNo, @hash)";
+                    cmd.Prepare();
+
+                    cmd.Parameters.AddWithValue("@id", 0);
+                    cmd.Parameters.AddWithValue("@title", title);
+                    cmd.Parameters.AddWithValue("@timestamp", timestamp);
+                    cmd.Parameters.AddWithValue("@sequenceNo", sequenceNumber);
+                    cmd.Parameters.AddWithValue("@hash", hash);
+                    cmd.ExecuteNonQuery();
+                    Console.ReadLine();
                 }
-                catch (ResourceNotFoundException)
+                catch (MySqlException ex)
                 {
-                    // DescribeTable is eventually consistent. So you might
-                    // get resource not found. So we handle the potential exception.
+                    Console.WriteLine("Error: {0}", ex.ToString());
+
                 }
-            } while (status != "ACTIVE");
-        **/
-        }
 
-        public void RemoveTestTable()
-        { 
-            var request = new DeleteTableRequest
-            {
-                TableName = tableName
-            };
-
-            Client.DeleteTable(request);
+                finally
+                {
+                    if (conn != null)
+                    {
+                        conn.Close();
+                    }
+                }
+            }
         }
     }
 }
+

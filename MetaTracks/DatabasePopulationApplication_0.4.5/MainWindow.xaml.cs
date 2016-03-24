@@ -5,7 +5,6 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Threading;
 using System.Windows;
-using AcousticFingerprintingLibrary_0._4._5;
 using AcousticFingerprintingLibrary_0._4._5.SoundFingerprint;
 using AcousticFingerprintingLibrary_0._4._5.SoundFingerprint.AudioProxies;
 using AcousticFingerprintingLibrary_0._4._5.SoundFingerprint.AudioProxies.Strides;
@@ -27,9 +26,8 @@ namespace DatabasePopulationApplication_0._4._5
         }
 
         internal static MainWindow Main;
-        // From acoustic fingerprinting client
         FingerprintManager fm = new FingerprintManager();
-        //FingerprintDatabaseManager fdm = new FingerprintDatabaseManager();
+        FingerprintDatabaseManager fdbm = new FingerprintDatabaseManager();
         private string _entryName;
         private string _typeName;
         private string filename;
@@ -63,6 +61,7 @@ namespace DatabasePopulationApplication_0._4._5
                     OpenFileDialog ofd = new OpenFileDialog();
                     ofd.ShowDialog();
                     filename = ofd.FileName;
+                    Main.Status = "Opened file: " + filename;
                 }
                 catch (TypeInitializationException exception)
                 {
@@ -88,22 +87,13 @@ namespace DatabasePopulationApplication_0._4._5
                 List<Fingerprint> fingerprints = manager.CreateFingerprints(proxy, Path.GetFullPath(filename), stride);
                 var test = manager.GetFingerHashes(stride, fingerprints, null);
                 //Console.WriteLine("Preliminary: " + preliminaryFingerprints.Count + " ---- " + test[1].HashBins[1]);
-                foreach (var fingerprint in test)
-                {
-                    Console.WriteLine("SEQUENCE NO: " + fingerprint.SequenceNumber + " --- TIMESTAMP:" + fingerprint.Timestamp);
-                    for (int i = 0; i < fingerprint.HashBins.Length; i++)
-                    {
-                        Console.WriteLine("SUB FINGERPRINT: " + fingerprint.HashBins[i]);
-                    }  
-                }
-                Console.WriteLine("Done");
-                //manager.GetHashSimilarity(stride, stride, proxy, filename, "C:\\Users\\Kristian\\Desktop\\c# musikkfile\\Pokemon_BlueRed_-_Route_1.wav");
-                //var test = manager.GetFingerHashes(stride, fingerprints, path);
-                //int width = manager.FingerprintLength;
-                //int height = manager.LogBins;
-                //Bitmap image = Imaging.GetFingerprintsImage(fingerprints, width, height);
-                //image.Save(path);
-                //image.Dispose();
+                
+                manager.GetHashSimilarity(stride, stride, proxy, filename, filename);
+                int width = manager.FingerprintLength;
+                int height = manager.LogBins;
+                Bitmap image = Imaging.GetFingerprintsImage(fingerprints, width, height);
+                image.Save(Path.GetFullPath(filename));
+                image.Dispose();
             }
         }
     
@@ -158,10 +148,26 @@ namespace DatabasePopulationApplication_0._4._5
 
         private void sendButton_Click(object sender, RoutedEventArgs e)
         {
+            Main.Status = "Staging the following file: " + filename;
             (new Thread(() =>
             {
-                Main.Status = "Not implemented.";
-                //fdm.SendFullFileToDatabase(_entryName);
+                using (IAudio proxy = new BassProxy())
+                {
+                    Fingerprinter manager = new Fingerprinter();
+                    int strideSize = 1102;
+                    int samplesPerFingerprint = 128 * 64; // 128 = width of fingerprint, 64 = overlap
+                    var stride = new IncrementalStaticStride(strideSize, samplesPerFingerprint);
+
+                    List<Fingerprint> fingerprints = manager.CreateFingerprints(proxy, Path.GetFullPath(filename), stride);
+                    var test = manager.GetFingerHashes(stride, fingerprints, null);
+                    Main.Status = "Sending hashes to database. This might take a long time. ";
+                    foreach (var fingerprint in test)
+                    {
+                        var currentHash = fingerprint.HashBins[1];
+                        fdbm.insertFingerprints(_entryName, fingerprint.Timestamp, fingerprint.SequenceNumber, currentHash);
+                    }
+                    Console.WriteLine("Done");
+                }
             })).Start();
         }
 
@@ -220,7 +226,10 @@ namespace DatabasePopulationApplication_0._4._5
 
         private void waveletButton_Click(object sender, RoutedEventArgs e)
         {
-            drawWavelets();
+            (new Thread(() =>
+            {
+                drawWavelets();
+            })).Start();
         }
 
         private void closeButton_Click(object sender, RoutedEventArgs e)
@@ -230,7 +239,10 @@ namespace DatabasePopulationApplication_0._4._5
 
         private void hashButton_Click(object sender, RoutedEventArgs e)
         {
-            DrawFingerprints();
+            (new Thread(() =>
+            {
+                DrawFingerprints();
+            })).Start();
         }
     }
 

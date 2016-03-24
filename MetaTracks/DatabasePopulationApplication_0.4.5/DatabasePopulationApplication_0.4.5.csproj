@@ -44,6 +44,10 @@
     <Reference Include="Bass.Net">
       <HintPath>..\..\..\..\Dropbox\Bacheloroppgave 2016 MetaTracks\Bass.Net.dll</HintPath>
     </Reference>
+    <Reference Include="MySql.Data, Version=6.9.8.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\packages\MySql.Data.6.9.8\lib\net45\MySql.Data.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="NAudio">
       <HintPath>..\..\..\..\Dropbox\Bacheloroppgave 2016 MetaTracks\c# References\NAudio.dll</HintPath>
     </Reference>
@@ -77,6 +81,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="FingerprintDatabaseManager.cs" />
+    <Compile Include="FingerprintDatabaseManager_old.cs" />
     <Compile Include="FingerprintManager.cs" />
     <Compile Include="IFingerprintDatabaseManager.cs" />
     <Compile Include="IFingerprintManager.cs" />
@@ -120,6 +125,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
