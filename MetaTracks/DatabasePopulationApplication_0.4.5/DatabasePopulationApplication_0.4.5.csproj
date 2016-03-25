@@ -35,11 +35,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AcousticFingerprintingLibrary_0.4.5">
-      <HintPath>..\AcousticFingerprintingLibrary_0.4.5\bin\Debug\AcousticFingerprintingLibrary_0.4.5.dll</HintPath>
-    </Reference>
     <Reference Include="AWSSDK">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\AWS SDK for .NET\past-releases\Version-2\Net45\AWSSDK.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\AWS SDK for .NET\past-releases\Version-2\Net45\AWSSDK.dll</HintPath>
     </Reference>
     <Reference Include="Bass.Net">
       <HintPath>..\..\..\..\Dropbox\Bacheloroppgave 2016 MetaTracks\Bass.Net.dll</HintPath>
@@ -49,7 +46,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="NAudio">
-      <HintPath>..\..\..\..\Dropbox\Bacheloroppgave 2016 MetaTracks\c# References\NAudio.dll</HintPath>
+      <HintPath>..\..\..\..\..\Dropbox\Bacheloroppgave 2016 MetaTracks\c# References\NAudio.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -143,6 +140,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AcousticFingerprintingLibrary_0.4.5\AcousticFingerprintingLibrary_0.4.5.csproj">
+      <Project>{538e6060-29f1-4cce-b9d5-edb993183956}</Project>
+      <Name>AcousticFingerprintingLibrary_0.4.5</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WindowsApplication_0.4.5\WindowsApplication_0.4.5.csproj">
       <Project>{19F54949-DDCA-43BC-B558-50AD1D5DDDCE}</Project>
       <Name>WindowsApplication_0.4.5</Name>
