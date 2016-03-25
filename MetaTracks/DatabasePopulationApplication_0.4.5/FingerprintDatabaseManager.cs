@@ -20,7 +20,7 @@ namespace DatabasePopulationApplication_0._4._5
             {
                 conn = new MySqlConnection(cs);
                 conn.Open();
-                Console.WriteLine("MySQL version : {0}", conn.ServerVersion);
+                Console.WriteLine("Connected to database. MySQL version : {0}", conn.ServerVersion);
             }
             catch (MySqlException ex)
             {
@@ -49,8 +49,6 @@ namespace DatabasePopulationApplication_0._4._5
                 {
                     conn = new MySqlConnection(cs);
                     conn.Open();
-                    Console.WriteLine("MySQL version : {0}", conn.ServerVersion);
-
 
                     MySqlCommand cmd = new MySqlCommand();
                     cmd.Connection = conn;
@@ -77,6 +75,40 @@ namespace DatabasePopulationApplication_0._4._5
                     {
                         conn.Close();
                     }
+                }
+            }
+        }
+
+        public void truncateTable()
+        {
+            string cs = @"server=webapidb.c7tab1cc7vsa.eu-west-1.rds.amazonaws.com;userid=glennskjong;
+           password=Security1;database=system_users";
+
+            MySqlConnection conn = null;
+
+            try
+            {
+                conn = new MySqlConnection(cs);
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand();
+                cmd.Connection = conn;
+                cmd.CommandText = "TRUNCATE fingerprintTable";
+                cmd.Prepare();
+                cmd.ExecuteNonQuery();
+                Console.ReadLine();
+
+            }
+            catch (MySqlException ex)
+            {
+                Console.WriteLine("Error: {0}", ex.ToString());
+
+            }
+
+            finally
+            {
+                if (conn != null)
+                {
+                    conn.Close();
                 }
             }
         }

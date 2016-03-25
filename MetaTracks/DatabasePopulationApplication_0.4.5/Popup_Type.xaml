@@ -1,0 +1,22 @@
+﻿<Window x:Class="dbApp.Popup_Type"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:dbApp"
+        mc:Ignorable="d"
+        Title="Choose a movie type." Height="170" Width="300">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0*"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="260" Height="41" Grid.Column="1" FontSize="13.333"><Run Text="Choose the "/><Run FontWeight="Bold" Text="type"/><Run Text=" for the new entry as it will appear in the database (movie / series title)."/></TextBlock>
+        <Button x:Name="submit_button" Grid.ColumnSpan="2" Content="Submit" HorizontalAlignment="Left" Margin="90,89,0,0" VerticalAlignment="Top" Width="112" Height="30" Click="submit_Click"/>
+        <ComboBox x:Name="comboBox" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="10,56,0,0" VerticalAlignment="Top" Width="260" Height="28" SelectionChanged="comboBox_SelectionChanged">
+        <ComboBoxItem Content="Movie"/>
+        <ComboBoxItem Content="Series"/>
+        <ComboBoxItem Content="Trailer"/>
+        </ComboBox>
+    </Grid>
+</Window>

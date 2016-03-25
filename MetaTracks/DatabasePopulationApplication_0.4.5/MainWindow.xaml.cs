@@ -13,9 +13,6 @@ using Microsoft.Win32;
 
 namespace DatabasePopulationApplication_0._4._5
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow
     {
         public MainWindow()
@@ -34,7 +31,7 @@ namespace DatabasePopulationApplication_0._4._5
 
         private void openButton_Click(object sender, RoutedEventArgs e)
         {
-            var nameDialog = new Popup();
+            var nameDialog = new Popup_Title();
             if (nameDialog.ShowDialog() == true)
             {
                 _entryName = nameDialog.ResponseText;
@@ -44,7 +41,7 @@ namespace DatabasePopulationApplication_0._4._5
                 return;
             }
 
-            var typeDialog = new Popup();
+            var typeDialog = new Popup_Type();
             if (typeDialog.ShowDialog() == true)
             {
                 _typeName = typeDialog.ResponseText;
@@ -62,6 +59,9 @@ namespace DatabasePopulationApplication_0._4._5
                     ofd.ShowDialog();
                     filename = ofd.FileName;
                     Main.Status = "Opened file: " + filename;
+                    Main.Status = "The file will appear in the database as:";
+                    Main.Status = "Name: " + _entryName;
+                    Main.Status = "Type: " + _typeName;
                 }
                 catch (TypeInitializationException exception)
                 {
@@ -73,8 +73,17 @@ namespace DatabasePopulationApplication_0._4._5
 
         private void DrawFingerprints()
         {
+            SaveFileDialog sfd = new SaveFileDialog
+            {
+                Filter = "(*.jpg)|*.jpg", //Resources.FileFilterJPeg,
+                FileName = Path.GetFileNameWithoutExtension(filename) + "_fingerprints" + ".jpg"
+            };
+
+            sfd.ShowDialog();
+
             using (IAudio proxy = new BassProxy())
             {
+                Main.Status = "Visualizing hashes. This might take a while, depending on the movie length.";
                 Fingerprinter manager = new Fingerprinter();
                 // Not 100% sure what stridenumber means
                 int strideSize = 1102;
@@ -87,16 +96,17 @@ namespace DatabasePopulationApplication_0._4._5
                 List<Fingerprint> fingerprints = manager.CreateFingerprints(proxy, Path.GetFullPath(filename), stride);
                 var test = manager.GetFingerHashes(stride, fingerprints, null);
                 //Console.WriteLine("Preliminary: " + preliminaryFingerprints.Count + " ---- " + test[1].HashBins[1]);
-                
+
                 manager.GetHashSimilarity(stride, stride, proxy, filename, filename);
                 int width = manager.FingerprintLength;
                 int height = manager.LogBins;
                 Bitmap image = Imaging.GetFingerprintsImage(fingerprints, width, height);
-                image.Save(Path.GetFullPath(filename));
+                image.Save(sfd.FileName, ImageFormat.Jpeg);
                 image.Dispose();
+                Main.Status = "Visualization done. Image file saved to: " + Path.GetFullPath(sfd.FileName);
             }
         }
-    
+
 
         private string Selector(bool itemin)
         {
@@ -108,41 +118,46 @@ namespace DatabasePopulationApplication_0._4._5
             SaveFileDialog sfd = new SaveFileDialog
             {
                 Filter = "(*.jpg)|*.jpg", //Resources.FileFilterJPeg,
-                FileName = Path.GetFileNameWithoutExtension(filename) + "_spectrum_" + ".jpg"
+                FileName = Path.GetFileNameWithoutExtension(filename) + "_spectrum" + ".jpg"
             };
+
             int width = 1000;
             int height = 800;
-            //
+
             sfd.ShowDialog();
             using (BassProxy proxy = new BassProxy())
             {
+                Main.Status = "Generating spectrogram visualization.";
                 Fingerprinter manager = new Fingerprinter();
 
                 float[][] data = manager.CreateSpectrogram(proxy, Path.GetFullPath(filename), 0, 0);
                 Bitmap image = Imaging.GetSpectrogramImage(data, width, height);
                 image.Save(sfd.FileName, ImageFormat.Jpeg);
                 image.Dispose();
+                Main.Status = "Visualization done. Image file saved to: " + Path.GetFullPath(sfd.FileName);
             }
-            
+
         }
 
         private void drawWavelets()
         {
             SaveFileDialog sfd = new SaveFileDialog
             {
-                Filter = "(*.jpg)|*.jpg", //Resources.FileFilterJPeg,
-                FileName = Path.GetFileNameWithoutExtension(filename) + "_wavelets_" + ".jpg"
+                Filter = "(*.jpg)|*.jpg",
+                FileName = Path.GetFileNameWithoutExtension(filename) + "_wavelets" + ".jpg"
             };
             sfd.ShowDialog();
             string path = Path.GetFullPath(sfd.FileName);
             using (IAudio proxy = new BassProxy())
             {
+                Main.Status = "Generating wavelet visualization.";
                 Fingerprinter manager = new Fingerprinter();
-                // 1102?
-                StaticStride stride = new StaticStride((int) 1102);
+
+                StaticStride stride = new StaticStride((int)1102);
                 Image image = Imaging.GetWaveletSpectralImage(Path.GetFullPath(filename), stride, proxy, manager);
                 image.Save(path);
                 image.Dispose();
+                Main.Status = "Visualization done. Image file saved to: " + Path.GetFullPath(sfd.FileName);
             }
         }
 
@@ -160,7 +175,7 @@ namespace DatabasePopulationApplication_0._4._5
 
                     List<Fingerprint> fingerprints = manager.CreateFingerprints(proxy, Path.GetFullPath(filename), stride);
                     var test = manager.GetFingerHashes(stride, fingerprints, null);
-                    Main.Status = "Sending hashes to database. This might take a long time. ";
+                    Main.Status = "Sending hashes to database. This might take a long time, depending on the movie length.";
                     foreach (var fingerprint in test)
                     {
                         var currentHash = fingerprint.HashBins[1];
@@ -191,22 +206,14 @@ namespace DatabasePopulationApplication_0._4._5
 
             Confirmation dialog = new Confirmation();
             dialog.ShowDialog();
+
             if (dialog.DialogResult == true)
-            {
-                Main.Status = "Purging database.";
-            }
-
-            //FingerprintManager.DeleteTable();
-            //Main.Status = "Table has been deleted. Don't forget to create it again.";
-        }
-    
-
-        private void createbutton_Click(object sender, RoutedEventArgs e)
-        {
-            (new Thread(() =>
-            {
-                Main.Status = "Table has been created.";
-            })).Start();
+                (new Thread(() =>
+                {
+                    Main.Status = "Truncating table.";
+                    fdbm.truncateTable();
+                    Main.Status = "Table successfully truncated.";
+                })).Start();
         }
 
         private void spectrogramButton_Click(object sender, RoutedEventArgs e)

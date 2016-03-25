@@ -7,9 +7,9 @@ namespace dbApp
     /// <summary>
     /// Interaction logic for Popup.xaml
     /// </summary>
-    public partial class Popup : Window
+    public partial class Popup_Title : Window
     {
-        public Popup()
+        public Popup_Title()
         {
             InitializeComponent();
         }

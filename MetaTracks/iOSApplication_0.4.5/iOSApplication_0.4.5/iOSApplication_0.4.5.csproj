@@ -22,7 +22,7 @@
     <MtouchArch>i386</MtouchArch>
     <MtouchLink>Full</MtouchLink>
     <MtouchDebug>True</MtouchDebug>
-    <MtouchSdkVersion>9.2</MtouchSdkVersion>
+    <MtouchSdkVersion>9.3</MtouchSdkVersion>
     <MtouchProfiling>False</MtouchProfiling>
     <MtouchFastDev>False</MtouchFastDev>
     <MtouchUseLlvm>False</MtouchUseLlvm>
@@ -32,7 +32,7 @@
     <OptimizePNGs>True</OptimizePNGs>
     <MtouchFloat32>False</MtouchFloat32>
     <MtouchI18n />
-    <MtouchExtraArgs>-nosymbolstrip -nostrip -gcc_flags "-framework AudioToolbox -L${ProjectDir} -iOSApplication -force_load ${ProjectDir}/libbass.a -force_load ${ProjectDir}/libbassmix.a"</MtouchExtraArgs>
+    <MtouchExtraArgs>--linkskip=Bass.Net -nosymbolstrip -nostrip -gcc_flags "-framework AudioToolbox -L${ProjectDir} -iOSApplication -force_load ${ProjectDir}/libbass.a -force_load ${ProjectDir}/libbassmix.a"</MtouchExtraArgs>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>none</DebugType>

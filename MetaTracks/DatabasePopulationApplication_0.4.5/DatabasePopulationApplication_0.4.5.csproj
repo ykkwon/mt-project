@@ -94,7 +94,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Popup.xaml">
+    <Page Include="Popup_Type.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Popup_Title.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -104,8 +108,11 @@
       <DependentUpon>Confirmation.xaml</DependentUpon>
     </Compile>
     <Compile Include="Media.cs" />
-    <Compile Include="Popup.xaml.cs">
-      <DependentUpon>Popup.xaml</DependentUpon>
+    <Compile Include="Popup_Type.xaml.cs">
+      <DependentUpon>Popup_Type.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Popup_Title.xaml.cs">
+      <DependentUpon>Popup_Title.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

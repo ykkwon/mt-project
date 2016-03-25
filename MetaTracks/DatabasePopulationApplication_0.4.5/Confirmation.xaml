@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:dbApp"
         mc:Ignorable="d"
-        Title="Confirm action" Height="170" Width="300">
+        Title="Confirm action" Height="178.979" Width="307.183">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0*"/>
