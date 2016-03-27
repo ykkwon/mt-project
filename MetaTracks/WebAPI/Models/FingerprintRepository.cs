@@ -63,7 +63,7 @@ namespace WebAPI.Models
 
             while (rdr.Read())
             {
-                titles.Append(rdr.GetString("title") + " ");
+                titles.Append(rdr.GetString("title") + ",");
             }
             Console.WriteLine(titles.ToString());
             return titles.ToString();

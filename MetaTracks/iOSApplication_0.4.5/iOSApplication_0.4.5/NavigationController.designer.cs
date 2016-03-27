@@ -12,8 +12,16 @@ using UIKit;
 namespace iOSApplication_0._4._5
 {
 	[Register ("ViewController")]
-	partial class ViewController
+	partial class NavigationController
 	{
+		[Outlet]
+		[GeneratedCode ("iOS Designer", "1.0")]
+		UILabel foreground_label { get; set; }
+
+		[Outlet]
+		[GeneratedCode ("iOS Designer", "1.0")]
+		UISearchBar MoviePicker { get; set; }
+
 		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
 		UIButton RecordButton { get; set; }
@@ -28,6 +36,14 @@ namespace iOSApplication_0._4._5
 
 		void ReleaseDesignerOutlets ()
 		{
+			if (foreground_label != null) {
+				foreground_label.Dispose ();
+				foreground_label = null;
+			}
+			if (MoviePicker != null) {
+				MoviePicker.Dispose ();
+				MoviePicker = null;
+			}
 			if (RecordButton != null) {
 				RecordButton.Dispose ();
 				RecordButton = null;

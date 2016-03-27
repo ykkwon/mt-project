@@ -99,7 +99,6 @@
     </StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="FingerprintDatabaseManager.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
     <None Include="Info.plist" />
@@ -107,10 +106,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Record.cs" />
-    <Compile Include="ViewController.designer.cs">
-      <DependentUpon>ViewController.cs</DependentUpon>
+    <Compile Include="NavigationController.designer.cs">
+      <DependentUpon>NavigationController.cs</DependentUpon>
     </Compile>
-    <Compile Include="ViewController.cs" />
+    <Compile Include="NavigationController.cs" />
     <InterfaceDefinition Include="Main.storyboard" />
     <InterfaceDefinition Include="Resources\LaunchScreen.xib" />
   </ItemGroup>
