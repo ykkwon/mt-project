@@ -31,8 +31,8 @@
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Bass.Net">
-      <HintPath>..\..\..\..\..\Dropbox\Bacheloroppgave 2016 MetaTracks\c# References\Bass.Net.dll</HintPath>
+    <Reference Include="Bass.Net.iOS">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\BASS.NET\iOS\Bass.Net.iOS.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />

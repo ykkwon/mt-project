@@ -10,15 +10,19 @@ namespace iOSApplication_0._4._5
         {
             
         }
+        FingerprintDatabaseManager fpdm = new FingerprintDatabaseManager();
 
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
             
             Thread newThread = new Thread(Record.RunRecord);
+            fpdm.getTitles();
+
 
             // Event handler for simple "Record" button click and release.
             RecordButton.TouchUpInside += (sender, e) => {
+                /*
                 try {
                     if (newThread.ThreadState == ThreadState.Running) {
                         Console.WriteLine("Thread is already running.");
@@ -34,6 +38,7 @@ namespace iOSApplication_0._4._5
                 {
                     Console.WriteLine("The recorder is already running.");
                 }
+                */
             };
 
             // Event handler for simple "Stop" button click and release.

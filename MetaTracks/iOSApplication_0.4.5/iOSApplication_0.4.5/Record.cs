@@ -5,9 +5,7 @@ using System.Threading;
 using AcousticFingerprintingLibrary_0._4._5.SoundFingerprint;
 using AcousticFingerprintingLibrary_0._4._5.SoundFingerprint.AudioProxies.Strides;
 using Foundation;
-using Un4seen.Bass;
 using AcousticFingerprintingLibrary_0._4._5.SoundFingerprint.AudioProxies;
-using Un4seen.Bass.AddOn.Mix;
 
 namespace iOSApplication_0._4._5
 {
@@ -94,11 +92,6 @@ namespace iOSApplication_0._4._5
                 Console.WriteLine( " --------------- TIMESTAMP:" + fingerprint.Timestamp);
             }
             //SendToApi(preliminaryFingerprints);
-        }
-
-        public static void SendToApi()
-        {
-            
         }
 
         public static void StopRecord()

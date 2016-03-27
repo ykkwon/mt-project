@@ -7,5 +7,6 @@ namespace WebAPI.Models
     {
         string GetSingleFingerprintByHash(string hash);
         List<string> GetFingerprintsByTitle(string title);
+        string GetAllTitlesSQL();
     }
 }

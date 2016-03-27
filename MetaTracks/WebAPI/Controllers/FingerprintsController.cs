@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Web.Mvc;
@@ -31,6 +32,18 @@ namespace WebAPI.Controllers
         public string GetSingleFingerprintByHash(string inputHash)
         {
             var returnedString = _repository.GetSingleFingerprintByHash(inputHash);
+            if (returnedString != null)
+            {
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.OK);
+                message.Content = new StringContent(returnedString, Encoding.UTF8);
+                return message.Content.ReadAsStringAsync().Result;
+            }
+            return null;
+        }
+
+        public string GetAllTitlesSQL()
+        {
+            var returnedString = _repository.GetAllTitlesSQL();
             if (returnedString != null)
             {
                 HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.OK);

@@ -1,6 +1,9 @@
 ﻿using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DocumentModel;
+using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace WebAPI.Models
 {
@@ -33,7 +36,7 @@ namespace WebAPI.Models
             scanFilter.AddCondition("Title", ScanOperator.Equal, title);
             Search titleSearch = table.Scan(scanFilter);
             List<string> stringList = new List<string>();
-            List <Document> titleItems = titleSearch.GetRemaining();
+            List<Document> titleItems = titleSearch.GetRemaining();
             foreach (Document doc in titleItems)
             {
                 string newDoc = doc.ToJson();
@@ -44,6 +47,26 @@ namespace WebAPI.Models
                 return stringList;
             }
             return null;
+        }
+
+        public string GetAllTitlesSQL()
+        {
+            string cs = @"server=webapidb.c7tab1cc7vsa.eu-west-1.rds.amazonaws.com;userid=glennskjong;
+                password=Security1;database=system_users";
+            MySqlConnection conn = null;
+            conn = new MySqlConnection(cs);
+            conn.Open();
+            string sql = "SELECT distinct title from fingerprintTable";
+            MySqlCommand cmd = new MySqlCommand(sql, conn);
+            MySqlDataReader rdr = cmd.ExecuteReader();
+            var titles = new StringBuilder();
+
+            while (rdr.Read())
+            {
+                titles.Append(rdr.GetString("title") + " ");
+            }
+            Console.WriteLine(titles.ToString());
+            return titles.ToString();
         }
     }
 }
