@@ -20,7 +20,7 @@ namespace iOSApplication_0._4._5
 
 		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
-		UISearchDisplayController searchDisplayController { get; set; }
+		UILabel foreground_label { get; set; }
 
 		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
@@ -32,9 +32,9 @@ namespace iOSApplication_0._4._5
 				RecordButton.Dispose ();
 				RecordButton = null;
 			}
-			if (searchDisplayController != null) {
-				searchDisplayController.Dispose ();
-				searchDisplayController = null;
+			if (foreground_label != null) {
+				foreground_label.Dispose ();
+				foreground_label = null;
 			}
 			if (StopButton != null) {
 				StopButton.Dispose ();

@@ -4,15 +4,15 @@ using System.Net.Http.Headers;
 using System.Threading;
 using UIKit;
 
-namespace iOSApplication_0._4._5
+namespace iOSApplication_0._5._3
 {
-    public partial class NavigationController : UIViewController
+    public partial class ViewController : UIViewController
     {
         string[] availableMovies = new string[100];
 
-        public NavigationController(IntPtr handle) : base(handle)
+        public ViewController(IntPtr handle) : base(handle)
         {
-            
+
         }
 
         public async void getTitles()
@@ -30,6 +30,7 @@ namespace iOSApplication_0._4._5
                 var responseString = response.Content.ReadAsStringAsync().Result;
                 string s = responseString;
                 availableMovies = s.Split(',');
+                Console.WriteLine("Movies indexed from database.");
             }
         }
 
@@ -39,12 +40,13 @@ namespace iOSApplication_0._4._5
 
             base.ViewDidLoad();
 
-            Thread recordThread = new Thread(Record.RunRecord);
+            Thread recordThread = new Thread(RecordManager.RunRecord);
 
             // Event handler for simple "Record" button click and release.
             RecordButton.TouchUpInside += (sender, e) => {
-                recordThread.Start();
-            
+                Console.WriteLine(availableMovies[0]);
+                //recordThread.Start();
+
                 /*
                 try {
                     if (newThread.ThreadState == ThreadState.Running) {
@@ -67,8 +69,8 @@ namespace iOSApplication_0._4._5
             // Event handler for simple "Stop" button click and release.
             StopButton.TouchUpInside += (sender, e) =>
             {
-                foreground_label.Text = "Stopped recording.";
-                recordThread.Abort();  
+                ForegroundLabel.Text = "Stopped recording.";
+                recordThread.Abort();
             };
         }
     }

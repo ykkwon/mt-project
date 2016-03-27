@@ -9,14 +9,14 @@ using System;
 using System.CodeDom.Compiler;
 using UIKit;
 
-namespace iOSApplication_0._4._5
+namespace iOSApplication_0._5._3
 {
 	[Register ("ViewController")]
-	partial class NavigationController
+	partial class ViewController
 	{
 		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
-		UILabel foreground_label { get; set; }
+		UILabel ForegroundLabel { get; set; }
 
 		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
@@ -24,37 +24,21 @@ namespace iOSApplication_0._4._5
 
 		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
-		UISearchDisplayController searchDisplayController { get; set; }
-
-		[Outlet]
-		[GeneratedCode ("iOS Designer", "1.0")]
 		UIButton StopButton { get; set; }
-
-		[Outlet]
-		[GeneratedCode ("iOS Designer", "1.0")]
-		NavigationController ViewController { get; set; }
 
 		void ReleaseDesignerOutlets ()
 		{
-			if (foreground_label != null) {
-				foreground_label.Dispose ();
-				foreground_label = null;
+			if (ForegroundLabel != null) {
+				ForegroundLabel.Dispose ();
+				ForegroundLabel = null;
 			}
 			if (RecordButton != null) {
 				RecordButton.Dispose ();
 				RecordButton = null;
 			}
-			if (searchDisplayController != null) {
-				searchDisplayController.Dispose ();
-				searchDisplayController = null;
-			}
 			if (StopButton != null) {
 				StopButton.Dispose ();
 				StopButton = null;
-			}
-			if (ViewController != null) {
-				ViewController.Dispose ();
-				ViewController = null;
 			}
 		}
 	}

@@ -46,7 +46,7 @@
       <HintPath>..\packages\MySql.Data.6.9.8\lib\net45\MySql.Data.dll</HintPath>
     </Reference>
     <Reference Include="NAudio">
-      <HintPath>..\..\..\..\..\Dropbox\Bacheloroppgave 2016 MetaTracks\c# References\NAudio.dll</HintPath>
+      <HintPath>..\..\..\..\Dropbox\Bacheloroppgave 2016 MetaTracks\c# References\NAudio.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
