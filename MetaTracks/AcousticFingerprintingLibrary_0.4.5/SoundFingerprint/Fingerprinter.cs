@@ -839,7 +839,7 @@ namespace AcousticFingerprintingLibrary_0._4._5.SoundFingerprint
             double result = similarMinHashValues / (double)(countDb * minHashSignatureLen * countQuery);
         }
 
-        public List<HashedFingerprint> GetFingerHashes(IStride stride, List<Fingerprint> listdb)
+        public HashedFingerprint[] GetFingerHashes(IStride stride, List<Fingerprint> listdb)
         {
             List<Fingerprint> listDb = listdb;
             MinHash minHash = new MinHash(true);
@@ -855,12 +855,14 @@ namespace AcousticFingerprintingLibrary_0._4._5.SoundFingerprint
                 int wut = 0;
             }
 
-            List<HashedFingerprint> hashedFinger = new List<HashedFingerprint>();
+            //List<HashedFingerprint> hashedFinger = new List<HashedFingerprint>();
+            HashedFingerprint[] hashedFinger = new HashedFingerprint[listDb.Count];
             for (int index = 0; index < listDb.Count; index++)
             {
                 var hashfinger = new HashedFingerprint(minhashdb[index], lshBuckets[index], listDb[index].SequenceNumber,
                     listDb[index].Timestamp);
-                hashedFinger.Add(hashfinger);
+                //hashedFinger.Add(hashfinger);
+                hashedFinger[index] = hashfinger;
             }
 
             return hashedFinger;
@@ -870,7 +872,7 @@ namespace AcousticFingerprintingLibrary_0._4._5.SoundFingerprint
 
         #region Recognition
         public List<HashedFingerprint> matchedFingerprints = new List<HashedFingerprint>(); 
-        public bool CompareFingerprintLists(List<HashedFingerprint> fingerprints, List<HashedFingerprint> toCompare)
+        public bool CompareFingerprintLists(HashedFingerprint[] fingerprints, HashedFingerprint[] toCompare)
         {
             //
             var commonCounter = 0;
@@ -897,11 +899,11 @@ namespace AcousticFingerprintingLibrary_0._4._5.SoundFingerprint
                 }
             }
             // If result is greater than 5% it is a potential match
-            var result = (double) (100 * commonCounter)/fingerprints.Count;
+            var result = (double) (100 * commonCounter)/fingerprints.Length;
             return result > 5; // if result greater than 5, return true, else false
         }
 
-        public double GetTimeStamps(List<HashedFingerprint> fingerprints, List<HashedFingerprint> toCompare)
+        public double GetTimeStamps(HashedFingerprint[] fingerprints, HashedFingerprint[] toCompare)
         {
             if (CompareFingerprintLists(fingerprints, toCompare))
             {

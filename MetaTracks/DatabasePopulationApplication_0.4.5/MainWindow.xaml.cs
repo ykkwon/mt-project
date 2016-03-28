@@ -94,7 +94,6 @@ namespace DatabasePopulationApplication_0._4._5
 
                 //List<bool[]> fingerprints = manager.CreateFingerprints(proxy, Path.GetFullPath(filename), stride);
                 List<Fingerprint> fingerprints = manager.CreateFingerprints(proxy, Path.GetFullPath(filename), stride);
-                var test = manager.GetFingerHashes(stride, fingerprints);
                 //Console.WriteLine("Preliminary: " + preliminaryFingerprints.Count + " ---- " + test[1].HashBins[1]);
 
                 //manager.GetHashSimilarity(stride, stride, proxy, filename, filename);
@@ -106,8 +105,9 @@ namespace DatabasePopulationApplication_0._4._5
                 Main.Status = "Visualization done. Image file saved to: " + Path.GetFullPath(sfd.FileName);
 
                 ///////////////////////////////////////////////////////////////////////////////////////////
-                string secondfile = "C:\\Users\\Kristian\\Desktop\\Bachelor Stuff\\Songlist\\mic.wav";
+                string secondfile = "C:\\Users\\Kristian\\Desktop\\Bachelor Stuff\\Songlist\\Tale 011.m4a";
                 var fingerprints2 = manager.CreateFingerprints(proxy, secondfile, stride);
+                var test = manager.GetFingerHashes(stride, fingerprints);
                 var test2 = manager.GetFingerHashes(stride, fingerprints2);
 
                 // NOTE TO SELF: We should split up fingerprints of movie into different lists, 
