@@ -106,12 +106,25 @@ namespace DatabasePopulationApplication_0._4._5
                 Main.Status = "Visualization done. Image file saved to: " + Path.GetFullPath(sfd.FileName);
 
                 ///////////////////////////////////////////////////////////////////////////////////////////
-
-                var fingerprints2 = manager.CreateFingerprints(proxy, filename, stride);
+                string secondfile = "C:\\Users\\Kristian\\Desktop\\Bachelor Stuff\\Songlist\\mic.wav";
+                var fingerprints2 = manager.CreateFingerprints(proxy, secondfile, stride);
                 var test2 = manager.GetFingerHashes(stride, fingerprints2);
 
+                // NOTE TO SELF: We should split up fingerprints of movie into different lists, 
+                // ie. fingerprints from timestamp 0 - 600 seconds (10min) goes in one list, next 600seconds go to next list.
+                // This is for faster comparing when we search later on.
 
-                var results = manager.CompareFingerprintLists(test, test2);
+                // sends in two lists of HashedFingerprints, returns timestamp if they match
+                // Assuming first list is a section of fingerprints from the movie (say a list of fingerprints for 10minutes)
+                var results = manager.GetTimeStamps(test, test2);
+                if (results != -1)
+                {
+                    // do something with timestamp
+                    int x = 0;
+                } else {
+                    // List of fingerprints were not a match
+                    int x = 0;
+                }
                 var breakpointchecker = 0;
             }
         }

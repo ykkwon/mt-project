@@ -869,8 +869,8 @@ namespace AcousticFingerprintingLibrary_0._4._5.SoundFingerprint
         #endregion
 
         #region Recognition
-
-        public double CompareFingerprintLists(List<HashedFingerprint> fingerprints, List<HashedFingerprint> toCompare)
+        public List<HashedFingerprint> matchedFingerprints = new List<HashedFingerprint>(); 
+        public bool CompareFingerprintLists(List<HashedFingerprint> fingerprints, List<HashedFingerprint> toCompare)
         {
             //
             var commonCounter = 0;
@@ -887,6 +887,9 @@ namespace AcousticFingerprintingLibrary_0._4._5.SoundFingerprint
 
                     if (CommonNumbers.Count() >= 2)
                     {
+                        matchedFingerprints.Add(fingerprint1);
+
+
                         // potential match
                         commonCounter++;
                         break; // jumps out of loop and on to next fingerprint
@@ -895,8 +898,18 @@ namespace AcousticFingerprintingLibrary_0._4._5.SoundFingerprint
             }
             // If result is greater than 5% it is a potential match
             var result = (double) (100 * commonCounter)/fingerprints.Count;
-            //
-            return result;
+            return result > 5; // if result greater than 5, return true, else false
+        }
+
+        public double GetTimeStamps(List<HashedFingerprint> fingerprints, List<HashedFingerprint> toCompare)
+        {
+            if (CompareFingerprintLists(fingerprints, toCompare))
+            {
+                // returns timestamp of matched fingerprint
+                return matchedFingerprints[matchedFingerprints.Count - 1].Timestamp;
+            }
+            // Returns -1 if the lists are not a match
+            return -1;
         }
         #endregion
 
