@@ -88,15 +88,15 @@ namespace DatabasePopulationApplication_0._4._5
                 Fingerprinter manager = new Fingerprinter();
                 // Stridesize is length of fingerprint in bytes(68% sure)
                 int strideSize = 1102;
-                int samplesPerFingerprint = 128 * 64; // 128 = width of fingerprint, 64 = overlap
+                int samplesPerFingerprint = 128*64; // 128 = width of fingerprint, 64 = overlap
                 var stride = new IncrementalStaticStride(strideSize, samplesPerFingerprint);
-                
+
 
                 //List<bool[]> fingerprints = manager.CreateFingerprints(proxy, Path.GetFullPath(filename), stride);
                 List<Fingerprint> fingerprints = manager.CreateFingerprints(proxy, Path.GetFullPath(filename), stride);
-                var test = manager.GetFingerHashes(stride, fingerprints, null);
+                var test = manager.GetFingerHashes(stride, fingerprints);
                 //Console.WriteLine("Preliminary: " + preliminaryFingerprints.Count + " ---- " + test[1].HashBins[1]);
-                
+
                 //manager.GetHashSimilarity(stride, stride, proxy, filename, filename);
                 int width = manager.FingerprintLength;
                 int height = manager.LogBins;
@@ -104,47 +104,14 @@ namespace DatabasePopulationApplication_0._4._5
                 image.Save(sfd.FileName, ImageFormat.Jpeg);
                 image.Dispose();
                 Main.Status = "Visualization done. Image file saved to: " + Path.GetFullPath(sfd.FileName);
-                
-                ///////////////////////////////////////////////////////////////////////////////////////////
-                var JaccardIndexVotes = 0.0;
-                var indexplusser = 0.0;
-                var commonCounter = 0.0;
 
-                var highestCommon = 0;
+                ///////////////////////////////////////////////////////////////////////////////////////////
 
                 var fingerprints2 = manager.CreateFingerprints(proxy, filename, stride);
-                var test2 = manager.GetFingerHashes(stride, fingerprints2, null);
+                var test2 = manager.GetFingerHashes(stride, fingerprints2);
 
 
-                foreach (var fingerprint in test)
-                {
-                    foreach (var fingerprint2 in test2)
-                    {
-                        var CommonNumbers = from a in fingerprint.HashBins.AsEnumerable<long>()
-                                            join b in fingerprint2.HashBins.AsEnumerable<long>() on a equals b
-                                            select a;
-                        double JaccardIndex = (double)CommonNumbers.Count() /
-                                               fingerprint.HashBins.Length + fingerprint2.HashBins.Length;
-
-                        JaccardIndexVotes += (double)CommonNumbers.Count() /
-                                               (double)fingerprint.HashBins.Length;
-
-                        indexplusser += JaccardIndex;
-
-                        if (highestCommon < CommonNumbers.Count()) highestCommon = CommonNumbers.Count();
-
-                        if (CommonNumbers.Count() >= 5)
-                        {
-                            // potential match
-                            commonCounter++;
-                            break; // jumps out of loop and on to next fingerprint
-                        }
-                    }
-                }
-
-                // editedtumblr (first 24sec of pkmon song) + pokemon song = 12%
-                // pkmn + tutorial1 = 1.4%
-                double results = 100 * commonCounter / test.Count; // If this is greater than 5, it is a potential match, higher = more likely
+                var results = manager.CompareFingerprintLists(test, test2);
                 var breakpointchecker = 0;
             }
         }
@@ -216,7 +183,7 @@ namespace DatabasePopulationApplication_0._4._5
                     var stride = new IncrementalStaticStride(strideSize, samplesPerFingerprint);
 
                     List<Fingerprint> fingerprints = manager.CreateFingerprints(proxy, Path.GetFullPath(filename), stride);
-                    var test = manager.GetFingerHashes(stride, fingerprints, null);
+                    var test = manager.GetFingerHashes(stride, fingerprints);
                     Main.Status = "Sending hashes to database. This might take a long time, depending on the movie length.";
                     foreach (var fingerprint in test)
                     {

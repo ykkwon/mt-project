@@ -839,7 +839,7 @@ namespace AcousticFingerprintingLibrary_0._4._5.SoundFingerprint
             double result = similarMinHashValues / (double)(countDb * minHashSignatureLen * countQuery);
         }
 
-        public List<HashedFingerprint> GetFingerHashes(IStride stride, List<Fingerprint> listdb, string path)
+        public List<HashedFingerprint> GetFingerHashes(IStride stride, List<Fingerprint> listdb)
         {
             List<Fingerprint> listDb = listdb;
             MinHash minHash = new MinHash(true);
@@ -864,10 +864,41 @@ namespace AcousticFingerprintingLibrary_0._4._5.SoundFingerprint
             }
 
             return hashedFinger;
-        } 
+        }
 
         #endregion
-        
+
+        #region Recognition
+
+        public double CompareFingerprintLists(List<HashedFingerprint> fingerprints, List<HashedFingerprint> toCompare)
+        {
+            //
+            var commonCounter = 0;
+            var highestCommon = 0;
+            foreach (var fingerprint1 in fingerprints)
+            {
+                foreach (var fingerprint2 in toCompare)
+                {
+                    var CommonNumbers = from a in fingerprint1.HashBins.AsEnumerable<long>()
+                                        join b in fingerprint2.HashBins.AsEnumerable<long>() on a equals b
+                                        select a;
+
+                    if (highestCommon < CommonNumbers.Count()) highestCommon = CommonNumbers.Count();
+
+                    if (CommonNumbers.Count() >= 2)
+                    {
+                        // potential match
+                        commonCounter++;
+                        break; // jumps out of loop and on to next fingerprint
+                    }
+                }
+            }
+            // If result is greater than 5% it is a potential match
+            var result = (double) (100 * commonCounter)/fingerprints.Count;
+            //
+            return result;
+        }
+        #endregion
 
         /// <summary>
         ///   Absolute value comparator

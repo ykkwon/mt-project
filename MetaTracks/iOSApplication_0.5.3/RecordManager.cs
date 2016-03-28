@@ -83,7 +83,7 @@ namespace iOSApplication_0._5._3
             IStride stride = new IncrementalStaticStride(1102, 128 * 64);
             // Create an array of fingerprints to be hashed.
             var preliminaryFingerprints = manager.CreateFingerprints(monoArray, stride);
-            var test = manager.GetFingerHashes(stride, preliminaryFingerprints, null);
+            var test = manager.GetFingerHashes(stride, preliminaryFingerprints);
             //Console.WriteLine("Preliminary: " + preliminaryFingerprints.Count + " ---- " + test[1].HashBins[1]);
             foreach (var fingerprint in test)
             {/*
