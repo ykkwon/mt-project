@@ -52,5 +52,29 @@ namespace WebAPI.Controllers
             }
             return null;
         }
+
+        public string GetAllFingerprintsSQL(string inputTitle)
+        {
+            var returnedString = _repository.GetAllFingerprintsSQL(inputTitle);
+            if (returnedString != null)
+            {
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.OK);
+                message.Content = new StringContent(returnedString, Encoding.UTF8);
+                return message.Content.ReadAsStringAsync().Result;
+            }
+            return null;
+        }
+
+        public string GetAllTimestampsSQL(string inputTitle)
+        {
+            var returnedString = _repository.GetAllTimestampsSQL(inputTitle);
+            if (returnedString != null)
+            {
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.OK);
+                message.Content = new StringContent(returnedString, Encoding.UTF8);
+                return message.Content.ReadAsStringAsync().Result;
+            }
+            return null;
+        }
     }
 }

@@ -68,5 +68,47 @@ namespace WebAPI.Models
             Console.WriteLine(titles.ToString());
             return titles.ToString();
         }
+
+        public string GetAllFingerprintsSQL(string title)
+        {
+            string cs = @"server=webapidb.c7tab1cc7vsa.eu-west-1.rds.amazonaws.com;userid=glennskjong;
+                password=Security1;database=system_users";
+            MySqlConnection conn = null;
+            conn = new MySqlConnection(cs);
+            conn.Open();
+            string sql = string.Format("SELECT hash from fingerprintTable WHERE title =" + "{0}",
+                    title);
+            MySqlCommand cmd = new MySqlCommand(sql, conn);
+            MySqlDataReader rdr = cmd.ExecuteReader();
+            var hashes = new StringBuilder();
+
+            while (rdr.Read())
+            {
+                hashes.Append(rdr.GetString("hash") + ",");
+            }
+            Console.WriteLine(hashes.ToString());
+            return hashes.ToString();
+        }
+
+        public string GetAllTimestampsSQL(string title)
+        {
+            string cs = @"server=webapidb.c7tab1cc7vsa.eu-west-1.rds.amazonaws.com;userid=glennskjong;
+                password=Security1;database=system_users";
+            MySqlConnection conn = null;
+            conn = new MySqlConnection(cs);
+            conn.Open();
+            string sql = string.Format("SELECT timestamp from fingerprintTable WHERE title =" + "{0}",
+                    title);
+            MySqlCommand cmd = new MySqlCommand(sql, conn);
+            MySqlDataReader rdr = cmd.ExecuteReader();
+            var hashes = new StringBuilder();
+
+            while (rdr.Read())
+            {
+                hashes.Append(rdr.GetString("timestamp") + ",");
+            }
+            Console.WriteLine(hashes.ToString());
+            return hashes.ToString();
+        }
     }
 }

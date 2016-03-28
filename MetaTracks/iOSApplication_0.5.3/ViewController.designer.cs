@@ -20,6 +20,22 @@ namespace iOSApplication_0._5._3
 
 		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
+		UIButton GetFingerprintsButton { get; set; }
+
+		[Outlet]
+		[GeneratedCode ("iOS Designer", "1.0")]
+		UIButton IndexButton { get; set; }
+
+		[Outlet]
+		[GeneratedCode ("iOS Designer", "1.0")]
+		UIButton MovieButton { get; set; }
+
+		[Outlet]
+		[GeneratedCode ("iOS Designer", "1.0")]
+		UITextField MovieTextField { get; set; }
+
+		[Outlet]
+		[GeneratedCode ("iOS Designer", "1.0")]
 		UIButton RecordButton { get; set; }
 
 		[Outlet]
@@ -31,6 +47,22 @@ namespace iOSApplication_0._5._3
 			if (ForegroundLabel != null) {
 				ForegroundLabel.Dispose ();
 				ForegroundLabel = null;
+			}
+			if (GetFingerprintsButton != null) {
+				GetFingerprintsButton.Dispose ();
+				GetFingerprintsButton = null;
+			}
+			if (IndexButton != null) {
+				IndexButton.Dispose ();
+				IndexButton = null;
+			}
+			if (MovieButton != null) {
+				MovieButton.Dispose ();
+				MovieButton = null;
+			}
+			if (MovieTextField != null) {
+				MovieTextField.Dispose ();
+				MovieTextField = null;
 			}
 			if (RecordButton != null) {
 				RecordButton.Dispose ();

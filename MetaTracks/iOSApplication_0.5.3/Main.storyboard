@@ -22,19 +22,8 @@
                                 <state key="normal" title="Record">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
-                                <variation key="heightClass=regular-widthClass=compact">
-                                    <rect key="frame" x="20" y="176" width="360" height="30"/>
-                                    <mask key="constraints">
-                                        <include reference="15"/>
-                                    </mask>
-                                </variation>
-                                <constraints>
-                                    <constraint id="15" firstAttribute="width" constant="360"/>
-                                </constraints>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="15"/>
-                                    </mask>
+                                <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
+                                    <rect key="frame" x="20" y="228" width="360" height="30"/>
                                 </variation>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="4" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
@@ -42,59 +31,55 @@
                                 <state key="normal" title="Stop">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
-                                <variation key="heightClass=regular-widthClass=compact">
-                                    <rect key="frame" x="20" y="236" width="360" height="30"/>
-                                    <mask key="constraints">
-                                        <include reference="24"/>
-                                    </mask>
-                                </variation>
-                                <constraints>
-                                    <constraint id="24" firstAttribute="width" constant="360"/>
-                                </constraints>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="24"/>
-                                    </mask>
+                                <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
+                                    <rect key="frame" x="20" y="283" width="360" height="30"/>
                                 </variation>
                             </button>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" lineBreakMode="tailTruncation" minimumFontSize="10" id="5" translatesAutoresizingMaskIntoConstraints="NO" text="Placeholder" textAlignment="center">
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" lineBreakMode="tailTruncation" minimumFontSize="10" id="5" translatesAutoresizingMaskIntoConstraints="NO" textAlignment="center" fixedFrame="YES">
                                 <rect key="frame" x="179" y="306" width="42" height="21"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
-                                <variation key="heightClass=regular-widthClass=compact" misplaced="YES">
-                                    <rect key="frame" x="20" y="306" width="360" height="80"/>
-                                    <mask key="constraints">
-                                        <include reference="8"/>
-                                        <include reference="9"/>
-                                    </mask>
-                                </variation>
-                                <constraints>
-                                    <constraint id="8" firstAttribute="width" constant="42"/>
-                                    <constraint id="9" firstAttribute="height" constant="21"/>
-                                </constraints>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="8"/>
-                                        <exclude reference="9"/>
-                                    </mask>
+                                <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
+                                    <rect key="frame" x="20" y="357" width="360" height="95"/>
                                 </variation>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="35" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
+                                <rect key="frame" x="177" y="66" width="46" height="30"/>
+                                <state key="normal" title="Index movies">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
+                                    <rect key="frame" x="0.0" y="66" width="400" height="30"/>
+                                </variation>
+                            </button>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="83" translatesAutoresizingMaskIntoConstraints="NO" placeholder="What movie are you watching?" textAlignment="center" fixedFrame="YES">
+                                <rect key="frame" x="178" y="157" width="97" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
+                                    <rect key="frame" x="20" y="120" width="360" height="30"/>
+                                </variation>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="93" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
+                                <rect key="frame" x="177" y="165" width="46" height="30"/>
+                                <state key="normal" title="Get fingerprints">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
+                                    <rect key="frame" x="20" y="171" width="360" height="30"/>
+                                </variation>
+                            </button>
                         </subviews>
                         <variation key="default">
                             <mask key="subviews">
                                 <exclude reference="3"/>
                                 <exclude reference="4"/>
                                 <exclude reference="5"/>
-                            </mask>
-                            <mask key="constraints">
-                                <exclude reference="6"/>
-                                <exclude reference="7"/>
-                                <exclude reference="18"/>
-                                <exclude reference="19"/>
-                                <exclude reference="22"/>
-                                <exclude reference="23"/>
+                                <exclude reference="35"/>
+                                <exclude reference="83"/>
+                                <exclude reference="93"/>
                             </mask>
                         </variation>
                         <variation key="heightClass=regular-widthClass=compact">
@@ -102,29 +87,19 @@
                                 <include reference="3"/>
                                 <include reference="4"/>
                                 <include reference="5"/>
-                            </mask>
-                            <mask key="constraints">
-                                <include reference="6"/>
-                                <include reference="7"/>
-                                <include reference="18"/>
-                                <include reference="19"/>
-                                <include reference="22"/>
-                                <include reference="23"/>
+                                <include reference="35"/>
+                                <include reference="83"/>
+                                <include reference="93"/>
                             </mask>
                         </variation>
-                        <constraints>
-                            <constraint id="6" firstItem="8bC-Xf-vdC" firstAttribute="trailing" secondItem="5" secondAttribute="trailing" constant="179"/>
-                            <constraint id="7" firstItem="5" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="306"/>
-                            <constraint id="18" firstItem="8bC-Xf-vdC" firstAttribute="trailing" secondItem="3" secondAttribute="trailing" constant="20"/>
-                            <constraint id="19" firstItem="3" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="176"/>
-                            <constraint id="22" firstItem="8bC-Xf-vdC" firstAttribute="trailing" secondItem="4" secondAttribute="trailing" constant="20"/>
-                            <constraint id="23" firstItem="4" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="236"/>
-                        </constraints>
                     </view>
                     <connections>
                         <outlet property="RecordButton" destination="3" id="name-outlet-3"/>
                         <outlet property="StopButton" destination="4" id="name-outlet-4"/>
                         <outlet property="ForegroundLabel" destination="5" id="name-outlet-5"/>
+                        <outlet property="IndexButton" destination="35" id="name-outlet-35"/>
+                        <outlet property="MovieTextField" destination="83" id="name-outlet-83"/>
+                        <outlet property="GetFingerprintsButton" destination="93" id="name-outlet-93"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
