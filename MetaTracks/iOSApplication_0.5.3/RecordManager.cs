@@ -13,6 +13,9 @@ namespace iOSApplication_0._5._3
 {
     public static class RecordManager
     {
+        public static string[] ReceivedHashes;
+        public static string[] ReceivedTimestamps;
+
         public static AVAudioRecorder Recorder;
         public static NSError Error;
         public static NSUrl Url;
@@ -102,6 +105,16 @@ namespace iOSApplication_0._5._3
         {
             var audioSession = AVAudioSession.SharedInstance();
             audioSession.SetCategory(AVAudioSessionCategory.PlayAndRecord);
+        }
+
+        public static void SetReceivedHashes(string[] receivedHashes)
+        {
+            ReceivedHashes = receivedHashes;
+        }
+
+        public static void SetReceivedTimestamps(string[] receivedTimestamps)
+        {
+            ReceivedTimestamps = receivedTimestamps;
         }
     }
 }
