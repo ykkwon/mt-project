@@ -84,17 +84,17 @@ namespace iOSApplication_0._5._3
 
                 var inputString2 = string.Format("http://webapi-1.bwjyuhcr5p.eu-west-1.elasticbeanstalk.com/Fingerprints/GetAllTimestampsSQL?inputTitle=" + "'{0}'",
                     textFieldInput);
-                client.BaseAddress = new Uri(inputString);
+                client.BaseAddress = new Uri(inputString2);
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                 // HTTP GET
                 HttpResponseMessage response2 = await client.GetAsync(client.BaseAddress);
-                var responseString2 = response.Content.ReadAsStringAsync().Result;
-                receivedTimestamps = responseString.Split(',');
+                var responseString2 = response2.Content.ReadAsStringAsync().Result;
+                receivedTimestamps = responseString2.Split(',');
                 Console.WriteLine("Got all timestamps.");
 
-                /*
+                
                 Console.WriteLine("RECEIVED HASHES LENGTH: " + receivedHashes.Length);
                 Console.WriteLine("RECEIVED TIMESTAPS LENGTH: " + receivedTimestamps.Length);
                 Console.WriteLine("ReceivedHashes[0]: " + receivedHashes[0]);
@@ -103,7 +103,7 @@ namespace iOSApplication_0._5._3
                 Console.WriteLine("ReceivedTimestamps[0]: " + receivedTimestamps[0]);
                 Console.WriteLine("ReceivedTimestamps[0]: " + receivedTimestamps[1]);
                 Console.WriteLine("ReceivedTimestamps[0]: " + receivedTimestamps[2]);
-                */
+                
                 ForegroundLabel.Text = "Fingerprints " + receivedHashes.Length + "---" +" Timestamps: " + receivedTimestamps.Length;
             };
 
@@ -111,7 +111,7 @@ namespace iOSApplication_0._5._3
             {
                 var client = new HttpClient();
                 var inputString =
-                string.Format("http://webapi-1.bwjyuhcr5p.eu-west-1.elasticbeanstalk.com/Fingerprints/GetAllTitlesSQL");
+                "http://webapi-1.bwjyuhcr5p.eu-west-1.elasticbeanstalk.com/Fingerprints/GetAllTitlesSQL";
                 client.BaseAddress = new Uri(inputString);
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
