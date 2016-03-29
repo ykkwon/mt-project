@@ -96,7 +96,9 @@ namespace AcousticFingerprintingLibrary_0._4._5.SoundFingerprint.AudioProxies
         /// </remarks>
         public static float[] ReadMonoFromFile(string filename, int samplerate, int milliseconds, int startmillisecond)
         {
-            int totalmilliseconds = milliseconds <= 0 ? Int32.MaxValue : milliseconds + startmillisecond;
+            int totalmilliseconds;
+            if (milliseconds <= 0) totalmilliseconds = Int32.MaxValue;
+            else totalmilliseconds = milliseconds + startmillisecond;
             float[] data = null;
             //create streams for re-sampling
             int stream = Bass.BASS_StreamCreateFile(filename, 0, 0, BASSFlag.BASS_STREAM_DECODE | BASSFlag.BASS_SAMPLE_MONO | BASSFlag.BASS_SAMPLE_FLOAT); //Decode the stream

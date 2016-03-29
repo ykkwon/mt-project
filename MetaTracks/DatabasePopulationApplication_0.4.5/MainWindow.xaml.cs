@@ -4,6 +4,8 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading;
 using System.Windows;
 using AcousticFingerprintingLibrary_0._4._5.SoundFingerprint;
@@ -72,7 +74,7 @@ namespace DatabasePopulationApplication_0._4._5
             })).Start();
         }
 
-        private void DrawFingerprints()
+        private async void DrawFingerprints()
         {
             SaveFileDialog sfd = new SaveFileDialog
             {
@@ -105,10 +107,41 @@ namespace DatabasePopulationApplication_0._4._5
                 Main.Status = "Visualization done. Image file saved to: " + Path.GetFullPath(sfd.FileName);
 
                 ///////////////////////////////////////////////////////////////////////////////////////////
-                string secondfile = "C:\\Users\\Kristian\\Desktop\\Bachelor Stuff\\Songlist\\Tale 011.m4a";
-                var fingerprints2 = manager.CreateFingerprints(proxy, secondfile, stride);
-                var test = manager.GetFingerHashes(stride, fingerprints);
-                var test2 = manager.GetFingerHashes(stride, fingerprints2);
+                string adress = "http://webapi-1.bwjyuhcr5p.eu-west-1.elasticbeanstalk.com/Fingerprints/GetAllFingerprintsSQL?inputTitle='FC'";
+                var client = new HttpClient();
+                client.BaseAddress = new Uri(adress);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                // HTTP GET
+                HttpResponseMessage response = await client.GetAsync(client.BaseAddress);
+                var responseString = response.Content.ReadAsStringAsync().Result;
+                var receivedHashes = responseString.Split(',');
+                Console.WriteLine("Got all hashes.");
+
+                /*
+
+                var inputString2 = string.Format("http://webapi-1.bwjyuhcr5p.eu-west-1.elasticbeanstalk.com/Fingerprints/GetAllTimestampsSQL?inputTitle=FC");
+                client.BaseAddress = new Uri(inputString2);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                // HTTP GET
+                HttpResponseMessage response2 = await client.GetAsync(client.BaseAddress);
+                var responseString2 = response2.Content.ReadAsStringAsync().Result;
+                var receivedTimestamps = responseString2.Split(',');
+                */
+                Console.WriteLine("Got all timestamps.");
+                string[] receivedtime = new string[receivedHashes.Length];
+                // DUPLICATE CODE:
+                var movie = GenerateHashedFingerprints(receivedHashes, receivedtime);
+
+
+                //////// 
+                //string secondfile = "C:\\Users\\Kristian\\Desktop\\Bachelor Stuff\\Songlist\\Tale 011.m4a";
+                //var fingerprints2 = manager.CreateFingerprints(proxy, secondfile, stride);
+                //var movie = manager.GetFingerHashes(stride, fingerprints);
+                var toCompare = manager.GetFingerHashes(stride, fingerprints);
 
                 // NOTE TO SELF: We should split up fingerprints of movie into different lists, 
                 // ie. fingerprints from timestamp 0 - 600 seconds (10min) goes in one list, next 600seconds go to next list.
@@ -116,7 +149,7 @@ namespace DatabasePopulationApplication_0._4._5
 
                 // sends in two lists of HashedFingerprints, returns timestamp if they match
                 // Assuming first list is a section of fingerprints from the movie (say a list of fingerprints for 10minutes)
-                var results = manager.GetTimeStamps(test, test2);
+                var results = manager.GetTimeStamps(movie, toCompare);
                 if (results != -1)
                 {
                     // do something with timestamp
@@ -128,7 +161,44 @@ namespace DatabasePopulationApplication_0._4._5
                 var breakpointchecker = 0;
             }
         }
+        public HashedFingerprint[] GenerateHashedFingerprints(string[] receivedHashes, string[] receivedTimestamps)
+        {
+            List<long> hashBins = new List<long>();
+            List<double> timestamps = new List<double>();
 
+            List<HashedFingerprint> receivedFingerprints = new List<HashedFingerprint>();
+
+            for (int index = 0; index < receivedHashes.Length - 1; index++)
+            {
+                hashBins.Add(Convert.ToInt64(receivedHashes[index]));
+                timestamps.Add(Convert.ToDouble(receivedTimestamps[index]));
+            }
+            List<long[]> hashBinsList = new List<long[]>();
+            List<double> timestampList = new List<double>();
+            var indexer = 0;
+            for (int j = 0; j < timestamps.Count - 1; j++)
+            {
+                if (j % 20 == 0 && hashBins.Count > j + 20)
+                {
+                    long[] bins = new long[20];
+                    for (int i = 0; i < 20; i++)
+                    {
+                        bins[i] = hashBins[i + j];
+                    }
+                    hashBinsList.Add(bins);
+                    timestampList.Add(timestamps[j]);
+                    indexer += bins.Length;
+                }
+            }
+            for (int i = 0; i < hashBinsList.Count; i++)
+            {
+                var finger = new HashedFingerprint(hashBinsList[i], timestampList[i]);
+                receivedFingerprints.Add(finger);
+
+            }
+
+            return receivedFingerprints.ToArray();
+        }
 
         private string Selector(bool itemin)
         {

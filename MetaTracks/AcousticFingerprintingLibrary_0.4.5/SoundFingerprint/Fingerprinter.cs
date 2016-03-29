@@ -901,6 +901,34 @@ namespace AcousticFingerprintingLibrary_0._4._5.SoundFingerprint
             return result > 5; // if result greater than 5, return true, else false
         }
 
+        public int CompareFingerprintListsHighest(HashedFingerprint[] fingerprints, HashedFingerprint[] toCompare)
+        {
+            //
+            var commonCounter = 0;
+            var highestCommon = 0;
+            foreach (var fingerprint1 in fingerprints)
+            {
+                foreach (var fingerprint2 in toCompare)
+                {
+                    var CommonNumbers = from a in fingerprint1.HashBins.AsEnumerable<long>()
+                                        join b in fingerprint2.HashBins.AsEnumerable<long>() on a equals b
+                                        select a;
+
+                    if (highestCommon < CommonNumbers.Count()) highestCommon = CommonNumbers.Count();
+
+                    if (CommonNumbers.Count() >= 2)
+                    {
+                        matchedFingerprints.Add(fingerprint1);
+                        // potential match
+                        commonCounter++;
+                        break; // jumps out of loop and on to next fingerprint
+                    }
+                }
+            }
+            // If result is greater than 5% it is a potential match
+            return highestCommon; // if result greater than 5, return true, else false
+        }
+
         public double GetTimeStamps(HashedFingerprint[] fingerprints, HashedFingerprint[] toCompare)
         {
             if (CompareFingerprintLists(fingerprints, toCompare))

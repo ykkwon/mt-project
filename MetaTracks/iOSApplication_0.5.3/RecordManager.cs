@@ -31,9 +31,9 @@ namespace iOSApplication_0._5._3
             NSObject[] values =
             {
                 // Record in 5512 Hz, Linear PCM, Mono, 16 bit. 
-                NSNumber.FromFloat(5512.0f), // Sample rate
+                NSNumber.FromFloat(44100.0f),//5512.0f), // Sample rate
                 NSNumber.FromInt32((int) AudioToolbox.AudioFormatType.LinearPCM), // AVFormat
-                NSNumber.FromInt32(1), // Channels
+                NSNumber.FromInt32(2), // Channels
                 NSNumber.FromInt32(16), // PCM bit depth
                 NSNumber.FromBoolean(false), // IsBigEndianKey
                 NSNumber.FromBoolean(false) // IsFloatKey 
@@ -78,6 +78,8 @@ namespace iOSApplication_0._5._3
             }
         }
 
+
+        private static List<HashedFingerprint> storedFingerprints = new List<HashedFingerprint>(); 
         public static void ConsumeWaveFile(string filePath)
         {
             // Read all the mono values from the input file.
@@ -88,26 +90,24 @@ namespace iOSApplication_0._5._3
             var preliminaryFingerprints = manager.CreateFingerprints(monoArray, stride);
 
             var test = manager.GetFingerHashes(stride, preliminaryFingerprints);
-            foreach (var qq in test)
-            {
-                foreach (var tt in qq.HashBins)
-                {
-                    //Console.WriteLine(tt);
-                }
-            }
-
+            foreach(var hash in test)
+                storedFingerprints.Add(hash);
             
             var movie = GenerateHashedFingerprints(ReceivedHashes, ReceivedTimestamps);
-            var results = manager.GetTimeStamps(movie, test);
+            var results = manager.GetTimeStamps(movie, storedFingerprints.ToArray());
+            //var results = manager.CompareFingerprintListsHighest(movie, storedFingerprints.ToArray());
             if (results != -1)
             {
-                //
+                // If amatch is found, print timestamp
                 Console.WriteLine("Matched -- " + results);
+                //storedFingerprints.Clear();
             }
             else
             {
                 //
-                //Console.WriteLine("NO MATCH");
+                Console.WriteLine("NO MATCH -- " + storedFingerprints[0].HashBins[0]);
+                storedFingerprints.Clear();
+                
             }
             //
 
