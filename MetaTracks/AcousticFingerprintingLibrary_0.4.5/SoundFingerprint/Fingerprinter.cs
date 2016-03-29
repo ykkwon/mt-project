@@ -890,8 +890,6 @@ namespace AcousticFingerprintingLibrary_0._4._5.SoundFingerprint
                     if (CommonNumbers.Count() >= 2)
                     {
                         matchedFingerprints.Add(fingerprint1);
-
-
                         // potential match
                         commonCounter++;
                         break; // jumps out of loop and on to next fingerprint

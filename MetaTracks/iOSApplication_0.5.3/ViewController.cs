@@ -96,43 +96,12 @@ namespace iOSApplication_0._5._3
                 HttpResponseMessage response2 = await client.GetAsync(client.BaseAddress);
                 var responseString2 = response2.Content.ReadAsStringAsync().Result;
                 receivedTimestamps = responseString2.Split(',');
-
-                /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                List<long> hashBins = new List<long>();
-                List<double> timestamps = new List<double>();
-
-                List<HashedFingerprint> receivedFingerprints = new List<HashedFingerprint>();
-
-                for (int index = 0; index < receivedHashes.Length - 1; index++)
-                {
-                    hashBins.Add(Convert.ToInt64(receivedHashes[index]));
-                    timestamps.Add(Convert.ToDouble(receivedTimestamps[index]));
-                }
-                List<long[]> hashBinsList = new List<long[]>();
-                var indexer = 0;
-                foreach (var timestamp in timestamps)
-                {
-                    if (indexer + 20 <= hashBins.Count)
-                    {
-                        long[] bins = new long[20];
-                        for (int i = 0; i < 20; i++)
-                        {
-                            bins[i] = hashBins[i + indexer];
-                        }
-                        hashBinsList.Add(bins);
-                        indexer += bins.Length;
-                    }
-                }
-                for (int i = 0; i < hashBinsList.Count; i++)
-                {
-                    receivedFingerprints.Add(new HashedFingerprint(hashBinsList[i], timestamps[i]));
-                }
-                //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                
                 Console.WriteLine("Got all timestamps.");
 
                 RecordManager.SetReceivedHashes(receivedHashes);
                 RecordManager.SetReceivedTimestamps(receivedTimestamps);
-
+                var hahaha = RecordManager.GenerateHashedFingerprints(receivedHashes, receivedTimestamps);
                 ForegroundLabel.Text = "Fingerprints " + receivedHashes.Length + "---" +" Timestamps: " + receivedTimestamps.Length;
             };
 
