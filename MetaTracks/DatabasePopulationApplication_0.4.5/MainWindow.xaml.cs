@@ -200,10 +200,13 @@ namespace DatabasePopulationApplication_0._4._5
                     Main.Status = "Sending hashes to database. This might take a long time, depending on the movie length.";
                     foreach (var fingerprint in test)
                     {
-                        var currentHash = fingerprint.HashBins[1];
-                        fdbm.insertFingerprints(_entryName, fingerprint.Timestamp, fingerprint.SequenceNumber, currentHash);
+                        for (int i = 0; i < 19; i++)
+                        {
+                            var currentHash = fingerprint.HashBins[i];
+                            fdbm.insertFingerprints(_entryName, fingerprint.Timestamp, fingerprint.SequenceNumber, currentHash);
+                        }
                     }
-                    Console.WriteLine("Done");
+                    Main.Status = "Done.";
                 }
             })).Start();
         }
@@ -220,8 +223,7 @@ namespace DatabasePopulationApplication_0._4._5
                 });
             }
         }
-
-
+ 
 
         private void purgebutton_Click(object sender, RoutedEventArgs e)
         {
