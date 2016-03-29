@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
+using AcousticFingerprintingLibrary_0._4._5.SoundFingerprint;
 using UIKit;
 
 namespace iOSApplication_0._5._3
@@ -80,6 +82,8 @@ namespace iOSApplication_0._5._3
                 var responseString = response.Content.ReadAsStringAsync().Result;
                 receivedHashes = responseString.Split(',');
                 Console.WriteLine("Got all hashes.");
+                
+
                 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
                 var inputString2 = string.Format("http://webapi-1.bwjyuhcr5p.eu-west-1.elasticbeanstalk.com/Fingerprints/GetAllTimestampsSQL?inputTitle=" + "'{0}'",
@@ -92,6 +96,34 @@ namespace iOSApplication_0._5._3
                 HttpResponseMessage response2 = await client.GetAsync(client.BaseAddress);
                 var responseString2 = response2.Content.ReadAsStringAsync().Result;
                 receivedTimestamps = responseString2.Split(',');
+
+                //
+                var hashBins = new long[receivedHashes.Length];
+                var timestamps = new double[receivedTimestamps.Length];
+                List<HashedFingerprint> receivedFingerprints = new List<HashedFingerprint>();
+                var previousTimestamp = -1.0;
+                var previousIndex = 0;
+
+                for (int index = 0; index < receivedHashes.Length; index++)
+                {
+                    if (timestamps[index] != previousTimestamp)
+                    {
+                        previousIndex = index;
+                        if (index >= 20)
+                        {
+                            var bin = new long[20];
+                            for (int i = 0; i < 20; i++)
+                            {
+                                bin[i] = hashBins[previousIndex + i];
+                            }
+                            receivedFingerprints.Add(new HashedFingerprint(bin, timestamps[index]));
+                        }
+                    }
+                    hashBins[index] = Convert.ToInt64(receivedHashes[index]);
+                    timestamps[index] = Convert.ToDouble(receivedTimestamps[index]);
+                    previousTimestamp = timestamps[index];
+                }
+                //
                 Console.WriteLine("Got all timestamps.");
 
                 
