@@ -97,45 +97,42 @@ namespace iOSApplication_0._5._3
                 var responseString2 = response2.Content.ReadAsStringAsync().Result;
                 receivedTimestamps = responseString2.Split(',');
 
-                //
-                var hashBins = new long[receivedHashes.Length];
-                var timestamps = new double[receivedTimestamps.Length];
-                List<HashedFingerprint> receivedFingerprints = new List<HashedFingerprint>();
-                var previousTimestamp = -1.0;
-                var previousIndex = 0;
+                /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                List<long> hashBins = new List<long>();
+                List<double> timestamps = new List<double>();
 
-                for (int index = 0; index < receivedHashes.Length; index++)
+                List<HashedFingerprint> receivedFingerprints = new List<HashedFingerprint>();
+
+                for (int index = 0; index < receivedHashes.Length - 1; index++)
                 {
-                    if (timestamps[index] != previousTimestamp)
-                    {
-                        previousIndex = index;
-                        if (index >= 20)
-                        {
-                            var bin = new long[20];
-                            for (int i = 0; i < 20; i++)
-                            {
-                                bin[i] = hashBins[previousIndex + i];
-                            }
-                            receivedFingerprints.Add(new HashedFingerprint(bin, timestamps[index]));
-                        }
-                    }
-                    hashBins[index] = Convert.ToInt64(receivedHashes[index]);
-                    timestamps[index] = Convert.ToDouble(receivedTimestamps[index]);
-                    previousTimestamp = timestamps[index];
+                    hashBins.Add(Convert.ToInt64(receivedHashes[index]));
+                    timestamps.Add(Convert.ToDouble(receivedTimestamps[index]));
                 }
-                //
+                List<long[]> hashBinsList = new List<long[]>();
+                var indexer = 0;
+                foreach (var timestamp in timestamps)
+                {
+                    if (indexer + 20 <= hashBins.Count)
+                    {
+                        long[] bins = new long[20];
+                        for (int i = 0; i < 20; i++)
+                        {
+                            bins[i] = hashBins[i + indexer];
+                        }
+                        hashBinsList.Add(bins);
+                        indexer += bins.Length;
+                    }
+                }
+                for (int i = 0; i < hashBinsList.Count; i++)
+                {
+                    receivedFingerprints.Add(new HashedFingerprint(hashBinsList[i], timestamps[i]));
+                }
+                //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 Console.WriteLine("Got all timestamps.");
 
-                
-                Console.WriteLine("RECEIVED HASHES LENGTH: " + receivedHashes.Length);
-                Console.WriteLine("RECEIVED TIMESTAPS LENGTH: " + receivedTimestamps.Length);
-                Console.WriteLine("ReceivedHashes[0]: " + receivedHashes[0]);
-                Console.WriteLine("ReceivedHashes[1]: " + receivedHashes[1]);
-                Console.WriteLine("ReceivedHashes[2]: " + receivedHashes[2]);
-                Console.WriteLine("ReceivedTimestamps[0]: " + receivedTimestamps[0]);
-                Console.WriteLine("ReceivedTimestamps[0]: " + receivedTimestamps[1]);
-                Console.WriteLine("ReceivedTimestamps[0]: " + receivedTimestamps[2]);
-                
+                RecordManager.SetReceivedHashes(receivedHashes);
+                RecordManager.SetReceivedTimestamps(receivedTimestamps);
+
                 ForegroundLabel.Text = "Fingerprints " + receivedHashes.Length + "---" +" Timestamps: " + receivedTimestamps.Length;
             };
 
