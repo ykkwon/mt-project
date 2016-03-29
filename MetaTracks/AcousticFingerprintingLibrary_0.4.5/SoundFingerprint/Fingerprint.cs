@@ -22,6 +22,12 @@
             Timestamp = sequenceAt;
         }
 
+        public HashedFingerprint(long[] hashBins, double timeStamp)
+        {
+            HashBins = hashBins;
+            Timestamp = timeStamp;
+        }
+
         public byte[] SubFingerprint { get; set; }
 
         public long[] HashBins { get; set; }
