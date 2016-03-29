@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
@@ -52,8 +51,8 @@ namespace iOSApplication_0._5._3
                 {
                     Console.WriteLine("The recorder is already running.");
                 }
-                
             };
+
 
             // Event handler for simple "Stop" button click and release.
             StopButton.TouchUpInside += (sender, e) =>
@@ -94,16 +93,9 @@ namespace iOSApplication_0._5._3
                 receivedTimestamps = responseString2.Split(',');
                 Console.WriteLine("Got all timestamps.");
 
-                
-                Console.WriteLine("RECEIVED HASHES LENGTH: " + receivedHashes.Length);
-                Console.WriteLine("RECEIVED TIMESTAPS LENGTH: " + receivedTimestamps.Length);
-                Console.WriteLine("ReceivedHashes[0]: " + receivedHashes[0]);
-                Console.WriteLine("ReceivedHashes[1]: " + receivedHashes[1]);
-                Console.WriteLine("ReceivedHashes[2]: " + receivedHashes[2]);
-                Console.WriteLine("ReceivedTimestamps[0]: " + receivedTimestamps[0]);
-                Console.WriteLine("ReceivedTimestamps[0]: " + receivedTimestamps[1]);
-                Console.WriteLine("ReceivedTimestamps[0]: " + receivedTimestamps[2]);
-                
+                RecordManager.SetReceivedHashes(receivedHashes);
+                RecordManager.SetReceivedTimestamps(receivedTimestamps);
+
                 ForegroundLabel.Text = "Fingerprints " + receivedHashes.Length + "---" +" Timestamps: " + receivedTimestamps.Length;
             };
 
