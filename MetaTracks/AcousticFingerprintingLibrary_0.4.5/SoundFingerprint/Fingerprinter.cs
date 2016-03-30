@@ -916,7 +916,7 @@ namespace AcousticFingerprintingLibrary_0._4._5.SoundFingerprint
 
                     if (highestCommon < CommonNumbers.Count()) highestCommon = CommonNumbers.Count();
 
-                    if (CommonNumbers.Count() >= 2)
+                    if (CommonNumbers.Count() >= 3)
                     {
                         matchedFingerprints.Add(fingerprint1);
                         // potential match

@@ -334,7 +334,7 @@ namespace DatabasePopulationApplication_0._4._5
                 string[] receivedtime = new string[receivedHashes.Length];
 
                 var fingerprints2 = manager.CreateFingerprints(proxy, secondFile, stride);
-                var movie = manager.GetFingerHashes(stride, fingerprints2);
+                var movie = GenerateHashedFingerprints(receivedHashes, receivedtime);
 
 
                 var toCompare = manager.GetFingerHashes(stride, fingerprints2);
