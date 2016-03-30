@@ -5,7 +5,7 @@
 	<key>CFBundleDisplayName</key>
 	<string>iOSApplication_0._5._3</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.companyname.iOSApplication_0._5._3</string>
+	<string>com.companyname.iOSApplication053</string>
 	<key>CFBundleShortVersionString</key>
 	<string>1.0</string>
 	<key>CFBundleVersion</key>
@@ -13,7 +13,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>MinimumOSVersion</key>
-	<string>9.3</string>
+	<string>9.2</string>
 	<key>UIDeviceFamily</key>
 	<array>
 		<integer>1</integer>

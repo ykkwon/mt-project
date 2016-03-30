@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
-using AcousticFingerprintingLibrary_0._4._5.SoundFingerprint;
 using UIKit;
 
 namespace iOSApplication_0._5._3
@@ -23,8 +20,8 @@ namespace iOSApplication_0._5._3
             // Directory<long[], double> fingerprints;
 
             string[] availableMovies = new string[100];
-            string[] receivedHashes = null;
-            string[] receivedTimestamps = null;
+            string[] receivedHashes;
+            string[] receivedTimestamps;
 
             MovieTextField.EnablesReturnKeyAutomatically = true;
             MovieTextField.ReturnKeyType = UIReturnKeyType.Send;
@@ -35,8 +32,9 @@ namespace iOSApplication_0._5._3
             // Event handler for simple "Record" button click and release.
             RecordButton.TouchUpInside += (sender, e) =>
             {
-                recordThread.Start();
 
+                ForegroundLabel.Text = "Recording . .";
+                recordThread.Start();
                 
                 try {
                     if (recordThread.ThreadState == ThreadState.Running) {
@@ -44,10 +42,9 @@ namespace iOSApplication_0._5._3
                     }
                     else
                     {
+
                         RecordManager.InitializeComponents();
                         recordThread.Start();
-                        ForegroundLabel.Text = "Recording . .";
-                        
                     }
                 }
                 catch(ThreadStateException)
@@ -83,10 +80,6 @@ namespace iOSApplication_0._5._3
                 receivedHashes = responseString.Split(',');
 
 
-                
-
-                /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
                 var inputString2 = string.Format("http://webapi-1.bwjyuhcr5p.eu-west-1.elasticbeanstalk.com/Fingerprints/GetAllTimestampsSQL?inputTitle=" + "'{0}'",
                     textFieldInput);
                 client.BaseAddress = new Uri(inputString2);
@@ -97,13 +90,14 @@ namespace iOSApplication_0._5._3
                 HttpResponseMessage response2 = await client.GetAsync(client.BaseAddress);
                 var responseString2 = response2.Content.ReadAsStringAsync().Result;
                 receivedTimestamps = responseString2.Split(',');
-                
-                Console.WriteLine("Got all timestamps.");
+
+                ForegroundLabel.Text = "Got all timestamps from database.";
+
 
                 RecordManager.SetReceivedHashes(receivedHashes);
                 RecordManager.SetReceivedTimestamps(receivedTimestamps);
                 var hahaha = RecordManager.GenerateHashedFingerprints(receivedHashes, receivedTimestamps);
-                ForegroundLabel.Text = "Fingerprints " + receivedHashes.Length + "---" +" Timestamps: " + receivedTimestamps.Length;
+                ForegroundLabel.Text = "Found " + receivedHashes.Length + " fingerprints for " + textFieldInput;
             };
 
             IndexButton.TouchUpInside += async (sender, e) =>
@@ -119,7 +113,7 @@ namespace iOSApplication_0._5._3
                 HttpResponseMessage response = await client.GetAsync(client.BaseAddress);
                 var responseString = response.Content.ReadAsStringAsync().Result;
                 availableMovies = responseString.Split(',');
-                Console.WriteLine("Indexing done. Found " + availableMovies.Length + " movies.");
+                ForegroundLabel.Text = "Indexing done. Found " + availableMovies.Length + " movies.";
             };
 
 
