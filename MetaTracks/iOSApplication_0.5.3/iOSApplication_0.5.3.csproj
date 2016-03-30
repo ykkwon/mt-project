@@ -135,7 +135,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AcousticFingerprintingLibrary_0.4.5\AcousticFingerprintingLibrary_0.4.5.csproj">
-      <Project>{538E6060-29F1-4CCE-B9D5-EDB993183956}</Project>
+      <Project>{538e6060-29f1-4cce-b9d5-edb993183956}</Project>
       <Name>AcousticFingerprintingLibrary_0.4.5</Name>
       <IsAppExtension>false</IsAppExtension>
       <IsWatchApp>false</IsWatchApp>

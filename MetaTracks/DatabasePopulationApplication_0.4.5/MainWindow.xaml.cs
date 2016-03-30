@@ -90,14 +90,13 @@ namespace DatabasePopulationApplication_0._4._5
                 Fingerprinter manager = new Fingerprinter();
                 // Stridesize is length of fingerprint in bytes(68% sure)
                 int strideSize = 1102;
-                int samplesPerFingerprint = 128*64; // 128 = width of fingerprint, 64 = overlap
+                int samplesPerFingerprint = 128 * 64; // 128 = width of fingerprint, 64 = overlap
                 var stride = new IncrementalStaticStride(strideSize, samplesPerFingerprint);
 
 
                 //List<bool[]> fingerprints = manager.CreateFingerprints(proxy, Path.GetFullPath(filename), stride);
                 List<Fingerprint> fingerprints = manager.CreateFingerprints(proxy, Path.GetFullPath(filename), stride);
-                //Console.WriteLine("Preliminary: " + preliminaryFingerprints.Count + " ---- " + test[1].HashBins[1]);
-                /*
+
                 //manager.GetHashSimilarity(stride, stride, proxy, filename, filename);
                 int width = manager.FingerprintLength;
                 int height = manager.LogBins;
@@ -105,63 +104,6 @@ namespace DatabasePopulationApplication_0._4._5
                 image.Save(sfd.FileName, ImageFormat.Jpeg);
                 image.Dispose();
                 Main.Status = "Visualization done. Image file saved to: " + Path.GetFullPath(sfd.FileName);
-
-                ///////////////////////////////////////////////////////////////////////////////////////////
-                string adress = "http://webapi-1.bwjyuhcr5p.eu-west-1.elasticbeanstalk.com/Fingerprints/GetAllFingerprintsSQL?inputTitle='FC'";
-                var client = new HttpClient();
-                client.BaseAddress = new Uri(adress);
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                // HTTP GET
-                HttpResponseMessage response = await client.GetAsync(client.BaseAddress);
-                var responseString = response.Content.ReadAsStringAsync().Result;
-                var receivedHashes = responseString.Split(',');
-                Console.WriteLine("Got all hashes.");
-                */
-                /*
-
-                var inputString2 = string.Format("http://webapi-1.bwjyuhcr5p.eu-west-1.elasticbeanstalk.com/Fingerprints/GetAllTimestampsSQL?inputTitle=FC");
-                client.BaseAddress = new Uri(inputString2);
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                // HTTP GET
-                HttpResponseMessage response2 = await client.GetAsync(client.BaseAddress);
-                var responseString2 = response2.Content.ReadAsStringAsync().Result;
-                var receivedTimestamps = responseString2.Split(',');
-                
-                Console.WriteLine("Got all timestamps.");
-                string[] receivedtime = new string[receivedHashes.Length];
-                // DUPLICATE CODE:
-                var movie = GenerateHashedFingerprints(receivedHashes, receivedtime);
-                */
-
-                //////// 
-                string secondfile = "C:\\Users\\Kristian\\Dropbox\\Fight Club Trailer.mp4";
-                var fingerprints2 = manager.CreateFingerprints(proxy, secondfile, stride);
-                var movie = manager.GetFingerHashes(stride, fingerprints2);
-
-
-                var toCompare = manager.GetFingerHashes(stride, fingerprints);
-
-
-                // NOTE TO SELF: We should split up fingerprints of movie into different lists, 
-                // ie. fingerprints from timestamp 0 - 600 seconds (10min) goes in one list, next 600seconds go to next list.
-                // This is for faster comparing when we search later on.
-
-                // sends in two lists of HashedFingerprints, returns timestamp if they match
-                // Assuming first list is a section of fingerprints from the movie (say a list of fingerprints for 10minutes)
-                var results = manager.GetTimeStamps(movie, toCompare);
-                if (results != -1)
-                {
-                    // do something with timestamp
-                    int x = 0;
-                } else {
-                    // List of fingerprints were not a match
-                    int x = 0;
-                }
-                var breakpointchecker = 0;
             }
         }
         public HashedFingerprint[] GenerateHashedFingerprints(string[] receivedHashes, string[] receivedTimestamps)
@@ -236,11 +178,13 @@ namespace DatabasePopulationApplication_0._4._5
 
         private void drawWavelets()
         {
+
             SaveFileDialog sfd = new SaveFileDialog
             {
                 Filter = "(*.jpg)|*.jpg",
                 FileName = Path.GetFileNameWithoutExtension(filename) + "_wavelets" + ".jpg"
             };
+
             sfd.ShowDialog();
             string path = Path.GetFullPath(sfd.FileName);
             using (IAudio proxy = new BassProxy())
@@ -296,7 +240,7 @@ namespace DatabasePopulationApplication_0._4._5
                 });
             }
         }
- 
+
 
         private void purgebutton_Click(object sender, RoutedEventArgs e)
         {
@@ -348,6 +292,65 @@ namespace DatabasePopulationApplication_0._4._5
                 DrawFingerprints();
             })).Start();
         }
-    }
 
+        private async void compareButton_Click(object sender, RoutedEventArgs e)
+        {
+
+            using (IAudio proxy = new BassProxy())
+            {
+                string secondFile = null;
+                string titleInput = null;
+
+                OpenFileDialog ofd = new OpenFileDialog();
+                ofd.ShowDialog();
+                secondFile = ofd.FileName;
+                Main.Status = "Comparing chosen digital file with fingerprints from database.";
+                Fingerprinter manager = new Fingerprinter();
+                int strideSize = 1102;
+                int samplesPerFingerprint = 128 * 64; // 128 = width of fingerprint, 64 = overlap
+                var stride = new IncrementalStaticStride(strideSize, samplesPerFingerprint);
+
+                var nameDialog2 = new Popup_Title();
+                if (nameDialog2.ShowDialog() == true)
+                {
+                    titleInput = nameDialog2.ResponseText;
+                    
+                }
+
+                string address = string.Format("http://webapi-1.bwjyuhcr5p.eu-west-1.elasticbeanstalk.com/Fingerprints/GetAllFingerprintsSQL?inputTitle=" + "'{0}'",
+                    Uri.EscapeDataString(titleInput));
+                var client = new HttpClient();
+                client.BaseAddress = new Uri(address);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                // HTTP GET
+                HttpResponseMessage response = await client.GetAsync(client.BaseAddress);
+                var responseString = response.Content.ReadAsStringAsync().Result;
+                var receivedHashes = responseString.Split(',');
+                Console.WriteLine("Got all hashes.");
+                List<Fingerprint> fingerprints = manager.CreateFingerprints(proxy, Path.GetFullPath(secondFile), stride);
+
+                string[] receivedtime = new string[receivedHashes.Length];
+
+                var fingerprints2 = manager.CreateFingerprints(proxy, secondFile, stride);
+                var movie = manager.GetFingerHashes(stride, fingerprints2);
+
+
+                var toCompare = manager.GetFingerHashes(stride, fingerprints2);
+
+
+                // NOTE TO SELF: We should split up fingerprints of movie into different lists, 
+                // ie. fingerprints from timestamp 0 - 600 seconds (10min) goes in one list, next 600seconds go to next list.
+                // This is for faster comparing when we search later on.
+
+                // sends in two lists of HashedFingerprints, returns timestamp if they match
+                // Assuming first list is a section of fingerprints from the movie (say a list of fingerprints for 10minutes)
+                var results = manager.GetTimeStamps(movie, toCompare);
+                var totalMatch = manager.CompareFingerprintListsHighest(movie, toCompare);
+                Main.Status = "RESULT: " + totalMatch;
+                
+            }
+        }
+    }
 }
