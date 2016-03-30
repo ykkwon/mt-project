@@ -97,7 +97,7 @@ namespace DatabasePopulationApplication_0._4._5
                 //List<bool[]> fingerprints = manager.CreateFingerprints(proxy, Path.GetFullPath(filename), stride);
                 List<Fingerprint> fingerprints = manager.CreateFingerprints(proxy, Path.GetFullPath(filename), stride);
                 //Console.WriteLine("Preliminary: " + preliminaryFingerprints.Count + " ---- " + test[1].HashBins[1]);
-
+                /*
                 //manager.GetHashSimilarity(stride, stride, proxy, filename, filename);
                 int width = manager.FingerprintLength;
                 int height = manager.LogBins;
@@ -118,7 +118,7 @@ namespace DatabasePopulationApplication_0._4._5
                 var responseString = response.Content.ReadAsStringAsync().Result;
                 var receivedHashes = responseString.Split(',');
                 Console.WriteLine("Got all hashes.");
-
+                */
                 /*
 
                 var inputString2 = string.Format("http://webapi-1.bwjyuhcr5p.eu-west-1.elasticbeanstalk.com/Fingerprints/GetAllTimestampsSQL?inputTitle=FC");
@@ -130,18 +130,21 @@ namespace DatabasePopulationApplication_0._4._5
                 HttpResponseMessage response2 = await client.GetAsync(client.BaseAddress);
                 var responseString2 = response2.Content.ReadAsStringAsync().Result;
                 var receivedTimestamps = responseString2.Split(',');
-                */
+                
                 Console.WriteLine("Got all timestamps.");
                 string[] receivedtime = new string[receivedHashes.Length];
                 // DUPLICATE CODE:
                 var movie = GenerateHashedFingerprints(receivedHashes, receivedtime);
-
+                */
 
                 //////// 
-                //string secondfile = "C:\\Users\\Kristian\\Desktop\\Bachelor Stuff\\Songlist\\Tale 011.m4a";
-                //var fingerprints2 = manager.CreateFingerprints(proxy, secondfile, stride);
-                //var movie = manager.GetFingerHashes(stride, fingerprints);
+                string secondfile = "C:\\Users\\Kristian\\Dropbox\\Fight Club Trailer.mp4";
+                var fingerprints2 = manager.CreateFingerprints(proxy, secondfile, stride);
+                var movie = manager.GetFingerHashes(stride, fingerprints2);
+
+
                 var toCompare = manager.GetFingerHashes(stride, fingerprints);
+
 
                 // NOTE TO SELF: We should split up fingerprints of movie into different lists, 
                 // ie. fingerprints from timestamp 0 - 600 seconds (10min) goes in one list, next 600seconds go to next list.

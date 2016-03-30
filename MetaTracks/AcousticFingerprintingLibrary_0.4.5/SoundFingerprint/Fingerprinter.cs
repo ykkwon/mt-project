@@ -851,7 +851,7 @@ namespace AcousticFingerprintingLibrary_0._4._5.SoundFingerprint
             var lshBuckets = new List<long[]>();
             foreach (var fing in minhashdb)
             {
-                lshBuckets.Add(minHash.GroupMinHashToLSHBucketsByte(fing, 20, 5).Values.ToArray());
+                lshBuckets.Add(minHash.GroupMinHashToLSHBucketsByte(fing, 33, 3).Values.ToArray());
                 int wut = 0;
             }
 
@@ -887,7 +887,7 @@ namespace AcousticFingerprintingLibrary_0._4._5.SoundFingerprint
 
                     if (highestCommon < CommonNumbers.Count()) highestCommon = CommonNumbers.Count();
 
-                    if (CommonNumbers.Count() >= 2)
+                    if (CommonNumbers.Count() >= 3)
                     {
                         matchedFingerprints.Add(fingerprint1);
                         // potential match
