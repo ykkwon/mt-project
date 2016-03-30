@@ -901,7 +901,7 @@ namespace AcousticFingerprintingLibrary_0._4._5.SoundFingerprint
             return result > 5; // if result greater than 5, return true, else false
         }
 
-        public int CompareFingerprintListsHighest(HashedFingerprint[] fingerprints, HashedFingerprint[] toCompare)
+        public double CompareFingerprintListsHighest(HashedFingerprint[] fingerprints, HashedFingerprint[] toCompare)
         {
             //
             var commonCounter = 0;
@@ -926,7 +926,8 @@ namespace AcousticFingerprintingLibrary_0._4._5.SoundFingerprint
                 }
             }
             // If result is greater than 5% it is a potential match
-            return highestCommon; // if result greater than 5, return true, else false
+            var result = (double)(100 * commonCounter) / fingerprints.Length;
+            return result; // if result greater than 5, return true, else false
         }
 
         public double GetTimeStamps(HashedFingerprint[] fingerprints, HashedFingerprint[] toCompare)
