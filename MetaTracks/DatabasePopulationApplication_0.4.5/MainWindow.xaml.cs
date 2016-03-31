@@ -219,7 +219,7 @@ namespace DatabasePopulationApplication_0._4._5
                         Main.Status = "Sending hashes to database. This might take a long time, depending on the movie length.";
                         foreach (var fingerprint in test)
                         {
-                            for (int i = 0; i < 19; i++)
+                            for (int i = 0; i < fingerprint.HashBins.Length; i++)
                             {
                                 var currentHash = fingerprint.HashBins[i];
                                 fdbm.insertFingerprints(_entryName, fingerprint.Timestamp, fingerprint.SequenceNumber, currentHash);
