@@ -211,19 +211,27 @@ namespace DatabasePopulationApplication_0._4._5
                     int strideSize = 1102;
                     int samplesPerFingerprint = 128 * 64; // 128 = width of fingerprint, 64 = overlap
                     var stride = new IncrementalStaticStride(strideSize, samplesPerFingerprint);
-
-                    List<Fingerprint> fingerprints = manager.CreateFingerprints(proxy, Path.GetFullPath(filename), stride);
-                    var test = manager.GetFingerHashes(stride, fingerprints);
-                    Main.Status = "Sending hashes to database. This might take a long time, depending on the movie length.";
-                    foreach (var fingerprint in test)
+                    try
                     {
-                        for (int i = 0; i < 19; i++)
+                        List<Fingerprint> fingerprints = manager.CreateFingerprints(proxy, Path.GetFullPath(filename),
+                            stride);
+                        var test = manager.GetFingerHashes(stride, fingerprints);
+                        Main.Status = "Sending hashes to database. This might take a long time, depending on the movie length.";
+                        foreach (var fingerprint in test)
                         {
-                            var currentHash = fingerprint.HashBins[i];
-                            fdbm.insertFingerprints(_entryName, fingerprint.Timestamp, fingerprint.SequenceNumber, currentHash);
+                            for (int i = 0; i < 19; i++)
+                            {
+                                var currentHash = fingerprint.HashBins[i];
+                                fdbm.insertFingerprints(_entryName, fingerprint.Timestamp, fingerprint.SequenceNumber, currentHash);
+                            }
                         }
+                        Main.Status = "Done.";
                     }
-                    Main.Status = "Done.";
+                    catch(ArgumentNullException)
+                    {
+                        Main.Status = "You need to preprocess a file first.";
+                    }
+                    
                 }
             })).Start();
         }
@@ -296,26 +304,30 @@ namespace DatabasePopulationApplication_0._4._5
         private async void compareButton_Click(object sender, RoutedEventArgs e)
         {
 
-            using (IAudio proxy = new BassProxy())
+            string secondFile = null;
+            string titleInput = null;
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.ShowDialog();
+            secondFile = ofd.FileName;
+            var nameDialog2 = new Popup_Title();
+            if (nameDialog2.ShowDialog() == true)
             {
-                string secondFile = null;
-                string titleInput = null;
+                titleInput = nameDialog2.ResponseText;
 
-                OpenFileDialog ofd = new OpenFileDialog();
-                ofd.ShowDialog();
-                secondFile = ofd.FileName;
+            }
+
+            (new Thread(async () =>
+            {
+                using (IAudio proxy = new BassProxy())
+            {
+                
                 Main.Status = "Comparing chosen digital file with fingerprints from database.";
                 Fingerprinter manager = new Fingerprinter();
                 int strideSize = 1102;
                 int samplesPerFingerprint = 128 * 64; // 128 = width of fingerprint, 64 = overlap
                 var stride = new IncrementalStaticStride(strideSize, samplesPerFingerprint);
 
-                var nameDialog2 = new Popup_Title();
-                if (nameDialog2.ShowDialog() == true)
-                {
-                    titleInput = nameDialog2.ResponseText;
-                    
-                }
+                
 
                 string address = string.Format("http://webapi-1.bwjyuhcr5p.eu-west-1.elasticbeanstalk.com/Fingerprints/GetAllFingerprintsSQL?inputTitle=" + "'{0}'",
                     Uri.EscapeDataString(titleInput));
@@ -348,9 +360,9 @@ namespace DatabasePopulationApplication_0._4._5
                 // Assuming first list is a section of fingerprints from the movie (say a list of fingerprints for 10minutes)
                 var results = manager.GetTimeStamps(movie, toCompare);
                 var totalMatch = manager.CompareFingerprintListsHighest(movie, toCompare);
-                Main.Status = "RESULT: " + totalMatch;
-                
+                Main.Status = "Percentage of matched fingerprints: " + totalMatch;
             }
+            })).Start();
         }
     }
 }
