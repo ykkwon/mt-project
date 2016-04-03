@@ -13,7 +13,7 @@
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <subviews>
@@ -111,6 +111,7 @@
                                 <variation key="heightClass=regular-widthClass=regular" fixedFrame="YES">
                                     <rect key="frame" x="252" y="237" width="265" height="30"/>
                                 </variation>
+                                <connections/>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="105" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
                                 <rect key="frame" x="177" y="173" width="46" height="30"/>
@@ -138,16 +139,16 @@
                                     <rect key="frame" x="361" y="382" width="46" height="30"/>
                                 </variation>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="109" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
-                                <rect key="frame" x="60" y="323" width="46" height="30"/>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" lineBreakMode="tailTruncation" minimumFontSize="10" id="119" translatesAutoresizingMaskIntoConstraints="NO" textAlignment="center" numberOfLines="3">
+                                <rect key="frame" x="363" y="468" width="42" height="21"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
-                                <state key="normal" title="Stop">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
-                                    <rect key="frame" x="20" y="283" width="360" height="30"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                                <variation key="heightClass=regular-widthClass=regular" fixedFrame="YES">
+                                    <rect key="frame" x="252" y="468" width="265" height="103"/>
                                 </variation>
-                            </button>
+                            </label>
                         </subviews>
                         <variation key="default">
                             <mask key="subviews">
@@ -162,6 +163,7 @@
                                 <exclude reference="104"/>
                                 <exclude reference="105"/>
                                 <exclude reference="106"/>
+                                <exclude reference="119"/>
                             </mask>
                         </variation>
                         <variation key="heightClass=regular-widthClass=compact">
@@ -181,6 +183,7 @@
                                 <include reference="104"/>
                                 <include reference="105"/>
                                 <include reference="106"/>
+                                <include reference="119"/>
                             </mask>
                         </variation>
                     </view>
@@ -196,6 +199,7 @@
                         <outlet property="MovieTextField" destination="103" id="name-outlet-103"/>
                         <outlet property="GetFingerprintsButton" destination="104" id="name-outlet-104"/>
                         <outlet property="IndexButton" destination="99" id="name-outlet-99"/>
+                        <outlet property="ForegroundLabel" destination="119" id="name-outlet-119"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -204,6 +208,6 @@
         </scene>
     </scenes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
-        <simulatedScreenMetrics key="destination" type="retina47"/>
+        <simulatedScreenMetrics key="destination" type="iPad"/>
     </simulatedMetricsContainer>
 </document>

@@ -63,13 +63,13 @@ namespace iOSApplication_0._5._3
 
             GetFingerprintsButton.TouchUpInside += async (sender, e) =>
             {
-
-                var textFieldInput = MovieTextField.Text.ToString();
-                Console.WriteLine("User input: " + textFieldInput);
-                Console.WriteLine("Sending request to Web API: " + textFieldInput);
+                //Console.WriteLine("Got input: " + MovieTextField.Text.ToString());
+                //var textFieldInput = MovieTextField.Text.ToString();
+                //Console.WriteLine("User input: " + textFieldInput);
+                //Console.WriteLine("Sending request to Web API: " + textFieldInput);
                 var client = new HttpClient();
-                var inputString = string.Format("http://webapi-1.bwjyuhcr5p.eu-west-1.elasticbeanstalk.com/Fingerprints/GetAllFingerprintsSQL?inputTitle=" + "'{0}'",
-                    textFieldInput);
+                var inputString = @"http://webapi-1.bwjyuhcr5p.eu-west-1.elasticbeanstalk.com/Fingerprints/GetAllFingerprintsSQL?inputTitle='TH'";
+                
                 client.BaseAddress = new Uri(inputString);
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -80,8 +80,7 @@ namespace iOSApplication_0._5._3
                 receivedHashes = responseString.Split(',');
 
 
-                var inputString2 = string.Format("http://webapi-1.bwjyuhcr5p.eu-west-1.elasticbeanstalk.com/Fingerprints/GetAllTimestampsSQL?inputTitle=" + "'{0}'",
-                    textFieldInput);
+                var inputString2 = @"http://webapi-1.bwjyuhcr5p.eu-west-1.elasticbeanstalk.com/Fingerprints/GetAllTimestampsSQL?inputTitle='TH'";
                 client.BaseAddress = new Uri(inputString2);
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -91,20 +90,21 @@ namespace iOSApplication_0._5._3
                 var responseString2 = response2.Content.ReadAsStringAsync().Result;
                 receivedTimestamps = responseString2.Split(',');
 
-                ForegroundLabel.Text = "Got all timestamps from database.";
+                ForegroundLabel.Text = @"Got all timestamps from database.";
 
 
                 RecordManager.SetReceivedHashes(receivedHashes);
                 RecordManager.SetReceivedTimestamps(receivedTimestamps);
                 var hahaha = RecordManager.GenerateHashedFingerprints(receivedHashes, receivedTimestamps);
-                ForegroundLabel.Text = "Found " + receivedHashes.Length + " fingerprints for " + textFieldInput;
+                ForegroundLabel.Text = @"Got all fingerprints and timestamps.";
+                //ForegroundLabel.Text = "Found " + receivedHashes.Length + " fingerprints for " + "The Hobbit";
             };
 
             IndexButton.TouchUpInside += async (sender, e) =>
             {
                 var client = new HttpClient();
                 var inputString =
-                "http://webapi-1.bwjyuhcr5p.eu-west-1.elasticbeanstalk.com/Fingerprints/GetAllTitlesSQL";
+                @"http://webapi-1.bwjyuhcr5p.eu-west-1.elasticbeanstalk.com/Fingerprints/GetAllTitlesSQL";
                 client.BaseAddress = new Uri(inputString);
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -115,8 +115,6 @@ namespace iOSApplication_0._5._3
                 availableMovies = responseString.Split(',');
                 ForegroundLabel.Text = "Indexing done. Found " + availableMovies.Length + " movies.";
             };
-
-
         }
     }
 }
