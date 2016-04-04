@@ -63,41 +63,34 @@ namespace iOSApplication_0._5._3
 
             GetFingerprintsButton.TouchUpInside += async (sender, e) =>
             {
-                //Console.WriteLine("Got input: " + MovieTextField.Text.ToString());
-                //var textFieldInput = MovieTextField.Text.ToString();
-                //Console.WriteLine("User input: " + textFieldInput);
-                //Console.WriteLine("Sending request to Web API: " + textFieldInput);
-                var client = new HttpClient();
-                var inputString = @"http://webapi-1.bwjyuhcr5p.eu-west-1.elasticbeanstalk.com/Fingerprints/GetAllFingerprintsSQL?inputTitle='TH'";
                 
-                client.BaseAddress = new Uri(inputString);
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    var client = new HttpClient();
+                    var inputString = @"http://webapi-1.bwjyuhcr5p.eu-west-1.elasticbeanstalk.com/Fingerprints/GetAllFingerprintsSQL?inputTitle='TH'";
 
-                // HTTP GET
-                HttpResponseMessage response = await client.GetAsync(client.BaseAddress);
-                var responseString = response.Content.ReadAsStringAsync().Result;
-                receivedHashes = responseString.Split(',');
-
-
-                var inputString2 = @"http://webapi-1.bwjyuhcr5p.eu-west-1.elasticbeanstalk.com/Fingerprints/GetAllTimestampsSQL?inputTitle='TH'";
-                client.BaseAddress = new Uri(inputString2);
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                // HTTP GET
-                HttpResponseMessage response2 = await client.GetAsync(client.BaseAddress);
-                var responseString2 = response2.Content.ReadAsStringAsync().Result;
-                receivedTimestamps = responseString2.Split(',');
-
-                ForegroundLabel.Text = @"Got all timestamps from database.";
+                    client.BaseAddress = new Uri(inputString);
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+               
+                    // HTTP GET
+                    HttpResponseMessage response = await client.GetAsync(client.BaseAddress);
+                    var responseString = response.Content.ReadAsStringAsync().Result;
+                    receivedHashes = responseString.Split(',');
 
 
-                RecordManager.SetReceivedHashes(receivedHashes);
-                RecordManager.SetReceivedTimestamps(receivedTimestamps);
-                var hahaha = RecordManager.GenerateHashedFingerprints(receivedHashes, receivedTimestamps);
-                ForegroundLabel.Text = @"Got all fingerprints and timestamps.";
-                //ForegroundLabel.Text = "Found " + receivedHashes.Length + " fingerprints for " + "The Hobbit";
+                    var inputString2 = @"http://webapi-1.bwjyuhcr5p.eu-west-1.elasticbeanstalk.com/Fingerprints/GetAllTimestampsSQL?inputTitle='TH'";
+                    client.BaseAddress = new Uri(inputString2);
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                    // HTTP GET
+                    HttpResponseMessage response2 = await client.GetAsync(client.BaseAddress);
+                    var responseString2 = response2.Content.ReadAsStringAsync().Result;
+                    receivedTimestamps = responseString2.Split(',');
+
+                    RecordManager.SetReceivedHashes(receivedHashes);
+                    RecordManager.SetReceivedTimestamps(receivedTimestamps);
+                    var hahaha = RecordManager.GenerateHashedFingerprints(receivedHashes, receivedTimestamps);
+                    ForegroundLabel.Text = "Found " + receivedHashes.Length + " fingerprints for " + "The Hobbit";           
             };
 
             IndexButton.TouchUpInside += async (sender, e) =>

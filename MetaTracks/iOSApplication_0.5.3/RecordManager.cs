@@ -16,6 +16,7 @@ namespace iOSApplication_0._5._3
         public static string[] ReceivedHashes;
         public static string[] ReceivedTimestamps;
 
+        public static AVAudioPlayer Player;
         public static AVAudioRecorder Recorder;
         public static NSError Error;
         public static NSUrl Url;
@@ -52,30 +53,27 @@ namespace iOSApplication_0._5._3
 
             Settings = NSDictionary.FromObjectsAndKeys(values, keys);
             Recorder = AVAudioRecorder.Create(Url, new AudioSettings(Settings), out Error);
-            Recorder.PrepareToRecord();
-            // Return the file path of the written file as string.
-            return audioFilePath;
-        }
-
-        public static void DoRecord()
-        {
-            // Write data to the wave file.
             Recorder.Record();
-            // "Sleep", or keep running, for 3000 milliseconds before stopping and resuming.
             Thread.Sleep(3000);
             Recorder.Stop();
+            Console.WriteLine(audioFilePath);
+            Player = AVAudioPlayer.FromUrl(NSUrl.FromFilename(Path.Combine(Path.GetTempPath(), fileName)));
+
+
+            // Return the file path of the written file as string.
+            Console.WriteLine("Returning: " + audioFilePath);
+            return audioFilePath;
         }
 
         public static void RunRecord()
         {
-            {
-                for (var i = 0; i < int.MaxValue; i++)
-                {
-                    var preprocessedFile = PrepareRecording(i);
-                    DoRecord();
-                    ConsumeWaveFile(preprocessedFile);
-                }
-            }
+           // {
+             //   for (var i = 0; i < int.MaxValue; i++)
+            //    {
+                    var preprocessedFile = PrepareRecording(1);
+            //        ConsumeWaveFile(preprocessedFile);
+            //    }
+           // }
         }
 
 
@@ -123,12 +121,18 @@ namespace iOSApplication_0._5._3
             List<double> timestamps = new List<double>();
 
             List<HashedFingerprint> receivedFingerprints = new List<HashedFingerprint>();
-
-            for (int index = 0; index < receivedHashes.Length - 1; index++)
-            {
-                hashBins.Add(Convert.ToInt64(receivedHashes[index]));
-                timestamps.Add(Convert.ToDouble(receivedTimestamps[index]));
+            try {
+                for (int index = 0; index < receivedHashes.Length - 1; index++)
+                {
+                    hashBins.Add(Convert.ToInt64(receivedHashes[index]));
+                    timestamps.Add(Convert.ToDouble(receivedTimestamps[index]));
+                }
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+            
             List<long[]> hashBinsList = new List<long[]>();
             List<double> timestampList = new List<double>();
             var indexer = 0;
@@ -158,8 +162,9 @@ namespace iOSApplication_0._5._3
 
         public static void StopRecord()
         {
-            Recorder.Stop();
-            Recorder.Dispose();
+            Player.Play();
+            //Recorder.Stop();
+            //Recorder.Dispose();
         }
 
         public static void InitializeComponents()

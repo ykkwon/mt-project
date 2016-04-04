@@ -70,7 +70,7 @@
     <MtouchFloat32>False</MtouchFloat32>
     <DeviceSpecificBuild>False</DeviceSpecificBuild>
     <MtouchI18n />
-    <MtouchExtraArgs>-nosymbolstrip -nostrip -gcc_flags "-framework Accelerate -framework AudioToolbox -L${ProjectDir} -iOSApplication -force_load ${ProjectDir}/libbass.a -force_load ${ProjectDir}/libbassmix.a"</MtouchExtraArgs>
+    <MtouchExtraArgs>-nosymbolstrip -nostrip -gcc_flags "-framework AVFoundation -framework Accelerate -framework AudioToolbox -L${ProjectDir} -iOSApplication -force_load ${ProjectDir}/libbass.a -force_load ${ProjectDir}/libbassmix.a"</MtouchExtraArgs>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
     <DebugType>none</DebugType>
