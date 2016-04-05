@@ -927,7 +927,7 @@ namespace AcousticFingerprintingLibrary_0._4._5.SoundFingerprint
             }
             // If result is greater than 5% it is a potential match
             var result = (double)(100 * commonCounter) / fingerprints.Length;
-            return result; // if result greater than 5, return true, else false
+            return matchedFingerprints.Count; // if result greater than 5, return true, else false
         }
 
         public double GetTimeStamps(HashedFingerprint[] fingerprints, HashedFingerprint[] toCompare)

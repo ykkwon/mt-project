@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Globalization;
 using System.IO;
+using System.Security.Policy;
 using System.Text;
 using System.Threading;
 using AcousticFingerprintingLibrary_0._4._5.SoundFingerprint;
@@ -8,6 +11,7 @@ using AcousticFingerprintingLibrary_0._4._5.SoundFingerprint.AudioProxies;
 using AcousticFingerprintingLibrary_0._4._5.SoundFingerprint.AudioProxies.Strides;
 using AVFoundation;
 using Foundation;
+using UIKit;
 
 namespace iOSApplication_0._5._3
 {
@@ -16,69 +20,91 @@ namespace iOSApplication_0._5._3
         public static string[] ReceivedHashes;
         public static string[] ReceivedTimestamps;
 
-        public static AVAudioPlayer Player;
+
         public static AVAudioRecorder Recorder;
-        public static NSError Error;
-        public static NSUrl Url;
-        public static NSDictionary Settings;
-
-        public static string PrepareRecording(int iterator)
+        public static AVPlayer Player;
+        public static Stopwatch Stopwatch;
+        public static NSUrl AudioFilePath;
+        public static NSObject Observer;
+        public static string tempRecording;
+        public static NSUrl CreateOutputUrl()
         {
-            string fileName = string.Format("Split{0}.wav", iterator);
-            string audioFilePath = Path.Combine(Path.GetTempPath(), fileName);
-            Url = NSUrl.FromFilename(audioFilePath);
-
-            //set up the NSObject Array of values that will be combined with the keys to make the NSDictionary.
-            NSObject[] values =
-            {
-                // Record in 5512 Hz, Linear PCM, Mono, 16 bit. 
-                NSNumber.FromFloat(44100.0f),//5512.0f), // Sample rate
-                NSNumber.FromInt32((int) AudioToolbox.AudioFormatType.LinearPCM), // AVFormat
-                NSNumber.FromInt32(2), // Channels
-                NSNumber.FromInt32(16), // PCM bit depth
-                NSNumber.FromBoolean(false), // IsBigEndianKey
-                NSNumber.FromBoolean(false) // IsFloatKey 
-            };
-
-            //Set up the NSObject Array of keys that will be combined with the values to make the NSDictionary
-            NSObject[] keys =
-            {
-                AVAudioSettings.AVSampleRateKey,
-                AVAudioSettings.AVFormatIDKey,
-                AVAudioSettings.AVNumberOfChannelsKey,
-                AVAudioSettings.AVLinearPCMBitDepthKey,
-                AVAudioSettings.AVLinearPCMIsBigEndianKey,
-                AVAudioSettings.AVLinearPCMIsFloatKey
-            };
-
-            Settings = NSDictionary.FromObjectsAndKeys(values, keys);
-            Recorder = AVAudioRecorder.Create(Url, new AudioSettings(Settings), out Error);
-            Recorder.Record();
-            Thread.Sleep(3000);
-            Recorder.Stop();
-            Console.WriteLine(audioFilePath);
-            Player = AVAudioPlayer.FromUrl(NSUrl.FromFilename(Path.Combine(Path.GetTempPath(), fileName)));
-
-
-            // Return the file path of the written file as string.
-            Console.WriteLine("Returning: " + audioFilePath);
-            return audioFilePath;
+            string fileName = string.Format("Myfile{0}.wav", DateTime.Now.ToString("yyyyMMddHHmmss"));
+            tempRecording = Path.Combine(Path.GetTempPath(), fileName);
+        
+            return NSUrl.FromFilename(tempRecording);
         }
 
+        public static void OnDidPlayToEndTime(object sender, NSNotificationEventArgs e)
+        {
+            Player.Dispose();
+            Player = null;
+        }
+
+        
+
+        public static bool PrepareAudioRecording()
+        {
+            AudioFilePath = CreateOutputUrl();
+
+            var audioSettings = new AudioSettings
+            {
+                SampleRate = 5512,
+                Format = AudioToolbox.AudioFormatType.LinearPCM,
+                NumberChannels = 1,
+                AudioQuality = AVAudioQuality.High
+            };
+
+            //Set recorder parameters
+            NSError error;
+            Recorder = AVAudioRecorder.Create(AudioFilePath, audioSettings, out error);
+            if (error != null)
+            {
+                Console.WriteLine(error);
+                return false;
+            }
+
+            //Set Recorder to Prepare To Record
+            if (!Recorder.PrepareToRecord())
+            {
+                Recorder.Dispose();
+                Recorder = null;
+                return false;
+            }
+
+            Recorder.FinishedRecording += OnFinishedRecording;
+
+            return true;
+        }
+
+        public static void OnFinishedRecording(object sender, AVStatusEventArgs e)
+        {
+            Recorder.Dispose();
+            Recorder = null;
+            Console.WriteLine("Done Recording (status: {0})", e.Status);
+        }
+
+        public static void Dispose(bool disposing)
+        {
+            Observer.Dispose();
+        }
+
+
+        /*
         public static void RunRecord()
         {
-           // {
-             //   for (var i = 0; i < int.MaxValue; i++)
-            //    {
-                    var preprocessedFile = PrepareRecording(1);
-            //        ConsumeWaveFile(preprocessedFile);
-            //    }
-           // }
-        }
+           {
+                for (var i = 0; i < int.MaxValue; i++)
+                {
+                    var preprocessedFile = PrepareRecording(i);
+                    ConsumeWaveFile(preprocessedFile);
+                }
+           }
+        }*/
 
 
         private static List<HashedFingerprint> storedFingerprints = new List<HashedFingerprint>(); 
-        public static void ConsumeWaveFile(string filePath)
+        public static double ConsumeWaveFile(string filePath)
         {
             // Read all the mono values from the input file.
             var monoArray = BassProxy.ReadMonoFromFile(filePath, 5512, 0, 0);
@@ -92,26 +118,21 @@ namespace iOSApplication_0._5._3
                 storedFingerprints.Add(hash);
             
             var movie = GenerateHashedFingerprints(ReceivedHashes, ReceivedTimestamps);
-            var results = manager.GetTimeStamps(movie, storedFingerprints.ToArray());
-            //var results = manager.CompareFingerprintListsHighest(movie, storedFingerprints.ToArray());
+            //var results = manager.GetTimeStamps(movie, storedFingerprints.ToArray());
+            int x = 0;
+            var results = manager.CompareFingerprintListsHighest(movie, storedFingerprints.ToArray());
             if (results != -1)
             {
                 // If amatch is found, print timestamp
                 Console.WriteLine("Matched -- " + results);
                 //storedFingerprints.Clear();
+                return results;
             }
             else
             {
-                //
                 Console.WriteLine("NO MATCH -- " + storedFingerprints[0].HashBins[0]);
                 storedFingerprints.Clear();
-                
-            }
-            //
-
-            foreach (var fingerprint in test)
-            {
-                //Console.WriteLine("HASH BIN: " + fingerprint.HashBins[0] + " --- TIMESTAMP:" + fingerprint.Timestamp);
+                return results;
             }
         }
 
@@ -162,9 +183,8 @@ namespace iOSApplication_0._5._3
 
         public static void StopRecord()
         {
-            Player.Play();
-            //Recorder.Stop();
-            //Recorder.Dispose();
+            Recorder.Stop();
+            Recorder.Dispose();
         }
 
         public static void InitializeComponents()

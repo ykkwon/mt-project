@@ -32,7 +32,15 @@ namespace iOSApplication_0._5._3
 
 		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
+		UIButton PlayButton { get; set; }
+
+		[Outlet]
+		[GeneratedCode ("iOS Designer", "1.0")]
 		UIButton RecordButton { get; set; }
+
+		[Outlet]
+		[GeneratedCode ("iOS Designer", "1.0")]
+		UIButton SendButton { get; set; }
 
 		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
@@ -56,9 +64,17 @@ namespace iOSApplication_0._5._3
 				MovieTextField.Dispose ();
 				MovieTextField = null;
 			}
+			if (PlayButton != null) {
+				PlayButton.Dispose ();
+				PlayButton = null;
+			}
 			if (RecordButton != null) {
 				RecordButton.Dispose ();
 				RecordButton = null;
+			}
+			if (SendButton != null) {
+				SendButton.Dispose ();
+				SendButton = null;
 			}
 			if (StopButton != null) {
 				StopButton.Dispose ();
