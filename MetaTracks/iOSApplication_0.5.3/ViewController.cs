@@ -92,7 +92,7 @@ namespace iOSApplication_0._5._3
                 try
                 {
                     var test = RecordManager.ConsumeWaveFile(RecordManager.tempRecording);
-                    Console.WriteLine(test);
+                    Console.WriteLine("ConsumeWaveFile done. Returned: " + test);
                 }
                 catch (Exception ex)
                 {
@@ -139,7 +139,7 @@ namespace iOSApplication_0._5._3
                 // HTTP GET
                 HttpResponseMessage response = await client.GetAsync(client.BaseAddress);
                 var responseString = response.Content.ReadAsStringAsync().Result;
-                receivedHashes = responseString.Split(',');
+                receivedHashes = responseString.Split(';');
 
 
                 var inputString2 = @"http://webapi-1.bwjyuhcr5p.eu-west-1.elasticbeanstalk.com/Fingerprints/GetAllTimestampsSQL?inputTitle='TH'";
@@ -150,11 +150,10 @@ namespace iOSApplication_0._5._3
                 // HTTP GET
                 HttpResponseMessage response2 = await client.GetAsync(client.BaseAddress);
                 var responseString2 = response2.Content.ReadAsStringAsync().Result;
-                receivedTimestamps = responseString2.Split(',');
+                receivedTimestamps = responseString2.Split(';');
 
                 RecordManager.SetReceivedHashes(receivedHashes);
                 RecordManager.SetReceivedTimestamps(receivedTimestamps);
-                RecordManager.GenerateHashedFingerprints(receivedHashes, receivedTimestamps);
                 ForegroundLabel.Text = "Found " + receivedHashes.Length + " fingerprints for " + "The Hobbit";
             };
 
@@ -170,7 +169,7 @@ namespace iOSApplication_0._5._3
                 // HTTP GET
                 HttpResponseMessage response = await client.GetAsync(client.BaseAddress);
                 var responseString = response.Content.ReadAsStringAsync().Result;
-                availableMovies = responseString.Split(',');
+                availableMovies = responseString.Split('|');
                 ForegroundLabel.Text = "Indexing done. Found " + availableMovies.Length + " movies.";
             };
         }

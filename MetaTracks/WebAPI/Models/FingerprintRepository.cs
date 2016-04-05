@@ -84,7 +84,7 @@ namespace WebAPI.Models
 
             while (rdr.Read())
             {
-                hashes.Append(rdr.GetString("hash") + ",");
+                hashes.Append(rdr.GetString("hash") + ";");
             }
             Console.WriteLine(hashes.ToString());
             return hashes.ToString();
@@ -105,7 +105,7 @@ namespace WebAPI.Models
 
             while (rdr.Read())
             {
-                hashes.Append(rdr.GetString("timestamp") + ",");
+                hashes.Append(rdr.GetString("timestamp") + ";");
             }
             Console.WriteLine(hashes.ToString());
             return hashes.ToString();
