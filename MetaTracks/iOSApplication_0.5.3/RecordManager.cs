@@ -116,8 +116,8 @@ namespace iOSApplication_0._5._3
             var test = manager.GetFingerHashes(stride, preliminaryFingerprints);
             foreach(var hash in test)
                 storedFingerprints.Add(hash);
-            
-            var movie = GenerateHashedFingerprints(ReceivedHashes, ReceivedTimestamps);
+            //                                             // String[], String[], int lshSize
+            var movie = manager.GenerateHashedFingerprints(ReceivedHashes, ReceivedTimestamps, test[0].HashBins.Length);
             //var results = manager.GetTimeStamps(movie, storedFingerprints.ToArray());
             int x = 0;
             var results = manager.CompareFingerprintListsHighest(movie, storedFingerprints.ToArray());
@@ -134,51 +134,6 @@ namespace iOSApplication_0._5._3
                 storedFingerprints.Clear();
                 return results;
             }
-        }
-
-        public static HashedFingerprint[] GenerateHashedFingerprints(string[] receivedHashes, string[] receivedTimestamps)
-        {
-            List<long> hashBins = new List<long>();
-            List<double> timestamps = new List<double>();
-
-            List<HashedFingerprint> receivedFingerprints = new List<HashedFingerprint>();
-            try {
-                for (int index = 0; index < receivedHashes.Length - 1; index++)
-                {
-                    hashBins.Add(Convert.ToInt64(receivedHashes[index]));
-                    timestamps.Add(Convert.ToDouble(receivedTimestamps[index]));
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-            }
-            
-            List<long[]> hashBinsList = new List<long[]>();
-            List<double> timestampList = new List<double>();
-            var indexer = 0;
-            for (int j = 0; j < timestamps.Count - 1; j++)
-            {
-                if (j % 20 == 0 && hashBins.Count > j + 20)
-                {
-                    long[] bins = new long[20];
-                    for (int i = 0; i < 20; i++)
-                    {
-                        bins[i] = hashBins[i + j];
-                    }
-                    hashBinsList.Add(bins);
-                    timestampList.Add(timestamps[j]);
-                    indexer += bins.Length;
-                }
-            }
-            for (int i = 0; i < hashBinsList.Count; i++)
-            {
-                var finger = new HashedFingerprint(hashBinsList[i], timestampList[i]);
-                receivedFingerprints.Add(finger);
-
-            }
-
-            return receivedFingerprints.ToArray();
         }
 
         public static void StopRecord()

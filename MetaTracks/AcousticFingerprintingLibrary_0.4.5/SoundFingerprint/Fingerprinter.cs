@@ -868,6 +868,51 @@ namespace AcousticFingerprintingLibrary_0._4._5.SoundFingerprint
             return hashedFinger;
         }
 
+        public HashedFingerprint[] GenerateHashedFingerprints(string[] receivedHashes, string[] receivedTimestamps, int tableSize)
+        {
+            List<long> hashBins = new List<long>();
+            List<double> timestamps = new List<double>();
+
+            List<HashedFingerprint> receivedFingerprints = new List<HashedFingerprint>();
+            try
+            {
+                for (int index = 0; index < receivedHashes.Length - 1; index++)
+                {
+                    hashBins.Add(Convert.ToInt64(receivedHashes[index]));
+                    timestamps.Add(Convert.ToDouble(receivedTimestamps[index]));
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.HResult);
+            }
+
+            List<long[]> hashBinsList = new List<long[]>();
+            List<double> timestampList = new List<double>();
+            var indexer = 0;
+            for (int j = 0; j < timestamps.Count - 1; j++)
+            {
+                if (j % tableSize == 0 && hashBins.Count > j + tableSize)
+                {
+                    long[] bins = new long[tableSize];
+                    for (int i = 0; i < tableSize; i++)
+                    {
+                        bins[i] = hashBins[i + j];
+                    }
+                    hashBinsList.Add(bins);
+                    timestampList.Add(timestamps[j]);
+                    indexer += bins.Length;
+                }
+            }
+            for (int i = 0; i < hashBinsList.Count; i++)
+            {
+                var finger = new HashedFingerprint(hashBinsList[i], timestampList[i]);
+                receivedFingerprints.Add(finger);
+            }
+
+            return receivedFingerprints.ToArray();
+        }
+
         #endregion
 
         #region Recognition
