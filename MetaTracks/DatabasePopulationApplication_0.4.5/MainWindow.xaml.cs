@@ -106,44 +106,7 @@ namespace DatabasePopulationApplication_0._4._5
                 Main.Status = "Visualization done. Image file saved to: " + Path.GetFullPath(sfd.FileName);
             }
         }
-        public HashedFingerprint[] GenerateHashedFingerprints(string[] receivedHashes, string[] receivedTimestamps)
-        {
-            List<long> hashBins = new List<long>();
-            List<double> timestamps = new List<double>();
-
-            List<HashedFingerprint> receivedFingerprints = new List<HashedFingerprint>();
-
-            for (int index = 0; index < receivedHashes.Length - 1; index++)
-            {
-                hashBins.Add(Convert.ToInt64(receivedHashes[index]));
-                timestamps.Add(Convert.ToDouble(receivedTimestamps[index]));
-            }
-            List<long[]> hashBinsList = new List<long[]>();
-            List<double> timestampList = new List<double>();
-            var indexer = 0;
-            for (int j = 0; j < timestamps.Count - 1; j++)
-            {
-                if (j % 20 == 0 && hashBins.Count > j + 20)
-                {
-                    long[] bins = new long[20];
-                    for (int i = 0; i < 20; i++)
-                    {
-                        bins[i] = hashBins[i + j];
-                    }
-                    hashBinsList.Add(bins);
-                    timestampList.Add(timestamps[j]);
-                    indexer += bins.Length;
-                }
-            }
-            for (int i = 0; i < hashBinsList.Count; i++)
-            {
-                var finger = new HashedFingerprint(hashBinsList[i], timestampList[i]);
-                receivedFingerprints.Add(finger);
-
-            }
-
-            return receivedFingerprints.ToArray();
-        }
+        
 
         private string Selector(bool itemin)
         {
@@ -341,23 +304,22 @@ namespace DatabasePopulationApplication_0._4._5
                 var responseString = response.Content.ReadAsStringAsync().Result;
                 var receivedHashes = responseString.Split(',');
                 Console.WriteLine("Got all hashes.");
-                List<Fingerprint> fingerprints = manager.CreateFingerprints(proxy, Path.GetFullPath(secondFile), stride);
 
                 string[] receivedtime = new string[receivedHashes.Length];
 
                 var fingerprints2 = manager.CreateFingerprints(proxy, secondFile, stride);
-                var movie = GenerateHashedFingerprints(receivedHashes, receivedtime);
 
 
                 var toCompare = manager.GetFingerHashes(stride, fingerprints2);
+                var movie = manager.GenerateHashedFingerprints(receivedHashes, receivedtime, toCompare[0].HashBins.Length);
 
 
-                // NOTE TO SELF: We should split up fingerprints of movie into different lists, 
-                // ie. fingerprints from timestamp 0 - 600 seconds (10min) goes in one list, next 600seconds go to next list.
-                // This is for faster comparing when we search later on.
+                    // NOTE TO SELF: We should split up fingerprints of movie into different lists, 
+                    // ie. fingerprints from timestamp 0 - 600 seconds (10min) goes in one list, next 600seconds go to next list.
+                    // This is for faster comparing when we search later on.
 
-                // sends in two lists of HashedFingerprints, returns timestamp if they match
-                // Assuming first list is a section of fingerprints from the movie (say a list of fingerprints for 10minutes)
+                    // sends in two lists of HashedFingerprints, returns timestamp if they match
+                    // Assuming first list is a section of fingerprints from the movie (say a list of fingerprints for 10minutes)
                 var results = manager.GetTimeStamps(movie, toCompare);
                 var totalMatch = manager.CompareFingerprintListsHighest(movie, toCompare);
                 Main.Status = "Percentage of matched fingerprints: " + totalMatch;
