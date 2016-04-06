@@ -46,6 +46,10 @@ namespace iOSApplication_0._5._3
 		[GeneratedCode ("iOS Designer", "1.0")]
 		UIButton StopButton { get; set; }
 
+		[Outlet]
+		[GeneratedCode ("iOS Designer", "1.0")]
+		UIButton TestButton { get; set; }
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (ForegroundLabel != null) {
@@ -79,6 +83,10 @@ namespace iOSApplication_0._5._3
 			if (StopButton != null) {
 				StopButton.Dispose ();
 				StopButton = null;
+			}
+			if (TestButton != null) {
+				TestButton.Dispose ();
+				TestButton = null;
 			}
 		}
 	}

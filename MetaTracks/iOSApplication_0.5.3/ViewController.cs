@@ -23,6 +23,7 @@ namespace iOSApplication_0._5._3
             string[] availableMovies;
             string[] receivedHashes;
             string[] receivedTimestamps;
+            double counter = 0;
 
             MovieTextField.EnablesReturnKeyAutomatically = true;
             MovieTextField.ReturnKeyType = UIReturnKeyType.Send;
@@ -61,7 +62,7 @@ namespace iOSApplication_0._5._3
                     return;
                 }
 
-                if (!RecordManager.PrepareAudioRecording())
+                if (!RecordManager.PrepareAudioRecording(1))
                 {
                     ForegroundLabel.Text = "Error preparing.";
                     return;
@@ -90,6 +91,35 @@ namespace iOSApplication_0._5._3
             };
 
 
+            TestButton.TouchUpInside += (sender, e) =>
+            {
+                while (true) {
+                    for (int i = 0; i < 10; i++)
+                    {
+                        var session = AVAudioSession.SharedInstance();
+                        NSError error;
+                        session.SetCategory(AVAudioSession.CategoryRecord, out error);
+                        RecordManager.CreateOutputUrl(i);
+                        RecordManager.PrepareAudioRecording(i);
+                        RecordManager.Recorder.Record();
+                        Thread.Sleep(3000);
+                        RecordManager.Recorder.Stop();
+                        var kasdf = RecordManager.AudioFilePath;
+                        Console.WriteLine("TEST: " + kasdf);
+                        RecordManager.ConsumeWaveFile(kasdf.RelativePath);
+                        Console.WriteLine(RecordManager.AudioFilePath + " consume done");
+                        var test = RecordManager.ConsumeWaveFile(RecordManager.TempRecording);
+                        counter += test;
+                        Console.WriteLine("COUNTER: " + counter);
+                        ForegroundLabel.Text = "Matched " + counter + " fingerprints in total.";
+                    }
+                }
+                // Record i 3-4s
+                // Skriv til ei fil
+                // Send til Preprocess wav
+                // Få et resultat
+                // Repeatx  
+            };
 
             // Event handler for simple "Stop" button click and release.
             StopButton.TouchUpInside += (sender, e) =>

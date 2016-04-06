@@ -22,9 +22,10 @@ namespace iOSApplication_0._5._3
         public static NSUrl AudioFilePath;
         public static NSObject Observer;
         public static string TempRecording;
-        public static NSUrl CreateOutputUrl()
+
+        public static NSUrl CreateOutputUrl(int nameIterator)
         {
-            string fileName = string.Format("Myfile{0}.wav", DateTime.Now.ToString("yyyyMMddHHmmss"));
+            string fileName = string.Format("Myfile{0}.wav", nameIterator);
             TempRecording = Path.Combine(Path.GetTempPath(), fileName);
         
             return NSUrl.FromFilename(TempRecording);
@@ -38,9 +39,9 @@ namespace iOSApplication_0._5._3
 
         
 
-        public static bool PrepareAudioRecording()
+        public static bool PrepareAudioRecording(int nameIterator)
         {
-            AudioFilePath = CreateOutputUrl();
+            AudioFilePath = CreateOutputUrl(nameIterator);
 
             var audioSettings = new AudioSettings
             {
@@ -106,7 +107,7 @@ namespace iOSApplication_0._5._3
             {
                 // If amatch is found, print timestamp
                 Console.WriteLine("Matched -- " + results);
-                //storedFingerprints.Clear();
+                storedFingerprints.Clear();
                 return results;
             }
             Console.WriteLine("NO MATCH -- " + storedFingerprints[0].HashBins[0]);
