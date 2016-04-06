@@ -201,7 +201,12 @@ namespace DatabasePopulationApplication_0._4._5
                         }
                         File.WriteAllText(Path.GetTempPath() + _entryName + "fingerprints.csv", csv.ToString());
                         Console.WriteLine(Path.GetTempPath());
+                       
+                        
+
                         Main.Status = "Printed CSV file to: " + Path.GetTempPath() + _entryName + "fingerprints.csv";
+                        // kjøre metoden ^^
+                        fdbm.writeToMySQL(Path.GetTempPath() + _entryName + "fingerprints.csv");
                         Main.Status = "Done.";
                     }
                     catch(ArgumentNullException)
