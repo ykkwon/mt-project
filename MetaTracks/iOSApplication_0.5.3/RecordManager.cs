@@ -84,21 +84,8 @@ namespace iOSApplication_0._5._3
             Observer.Dispose();
         }
 
+        private static List<HashedFingerprint> storedFingerprints = new List<HashedFingerprint>();
 
-        /*
-        public static void RunRecord()
-        {
-           {
-                for (var i = 0; i < int.MaxValue; i++)
-                {
-                    var preprocessedFile = PrepareRecording(i);
-                    ConsumeWaveFile(preprocessedFile);
-                }
-           }
-        }*/
-
-
-        private static List<HashedFingerprint> storedFingerprints = new List<HashedFingerprint>(); 
         public static double ConsumeWaveFile(string filePath)
         {
             // Read all the mono values from the input file.

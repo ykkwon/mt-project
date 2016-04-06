@@ -46,10 +46,6 @@ namespace iOSApplication_0._5._3
 		[GeneratedCode ("iOS Designer", "1.0")]
 		UIButton StopButton { get; set; }
 
-		[Action ("GetFingerprintsButton_TouchUpInside:")]
-		[GeneratedCode ("iOS Designer", "1.0")]
-		partial void GetFingerprintsButton_TouchUpInside (UIButton sender);
-
 		void ReleaseDesignerOutlets ()
 		{
 			if (ForegroundLabel != null) {

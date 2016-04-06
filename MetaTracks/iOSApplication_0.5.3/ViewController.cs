@@ -5,6 +5,7 @@ using System.Net.Http.Headers;
 using AVFoundation;
 using Foundation;
 using UIKit;
+using System.Threading;
 
 namespace iOSApplication_0._5._3
 {
@@ -17,7 +18,6 @@ namespace iOSApplication_0._5._3
 
         public override void ViewDidLoad()
         {
-
             base.ViewDidLoad();
             RecordManager.Observer = AVPlayerItem.Notifications.ObserveDidPlayToEndTime(RecordManager.OnDidPlayToEndTime);
             string[] availableMovies;
@@ -26,6 +26,18 @@ namespace iOSApplication_0._5._3
 
             MovieTextField.EnablesReturnKeyAutomatically = true;
             MovieTextField.ReturnKeyType = UIReturnKeyType.Send;
+
+            GetFingerprintsButton.Enabled = false;
+            RecordButton.Enabled = false;
+            StopButton.Enabled = false;
+            PlayButton.Enabled = false;
+            SendButton.Enabled = false;
+            GetFingerprintsButton.SetTitleColor(UIColor.FromRGBA(0, 0, 0, 150), UIControlState.Disabled);
+            RecordButton.SetTitleColor(UIColor.FromRGBA(0, 0, 0, 150), UIControlState.Disabled);
+            StopButton.SetTitleColor(UIColor.FromRGBA(0, 0, 0, 150), UIControlState.Disabled);
+            PlayButton.SetTitleColor(UIColor.FromRGBA(0, 0, 0, 150), UIControlState.Disabled);
+            SendButton.SetTitleColor(UIColor.FromRGBA(0, 0, 0, 150), UIControlState.Disabled);
+
 
             // Event handler for simple "Record" button click and release.
             RecordButton.TouchUpInside += (sender, e) =>
@@ -51,23 +63,30 @@ namespace iOSApplication_0._5._3
 
                 if (!RecordManager.PrepareAudioRecording())
                 {
-                    ForegroundLabel.Text = "Error preparing";
+                    ForegroundLabel.Text = "Error preparing.";
                     return;
                 }
 
                 if (!RecordManager.Recorder.Record())
                 {
-                    ForegroundLabel.Text = "Error preparing";
+                    ForegroundLabel.Text = "Error preparing.";
                     return;
                 }
 
                 RecordManager.Stopwatch = new Stopwatch();
                 RecordManager.Stopwatch.Start();
 
-                ForegroundLabel.Text = "Recording";
+                ForegroundLabel.Text = "Recording . . .";
                 RecordButton.Enabled = false;
                 StopButton.Enabled = true;
                 PlayButton.Enabled = false;
+                IndexButton.Enabled = false;
+                GetFingerprintsButton.Enabled = false;
+
+                RecordButton.SetTitleColor(UIColor.FromRGBA(0, 0, 0, 150), UIControlState.Disabled);
+                PlayButton.SetTitleColor(UIColor.FromRGBA(0, 0, 0, 150), UIControlState.Disabled);
+                IndexButton.SetTitleColor(UIColor.FromRGBA(0, 0, 0, 150), UIControlState.Disabled);
+                GetFingerprintsButton.SetTitleColor(UIColor.FromRGBA(0, 0, 0, 150), UIControlState.Disabled);
             };
 
 
@@ -75,6 +94,7 @@ namespace iOSApplication_0._5._3
             // Event handler for simple "Stop" button click and release.
             StopButton.TouchUpInside += (sender, e) =>
             {
+                ForegroundLabel.Text = "Stopping the recorder.";
                 RecordManager.Recorder.Stop();
                 RecordManager.Stopwatch.Stop();
 
@@ -83,14 +103,18 @@ namespace iOSApplication_0._5._3
                 RecordButton.Enabled = true;
                 StopButton.Enabled = false;
                 PlayButton.Enabled = true;
+                SendButton.Enabled = true;
+               
             };
 
             SendButton.TouchUpInside += (sender, e) =>
             {
+                
                 try
                 {
+                    ForegroundLabel.Text = "Sending recording to database . . .";
                     var test = RecordManager.ConsumeWaveFile(RecordManager.TempRecording);
-                    Console.WriteLine("ConsumeWaveFile done. Returned: " + test);
+                    ForegroundLabel.Text = "Matched " + test + " fingerprints in total.";
                 }
                 catch (Exception ex)
                 {
@@ -106,6 +130,7 @@ namespace iOSApplication_0._5._3
                 try
                 {
                     Console.WriteLine("Playing Back Recording {0}", RecordManager.AudioFilePath);
+                    ForegroundLabel.Text = "Playing back recording until end.";
 
                     // The following line prevents the audio from stopping
                     // when the device autolocks. will also make sure that it plays, even
@@ -117,6 +142,8 @@ namespace iOSApplication_0._5._3
 
                     RecordManager.Player = new AVPlayer(RecordManager.AudioFilePath);
                     RecordManager.Player.Play();
+                    ForegroundLabel.Text = "Finished playback.";
+
                 }
                 catch (Exception ex)
                 {
@@ -154,7 +181,8 @@ namespace iOSApplication_0._5._3
 
                 RecordManager.SetReceivedHashes(receivedHashes);
                 RecordManager.SetReceivedTimestamps(receivedTimestamps);
-                ForegroundLabel.Text = "Found " + receivedHashes.Length + " fingerprints for " + "The Hobbit";
+                ForegroundLabel.Text = "Found " + receivedHashes.Length + " fingerprints for " + "The Hobbit.";
+                RecordButton.Enabled = true;
             };
 
             // Event handler for simple "Index movies" button click and release.
@@ -171,7 +199,8 @@ namespace iOSApplication_0._5._3
                 HttpResponseMessage response = await client.GetAsync(client.BaseAddress);
                 var responseString = response.Content.ReadAsStringAsync().Result;
                 availableMovies = responseString.Split(';');
-                ForegroundLabel.Text = "Indexing done. Found " + availableMovies.Length + " movies.";
+                ForegroundLabel.Text = "Indexing done. Found " + availableMovies.Length + " movies in the database.";
+                GetFingerprintsButton.Enabled = true;
             };
         }
     }
