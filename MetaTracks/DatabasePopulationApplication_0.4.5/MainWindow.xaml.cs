@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Threading;
 using System.Windows;
 using AcousticFingerprintingLibrary_0._4._5.SoundFingerprint;
@@ -180,14 +181,26 @@ namespace DatabasePopulationApplication_0._4._5
                             stride);
                         var test = manager.GetFingerHashes(stride, fingerprints);
                         Main.Status = "Sending hashes to database. This might take a long time, depending on the movie length.";
+
+                        var csv = new StringBuilder();
                         foreach (var fingerprint in test)
                         {
                             for (int i = 0; i < fingerprint.HashBins.Length; i++)
                             {
                                 var currentHash = fingerprint.HashBins[i];
-                                fdbm.insertFingerprints(_entryName, fingerprint.Timestamp, fingerprint.SequenceNumber, currentHash);
+                                //
+                                var first = _entryName;
+                                var second = fingerprint.Timestamp;
+                                var third = fingerprint.SequenceNumber;
+                                var fourth = currentHash;
+                                var newLine = string.Format("{0},{1},{2},{3}", first, second, third, fourth);
+                                csv.AppendLine(newLine);
+
+                                //fdbm.insertFingerprints(_entryName, fingerprint.Timestamp, fingerprint.SequenceNumber, currentHash);
                             }
                         }
+                        File.WriteAllText(Path.GetTempPath() + _entryName + "fingerprints.csv", csv.ToString());
+                        Console.WriteLine(Path.GetTempPath());
                         Main.Status = "Done.";
                     }
                     catch(ArgumentNullException)
