@@ -52,7 +52,7 @@ namespace WebAPI.Models
         public string GetAllTitlesSQL()
         {
             string cs = @"server=webapidb.c7tab1cc7vsa.eu-west-1.rds.amazonaws.com;userid=glennskjong;
-                password=Security1;database=system_users";
+                password=Bachelor2016!;database=system_users";
             MySqlConnection conn = null;
             conn = new MySqlConnection(cs);
             conn.Open();
@@ -72,7 +72,7 @@ namespace WebAPI.Models
         public string GetAllFingerprintsSQL(string title)
         {
             string cs = @"server=webapidb.c7tab1cc7vsa.eu-west-1.rds.amazonaws.com;userid=glennskjong;
-                password=Security1;database=system_users";
+                password=Bachelor2016!;database=system_users";
             MySqlConnection conn = null;
             conn = new MySqlConnection(cs);
             conn.Open();
@@ -93,7 +93,7 @@ namespace WebAPI.Models
         public string GetAllTimestampsSQL(string title)
         {
             string cs = @"server=webapidb.c7tab1cc7vsa.eu-west-1.rds.amazonaws.com;userid=glennskjong;
-                password=Security1;database=system_users";
+                password=Bachelor2016!;database=system_users";
             MySqlConnection conn = null;
             conn = new MySqlConnection(cs);
             conn.Open();

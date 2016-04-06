@@ -169,7 +169,7 @@ namespace iOSApplication_0._5._3
                 // HTTP GET
                 HttpResponseMessage response = await client.GetAsync(client.BaseAddress);
                 var responseString = response.Content.ReadAsStringAsync().Result;
-                availableMovies = responseString.Split('|');
+                availableMovies = responseString.Split(';');
                 ForegroundLabel.Text = "Indexing done. Found " + availableMovies.Length + " movies.";
             };
         }
