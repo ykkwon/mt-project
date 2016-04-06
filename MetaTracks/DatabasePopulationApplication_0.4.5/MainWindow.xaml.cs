@@ -193,7 +193,7 @@ namespace DatabasePopulationApplication_0._4._5
                                 var second = fingerprint.Timestamp;
                                 var third = fingerprint.SequenceNumber;
                                 var fourth = currentHash;
-                                var newLine = string.Format("{0},{1},{2},{3}", first, second, third, fourth);
+                                var newLine = string.Format("{0};{1};{2};{3}", first, second, third, fourth);
                                 csv.AppendLine(newLine);
 
                                 //fdbm.insertFingerprints(_entryName, fingerprint.Timestamp, fingerprint.SequenceNumber, currentHash);
