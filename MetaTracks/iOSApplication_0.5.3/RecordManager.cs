@@ -1,17 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Globalization;
 using System.IO;
-using System.Security.Policy;
-using System.Text;
-using System.Threading;
 using AcousticFingerprintingLibrary_0._4._5.SoundFingerprint;
 using AcousticFingerprintingLibrary_0._4._5.SoundFingerprint.AudioProxies;
 using AcousticFingerprintingLibrary_0._4._5.SoundFingerprint.AudioProxies.Strides;
 using AVFoundation;
 using Foundation;
-using UIKit;
 
 namespace iOSApplication_0._5._3
 {
@@ -26,13 +21,13 @@ namespace iOSApplication_0._5._3
         public static Stopwatch Stopwatch;
         public static NSUrl AudioFilePath;
         public static NSObject Observer;
-        public static string tempRecording;
+        public static string TempRecording;
         public static NSUrl CreateOutputUrl()
         {
             string fileName = string.Format("Myfile{0}.wav", DateTime.Now.ToString("yyyyMMddHHmmss"));
-            tempRecording = Path.Combine(Path.GetTempPath(), fileName);
+            TempRecording = Path.Combine(Path.GetTempPath(), fileName);
         
-            return NSUrl.FromFilename(tempRecording);
+            return NSUrl.FromFilename(TempRecording);
         }
 
         public static void OnDidPlayToEndTime(object sender, NSNotificationEventArgs e)
@@ -119,7 +114,6 @@ namespace iOSApplication_0._5._3
             //                                             // String[], String[], int lshSize
             var movie = manager.GenerateHashedFingerprints(ReceivedHashes, ReceivedTimestamps, test[0].HashBins.Length);
             //var results = manager.GetTimeStamps(movie, storedFingerprints.ToArray());
-            int x = 0;
             var results = manager.CompareFingerprintListsHighest(movie, storedFingerprints.ToArray());
             if (results != -1)
             {
@@ -128,12 +122,9 @@ namespace iOSApplication_0._5._3
                 //storedFingerprints.Clear();
                 return results;
             }
-            else
-            {
-                Console.WriteLine("NO MATCH -- " + storedFingerprints[0].HashBins[0]);
-                storedFingerprints.Clear();
-                return results;
-            }
+            Console.WriteLine("NO MATCH -- " + storedFingerprints[0].HashBins[0]);
+            storedFingerprints.Clear();
+            return results;
         }
 
         public static void StopRecord()

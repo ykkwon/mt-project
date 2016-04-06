@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Threading;
 using AVFoundation;
 using Foundation;
 using UIKit;
@@ -20,9 +19,8 @@ namespace iOSApplication_0._5._3
         {
 
             base.ViewDidLoad();
-            // Directory<long[], double> fingerprints;
             RecordManager.Observer = AVPlayerItem.Notifications.ObserveDidPlayToEndTime(RecordManager.OnDidPlayToEndTime);
-            string[] availableMovies = new string[100];
+            string[] availableMovies;
             string[] receivedHashes;
             string[] receivedTimestamps;
 
@@ -36,7 +34,7 @@ namespace iOSApplication_0._5._3
 
                 var session = AVAudioSession.SharedInstance();
 
-                NSError error = null;
+                NSError error;
                 session.SetCategory(AVAudioSession.CategoryRecord, out error);
                 if (error != null)
                 {
@@ -80,7 +78,7 @@ namespace iOSApplication_0._5._3
                 RecordManager.Recorder.Stop();
                 RecordManager.Stopwatch.Stop();
 
-                ForegroundLabel.Text = string.Format("{0:hh\\:mm\\:ss}", RecordManager.Stopwatch.Elapsed);
+                ForegroundLabel.Text = $"{RecordManager.Stopwatch.Elapsed:hh\\:mm\\:ss}";
                 ForegroundLabel.Text = "";
                 RecordButton.Enabled = true;
                 StopButton.Enabled = false;
@@ -91,7 +89,7 @@ namespace iOSApplication_0._5._3
             {
                 try
                 {
-                    var test = RecordManager.ConsumeWaveFile(RecordManager.tempRecording);
+                    var test = RecordManager.ConsumeWaveFile(RecordManager.TempRecording);
                     Console.WriteLine("ConsumeWaveFile done. Returned: " + test);
                 }
                 catch (Exception ex)
@@ -102,6 +100,7 @@ namespace iOSApplication_0._5._3
                 }
             };
 
+            // Event handler for simple "Play" button click and release.
             PlayButton.TouchUpInside += (sender, e) =>
             {
                 try
@@ -111,7 +110,7 @@ namespace iOSApplication_0._5._3
                     // The following line prevents the audio from stopping
                     // when the device autolocks. will also make sure that it plays, even
                     // if the device is in mute
-                    NSError error = null;
+                    NSError error;
                     AVAudioSession.SharedInstance().SetCategory(AVAudioSession.CategoryPlayback, out error);
                     if (error != null)
                         throw new Exception(error.DebugDescription);
@@ -126,6 +125,7 @@ namespace iOSApplication_0._5._3
                 }
             };
 
+            // Event handler for simple "Get fingerprints" button click and release.
             GetFingerprintsButton.TouchUpInside += async (sender, e) =>
             {
 
@@ -157,6 +157,7 @@ namespace iOSApplication_0._5._3
                 ForegroundLabel.Text = "Found " + receivedHashes.Length + " fingerprints for " + "The Hobbit";
             };
 
+            // Event handler for simple "Index movies" button click and release.
             IndexButton.TouchUpInside += async (sender, e) =>
             {
                 var client = new HttpClient();
