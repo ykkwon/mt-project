@@ -6,6 +6,7 @@ using AVFoundation;
 using Foundation;
 using UIKit;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace iOSApplication_0._5._3
 {
@@ -93,27 +94,39 @@ namespace iOSApplication_0._5._3
 
             TestButton.TouchUpInside += (sender, e) =>
             {
-                while (true) {
-                    for (int i = 0; i < 10; i++)
-                    {
-                        var session = AVAudioSession.SharedInstance();
-                        NSError error;
-                        session.SetCategory(AVAudioSession.CategoryRecord, out error);
-                        RecordManager.CreateOutputUrl(i);
-                        RecordManager.PrepareAudioRecording(i);
-                        RecordManager.Recorder.Record();
-                        Thread.Sleep(3000);
-                        RecordManager.Recorder.Stop();
-                        var kasdf = RecordManager.AudioFilePath;
-                        Console.WriteLine("TEST: " + kasdf);
-                        RecordManager.ConsumeWaveFile(kasdf.RelativePath);
-                        Console.WriteLine(RecordManager.AudioFilePath + " consume done");
-                        var test = RecordManager.ConsumeWaveFile(RecordManager.TempRecording);
-                        counter += test;
-                        Console.WriteLine("COUNTER: " + counter);
-                        ForegroundLabel.Text = "Matched " + counter + " fingerprints in total.";
+                RecordButton.Enabled = false;
+                StopButton.Enabled = true;
+                PlayButton.Enabled = false;
+                SendButton.Enabled = false;
+                IndexButton.Enabled = false;
+                GetFingerprintsButton.Enabled = false;
+
+                Task.Factory.StartNew(() => {
+                    while (true) {
+                        for (int i = 0; i < 10; i++)
+                        {
+                            var session = AVAudioSession.SharedInstance();
+                            NSError error;
+                            session.SetCategory(AVAudioSession.CategoryRecord, out error);
+                            RecordManager.CreateOutputUrl(i);
+                            RecordManager.PrepareAudioRecording(i);
+                            RecordManager.Recorder.Record();
+                            Thread.Sleep(3000);
+                            RecordManager.Recorder.Stop();
+                            var kasdf = RecordManager.AudioFilePath;
+                            Console.WriteLine("TEST: " + kasdf);
+                            RecordManager.ConsumeWaveFile(kasdf.RelativePath);
+                            Console.WriteLine(RecordManager.AudioFilePath + " consume done");
+                            var test = RecordManager.ConsumeWaveFile(RecordManager.TempRecording);
+                            counter += test;
+                            this.InvokeOnMainThread(() =>
+                                {
+                                    Console.WriteLine("COUNTER: " + counter);
+                                    ForegroundLabel.Text = "Matched " + counter + " fingerprints in total.";
+                                });
+                        }
                     }
-                }
+                });
                 // Record i 3-4s
                 // Skriv til ei fil
                 // Send til Preprocess wav
@@ -139,13 +152,15 @@ namespace iOSApplication_0._5._3
 
             SendButton.TouchUpInside += (sender, e) =>
             {
-                
-                try
+        
+          try
                 {
-                    ForegroundLabel.Text = "Sending recording to database . . .";
+                   
                     var test = RecordManager.ConsumeWaveFile(RecordManager.TempRecording);
-                    ForegroundLabel.Text = "Matched " + test + " fingerprints in total.";
-                }
+                       ForegroundLabel.Text = "Matched " + test + " fingerprints in total.";
+
+
+                    }
                 catch (Exception ex)
                 {
                     ForegroundLabel.Text = "ERROR";

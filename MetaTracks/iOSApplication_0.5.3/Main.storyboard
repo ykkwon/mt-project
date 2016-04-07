@@ -16,26 +16,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="3" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
-                                <rect key="frame" x="177" y="173" width="46" height="30"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
-                                <state key="normal" title="Record">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
-                                    <rect key="frame" x="20" y="228" width="360" height="30"/>
-                                </variation>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="4" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
-                                <rect key="frame" x="177" y="236" width="46" height="30"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
-                                <state key="normal" title="Stop">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
-                                    <rect key="frame" x="20" y="283" width="360" height="30"/>
-                                </variation>
-                            </button>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" lineBreakMode="tailTruncation" minimumFontSize="10" id="5" translatesAutoresizingMaskIntoConstraints="NO" textAlignment="center" fixedFrame="YES">
                                 <rect key="frame" x="179" y="306" width="42" height="21"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -46,34 +26,6 @@
                                     <rect key="frame" x="20" y="357" width="338" height="95"/>
                                 </variation>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="35" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
-                                <rect key="frame" x="177" y="66" width="46" height="30"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
-                                <state key="normal" title="Index movies">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
-                                    <rect key="frame" x="204" y="66" width="360" height="30"/>
-                                </variation>
-                            </button>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="83" translatesAutoresizingMaskIntoConstraints="NO" placeholder="What movie are you watching?" textAlignment="center" fixedFrame="YES">
-                                <rect key="frame" x="178" y="157" width="97" height="30"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                                <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
-                                    <rect key="frame" x="215" y="123" width="338" height="30"/>
-                                </variation>
-                            </textField>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="93" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
-                                <rect key="frame" x="177" y="165" width="46" height="30"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
-                                <state key="normal" title="Get fingerprints">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
-                                    <rect key="frame" x="20" y="171" width="360" height="30"/>
-                                </variation>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="99" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
                                 <rect key="frame" x="177" y="66" width="46" height="30"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
@@ -117,7 +69,7 @@
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="105" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
                                 <rect key="frame" x="177" y="173" width="46" height="30"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
-                                <state key="normal" title="Record">
+                                <state key="normal" title="Record (cont.)">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleColor" colorSpace="calibratedRGB" red="0.0196078431372549" green="0.4" blue="0.55294117647058827" alpha="1"/>
                                 </state>
@@ -125,7 +77,7 @@
                                     <rect key="frame" x="20" y="228" width="360" height="30"/>
                                 </variation>
                                 <variation key="heightClass=regular-widthClass=regular" fixedFrame="YES">
-                                    <rect key="frame" x="306" y="416" width="155" height="30"/>
+                                    <rect key="frame" x="253" y="416" width="155" height="30"/>
                                 </variation>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="106" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
@@ -171,7 +123,7 @@
                                     <color key="titleColor" colorSpace="calibratedRGB" red="0.0196078431372549" green="0.4" blue="0.55294117647058827" alpha="1"/>
                                 </state>
                                 <variation key="heightClass=regular-widthClass=regular" fixedFrame="YES">
-                                    <rect key="frame" x="330" y="610" width="109" height="30"/>
+                                    <rect key="frame" x="330" y="605" width="109" height="30"/>
                                 </variation>
                             </button>
                             <navigationBar contentMode="scaleToFill" id="134" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
@@ -189,7 +141,7 @@
                                     <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="15"/>
                                 </textAttributes>
                             </navigationBar>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" lineBreakMode="tailTruncation" minimumFontSize="10" id="147" translatesAutoresizingMaskIntoConstraints="NO">
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" lineBreakMode="tailTruncation" minimumFontSize="10" id="147" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
                                 <rect key="frame" x="368" y="0.0" width="42" height="21"/>
                                 <color key="backgroundColor" colorSpace="calibratedRGB" red="0.00784313725490196" green="0.76470588235294112" blue="0.60392156862745094" alpha="1"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -199,15 +151,21 @@
                                     <rect key="frame" x="0.0" y="0.0" width="768" height="21"/>
                                 </variation>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="155" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
+                                <rect key="frame" x="432" y="454" width="46" height="30"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                <state key="normal" title="Record (long)">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleColor" colorSpace="calibratedRGB" red="0.0196078431372549" green="0.40784313725490196" blue="0.55294117647058827" alpha="1"/>
+                                </state>
+                                <variation key="heightClass=regular-widthClass=regular" fixedFrame="YES">
+                                    <rect key="frame" x="409" y="416" width="115" height="30"/>
+                                </variation>
+                            </button>
                         </subviews>
                         <variation key="default">
                             <mask key="subviews">
-                                <exclude reference="3"/>
-                                <exclude reference="4"/>
                                 <exclude reference="5"/>
-                                <exclude reference="35"/>
-                                <exclude reference="83"/>
-                                <exclude reference="93"/>
                                 <exclude reference="99"/>
                                 <exclude reference="103"/>
                                 <exclude reference="104"/>
@@ -218,16 +176,12 @@
                                 <exclude reference="127"/>
                                 <exclude reference="134"/>
                                 <exclude reference="147"/>
+                                <exclude reference="155"/>
                             </mask>
                         </variation>
                         <variation key="heightClass=regular-widthClass=compact">
                             <mask key="subviews">
-                                <include reference="3"/>
-                                <include reference="4"/>
                                 <include reference="5"/>
-                                <include reference="35"/>
-                                <include reference="83"/>
-                                <include reference="93"/>
                             </mask>
                         </variation>
                         <variation key="heightClass=regular-widthClass=regular">
@@ -242,25 +196,22 @@
                                 <include reference="127"/>
                                 <include reference="134"/>
                                 <include reference="147"/>
+                                <include reference="155"/>
                             </mask>
                         </variation>
                         <color key="backgroundColor" colorSpace="calibratedRGB" red="1" green="1" blue="1" alpha="1"/>
                     </view>
                     <connections>
-                        <outlet property="RecordButton" destination="3" id="name-outlet-3"/>
-                        <outlet property="StopButton" destination="4" id="name-outlet-4"/>
                         <outlet property="ForegroundLabel" destination="5" id="name-outlet-5"/>
-                        <outlet property="IndexButton" destination="35" id="name-outlet-35"/>
-                        <outlet property="MovieTextField" destination="83" id="name-outlet-83"/>
-                        <outlet property="GetFingerprintsButton" destination="93" id="name-outlet-93"/>
                         <outlet property="StopButton" destination="106" id="name-outlet-106"/>
-                        <outlet property="RecordButton" destination="105" id="name-outlet-105"/>
+                        <outlet property="TestButton" destination="105" id="name-outlet-105"/>
                         <outlet property="MovieTextField" destination="103" id="name-outlet-103"/>
                         <outlet property="GetFingerprintsButton" destination="104" id="name-outlet-104"/>
                         <outlet property="IndexButton" destination="99" id="name-outlet-99"/>
                         <outlet property="ForegroundLabel" destination="119" id="name-outlet-119"/>
                         <outlet property="PlayButton" destination="123" id="name-outlet-123"/>
                         <outlet property="SendButton" destination="127" id="name-outlet-127"/>
+                        <outlet property="RecordButton" destination="155" id="name-outlet-155"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
