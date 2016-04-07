@@ -17,7 +17,7 @@ namespace AcousticFingerprintingLibrary_0._4._5.SoundFingerprint.AudioProxies
     ///   MOD music (XM, IT, S3M, MOD, MTM, UMX), MO3 music (MP3/OGG compressed MODs), and recording functions. 
     ///   All in a tiny DLL, under 100KB* in size.
     /// </remarks>
-    public class BassProxy : IAudio
+    public class BassProxy : IDisposable
     {
         /// <summary>
         ///   Default sample rate used at initialization
@@ -65,11 +65,7 @@ namespace AcousticFingerprintingLibrary_0._4._5.SoundFingerprint.AudioProxies
             _alreadyDisposed = true;
             GC.SuppressFinalize(this);
         }
-
-        float[] IAudio.ReadMonoFromFile(string filename, int samplerate, int milliseconds, int startmilliseconds)
-        {
-            return ReadMonoFromFile(filename, samplerate, milliseconds, startmilliseconds);
-        }
+        
 
         /// <summary>
         ///   Read mono from file
@@ -83,7 +79,7 @@ namespace AcousticFingerprintingLibrary_0._4._5.SoundFingerprint.AudioProxies
         ///   Seeking capabilities of Bass where not used because of the possible
         ///   timing errors on different formats.
         /// </remarks>
-        public static float[] ReadMonoFromFile(string filename, int samplerate, int milliseconds, int startmillisecond)
+        public /*static*/ float[] ReadMonoFromFile(string filename, int samplerate, int milliseconds, int startmillisecond)
         {
             int totalmilliseconds;
             if (milliseconds <= 0) totalmilliseconds = Int32.MaxValue;

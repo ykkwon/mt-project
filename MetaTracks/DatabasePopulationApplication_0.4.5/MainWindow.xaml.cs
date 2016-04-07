@@ -85,7 +85,7 @@ namespace DatabasePopulationApplication_0._4._5
 
             sfd.ShowDialog();
 
-            using (IAudio proxy = new BassProxy())
+            using (BassProxy proxy = new BassProxy())
             {
                 Main.Status = "Visualizing hashes. This might take a while, depending on the movie length.";
                 Fingerprinter manager = new Fingerprinter();
@@ -151,7 +151,7 @@ namespace DatabasePopulationApplication_0._4._5
 
             sfd.ShowDialog();
             string path = Path.GetFullPath(sfd.FileName);
-            using (IAudio proxy = new BassProxy())
+            using (BassProxy proxy = new BassProxy())
             {
                 Main.Status = "Generating wavelet visualization.";
                 Fingerprinter manager = new Fingerprinter();
@@ -169,7 +169,7 @@ namespace DatabasePopulationApplication_0._4._5
             Main.Status = "Staging the following file: " + filename;
             (new Thread(() =>
             {
-                using (IAudio proxy = new BassProxy())
+                using (BassProxy proxy = new BassProxy())
                 {
                     Fingerprinter manager = new Fingerprinter();
                     int strideSize = 1102;
@@ -300,7 +300,7 @@ namespace DatabasePopulationApplication_0._4._5
 
             (new Thread(async () =>
             {
-                using (IAudio proxy = new BassProxy())
+                using (BassProxy proxy = new BassProxy())
             {
                 
                 Main.Status = "Comparing chosen digital file with fingerprints from database.";

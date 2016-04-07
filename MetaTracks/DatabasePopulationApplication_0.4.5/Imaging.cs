@@ -167,7 +167,7 @@ namespace DatabasePopulationApplication_0._4._5
         /// <returns>Image to be saved</returns>
         public static Image GetWaveletSpectralImage(string pathToFile,
                                                     IStride stride,
-                                                    IAudio proxy,
+                                                    BassProxy proxy,
                                                     Fingerprinter manager)
         {
             List<float[][]> wavelets = new List<float[][]>();

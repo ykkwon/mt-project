@@ -195,7 +195,7 @@ namespace AcousticFingerprintingLibrary_0._4._5.SoundFingerprint
         /// <param name = "milliseconds">Milliseconds to process</param>
         /// <param name = "startmilliseconds">Starting point of the processing</param>
         /// <returns>Spectrogram</returns>
-        public float[][] CreateSpectrogram(IAudio proxy, string filename, int milliseconds, int startmilliseconds)
+        public float[][] CreateSpectrogram(BassProxy proxy, string filename, int milliseconds, int startmilliseconds)
         {
             //read 5512 Hz, Mono, PCM, with a specific proxy
             float[] samples = proxy.ReadMonoFromFile(filename, SampleRate, milliseconds, startmilliseconds);
@@ -238,7 +238,7 @@ namespace AcousticFingerprintingLibrary_0._4._5.SoundFingerprint
         /// <param name = "startmilliseconds">Starting point</param>
         /// <param name="stride">Byte length of fingerprint</param>
         /// <returns>Logarithmically spaced bins within the power spectrum</returns>
-        public float[][] CreateLogSpectrogram(IAudio proxy, string filename, int milliseconds, int startmilliseconds,
+        public float[][] CreateLogSpectrogram(BassProxy proxy, string filename, int milliseconds, int startmilliseconds,
             IStride stride)
         {
             if (stride == null) throw new ArgumentNullException(nameof(stride));
@@ -318,7 +318,7 @@ namespace AcousticFingerprintingLibrary_0._4._5.SoundFingerprint
         /// <param name = "milliseconds">Milliseconds to analyze</param>
         /// <param name = "startmilliseconds">Starting point of analysis</param>
         /// <returns>Fingerprint signatures</returns>
-        public List<Fingerprint> CreateFingerprints(IAudio proxy, string filename, IStride stride, int milliseconds,
+        public List<Fingerprint> CreateFingerprints(BassProxy proxy, string filename, IStride stride, int milliseconds,
             int startmilliseconds)
         {
             var spectrum = CreateLogSpectrogram(proxy, filename, milliseconds, startmilliseconds, stride);
@@ -345,7 +345,7 @@ namespace AcousticFingerprintingLibrary_0._4._5.SoundFingerprint
         /// <param name = "filename">Filename</param>
         /// <param name = "stride">Stride used in fingerprint creation</param>
         /// <returns>List of fingerprint signatures</returns>
-        public List<Fingerprint> CreateFingerprints(IAudio proxy, string filename, IStride stride)
+        public List<Fingerprint> CreateFingerprints(BassProxy proxy, string filename, IStride stride)
         {
             return CreateFingerprints(proxy, filename, stride, 0, 0);
         }
