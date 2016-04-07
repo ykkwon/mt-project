@@ -5,7 +5,7 @@ using Un4seen.Bass.AddOn.Mix;
 
 //using Un4seen.Bass.Misc;
 
-namespace AcousticFingerprintingLibrary_0._4._5.SoundFingerprint.AudioProxies
+namespace AcousticFingerprintingLibrary_0._4._5
 {
     /// <summary>
     ///   Bass Proxy for Bass.Net API

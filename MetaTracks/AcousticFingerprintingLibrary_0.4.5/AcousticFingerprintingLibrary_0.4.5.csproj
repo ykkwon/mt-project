@@ -44,20 +44,20 @@
     <Folder Include="Resources\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BassProxy.cs" />
+    <Compile Include="DistanceClasses\Distance.cs" />
+    <Compile Include="DistanceClasses\IncrementalDistance.cs" />
+    <Compile Include="FFT\Complex.cs" />
+    <Compile Include="FFT\ComplexF.cs" />
+    <Compile Include="FFT\Fourier.cs" />
+    <Compile Include="FFT\FourierDirection.cs" />
+    <Compile Include="FFT\HanningWindow.cs" />
+    <Compile Include="Fingerprint.cs" />
+    <Compile Include="FingerprintManager.cs" />
+    <Compile Include="Hashing\DefaultPermutations.cs" />
+    <Compile Include="Hashing\MinHash.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SoundFingerprint\AudioProxies\BassProxy.cs" />
-    <Compile Include="SoundFingerprint\AudioProxies\Distance\IncrementalDistance.cs" />
-    <Compile Include="SoundFingerprint\AudioProxies\Distance\Distance.cs" />
-    <Compile Include="SoundFingerprint\FFT\Complex.cs" />
-    <Compile Include="SoundFingerprint\FFT\ComplexF.cs" />
-    <Compile Include="SoundFingerprint\FFT\Fourier.cs" />
-    <Compile Include="SoundFingerprint\FFT\FourierDirection.cs" />
-    <Compile Include="SoundFingerprint\Fingerprint.cs" />
-    <Compile Include="SoundFingerprint\Fingerprinter.cs" />
-    <Compile Include="SoundFingerprint\Hashing\DefaultPermutations.cs" />
-    <Compile Include="SoundFingerprint\Hashing\MinHash.cs" />
-    <Compile Include="SoundFingerprint\Wavelets\HaarWavelet.cs" />
-    <Compile Include="SoundFingerprint\Windows\HanningWindow.cs" />
+    <Compile Include="Wavelets\HaarWavelet.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>

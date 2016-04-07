@@ -1,14 +1,12 @@
 ﻿using System;
 
-namespace AcousticFingerprintingLibrary_0._4._5.SoundFingerprint.Wavelets
+namespace AcousticFingerprintingLibrary_0._4._5.Wavelets
 {
     /// <summary>
     ///   Haar wavelet decomposition algorithm
     /// </summary>
     public class HaarWavelet
     {
-        #region IWaveletDecomposition Members
-
         /// <summary>
         ///   Apply Haar Wavelet decomposition on the frames
         /// </summary>
@@ -17,8 +15,6 @@ namespace AcousticFingerprintingLibrary_0._4._5.SoundFingerprint.Wavelets
         {
             DecomposeImage(frames);
         }
-
-        #endregion
 
         /// <summary>
         ///   Decomposition taken from

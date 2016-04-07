@@ -1,4 +1,4 @@
-﻿namespace AcousticFingerprintingLibrary_0._4._5.SoundFingerprint.FFT
+﻿namespace AcousticFingerprintingLibrary_0._4._5.FFT
 {
     // Comments? Questions? Bugs? Tell Ben Houston at ben@exocortex.org
     // Version: May 4, 2002

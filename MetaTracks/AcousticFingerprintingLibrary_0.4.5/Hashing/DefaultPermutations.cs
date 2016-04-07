@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AcousticFingerprintingLibrary_0._4._5.SoundFingerprint.Hashing
+namespace AcousticFingerprintingLibrary_0._4._5.Hashing
 {
     class DefaultPermutations
     {

@@ -1,4 +1,4 @@
-﻿namespace AcousticFingerprintingLibrary_0._4._5.SoundFingerprint
+﻿namespace AcousticFingerprintingLibrary_0._4._5
 {
     public class Fingerprint
     {

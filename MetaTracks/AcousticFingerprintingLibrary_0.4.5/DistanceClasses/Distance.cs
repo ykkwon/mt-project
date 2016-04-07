@@ -1,4 +1,4 @@
-﻿namespace AcousticFingerprintingLibrary_0._4._5.SoundFingerprint.AudioProxies.Distance
+﻿namespace AcousticFingerprintingLibrary_0._4._5.DistanceClasses
 {
     /// <summary>
     ///   Distance class

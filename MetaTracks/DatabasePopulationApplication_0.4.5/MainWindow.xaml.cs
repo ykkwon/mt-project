@@ -9,9 +9,8 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading;
 using System.Windows;
-using AcousticFingerprintingLibrary_0._4._5.SoundFingerprint;
-using AcousticFingerprintingLibrary_0._4._5.SoundFingerprint.AudioProxies;
-using AcousticFingerprintingLibrary_0._4._5.SoundFingerprint.AudioProxies.Distance;
+using AcousticFingerprintingLibrary_0._4._5;
+using AcousticFingerprintingLibrary_0._4._5.DistanceClasses;
 using dbApp;
 using Microsoft.Win32;
 
@@ -87,8 +86,8 @@ namespace DatabasePopulationApplication_0._4._5
             using (BassProxy proxy = new BassProxy())
             {
                 Main.Status = "Visualizing hashes. This might take a while, depending on the movie length.";
-                Fingerprinter manager = new Fingerprinter();
-                // DistanceeSize is length of fingerprint in bits
+                AcousticFingerprintingLibrary_0._4._5.FingerprintManager manager = new AcousticFingerprintingLibrary_0._4._5.FingerprintManager();
+                // DistanceeSize is length between consecutive fingerprints
                 int distanceSize = 1102;
                 int samplesPerFingerprint = 128 * 64; // 128 = width of fingerprint, 64 = overlap
                 var distance = new IncrementalDistance(distanceSize, samplesPerFingerprint);
@@ -122,7 +121,7 @@ namespace DatabasePopulationApplication_0._4._5
             using (BassProxy proxy = new BassProxy())
             {
                 Main.Status = "Generating spectrogram visualization.";
-                Fingerprinter manager = new Fingerprinter();
+                AcousticFingerprintingLibrary_0._4._5.FingerprintManager manager = new AcousticFingerprintingLibrary_0._4._5.FingerprintManager();
 
                 float[][] data = manager.CreateSpectrogram(proxy, Path.GetFullPath(_filename), 0, 0);
                 Bitmap image = Imaging.GetSpectrogramImage(data, width, height);
@@ -147,7 +146,7 @@ namespace DatabasePopulationApplication_0._4._5
             using (BassProxy proxy = new BassProxy())
             {
                 Main.Status = "Generating wavelet visualization.";
-                Fingerprinter manager = new Fingerprinter();
+                AcousticFingerprintingLibrary_0._4._5.FingerprintManager manager = new AcousticFingerprintingLibrary_0._4._5.FingerprintManager();
 
                 Distance distance = new Distance(1102);
                 Image image = Imaging.GetWaveletSpectralImage(Path.GetFullPath(_filename), distance, proxy, manager);
@@ -164,7 +163,7 @@ namespace DatabasePopulationApplication_0._4._5
             {
                 using (BassProxy proxy = new BassProxy())
                 {
-                    Fingerprinter manager = new Fingerprinter();
+                    AcousticFingerprintingLibrary_0._4._5.FingerprintManager manager = new AcousticFingerprintingLibrary_0._4._5.FingerprintManager();
                     int distanceSize = 1102;
                     int samplesPerFingerprint = 128 * 64; // 128 = width of fingerprint, 64 = overlap
                     var distance = new IncrementalDistance(distanceSize, samplesPerFingerprint);
@@ -295,7 +294,7 @@ namespace DatabasePopulationApplication_0._4._5
             {
                 
                 Main.Status = "Comparing chosen digital file with fingerprints from database.";
-                Fingerprinter manager = new Fingerprinter();
+                AcousticFingerprintingLibrary_0._4._5.FingerprintManager manager = new AcousticFingerprintingLibrary_0._4._5.FingerprintManager();
                 int distanceSize = 1102;
                 int samplesPerFingerprint = 128 * 64; // 128 = width of fingerprint, 64 = overlap
                 var distance = new IncrementalDistance(distanceSize, samplesPerFingerprint);

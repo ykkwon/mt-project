@@ -1,11 +1,10 @@
-﻿using AcousticFingerprintingLibrary_0._4._5.SoundFingerprint;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
-using AcousticFingerprintingLibrary_0._4._5.SoundFingerprint.AudioProxies;
-using AcousticFingerprintingLibrary_0._4._5.SoundFingerprint.AudioProxies.Distance;
+using AcousticFingerprintingLibrary_0._4._5;
+using AcousticFingerprintingLibrary_0._4._5.DistanceClasses;
 
 
 namespace DatabasePopulationApplication_0._4._5
@@ -168,7 +167,7 @@ namespace DatabasePopulationApplication_0._4._5
         public static Image GetWaveletSpectralImage(string pathToFile,
                                                     Distance distance,
                                                     BassProxy proxy,
-                                                    Fingerprinter manager)
+                                                    AcousticFingerprintingLibrary_0._4._5.FingerprintManager manager)
         {
             List<float[][]> wavelets = new List<float[][]>();
             float[][] spectrum = manager.CreateLogSpectrogram(proxy, pathToFile, 0, 0, distance);
