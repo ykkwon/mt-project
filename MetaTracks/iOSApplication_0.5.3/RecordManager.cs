@@ -90,9 +90,9 @@ namespace iOSApplication_0._5._3
         public static double ConsumeWaveFile(string filePath)
         {
             // Read all the mono values from the input file.
-            var monoArray = BassProxy.ReadMonoFromFile(filePath, 5512, 0, 0);
+            var monoArray = BassProxy.ReadMonoFromFileStatic(filePath, 5512, 0, 0);
             Fingerprinter manager = new Fingerprinter();
-            IStride stride = new IncrementalStaticStride(1102, 128 * 64);
+            Stride stride = new IncrementalStride(1102, 128 * 64);
             // Create an array of fingerprints to be hashed.
             var preliminaryFingerprints = manager.CreateFingerprints(monoArray, stride);
 

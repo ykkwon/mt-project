@@ -5,7 +5,7 @@ namespace AcousticFingerprintingLibrary_0._4._5.SoundFingerprint.Wavelets
     /// <summary>
     ///   Haar wavelet decomposition algorithm
     /// </summary>
-    public class HaarWavelet : IWaveletDecomposition
+    public class HaarWavelet
     {
         #region IWaveletDecomposition Members
 

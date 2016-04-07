@@ -1,9 +1,9 @@
 ﻿namespace AcousticFingerprintingLibrary_0._4._5.SoundFingerprint.AudioProxies.Strides
 {
     /// <summary>
-    ///   StaticStride class
+    ///   Stride class
     /// </summary>
-    public class StaticStride : IStride
+    public class Stride
     {
         /// <summary>
         ///   First stride
@@ -19,7 +19,7 @@
         ///   Constructor of static stride object
         /// </summary>
         /// <param name = "strideSize">Stride size, used each time GetStride method is invoked</param>
-        public StaticStride(int strideSize)
+        public Stride(int strideSize)
         {
             _strideSize = strideSize;
             FirstStride = 0;
@@ -30,7 +30,7 @@
         /// </summary>
         /// <param name = "strideSize">Stride size</param>
         /// <param name = "firstStride">First stride</param>
-        public StaticStride(int strideSize, int firstStride) : this(strideSize)
+        public Stride(int strideSize, int firstStride) : this(strideSize)
         {
             FirstStride = firstStride;
         }

@@ -62,7 +62,6 @@ namespace AcousticFingerprintingLibrary_0._4._5.SoundFingerprint.Hashing
         ///   Random shuffle of the elements in place
         /// </summary>
         /// <typeparam name = "T">T type of the elements in the enumeration</typeparam>
-        /// <param name = "list">List to be enumerated</param>
         public static void RandomShuffleInPlace<T>(T[] array)
         {
             Random random = new Random(unchecked((int)(DateTime.Now.Ticks >> 4)));

@@ -92,7 +92,7 @@ namespace DatabasePopulationApplication_0._4._5
                 // Stridesize is length of fingerprint in bytes(68% sure)
                 int strideSize = 1102;
                 int samplesPerFingerprint = 128 * 64; // 128 = width of fingerprint, 64 = overlap
-                var stride = new IncrementalStaticStride(strideSize, samplesPerFingerprint);
+                var stride = new IncrementalStride(strideSize, samplesPerFingerprint);
 
 
                 //List<bool[]> fingerprints = manager.CreateFingerprints(proxy, Path.GetFullPath(filename), stride);
@@ -156,7 +156,7 @@ namespace DatabasePopulationApplication_0._4._5
                 Main.Status = "Generating wavelet visualization.";
                 Fingerprinter manager = new Fingerprinter();
 
-                StaticStride stride = new StaticStride((int)1102);
+                Stride stride = new Stride((int)1102);
                 Image image = Imaging.GetWaveletSpectralImage(Path.GetFullPath(filename), stride, proxy, manager);
                 image.Save(path);
                 image.Dispose();
@@ -174,7 +174,7 @@ namespace DatabasePopulationApplication_0._4._5
                     Fingerprinter manager = new Fingerprinter();
                     int strideSize = 1102;
                     int samplesPerFingerprint = 128 * 64; // 128 = width of fingerprint, 64 = overlap
-                    var stride = new IncrementalStaticStride(strideSize, samplesPerFingerprint);
+                    var stride = new IncrementalStride(strideSize, samplesPerFingerprint);
                     try
                     {
                         List<Fingerprint> fingerprints = manager.CreateFingerprints(proxy, Path.GetFullPath(filename),
@@ -307,7 +307,7 @@ namespace DatabasePopulationApplication_0._4._5
                 Fingerprinter manager = new Fingerprinter();
                 int strideSize = 1102;
                 int samplesPerFingerprint = 128 * 64; // 128 = width of fingerprint, 64 = overlap
-                var stride = new IncrementalStaticStride(strideSize, samplesPerFingerprint);
+                var stride = new IncrementalStride(strideSize, samplesPerFingerprint);
 
                 
 

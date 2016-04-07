@@ -6,7 +6,7 @@ namespace AcousticFingerprintingLibrary_0._4._5.SoundFingerprint.Windows
     /// <summary>
     ///   Hanning window function
     /// </summary>
-    public class HanningWindow : IWindowFunction
+    public class HanningWindow
     {
         #region IWindowFunction Members
 
@@ -20,14 +20,14 @@ namespace AcousticFingerprintingLibrary_0._4._5.SoundFingerprint.Windows
         /// </remarks>
         public void WindowInPlace(float[] outerspace, int length)
         {
-#if SAFE
+
             if (outerspace == null)
-                throw new ArgumentNullException("outerspace");
+                throw new ArgumentNullException(nameof(outerspace));
             if (outerspace.Length <= 1)
                 throw new ArgumentException("Length of outer space parameter should be bigger than 1, otherwise division by zero will occur");
             if (outerspace.Length < length)
                 throw new ArgumentException("Length of the outer space parameter should be bigger of equal to window length");
-#endif
+
             //Hanning window of the whole signal
             for (int i = 0, n = length; i < n; i++)
                 outerspace[i] *= (float)(0.5 * (1 - Math.Cos(2 * Math.PI * i / (n - 1))));

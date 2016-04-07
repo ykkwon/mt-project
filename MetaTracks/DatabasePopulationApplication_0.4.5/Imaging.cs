@@ -166,7 +166,7 @@ namespace DatabasePopulationApplication_0._4._5
         /// <param name = "manager">Fingerprint manager</param>
         /// <returns>Image to be saved</returns>
         public static Image GetWaveletSpectralImage(string pathToFile,
-                                                    IStride stride,
+                                                    Stride stride,
                                                     BassProxy proxy,
                                                     Fingerprinter manager)
         {

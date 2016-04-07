@@ -25,12 +25,12 @@ namespace AcousticFingerprintingLibrary_0._4._5.SoundFingerprint
         /// <summary>
         ///   Window function used in spectrogram computation
         /// </summary>
-        public IWindowFunction WindowFunction { get; set; }
+        public HanningWindow WindowFunction { get; set; }
 
         /// <summary>
         ///   Wavelet decomposition algorithm
         /// </summary>
-        public IWaveletDecomposition WaveletDecomposition { get; set; }
+        public HaarWavelet WaveletDecomposition { get; set; }
 
         /// <summary>
         ///   Number of logarithmically spaced bins between the frequency components computed by FFT.
@@ -239,7 +239,7 @@ namespace AcousticFingerprintingLibrary_0._4._5.SoundFingerprint
         /// <param name="stride">Byte length of fingerprint</param>
         /// <returns>Logarithmically spaced bins within the power spectrum</returns>
         public float[][] CreateLogSpectrogram(BassProxy proxy, string filename, int milliseconds, int startmilliseconds,
-            IStride stride)
+            Stride stride)
         {
             if (stride == null) throw new ArgumentNullException(nameof(stride));
 
@@ -248,7 +248,7 @@ namespace AcousticFingerprintingLibrary_0._4._5.SoundFingerprint
             return CreateLogSpectrogram(samples, stride);
         }
 
-        public float[][] CreateLogSpectrogram(float[] samples, IStride stride)
+        public float[][] CreateLogSpectrogram(float[] samples, Stride stride)
         {
             NormalizeInPlace(samples);
             int overlap = Overlap;
@@ -318,7 +318,7 @@ namespace AcousticFingerprintingLibrary_0._4._5.SoundFingerprint
         /// <param name = "milliseconds">Milliseconds to analyze</param>
         /// <param name = "startmilliseconds">Starting point of analysis</param>
         /// <returns>Fingerprint signatures</returns>
-        public List<Fingerprint> CreateFingerprints(BassProxy proxy, string filename, IStride stride, int milliseconds,
+        public List<Fingerprint> CreateFingerprints(BassProxy proxy, string filename, Stride stride, int milliseconds,
             int startmilliseconds)
         {
             var spectrum = CreateLogSpectrogram(proxy, filename, milliseconds, startmilliseconds, stride);
@@ -332,7 +332,7 @@ namespace AcousticFingerprintingLibrary_0._4._5.SoundFingerprint
         /// <param name = "samples">Samples from a song</param>
         /// <param name = "stride">Stride between 2 consecutive fingerprints</param>
         /// <returns>Fingerprint signatures</returns>
-        public List<Fingerprint> CreateFingerprints(float[] samples, IStride stride)
+        public List<Fingerprint> CreateFingerprints(float[] samples, Stride stride)
         {
             float[][] spectrum = CreateLogSpectrogram(samples, stride);
             return CreateFingerprints(spectrum, stride);
@@ -345,7 +345,7 @@ namespace AcousticFingerprintingLibrary_0._4._5.SoundFingerprint
         /// <param name = "filename">Filename</param>
         /// <param name = "stride">Stride used in fingerprint creation</param>
         /// <returns>List of fingerprint signatures</returns>
-        public List<Fingerprint> CreateFingerprints(BassProxy proxy, string filename, IStride stride)
+        public List<Fingerprint> CreateFingerprints(BassProxy proxy, string filename, Stride stride)
         {
             return CreateFingerprints(proxy, filename, stride, 0, 0);
         }
@@ -356,7 +356,7 @@ namespace AcousticFingerprintingLibrary_0._4._5.SoundFingerprint
         /// <param name = "spectrum">Spectrogram of the song</param>
         /// <param name = "stride">Stride between 2 consecutive fingerprints</param>
         /// <returns>Fingerprint signatures</returns>
-        public List<Fingerprint> CreateFingerprints(float[][] spectrum, IStride stride)
+        public List<Fingerprint> CreateFingerprints(float[][] spectrum, Stride stride)
         {
             int fingerprintLength = FingerprintLength; /*128*/
             int overlap = Overlap; /*64*/
@@ -755,18 +755,18 @@ namespace AcousticFingerprintingLibrary_0._4._5.SoundFingerprint
 
         #region Hashing
 
-        public HashedFingerprint[] GetFingerHashes(IStride stride, List<Fingerprint> listdb)
+        public HashedFingerprint[] GetFingerHashes(Stride stride, List<Fingerprint> listdb)
         {
             List<Fingerprint> listDb = listdb;
-            MinHash minHash = new MinHash(true);
+            MinHash minHash = new MinHash();
             List<byte[]> minhashdb = listDb.Select(fing => minHash.ComputeMinHashSignatureByte(fing.Signature)).ToList();
-            var lshBuckets = minhashdb.Select(fing => minHash.GroupMinHashToLSHBucketsByte(fing, 33, 3).Values.ToArray()).ToList();
+            var lshBuckets = minhashdb.Select(fing => minHash.GroupMinHashToLshBucketsByte(fing, 33, 3).Values.ToArray()).ToList();
 
             //List<HashedFingerprint> hashedFinger = new List<HashedFingerprint>();
             HashedFingerprint[] hashedFinger = new HashedFingerprint[listDb.Count];
             for (int index = 0; index < listDb.Count; index++)
             {
-                var hashfinger = new HashedFingerprint(minhashdb[index], lshBuckets[index], listDb[index].SequenceNumber,
+                var hashfinger = new HashedFingerprint(lshBuckets[index], listDb[index].SequenceNumber,
                     listDb[index].Timestamp);
                 //hashedFinger.Add(hashfinger);
                 hashedFinger[index] = hashfinger;

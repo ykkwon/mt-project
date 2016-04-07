@@ -46,9 +46,8 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SoundFingerprint\AudioProxies\BassProxy.cs" />
-    <Compile Include="SoundFingerprint\AudioProxies\Strides\IncrementalStaticStride.cs" />
-    <Compile Include="SoundFingerprint\AudioProxies\Strides\IStride.cs" />
-    <Compile Include="SoundFingerprint\AudioProxies\Strides\StaticStride.cs" />
+    <Compile Include="SoundFingerprint\AudioProxies\Strides\IncrementalStride.cs" />
+    <Compile Include="SoundFingerprint\AudioProxies\Strides\Stride.cs" />
     <Compile Include="SoundFingerprint\FFT\Complex.cs" />
     <Compile Include="SoundFingerprint\FFT\ComplexF.cs" />
     <Compile Include="SoundFingerprint\FFT\Fourier.cs" />
@@ -56,12 +55,9 @@
     <Compile Include="SoundFingerprint\Fingerprint.cs" />
     <Compile Include="SoundFingerprint\Fingerprinter.cs" />
     <Compile Include="SoundFingerprint\Hashing\DefaultPermutations.cs" />
-    <Compile Include="SoundFingerprint\Hashing\IPermutations.cs" />
     <Compile Include="SoundFingerprint\Hashing\MinHash.cs" />
     <Compile Include="SoundFingerprint\Wavelets\HaarWavelet.cs" />
-    <Compile Include="SoundFingerprint\Wavelets\IWaveletDecomposition.cs" />
     <Compile Include="SoundFingerprint\Windows\HanningWindow.cs" />
-    <Compile Include="SoundFingerprint\Windows\IWindowFunction.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>
