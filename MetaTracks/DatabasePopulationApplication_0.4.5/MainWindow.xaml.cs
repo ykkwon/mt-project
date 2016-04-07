@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -26,7 +25,7 @@ namespace DatabasePopulationApplication_0._4._5
         }
 
         internal static MainWindow Main;
-        private FingerprintDatabaseManager fdbm = new FingerprintDatabaseManager();
+        private readonly FingerprintDatabaseManager _fdbm = new FingerprintDatabaseManager();
         private string _entryName;
         private string _typeName;
         private string _filename;
@@ -77,7 +76,7 @@ namespace DatabasePopulationApplication_0._4._5
         {
             SaveFileDialog sfd = new SaveFileDialog
             {
-                Filter = "(*.jpg)|*.jpg", //Resources.FileFilterJPeg,
+                Filter = "(*.jpg)|*.jpg",
                 FileName = Path.GetFileNameWithoutExtension(_filename) + "_fingerprints" + ".jpg"
             };
 
@@ -181,14 +180,14 @@ namespace DatabasePopulationApplication_0._4._5
                             {
                                 var currentHash = fingerprint.HashBins[i];
                                 //
+                                var naught = 0;
                                 var first = _entryName;
                                 var second = fingerprint.Timestamp;
                                 var third = fingerprint.SequenceNumber;
                                 var fourth = currentHash;
-                                var newLine = string.Format("{0};{1};{2};{3}", first, second, third, fourth);
-                                csv.AppendLine(newLine);
-
-                                //fdbm.insertFingerprints(_entryName, fingerprint.Timestamp, fingerprint.SequenceNumber, currentHash);
+                                var fifth = _typeName;
+                                var newLine = string.Format("{0};{1};{2};{3};{4};{5}", naught, first, second, third, fourth, fifth);
+                                csv.AppendLine(newLine) ;
                             }
                         }
                         File.WriteAllText(Path.GetTempPath() + _entryName + "fingerprints.csv", csv.ToString());
@@ -197,8 +196,7 @@ namespace DatabasePopulationApplication_0._4._5
                         
 
                         Main.Status = "Printed CSV file to: " + Path.GetTempPath() + _entryName + "fingerprints.csv";
-                        // kjøre metoden ^^
-                        fdbm.writeToMySQL(Path.GetTempPath() + _entryName + "fingerprints.csv");
+                        _fdbm.WriteToMySql(Path.GetTempPath() + _entryName + "fingerprints.csv");
                         Main.Status = "Done.";
                     }
                     catch(ArgumentNullException)
@@ -234,7 +232,7 @@ namespace DatabasePopulationApplication_0._4._5
                 (new Thread(() =>
                 {
                     Main.Status = "Truncating table.";
-                    fdbm.truncateTable();
+                    _fdbm.TruncateTable();
                     Main.Status = "Table successfully truncated.";
                 })).Start();
         }
@@ -269,13 +267,10 @@ namespace DatabasePopulationApplication_0._4._5
 
         private void hashButton_Click(object sender, RoutedEventArgs e)
         {
-            (new Thread(() =>
-            {
-                DrawFingerprints();
-            })).Start();
+            (new Thread(DrawFingerprints)).Start();
         }
 
-        private async void compareButton_Click(object sender, RoutedEventArgs e)
+        private void compareButton_Click(object sender, RoutedEventArgs e)
         {
             string titleInput = null;
             OpenFileDialog ofd = new OpenFileDialog();
@@ -302,10 +297,10 @@ namespace DatabasePopulationApplication_0._4._5
 
                 if (titleInput != null)
                 {
-                    string address = string.Format("http://webapi-1.bwjyuhcr5p.eu-west-1.elasticbeanstalk.com/Fingerprints/GetAllFingerprintsSQL?inputTitle=" + "'{0}'",
-                        Uri.EscapeDataString(titleInput));
-                    var client = new HttpClient();
-                    client.BaseAddress = new Uri(address);
+                    string address =
+                        "http://webapi-1.bwjyuhcr5p.eu-west-1.elasticbeanstalk.com/Fingerprints/GetAllFingerprintsSQL?inputTitle=" +
+                        $"'{Uri.EscapeDataString(titleInput)}'";
+                    var client = new HttpClient {BaseAddress = new Uri(address)};
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 

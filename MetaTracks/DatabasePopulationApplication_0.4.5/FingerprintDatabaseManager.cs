@@ -1,15 +1,12 @@
 ﻿using System;
 using MySql.Data.MySqlClient;
-using System.Configuration;
-using System.Data;
-using System.Data.SqlClient;
 
 
 namespace DatabasePopulationApplication_0._4._5
 {
     class FingerprintDatabaseManager
     {
-        public void confirmConnection()
+        public void ConfirmConnection()
         {
             string cs = @"server=webapidb.c7tab1cc7vsa.eu-west-1.rds.amazonaws.com;userid=glennskjong;
            password=Bachelor2016!;database=system_users";
@@ -20,24 +17,21 @@ namespace DatabasePopulationApplication_0._4._5
             {
                 conn = new MySqlConnection(cs);
                 conn.Open();
-                Console.WriteLine("Connected to database. MySQL version : {0}", conn.ServerVersion);
+                Console.WriteLine(@"Connected to database. MySQL version : {0}", conn.ServerVersion);
             }
             catch (MySqlException ex)
             {
-                Console.WriteLine("Error: {0}", ex.ToString());
+                Console.WriteLine(@"Error: {0}", ex);
 
             }
 
             finally
             {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
+                conn?.Close();
             }
         }
 
-        public void insertFingerprints(string title, double timestamp, int sequenceNumber, long hash)
+        public void InsertFingerprints(string title, double timestamp, int sequenceNumber, long hash)
          {
              {
                  string cs = @"server=webapidb.c7tab1cc7vsa.eu-west-1.rds.amazonaws.com;userid=glennskjong;
@@ -65,7 +59,7 @@ namespace DatabasePopulationApplication_0._4._5
                  }
                  catch (MySqlException ex)
                  {
-                     Console.WriteLine("Error: {0}", ex.ToString());
+                     Console.WriteLine(@"Error: {0}", ex);
 
                  }
 
@@ -79,68 +73,42 @@ namespace DatabasePopulationApplication_0._4._5
              }
          }
 
-        /*public void writeToMySQL(string filepath)
+        public void WriteToMySql(string filepath)
         {
-            string connStr = @"server=webapidb.c7tab1cc7vsa.eu-west-1.rds.amazonaws.com;user=glennskjong;database=system_users;password=Bachelor2016!;";
-            MySqlConnection conn = new MySqlConnection(connStr);
 
-            MySqlBulkLoader bl = new MySqlBulkLoader(conn);
-            bl.TableName = "fingerprintTable";
-            bl.FieldTerminator = ",";
-           // bl.LineTerminator = "\n";
-            bl.FileName = filepath;
-            bl.NumberOfLinesToSkip = 0;
+
+            var newFilePath = filepath.Replace('\\', '/');
+            string cs = @"server=webapidb.c7tab1cc7vsa.eu-west-1.rds.amazonaws.com;user=glennskjong;database=system_users;password=Bachelor2016!";
+            MySqlConnection conn = null;
 
             try
             {
-                Console.WriteLine("Connecting to MySQL...");
+                conn = new MySqlConnection(cs);
                 conn.Open();
 
-                // Upload data from file
-                int count = bl.Load();
-                Console.WriteLine(count + " lines uploaded.");
-
-                string sql = "SELECT id, title, timestamp, sequenceNo, hash FROM fingerprintTable";
-                MySqlCommand cmd = new MySqlCommand(sql, conn);
-                MySqlDataReader rdr = cmd.ExecuteReader();
-
-               /* while (rdr.Read())
+                using (MySqlCommand cmd = new MySqlCommand(
+                             string.Format("LOAD DATA LOCAL INFILE '{0}' INTO TABLE fingerprintTable FIELDS TERMINATED BY ';' LINES TERMINATED BY '\n';", newFilePath), conn))
                 {
-                    Console.WriteLine(rdr[0] + " -- " + rdr[1] + " -- " + rdr[2]);
-                }*/
-
-          /*      rdr.Close();
-
-                conn.Close();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
-            }
-            Console.WriteLine("Done.");
-        }*/
-
-        public void writeToMySQL(string filepath)
-        {
-            string cs = @"server=webapidb.c7tab1cc7vsa.eu-west-1.rds.amazonaws.com;user=glennskjong;database=system_users;password=Bachelor2016!;";
-
-            using (MySqlConnection sqlCon = new MySqlConnection(cs))
-            {
-                try
-                {
-                    sqlCon.Open();
-                    MySqlCommand sqlCmd =
-                        new MySqlCommand("LOAD DATA INFILE 'filepath' INTO TABLE fingerprintTable FIELDS TERMINATED BY ',';", sqlCon);
-                    sqlCmd.ExecuteNonQuery();
+   
+                    cmd.CommandTimeout = 99999;
+                    cmd.ExecuteNonQuery();
                 }
-                catch (MySqlException ex)
-                {
-                    Console.WriteLine("Error: {0}", ex.ToString());
-                }
+                Console.WriteLine(@"Done");
+
+            }
+            catch (MySqlException ex)
+            {
+                Console.WriteLine("Error: {0}", ex);
+
+            }
+
+            finally
+            {
+                conn?.Close();
             }
         }
 
-        public void truncateTable()
+        public void TruncateTable()
         {
             string cs = @"server=webapidb.c7tab1cc7vsa.eu-west-1.rds.amazonaws.com;userid=glennskjong;
            password=Bachelor2016!;database=system_users";
@@ -161,16 +129,13 @@ namespace DatabasePopulationApplication_0._4._5
             }
             catch (MySqlException ex)
             {
-                Console.WriteLine("Error: {0}", ex.ToString());
+                Console.WriteLine(@"Error: {0}", ex);
 
             }
 
             finally
             {
-                if (conn != null)
-                {
-                    conn.Close();
-                }
+                conn?.Close();
             }
         }
     }
