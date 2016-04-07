@@ -46,8 +46,8 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SoundFingerprint\AudioProxies\BassProxy.cs" />
-    <Compile Include="SoundFingerprint\AudioProxies\Strides\IncrementalStride.cs" />
-    <Compile Include="SoundFingerprint\AudioProxies\Strides\Stride.cs" />
+    <Compile Include="SoundFingerprint\AudioProxies\Distance\IncrementalDistance.cs" />
+    <Compile Include="SoundFingerprint\AudioProxies\Distance\Distance.cs" />
     <Compile Include="SoundFingerprint\FFT\Complex.cs" />
     <Compile Include="SoundFingerprint\FFT\ComplexF.cs" />
     <Compile Include="SoundFingerprint\FFT\Fourier.cs" />

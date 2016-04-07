@@ -5,7 +5,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
 using AcousticFingerprintingLibrary_0._4._5.SoundFingerprint.AudioProxies;
-using AcousticFingerprintingLibrary_0._4._5.SoundFingerprint.AudioProxies.Strides;
+using AcousticFingerprintingLibrary_0._4._5.SoundFingerprint.AudioProxies.Distance;
 
 
 namespace DatabasePopulationApplication_0._4._5
@@ -161,19 +161,19 @@ namespace DatabasePopulationApplication_0._4._5
         ///   Gets the spectrum of the wavelet decomposition before extracting top wavelets and binary transformation
         /// </summary>
         /// <param name = "pathToFile">Path to file to be drawn</param>
-        /// <param name = "stride">Stride within the fingerprint creation</param>
+        /// <param name = "distance">Distance within the fingerprint creation</param>
         /// <param name = "proxy">Proxy manager</param>
         /// <param name = "manager">Fingerprint manager</param>
         /// <returns>Image to be saved</returns>
         public static Image GetWaveletSpectralImage(string pathToFile,
-                                                    Stride stride,
+                                                    Distance distance,
                                                     BassProxy proxy,
                                                     Fingerprinter manager)
         {
             List<float[][]> wavelets = new List<float[][]>();
-            float[][] spectrum = manager.CreateLogSpectrogram(proxy, pathToFile, 0, 0, stride);
+            float[][] spectrum = manager.CreateLogSpectrogram(proxy, pathToFile, 0, 0, distance);
             int specLen = spectrum.GetLength(0);
-            int start = stride.GetFirstStride() / manager.Overlap;
+            int start = distance.GetFirstDistance() / manager.Overlap;
             int logbins = manager.LogBins;
             int fingerprintLength = manager.FingerprintLength;
             int overlap = manager.Overlap;
@@ -185,7 +185,7 @@ namespace DatabasePopulationApplication_0._4._5
                     frames[i] = new float[logbins];
                     Array.Copy(spectrum[start + i], frames[i], logbins);
                 }
-                start += fingerprintLength + stride.GetStride() / overlap;
+                start += fingerprintLength + distance.GetDistance() / overlap;
                 wavelets.Add(frames);
             }
 

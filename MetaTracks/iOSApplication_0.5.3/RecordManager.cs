@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using AcousticFingerprintingLibrary_0._4._5.SoundFingerprint;
 using AcousticFingerprintingLibrary_0._4._5.SoundFingerprint.AudioProxies;
-using AcousticFingerprintingLibrary_0._4._5.SoundFingerprint.AudioProxies.Strides;
+using AcousticFingerprintingLibrary_0._4._5.SoundFingerprint.AudioProxies.Distance;
 using AVFoundation;
 using Foundation;
 
@@ -92,11 +92,11 @@ namespace iOSApplication_0._5._3
             // Read all the mono values from the input file.
             var monoArray = BassProxy.ReadMonoFromFileStatic(filePath, 5512, 0, 0);
             Fingerprinter manager = new Fingerprinter();
-            Stride stride = new IncrementalStride(1102, 128 * 64);
+            Distance distance = new IncrementalDistance(1102, 128 * 64);
             // Create an array of fingerprints to be hashed.
-            var preliminaryFingerprints = manager.CreateFingerprints(monoArray, stride);
+            var preliminaryFingerprints = manager.CreateFingerprints(monoArray, distance);
 
-            var test = manager.GetFingerHashes(stride, preliminaryFingerprints);
+            var test = manager.GetFingerHashes(distance, preliminaryFingerprints);
             foreach(var hash in test)
                 storedFingerprints.Add(hash);
             //                                             // String[], String[], int lshSize
