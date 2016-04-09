@@ -93,10 +93,10 @@ namespace DatabasePopulationApplication_0._4._5
 
 
                 //List<bool[]> fingerprints = manager.CreateFingerprints(proxy, Path.GetFullPath(filename), Distance);
-                List<Fingerprint> fingerprints = manager.CreateFingerprints(proxy, Path.GetFullPath(_filename), distance);
+                List<Fingerprint> fingerprints = manager.CreateFingerprints(Path.GetFullPath(_filename), distance);
 
                 //manager.GetHashSimilarity(Distance, Distance, proxy, filename, filename);
-                int width = manager.FingerprintLength;
+                int width = manager.FingerprintWidth;
                 int height = manager.LogBins;
                 Bitmap image = Imaging.GetFingerprintsImage(fingerprints, width, height);
                 image.Save(sfd.FileName, ImageFormat.Jpeg);
@@ -122,7 +122,7 @@ namespace DatabasePopulationApplication_0._4._5
                 Main.Status = "Generating spectrogram visualization.";
                 AcousticFingerprintingLibrary_0._4._5.FingerprintManager manager = new AcousticFingerprintingLibrary_0._4._5.FingerprintManager();
 
-                float[][] data = manager.CreateSpectrogram(proxy, Path.GetFullPath(_filename), 0, 0);
+                float[][] data = manager.CreateSpectrogram(Path.GetFullPath(_filename), 0, 0);
                 Bitmap image = Imaging.GetSpectrogramImage(data, width, height);
                 image.Save(sfd.FileName, ImageFormat.Jpeg);
                 image.Dispose();
@@ -168,7 +168,7 @@ namespace DatabasePopulationApplication_0._4._5
                     var distance = new IncrementalDistance(distanceSize, samplesPerFingerprint);
                     try
                     {
-                        List<Fingerprint> fingerprints = manager.CreateFingerprints(proxy, Path.GetFullPath(_filename),
+                        List<Fingerprint> fingerprints = manager.CreateFingerprints(Path.GetFullPath(_filename),
                             distance);
                         var test = manager.GetFingerHashes(distance, fingerprints);
                         Main.Status = "Sending hashes to database. This might take a long time, depending on the movie length.";
@@ -312,7 +312,7 @@ namespace DatabasePopulationApplication_0._4._5
 
                     string[] receivedtime = new string[receivedHashes.Length];
 
-                    var fingerprints2 = manager.CreateFingerprints(proxy, secondFile, distance);
+                    var fingerprints2 = manager.CreateFingerprints(secondFile, distance);
 
 
                     var toCompare = manager.GetFingerHashes(distance, fingerprints2);

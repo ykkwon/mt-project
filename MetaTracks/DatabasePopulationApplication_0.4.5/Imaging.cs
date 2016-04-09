@@ -170,11 +170,11 @@ namespace DatabasePopulationApplication_0._4._5
                                                     AcousticFingerprintingLibrary_0._4._5.FingerprintManager manager)
         {
             List<float[][]> wavelets = new List<float[][]>();
-            float[][] spectrum = manager.CreateLogSpectrogram(proxy, pathToFile, 0, 0, distance);
+            float[][] spectrum = manager.CreateLogSpectrogram(pathToFile, 0, 0);
             int specLen = spectrum.GetLength(0);
             int start = distance.GetFirstDistance() / manager.Overlap;
             int logbins = manager.LogBins;
-            int fingerprintLength = manager.FingerprintLength;
+            int fingerprintLength = manager.FingerprintWidth;
             int overlap = manager.Overlap;
             while (start + fingerprintLength < specLen)
             {
