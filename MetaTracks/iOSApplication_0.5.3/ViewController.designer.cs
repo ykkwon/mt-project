@@ -28,7 +28,7 @@ namespace iOSApplication_0._5._3
 
 		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
-		UITextField MovieTextField { get; set; }
+		UIButton MoviePicker { get; set; }
 
 		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
@@ -64,9 +64,9 @@ namespace iOSApplication_0._5._3
 				IndexButton.Dispose ();
 				IndexButton = null;
 			}
-			if (MovieTextField != null) {
-				MovieTextField.Dispose ();
-				MovieTextField = null;
+			if (MoviePicker != null) {
+				MoviePicker.Dispose ();
+				MoviePicker = null;
 			}
 			if (PlayButton != null) {
 				PlayButton.Dispose ();

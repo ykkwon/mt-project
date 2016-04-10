@@ -40,17 +40,6 @@
                                     <rect key="frame" x="252" y="191" width="265" height="79"/>
                                 </variation>
                             </button>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="103" translatesAutoresizingMaskIntoConstraints="NO" placeholder="What movie are you watching?" textAlignment="center" fixedFrame="YES">
-                                <rect key="frame" x="178" y="157" width="97" height="30"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                                <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
-                                    <rect key="frame" x="20" y="116" width="338" height="30"/>
-                                </variation>
-                                <variation key="heightClass=regular-widthClass=regular" fixedFrame="YES">
-                                    <rect key="frame" x="252" y="278" width="265" height="30"/>
-                                </variation>
-                            </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="104" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
                                 <rect key="frame" x="177" y="165" width="46" height="30"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
@@ -162,12 +151,22 @@
                                     <rect key="frame" x="409" y="416" width="115" height="30"/>
                                 </variation>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="164" translatesAutoresizingMaskIntoConstraints="NO">
+                                <rect key="frame" x="93" y="294" width="46" height="30"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                <state key="normal" title="Pick movie">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleColor" colorSpace="calibratedRGB" red="0.0196078431372549" green="0.4" blue="0.55294117647058827" alpha="1"/>
+                                </state>
+                                <variation key="heightClass=regular-widthClass=regular" fixedFrame="YES">
+                                    <rect key="frame" x="336" y="278" width="99" height="30"/>
+                                </variation>
+                            </button>
                         </subviews>
                         <variation key="default">
                             <mask key="subviews">
                                 <exclude reference="5"/>
                                 <exclude reference="99"/>
-                                <exclude reference="103"/>
                                 <exclude reference="104"/>
                                 <exclude reference="105"/>
                                 <exclude reference="106"/>
@@ -177,6 +176,7 @@
                                 <exclude reference="134"/>
                                 <exclude reference="147"/>
                                 <exclude reference="155"/>
+                                <exclude reference="164"/>
                             </mask>
                         </variation>
                         <variation key="heightClass=regular-widthClass=compact">
@@ -187,7 +187,6 @@
                         <variation key="heightClass=regular-widthClass=regular">
                             <mask key="subviews">
                                 <include reference="99"/>
-                                <include reference="103"/>
                                 <include reference="104"/>
                                 <include reference="105"/>
                                 <include reference="106"/>
@@ -197,6 +196,7 @@
                                 <include reference="134"/>
                                 <include reference="147"/>
                                 <include reference="155"/>
+                                <include reference="164"/>
                             </mask>
                         </variation>
                         <color key="backgroundColor" colorSpace="calibratedRGB" red="1" green="1" blue="1" alpha="1"/>
@@ -205,13 +205,13 @@
                         <outlet property="ForegroundLabel" destination="5" id="name-outlet-5"/>
                         <outlet property="StopButton" destination="106" id="name-outlet-106"/>
                         <outlet property="TestButton" destination="105" id="name-outlet-105"/>
-                        <outlet property="MovieTextField" destination="103" id="name-outlet-103"/>
                         <outlet property="GetFingerprintsButton" destination="104" id="name-outlet-104"/>
                         <outlet property="IndexButton" destination="99" id="name-outlet-99"/>
                         <outlet property="ForegroundLabel" destination="119" id="name-outlet-119"/>
                         <outlet property="PlayButton" destination="123" id="name-outlet-123"/>
                         <outlet property="SendButton" destination="127" id="name-outlet-127"/>
                         <outlet property="RecordButton" destination="155" id="name-outlet-155"/>
+                        <outlet property="MoviePicker" destination="164" id="name-outlet-164"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

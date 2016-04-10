@@ -7,11 +7,14 @@ using Foundation;
 using UIKit;
 using System.Threading;
 using System.Threading.Tasks;
+using CoreGraphics;
 
 namespace iOSApplication_0._5._3
 {
     public partial class ViewController : UIViewController
     {
+        string selectedMovie;
+        UITableView table;
         public ViewController(IntPtr handle) : base(handle)
         {
 
@@ -21,25 +24,27 @@ namespace iOSApplication_0._5._3
         {
             base.ViewDidLoad();
             RecordManager.Observer = AVPlayerItem.Notifications.ObserveDidPlayToEndTime(RecordManager.OnDidPlayToEndTime);
-            string[] availableMovies;
+            string[] availableMovies = null;
             string[] receivedHashes;
             string[] receivedTimestamps;
             double counter = 0;
-
-            MovieTextField.EnablesReturnKeyAutomatically = true;
-            MovieTextField.ReturnKeyType = UIReturnKeyType.Send;
+            
 
             GetFingerprintsButton.Enabled = false;
             RecordButton.Enabled = false;
+            TestButton.Enabled = false;
+            MoviePicker.Enabled = false;
             StopButton.Enabled = false;
             PlayButton.Enabled = false;
             SendButton.Enabled = false;
+
             GetFingerprintsButton.SetTitleColor(UIColor.FromRGBA(0, 0, 0, 150), UIControlState.Disabled);
             RecordButton.SetTitleColor(UIColor.FromRGBA(0, 0, 0, 150), UIControlState.Disabled);
             StopButton.SetTitleColor(UIColor.FromRGBA(0, 0, 0, 150), UIControlState.Disabled);
             PlayButton.SetTitleColor(UIColor.FromRGBA(0, 0, 0, 150), UIControlState.Disabled);
             SendButton.SetTitleColor(UIColor.FromRGBA(0, 0, 0, 150), UIControlState.Disabled);
-
+            MoviePicker.SetTitleColor(UIColor.FromRGBA(0, 0, 0, 150), UIControlState.Disabled);
+            TestButton.SetTitleColor(UIColor.FromRGBA(0, 0, 0, 150), UIControlState.Disabled);
 
             // Event handler for simple "Record" button click and release.
             RecordButton.TouchUpInside += (sender, e) =>
@@ -101,8 +106,10 @@ namespace iOSApplication_0._5._3
                 IndexButton.Enabled = false;
                 GetFingerprintsButton.Enabled = false;
 
-                Task.Factory.StartNew(() => {
-                    while (true) {
+                Task.Factory.StartNew(() =>
+                {
+                    while (true)
+                    {
                         for (int i = 0; i < 10; i++)
                         {
                             var session = AVAudioSession.SharedInstance();
@@ -127,11 +134,6 @@ namespace iOSApplication_0._5._3
                         }
                     }
                 });
-                // Record i 3-4s
-                // Skriv til ei fil
-                // Send til Preprocess wav
-                // Få et resultat
-                // Repeatx  
             };
 
             // Event handler for simple "Stop" button click and release.
@@ -147,20 +149,20 @@ namespace iOSApplication_0._5._3
                 StopButton.Enabled = false;
                 PlayButton.Enabled = true;
                 SendButton.Enabled = true;
-               
+
             };
 
             SendButton.TouchUpInside += (sender, e) =>
             {
-        
-          try
+
+                try
                 {
-                   
+
                     var test = RecordManager.ConsumeWaveFile(RecordManager.TempRecording);
-                       ForegroundLabel.Text = "Matched " + test + " fingerprints in total.";
+                    ForegroundLabel.Text = "Matched " + test + " fingerprints in total.";
 
 
-                    }
+                }
                 catch (Exception ex)
                 {
                     ForegroundLabel.Text = "ERROR";
@@ -200,9 +202,8 @@ namespace iOSApplication_0._5._3
             // Event handler for simple "Get fingerprints" button click and release.
             GetFingerprintsButton.TouchUpInside += async (sender, e) =>
             {
-
                 var client = new HttpClient();
-                var inputString = @"http://webapi-1.bwjyuhcr5p.eu-west-1.elasticbeanstalk.com/Fingerprints/GetAllFingerprintsSQL?inputTitle='TH'";
+                var inputString = string.Format("http://webapi-1.bwjyuhcr5p.eu-west-1.elasticbeanstalk.com/Fingerprints/GetAllFingerprintsSQL?inputTitle='{0}'", selectedMovie);
 
                 client.BaseAddress = new Uri(inputString);
                 client.DefaultRequestHeaders.Accept.Clear();
@@ -214,7 +215,7 @@ namespace iOSApplication_0._5._3
                 receivedHashes = responseString.Split(';');
 
 
-                var inputString2 = @"http://webapi-1.bwjyuhcr5p.eu-west-1.elasticbeanstalk.com/Fingerprints/GetAllTimestampsSQL?inputTitle='TH'";
+                var inputString2 = string.Format("http://webapi-1.bwjyuhcr5p.eu-west-1.elasticbeanstalk.com/Fingerprints/GetAllTimestampsSQL?inputTitle='{0}'", selectedMovie);
                 client.BaseAddress = new Uri(inputString2);
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -226,8 +227,9 @@ namespace iOSApplication_0._5._3
 
                 RecordManager.SetReceivedHashes(receivedHashes);
                 RecordManager.SetReceivedTimestamps(receivedTimestamps);
-                ForegroundLabel.Text = "Found " + receivedHashes.Length + " fingerprints for " + "The Hobbit.";
+                ForegroundLabel.Text = "Found " + receivedHashes.Length + " fingerprints for " + selectedMovie + ".";
                 RecordButton.Enabled = true;
+                TestButton.Enabled = true;
             };
 
             // Event handler for simple "Index movies" button click and release.
@@ -243,10 +245,30 @@ namespace iOSApplication_0._5._3
                 // HTTP GET
                 HttpResponseMessage response = await client.GetAsync(client.BaseAddress);
                 var responseString = response.Content.ReadAsStringAsync().Result;
-                availableMovies = responseString.Split(';');
-                ForegroundLabel.Text = "Indexing done. Found " + availableMovies.Length + " movies in the database.";
+                availableMovies = responseString.Split(',');
+                ForegroundLabel.Text = "Indexing done. Found " + (availableMovies.Length - 1) + " movies in the database.";
+                MoviePicker.Enabled = true;
+            };
+
+            MoviePicker.TouchUpInside += (sender, e) =>
+            {
+                var width = View.Bounds.Width;
+                var height = View.Bounds.Height;
+                table = new UITableView(new CGRect(0, 0, width, height));
+                table.AutoresizingMask = UIViewAutoresizing.All;
+                table.Source = new TableSource(availableMovies, this);
+                Add(table);
                 GetFingerprintsButton.Enabled = true;
             };
+        }
+        public void setSelectedMovie(string inputMovie)
+        {
+            selectedMovie = inputMovie;
+        }
+
+        public void setForegroundLabel(string text)
+        {
+            ForegroundLabel.Text = text;
         }
     }
 }
