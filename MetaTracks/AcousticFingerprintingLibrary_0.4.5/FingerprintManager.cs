@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using AcousticFingerprintingLibrary_0._4._5.DistanceClasses;
 using AcousticFingerprintingLibrary_0._4._5.FFT;
@@ -818,16 +819,24 @@ namespace AcousticFingerprintingLibrary_0._4._5
             {
                 foreach (var fingerprint2 in toCompare)
                 {
-                    var commonNumbers = from a in fingerprint1.HashBins.AsEnumerable()
-                                        join b in fingerprint2.HashBins.AsEnumerable() on a equals b
-                                        select a;
-                    if (highestCommon < commonNumbers.Count()) highestCommon = commonNumbers.Count();
+                    //var commonNumbers = fingerprint1.HashBins.Intersect(fingerprint2.HashBins);
 
-                    if (commonNumbers.Count() >= 3)
+                    HashSet<long> set2 = new HashSet<long>(fingerprint2.HashBins); // 7643
+                    var counter = 0;
+                    for (int index = 0; index < fingerprint1.HashBins.Length; index++)
+                    {
+                        var hash = fingerprint1.HashBins[index];
+                        var qwe = set2.Contains(hash);
+                        if (qwe)
+                            counter++;
+                    }
+
+                    var count = counter;
+                    if (count >= 3)
                     {
                         _matchedFingerprints.Add(fingerprint1);
                         // Best matched fingerprint is the fingerprint with the highest number of hashes being equal to original fingerprint
-                        _bestMatchedFingerprint.Add(commonNumbers.Count());
+                        _bestMatchedFingerprint.Add(count);
                         // potential match
                         commonCounter++;
                         break; // jumps out of loop and on to next fingerprint
@@ -841,25 +850,32 @@ namespace AcousticFingerprintingLibrary_0._4._5
 
         public double CompareFingerprintListsHighest(HashedFingerprint[] fingerprints, HashedFingerprint[] toCompare)
         {
-            //
-            var highestCommon = 0;
             foreach (var fingerprint1 in fingerprints)
             {
                 foreach (var fingerprint2 in toCompare)
                 {
-                    var commonNumbers = from a in fingerprint1.HashBins.AsEnumerable()
-                                        join b in fingerprint2.HashBins.AsEnumerable() on a equals b
-                                        select a;
+                    //var commonNumbers = fingerprint1.HashBins.Intersect(fingerprint2.HashBins);
 
-                    if (highestCommon < commonNumbers.Count()) highestCommon = commonNumbers.Count();
+                    HashSet<long> set2 = new HashSet<long>(fingerprint2.HashBins); // 7643
+                    var counter = 0;
+                    for (int index = 0; index < fingerprint1.HashBins.Length; index++)
+                    {
+                        var hash = fingerprint1.HashBins[index];
+                        var qwe = set2.Contains(hash);
+                        if (qwe)
+                            counter++;
+                    }
 
-                    if (commonNumbers.Count() >= 3)
+                    var count = counter;
+                    if (count >= 3)
                     {
                         _matchedFingerprints.Add(fingerprint1);
                         break; // jumps out of loop and on to next fingerprint
                     }
                 }
             }
+
+            
             // If result is greater than 5% it is a potential match
             //var result = (double)(100 * commonCounter) / fingerprints.Length;
             return _matchedFingerprints.Count; // if result greater than 5, return true, else false
