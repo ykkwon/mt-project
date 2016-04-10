@@ -307,7 +307,7 @@ namespace DatabasePopulationApplication_0._4._5
                     // HTTP GET
                     HttpResponseMessage response = await client.GetAsync(client.BaseAddress);
                     var responseString = response.Content.ReadAsStringAsync().Result;
-                    var receivedHashes = responseString.Split(',');
+                    var receivedHashes = responseString.Split(';');
                     Console.WriteLine(@"Got all hashes.");
 
                     string[] receivedtime = new string[receivedHashes.Length];
