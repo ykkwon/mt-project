@@ -29,6 +29,7 @@ namespace DatabasePopulationApplication_0._4._5
         private string _entryName;
         private string _typeName;
         private string _filename;
+        private bool _fileopened;
 
         private void openButton_Click(object sender, RoutedEventArgs e)
         {
@@ -36,9 +37,7 @@ namespace DatabasePopulationApplication_0._4._5
             if (nameDialog.ShowDialog() == true)
             {
                 _entryName = nameDialog.ResponseText;
-            }
-            else
-            {
+            } else {
                 return;
             }
 
@@ -57,12 +56,15 @@ namespace DatabasePopulationApplication_0._4._5
                 try
                 {
                     OpenFileDialog ofd = new OpenFileDialog();
-                    ofd.ShowDialog();
-                    _filename = ofd.FileName;
-                    Main.Status = "Opened file: " + _filename;
-                    Main.Status = "The file will appear in the database as:";
-                    Main.Status = "Name: " + _entryName;
-                    Main.Status = "Type: " + _typeName;
+                    if (ofd.ShowDialog() == true)
+                    {
+                        _fileopened = true;
+                        _filename = ofd.FileName;
+                        Main.Status = "Opened file: " + _filename;
+                        Main.Status = "The file will appear in the database as:";
+                        Main.Status = "Name: " + _entryName;
+                        Main.Status = "Type: " + _typeName;
+                    }
                 }
                 catch (TypeInitializationException exception)
                 {
@@ -72,53 +74,34 @@ namespace DatabasePopulationApplication_0._4._5
             })).Start();
         }
 
-        private void DrawFingerprints()
+        private void DrawFingerprints(SaveFileDialog sfd)
         {
-            SaveFileDialog sfd = new SaveFileDialog
-            {
-                Filter = "(*.jpg)|*.jpg",
-                FileName = Path.GetFileNameWithoutExtension(_filename) + "_fingerprints" + ".jpg"
-            };
-
-            sfd.ShowDialog();
-
-            using (BassProxy proxy = new BassProxy())
-            {
-                Main.Status = "Visualizing hashes. This might take a while, depending on the movie length.";
-                AcousticFingerprintingLibrary_0._4._5.FingerprintManager manager = new AcousticFingerprintingLibrary_0._4._5.FingerprintManager();
-                // DistanceeSize is length between consecutive fingerprints
-                int distanceSize = 1102;
-                int samplesPerFingerprint = 128 * 64; // 128 = width of fingerprint, 64 = overlap
-                var distance = new IncrementalDistance(distanceSize, samplesPerFingerprint);
+            Main.Status = "Visualizing hashes. This might take a while, depending on the movie length.";
+            AcousticFingerprintingLibrary_0._4._5.FingerprintManager manager =
+                new AcousticFingerprintingLibrary_0._4._5.FingerprintManager();
+            // DistanceeSize is length between consecutive fingerprints
+            int distanceSize = 1102;
+            int samplesPerFingerprint = 128*64; // 128 = width of fingerprint, 64 = overlap
+            var distance = new IncrementalDistance(distanceSize, samplesPerFingerprint);
 
 
-                //List<bool[]> fingerprints = manager.CreateFingerprints(proxy, Path.GetFullPath(filename), Distance);
-                List<Fingerprint> fingerprints = manager.CreateFingerprints(Path.GetFullPath(_filename), distance);
+            //List<bool[]> fingerprints = manager.CreateFingerprints(proxy, Path.GetFullPath(filename), Distance);
+            List<Fingerprint> fingerprints = manager.CreateFingerprints(Path.GetFullPath(_filename), distance);
 
-                //manager.GetHashSimilarity(Distance, Distance, proxy, filename, filename);
-                int width = manager.FingerprintWidth;
-                int height = manager.LogBins;
-                Bitmap image = Imaging.GetFingerprintsImage(fingerprints, width, height);
-                image.Save(sfd.FileName, ImageFormat.Jpeg);
-                image.Dispose();
-                Main.Status = "Visualization done. Image file saved to: " + Path.GetFullPath(sfd.FileName);
-            }
+            //manager.GetHashSimilarity(Distance, Distance, proxy, filename, filename);
+            int width = manager.FingerprintWidth;
+            int height = manager.LogBins;
+            Bitmap image = Imaging.GetFingerprintsImage(fingerprints, width, height);
+            image.Save(sfd.FileName, ImageFormat.Jpeg);
+            image.Dispose();
+            Main.Status = "Visualization done. Image file saved to: " + Path.GetFullPath(sfd.FileName);
         }
 
-        private void DrawSpectrogram()
+        private void DrawSpectrogram(SaveFileDialog sfd)
         {
-            SaveFileDialog sfd = new SaveFileDialog
-            {
-                Filter = "(*.jpg)|*.jpg", //Resources.FileFilterJPeg,
-                FileName = Path.GetFileNameWithoutExtension(_filename) + "_spectrum" + ".jpg"
-            };
-
             int width = 1000;
             int height = 800;
-
-            sfd.ShowDialog();
-            using (BassProxy proxy = new BassProxy())
-            {
+            
                 Main.Status = "Generating spectrogram visualization.";
                 AcousticFingerprintingLibrary_0._4._5.FingerprintManager manager = new AcousticFingerprintingLibrary_0._4._5.FingerprintManager();
 
@@ -127,20 +110,11 @@ namespace DatabasePopulationApplication_0._4._5
                 image.Save(sfd.FileName, ImageFormat.Jpeg);
                 image.Dispose();
                 Main.Status = "Visualization done. Image file saved to: " + Path.GetFullPath(sfd.FileName);
-            }
 
         }
 
-        private void DrawWavelets()
+        private void DrawWavelets(SaveFileDialog sfd)
         {
-
-            SaveFileDialog sfd = new SaveFileDialog
-            {
-                Filter = "(*.jpg)|*.jpg",
-                FileName = Path.GetFileNameWithoutExtension(_filename) + "_wavelets" + ".jpg"
-            };
-
-            sfd.ShowDialog();
             string path = Path.GetFullPath(sfd.FileName);
             using (BassProxy proxy = new BassProxy())
             {
@@ -160,8 +134,6 @@ namespace DatabasePopulationApplication_0._4._5
             Main.Status = "Staging the following file: " + _filename;
             (new Thread(() =>
             {
-                using (BassProxy proxy = new BassProxy())
-                {
                     AcousticFingerprintingLibrary_0._4._5.FingerprintManager manager = new AcousticFingerprintingLibrary_0._4._5.FingerprintManager();
                     int distanceSize = 1102;
                     int samplesPerFingerprint = 128 * 64; // 128 = width of fingerprint, 64 = overlap
@@ -203,8 +175,6 @@ namespace DatabasePopulationApplication_0._4._5
                     {
                         Main.Status = "You need to preprocess a file first.";
                     }
-                    
-                }
             })).Start();
         }
 
@@ -239,25 +209,48 @@ namespace DatabasePopulationApplication_0._4._5
 
         private void spectrogramButton_Click(object sender, RoutedEventArgs e)
         {
-            (new Thread(() =>
+            if (_fileopened)
             {
-                try
+                SaveFileDialog sfd = new SaveFileDialog
                 {
-                    DrawSpectrogram();
-                }
-                catch (NullReferenceException)
+                    Filter = "(*.jpg)|*.jpg", //Resources.FileFilterJPeg,
+                    FileName = Path.GetFileNameWithoutExtension(_filename) + "_spectrum" + ".jpg"
+                };
+                if (sfd.ShowDialog() == true)
                 {
-                    Console.WriteLine(@"No file loaded.");
+                    (new Thread(() =>
+                    {
+                        try
+                        {
+                            DrawSpectrogram(sfd);
+                        }
+                        catch (NullReferenceException)
+                        {
+                            Console.WriteLine(@"No file loaded.");
+                        }
+                    })).Start();
                 }
-            })).Start();
+            } else Main.Status = "You need to preprocess a file first.";
         }
 
         private void waveletButton_Click(object sender, RoutedEventArgs e)
         {
-            (new Thread(() =>
+            if (_fileopened)
             {
-                DrawWavelets();
-            })).Start();
+                SaveFileDialog sfd = new SaveFileDialog
+                {
+                    Filter = "(*.jpg)|*.jpg",
+                    FileName = Path.GetFileNameWithoutExtension(_filename) + "_wavelets" + ".jpg"
+                };
+                if (sfd.ShowDialog() == true)
+                {
+                    (new Thread(() =>
+                    {
+                        DrawWavelets(sfd);
+                    })).Start();
+                }
+            }
+            else Main.Status = "You need to preprocess a file first.";
         }
 
         private void closeButton_Click(object sender, RoutedEventArgs e)
@@ -267,70 +260,88 @@ namespace DatabasePopulationApplication_0._4._5
 
         private void hashButton_Click(object sender, RoutedEventArgs e)
         {
-            (new Thread(DrawFingerprints)).Start();
+            if (_fileopened)
+            {
+                SaveFileDialog sfd = new SaveFileDialog
+                {
+                    Filter = "(*.jpg)|*.jpg",
+                    FileName = Path.GetFileNameWithoutExtension(_filename) + "_fingerprints" + ".jpg"
+                };
+                if (sfd.ShowDialog() == true)
+                {
+                    (new Thread(() =>
+                    {
+                        DrawFingerprints(sfd);
+                    })).Start();
+                }
+            }
+            else Main.Status = "You need to preprocess a file first.";
         }
 
         private void compareButton_Click(object sender, RoutedEventArgs e)
         {
-            string titleInput = null;
-            OpenFileDialog ofd = new OpenFileDialog();
-            ofd.ShowDialog();
-            var secondFile = ofd.FileName;
-            var nameDialog2 = new Popup_Title();
-            if (nameDialog2.ShowDialog() == true)
+            if (_fileopened)
             {
-                titleInput = nameDialog2.ResponseText;
-
-            }
-
-            (new Thread(async () =>
-            {
-                using (BassProxy proxy = new BassProxy())
-            {
-                
-                Main.Status = "Comparing chosen digital file with fingerprints from database.";
-                AcousticFingerprintingLibrary_0._4._5.FingerprintManager manager = new AcousticFingerprintingLibrary_0._4._5.FingerprintManager();
-                int distanceSize = 1102;
-                int samplesPerFingerprint = 128 * 64; // 128 = width of fingerprint, 64 = overlap
-                var distance = new IncrementalDistance(distanceSize, samplesPerFingerprint);
-
-
-                if (titleInput != null)
+                string titleInput = null;
+                var nameDialog2 = new Popup_Title();
+                if (nameDialog2.ShowDialog() == true)
                 {
-                    string address =
-                        "http://webapi-1.bwjyuhcr5p.eu-west-1.elasticbeanstalk.com/Fingerprints/GetAllFingerprintsSQL?inputTitle=" +
-                        $"'{Uri.EscapeDataString(titleInput)}'";
-                    var client = new HttpClient {BaseAddress = new Uri(address)};
-                    client.DefaultRequestHeaders.Accept.Clear();
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                    // HTTP GET
-                    HttpResponseMessage response = await client.GetAsync(client.BaseAddress);
-                    var responseString = response.Content.ReadAsStringAsync().Result;
-                    var receivedHashes = responseString.Split(';');
-                    Console.WriteLine(@"Got all hashes.");
-
-                    string[] receivedtime = new string[receivedHashes.Length];
-
-                    var fingerprints2 = manager.CreateFingerprints(secondFile, distance);
-
-
-                    var toCompare = manager.GetFingerHashes(distance, fingerprints2);
-                    var movie = manager.GenerateHashedFingerprints(receivedHashes, receivedtime, toCompare[0].HashBins.Length);
-
-
-                    // NOTE TO SELF: We should split up fingerprints of movie into different lists, 
-                    // ie. fingerprints from timestamp 0 - 600 seconds (10min) goes in one list, next 600seconds go to next list.
-                    // This is for faster comparing when we search later on.
-
-                    // sends in two lists of HashedFingerprints, returns timestamp if they match
-                    // Assuming first list is a section of fingerprints from the movie (say a list of fingerprints for 10minutes)
-                    //var results = manager.GetTimeStamps(movie, toCompare);
-                    var totalMatch = manager.CompareFingerprintListsHighest(movie, toCompare);
-                    Main.Status = "Percentage of matched fingerprints: " + totalMatch;
+                    titleInput = nameDialog2.ResponseText;
                 }
+
+                (new Thread(async () =>
+                {
+                    using (BassProxy proxy = new BassProxy())
+                    {
+
+                        Main.Status = "Comparing chosen digital file with fingerprints from database.";
+                        AcousticFingerprintingLibrary_0._4._5.FingerprintManager manager =
+                            new AcousticFingerprintingLibrary_0._4._5.FingerprintManager();
+                        int distanceSize = 1102;
+                        int samplesPerFingerprint = 128*64; // 128 = width of fingerprint, 64 = overlap
+                        var distance = new IncrementalDistance(distanceSize, samplesPerFingerprint);
+
+
+                        if (titleInput != null)
+                        {
+                            string address =
+                                "http://webapi-1.bwjyuhcr5p.eu-west-1.elasticbeanstalk.com/Fingerprints/GetAllFingerprintsSQL?inputTitle=" +
+                                $"'{Uri.EscapeDataString(titleInput)}'";
+                            var client = new HttpClient {BaseAddress = new Uri(address)};
+                            client.DefaultRequestHeaders.Accept.Clear();
+                            client.DefaultRequestHeaders.Accept.Add(
+                                new MediaTypeWithQualityHeaderValue("application/json"));
+
+                            // HTTP GET
+                            HttpResponseMessage response = await client.GetAsync(client.BaseAddress);
+                            var responseString = response.Content.ReadAsStringAsync().Result;
+                            var receivedHashes = responseString.Split(';');
+                            Console.WriteLine(@"Got all hashes.");
+
+                            string[] receivedtime = new string[receivedHashes.Length];
+
+                            var fingerprints2 = manager.CreateFingerprints(_filename, distance);
+
+
+                            var toCompare = manager.GetFingerHashes(distance, fingerprints2);
+                            var movie = manager.GenerateHashedFingerprints(receivedHashes, receivedtime,
+                                toCompare[0].HashBins.Length);
+
+
+                            // NOTE TO SELF: We should split up fingerprints of movie into different lists, 
+                            // ie. fingerprints from timestamp 0 - 600 seconds (10min) goes in one list, next 600seconds go to next list.
+                            // This is for faster comparing when we search later on.
+
+                            // sends in two lists of HashedFingerprints, returns timestamp if they match
+                            // Assuming first list is a section of fingerprints from the movie (say a list of fingerprints for 10minutes)
+                            //var results = manager.GetTimeStamps(movie, toCompare);
+                            var totalMatch = manager.CompareFingerprintListsHighest(movie, toCompare);
+                            Main.Status = "Percentage of matched fingerprints: " + totalMatch;
+                        }
+                    }
+                })).Start();
             }
-            })).Start();
+            else Main.Status = "You need to preprocess a file first.";
         }
     }
 }
