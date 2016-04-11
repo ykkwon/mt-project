@@ -203,22 +203,22 @@ namespace AcousticFingerprintingLibrary_0._4._5
             var windowSize = WindowSize;
             var width = (samples.Length - windowSize)/overlap; /*width of the image*/
             var frames = new float[width][];
-            var complexSignal = new float[2*windowSize]; /*even - Re, odd - Img*/
+            var fourierSignal = new float[2*windowSize]; /*even - Re, odd - Img*/
             for (var i = 0; i < width; i++)
             {
                 //take 371 ms each 11.6 ms (2048 samples each 64 samples)
                 for (var j = 0; j < windowSize /*2048*/; j++)
                 {
-                    complexSignal[2*j] = (float) (_windowArray[j]*samples[i*overlap + j]); /*Weight by Hann Window*/
-                    complexSignal[2*j + 1] = 0;
+                    fourierSignal[2*j] = (float) (_windowArray[j]*samples[i*overlap + j]); /*Weight by Hann Window*/
+                    fourierSignal[2*j + 1] = 0;
                 }
                 //FFT transform for gathering the spectrogram
-                Fourier.FFT(complexSignal, windowSize, FourierDirection.Forward);
+                Fourier.FFT(fourierSignal, windowSize, FourierDirection.Forward);
                 var temp = new float[windowSize/2 + 1];
                 for (var j = 0; j < windowSize/2 + 1; j++)
                 {
-                    double re = complexSignal[2*j];
-                    double img = complexSignal[2*j + 1];
+                    double re = fourierSignal[2*j];
+                    double img = fourierSignal[2*j + 1];
                     re /= (float) windowSize/2;
                     img /= (float) windowSize/2;
                     temp[j] = (float) Math.Sqrt(re*re + img*img);
@@ -267,7 +267,7 @@ namespace AcousticFingerprintingLibrary_0._4._5
 
 
         // normalize power (volume) of a wave file.
-        // minimum and maximum rms to normalize from.
+        // minimum and maximum root-mean-square(RMS) to normalize from.
         private const float Minrms = 0.1f;
         private const float Maxrms = 3;
 
