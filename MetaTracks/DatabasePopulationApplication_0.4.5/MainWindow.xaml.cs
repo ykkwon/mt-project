@@ -24,6 +24,7 @@ namespace DatabasePopulationApplication_0._4._5
             MouseLeftButtonDown += delegate { DragMove(); };
         }
 
+        int foregroundLabelCounter = 0;
         internal static MainWindow Main;
         private readonly FingerprintDatabaseManager _fdbm = new FingerprintDatabaseManager();
         private string _entryName;
@@ -72,6 +73,7 @@ namespace DatabasePopulationApplication_0._4._5
                     Main.Status = "Not connected to database. Connect through AWS Explorer.";
                 }
             })).Start();
+            foregroundLabelCounter += 4;
         }
 
         private void DrawFingerprints(SaveFileDialog sfd)
@@ -95,6 +97,7 @@ namespace DatabasePopulationApplication_0._4._5
             image.Save(sfd.FileName, ImageFormat.Jpeg);
             image.Dispose();
             Main.Status = "Visualization done. Image file saved to: " + Path.GetFullPath(sfd.FileName);
+            foregroundLabelCounter += 2;
         }
 
         private void DrawSpectrogram(SaveFileDialog sfd)
@@ -110,6 +113,7 @@ namespace DatabasePopulationApplication_0._4._5
                 image.Save(sfd.FileName, ImageFormat.Jpeg);
                 image.Dispose();
                 Main.Status = "Visualization done. Image file saved to: " + Path.GetFullPath(sfd.FileName);
+            foregroundLabelCounter += 2;
 
         }
 
@@ -126,6 +130,7 @@ namespace DatabasePopulationApplication_0._4._5
                 image.Save(path);
                 image.Dispose();
                 Main.Status = "Visualization done. Image file saved to: " + Path.GetFullPath(sfd.FileName);
+                foregroundLabelCounter += 2;
             }
         }
 
@@ -170,6 +175,7 @@ namespace DatabasePopulationApplication_0._4._5
                         Main.Status = "Printed CSV file to: " + Path.GetTempPath() + _entryName + "fingerprints.csv";
                         _fdbm.WriteToMySql(Path.GetTempPath() + _entryName + "fingerprints.csv");
                         Main.Status = "Done.";
+                        foregroundLabelCounter += 5;
                     }
                     catch(ArgumentNullException)
                     {
@@ -181,12 +187,20 @@ namespace DatabasePopulationApplication_0._4._5
 
         internal string Status
         {
+            
             get { return fg_label.Content.ToString(); }
             set
             {
                 Dispatcher.Invoke(() =>
                 {
                     fg_label.Content += value + "\n";
+                    foregroundLabelCounter++;
+                    if(foregroundLabelCounter >= 18)
+                    {
+                        fg_label.Content = "";
+                        fg_label.Content += value + "\n";
+                        foregroundLabelCounter = 0;
+                    }
                 });
             }
         }
