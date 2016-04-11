@@ -125,7 +125,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -148,6 +148,30 @@
       <Project>{19F54949-DDCA-43BC-B558-50AD1D5DDDCE}</Project>
       <Name>WindowsApplication_0.4.5</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Style\arrows.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Style\database.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Style\interface.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Style\signs.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Style\squares.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Style\up-arrow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Style\delete.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Style\Untitled-1.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

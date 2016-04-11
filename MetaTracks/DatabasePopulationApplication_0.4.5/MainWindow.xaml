@@ -5,21 +5,49 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         Title="Database Population Application" Height="568.432" Width="1003.069" ResizeMode="NoResize" Background="#FF292929" WindowStyle="None">
-    <Grid HorizontalAlignment="Left" Height="558" VerticalAlignment="Top" Width="1003">
-        <Button x:Name="openButton" Content="Preprocess file" HorizontalAlignment="Left" VerticalAlignment="Top" Width="240" Height="40" Background="#FF343436" Click="openButton_Click" RenderTransformOrigin="0.504,1.525" Margin="10,106.03,0,0" Foreground="White" FontWeight="Bold"/>
-        <Button x:Name="sendButton" Content="Send hashes to database" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="240" Margin="10,0,0,187" Height="40" Background="#FF343436" Click="sendButton_Click" Foreground="White" FontWeight="Bold"/>
-        <Button x:Name="waveletButton" Content="Visualize wavelets (optional)" HorizontalAlignment="Left" Width="240" Margin="10,196,0,322" Background="#FF343436" Click="waveletButton_Click" Foreground="White" FontWeight="Bold"/>
-        <Button x:Name="spectrogramButton" Content="Generate spectrogram (optional)" HorizontalAlignment="Left" VerticalAlignment="Top" Width="240" Margin="10,151,0,0" Height="40" Background="#FF343436" Click="spectrogramButton_Click" Foreground="White" FontWeight="Bold"/>
-        <Label x:Name="fg_label" Content="" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="452" Width="705" BorderBrush="#FF464646" BorderThickness="1" Margin="268,0,0,0" Foreground="White" FontSize="14.667"/>
-        <Button x:Name="purgebutton" Content="Truncate table (dangeous)" HorizontalAlignment="Left" Margin="10,508,0,0" VerticalAlignment="Top" Width="240" Height="40" Background="#FFF55555" Click="purgebutton_Click"/>
-        <Rectangle x:Name="handle" Height="87.333" Margin="-132.667,-12,-25.375,0" VerticalAlignment="Top" Stroke="White" StrokeThickness="0.5" Fill="#FF383838" IsManipulationEnabled="True"/>
-        <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Height="75" TextWrapping="Wrap" Text="Database Population Application" VerticalAlignment="Top" Width="475" Margin="10,10,0,0" Foreground="White" FontFamily="Segoe UI Emoji" FontSize="21.333"/>
-        <Button x:Name="closeButton" Content="X" HorizontalAlignment="Left" VerticalAlignment="Top" Width="25" Margin="978,0,0,0" RenderTransformOrigin="0.46,0.35" Height="25" Click="closeButton_Click" BorderBrush="{x:Null}" Foreground="White" FontSize="16">
+    <Grid HorizontalAlignment="Left" Height="558" VerticalAlignment="Top" Width="1003" Background="White">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="253*"/>
+            <ColumnDefinition Width="751*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="32*"/>
+            <RowDefinition Height="527*"/>
+        </Grid.RowDefinitions>
+        <Rectangle x:Name="handle_Copy" Height="558" Margin="0,0,23.5,0" VerticalAlignment="Top" StrokeThickness="0.5" Fill="#FF383838" IsManipulationEnabled="True" Grid.RowSpan="2"/>
+        <Button x:Name="sendButton" Content="               Send hashes to database" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="229" Margin="0,0,0,280" Height="40" Background="{x:Null}" Click="sendButton_Click" Foreground="White" FontWeight="Bold" BorderBrush="{x:Null}" Grid.Row="1"/>
+        <Button x:Name="waveletButton" Content="     Visualize wavelets" HorizontalAlignment="Left" Width="229" Margin="0,72,0,415" Background="{x:Null}" Click="waveletButton_Click" Foreground="White" FontWeight="Bold" BorderBrush="{x:Null}" Grid.Row="1"/>
+        <Button x:Name="spectrogramButton" Content="             Generate spectrogram" HorizontalAlignment="Left" VerticalAlignment="Top" Width="229" Margin="0,26,0,0" Height="40" Background="{x:Null}" Click="spectrogramButton_Click" Foreground="White" FontWeight="Bold" BorderBrush="{x:Null}" Grid.Row="1"/>
+        <Border HorizontalAlignment="Left" Height="30" Margin="10,18,0,0" VerticalAlignment="Top" Width="40" Grid.RowSpan="2">
+            <Image x:Name="image" Source="Style/arrows.png" IsHitTestVisible="False"/>
+        </Border>
+        <Label x:Name="fg_label" Content="" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="450" Width="750" BorderThickness="1" Foreground="Black" FontSize="14.667" Grid.Row="1" Grid.Column="1"/>
+        <Button x:Name="purgebutton" Content="&#x9;  Truncate table (dangeous)" HorizontalAlignment="Left" Margin="0,480,0,0" VerticalAlignment="Top" Width="229" Height="40" Background="{x:Null}" Click="purgebutton_Click" Grid.Row="1" Foreground="White" FontWeight="Bold" BorderBrush="{x:Null}"/>
+        <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Height="75" TextWrapping="Wrap" Text="Database Population Application" VerticalAlignment="Top" Width="760" Margin="230,22,0,0" Foreground="#FF040404" FontFamily="Segoe UI Symbol" FontSize="24" Grid.RowSpan="2" Grid.ColumnSpan="2" TextAlignment="Center"/>
+        <Button x:Name="closeButton" Content="X" HorizontalAlignment="Left" VerticalAlignment="Top" Width="25" Margin="725.5,0,0,0" RenderTransformOrigin="0.46,0.35" Height="25" Click="closeButton_Click" BorderBrush="{x:Null}" Foreground="#FF9C9898" FontSize="16" Grid.Column="1">
             <Button.Background>
                 <ImageBrush/>
             </Button.Background>
         </Button>
-        <Button x:Name="hashButton" Content="Visualize fingerprints (optional)" HorizontalAlignment="Left" Margin="10,241,0,0" VerticalAlignment="Top" Width="240" Height="40" Background="#FF343436" Foreground="White" FontWeight="Bold" Click="hashButton_Click"/>
-        <Button x:Name="compareButton" Content="Compare digital copy (optional)" HorizontalAlignment="Left" Margin="10,286,0,0" VerticalAlignment="Top" Width="240" Height="40" Background="#FF343436" Foreground="White" FontWeight="Bold" Click="compareButton_Click"/>
+        <Button x:Name="hashButton" Content="          Visualize fingerprints" HorizontalAlignment="Left" Margin="0,116,0,0" VerticalAlignment="Top" Width="229" Height="40" Background="{x:Null}" Foreground="White" FontWeight="Bold" Click="hashButton_Click" BorderBrush="{x:Null}" Grid.Row="1"/>
+        <Button x:Name="compareButton" Content="          Compare digital copy" HorizontalAlignment="Left" Margin="0,162,0,0" VerticalAlignment="Top" Width="229" Height="40" Background="{x:Null}" Foreground="White" FontWeight="Bold" Click="compareButton_Click" BorderBrush="{x:Null}" Grid.Row="1"/>
+        <Border HorizontalAlignment="Left" Height="30" Margin="10,30,0,0" VerticalAlignment="Top" Width="40" Grid.Row="1">
+            <Image x:Name="image_Copy" Source="Style/interface.png" IsHitTestVisible="False"/>
+        </Border>
+        <Border HorizontalAlignment="Left" Height="30" Margin="10,76,0,0" VerticalAlignment="Top" Width="40" Grid.Row="1">
+            <Image x:Name="image_Copy1" Source="Style/squares.png" IsHitTestVisible="False"/>
+        </Border>
+        <Border HorizontalAlignment="Left" Height="30" Margin="10,122,0,0" VerticalAlignment="Top" Width="40" Grid.Row="1">
+            <Image x:Name="image_Copy2" Source="Style/signs.png" IsHitTestVisible="False"/>
+        </Border>
+        <Border HorizontalAlignment="Left" Height="30" Margin="10,166,0,0" VerticalAlignment="Top" Width="40" Grid.Row="1">
+            <Image x:Name="image_Copy3" Source="Style/up-arrow.png" IsHitTestVisible="False"/>
+        </Border>
+        <Border HorizontalAlignment="Left" Height="30" Margin="10,212,0,0" VerticalAlignment="Top" Width="40" Grid.Row="1">
+            <Image x:Name="image_Copy4" Source="Style/database.png" IsHitTestVisible="False"/>
+        </Border>
+        <Image x:Name="image1" HorizontalAlignment="Left" Height="30" Margin="20,486,0,0" Grid.Row="1" VerticalAlignment="Top" Width="30" Source="Style/delete.png" RenderTransformOrigin="0.667,0.156"/>
+        <Button x:Name="openButton" Content="Preprocess file" HorizontalAlignment="Left" VerticalAlignment="Top" Width="229" Height="40" Background="{x:Null}" Click="openButton_Click" RenderTransformOrigin="0.504,1.525" Margin="0,13,0,0" Foreground="White" FontWeight="Bold" BorderBrush="{x:Null}" Grid.RowSpan="2"/>
+        <Image x:Name="image2" HorizontalAlignment="Left" Height="80" Margin="0,10,0,0" VerticalAlignment="Top" Width="75" Grid.RowSpan="2" Source="Style/Untitled-1.png" Grid.Column="1"/>
     </Grid>
 </Window>
