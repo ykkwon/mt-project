@@ -809,15 +809,17 @@ namespace AcousticFingerprintingLibrary_0._4._5
 
         #region Recognition
         private readonly List<HashedFingerprint> _matchedFingerprints = new List<HashedFingerprint>();
-        private readonly List<int> _bestMatchedFingerprint = new List<int>();
+        private HashedFingerprint _bestMatchedFingerprint;
         public bool CompareFingerprintLists(HashedFingerprint[] fingerprints, HashedFingerprint[] toCompare)
         {
+            var fingerprintList = fingerprints;
+            var toCompareList = toCompare;
             //
             var commonCounter = 0;
             var highestCommon = 0;
-            foreach (var fingerprint1 in fingerprints)
+            foreach (var fingerprint1 in fingerprintList)
             {
-                foreach (var fingerprint2 in toCompare)
+                foreach (var fingerprint2 in toCompareList)
                 {
                     //var commonNumbers = fingerprint1.HashBins.Intersect(fingerprint2.HashBins);
 
@@ -836,7 +838,8 @@ namespace AcousticFingerprintingLibrary_0._4._5
                     {
                         _matchedFingerprints.Add(fingerprint1);
                         // Best matched fingerprint is the fingerprint with the highest number of hashes being equal to original fingerprint
-                        _bestMatchedFingerprint.Add(count);
+                        if (highestCommon <= count)
+                            _bestMatchedFingerprint = fingerprint1;
                         // potential match
                         commonCounter++;
                         break; // jumps out of loop and on to next fingerprint
@@ -893,7 +896,8 @@ namespace AcousticFingerprintingLibrary_0._4._5
                 */
 
                 // returns timestamp of matched fingerprint
-                return _matchedFingerprints[_matchedFingerprints.Count - 1].Timestamp;
+                return _bestMatchedFingerprint.Timestamp;
+                //return _matchedFingerprints.Last().Timestamp;
             }
             // Returns -1 if the lists are not a match
             return -1;
