@@ -839,7 +839,10 @@ namespace AcousticFingerprintingLibrary_0._4._5
                         _matchedFingerprints.Add(fingerprint1);
                         // Best matched fingerprint is the fingerprint with the highest number of hashes being equal to original fingerprint
                         if (highestCommon <= count)
+                        {
                             _bestMatchedFingerprint = fingerprint1;
+                            highestCommon = count;
+                        }
                         // potential match
                         commonCounter++;
                         break; // jumps out of loop and on to next fingerprint
