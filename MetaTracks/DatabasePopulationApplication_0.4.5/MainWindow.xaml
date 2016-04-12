@@ -14,23 +14,23 @@
             <RowDefinition Height="32*"/>
             <RowDefinition Height="527*"/>
         </Grid.RowDefinitions>
-        <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Height="92" TextWrapping="Wrap" VerticalAlignment="Top" Width="775" Margin="229,-34,-1,0" Foreground="White" FontFamily="Trebuchet MS" FontSize="24" Grid.ColumnSpan="2" TextAlignment="Center" Background="#FF383838" LineHeight="48" Grid.RowSpan="2"><Run/><LineBreak/><Run Text="DATABASE POPULATION APPLICATION"/></TextBlock>
+        <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Height="87" TextWrapping="Wrap" VerticalAlignment="Top" Width="775" Margin="229,-34,-1,0" Foreground="White" FontFamily="Trebuchet MS" FontSize="24" Grid.ColumnSpan="2" TextAlignment="Center" Background="#FF383838" LineHeight="48" Grid.RowSpan="2"><Run/><LineBreak/><Run Text="DATABASE POPULATION APPLICATION"/></TextBlock>
         <Rectangle x:Name="handle_Copy" Height="558" Margin="0,0,23.5,0" VerticalAlignment="Top" StrokeThickness="0.5" Fill="#FF383838" IsManipulationEnabled="True" Grid.RowSpan="2"/>
-        <Button x:Name="sendButton" Content="               Send hashes to database" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="229" Margin="0,0,0,280" Height="40" Background="{x:Null}" Click="sendButton_Click" Foreground="White" FontWeight="Bold" BorderBrush="{x:Null}" Grid.Row="1"/>
-        <Button x:Name="waveletButton" Content="     Visualize wavelets" HorizontalAlignment="Left" Width="229" Margin="0,72,0,415" Background="{x:Null}" Click="waveletButton_Click" Foreground="White" FontWeight="Bold" BorderBrush="{x:Null}" Grid.Row="1"/>
-        <Button x:Name="spectrogramButton" Content="             Generate spectrogram" HorizontalAlignment="Left" VerticalAlignment="Top" Width="229" Margin="0,26,0,0" Height="40" Background="{x:Null}" Click="spectrogramButton_Click" Foreground="White" FontWeight="Bold" BorderBrush="{x:Null}" Grid.Row="1"/>
+        <Button x:Name="sendButton" Content="               Send hashes to database" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="229" Margin="0,0,0,280" Height="40" Background="{x:Null}" Click="sendButton_Click" Foreground="White" FontWeight="Bold" BorderBrush="{x:Null}" Grid.Row="1" ToolTip="Send the hashed fingerprints from the preprocessed file to the database."/>
+        <Button x:Name="waveletButton" Content="     Visualize wavelets" HorizontalAlignment="Left" Width="229" Margin="0,72,0,415" Background="{x:Null}" Click="waveletButton_Click" Foreground="White" FontWeight="Bold" BorderBrush="{x:Null}" Grid.Row="1" ToolTip="Visualize the wavelets of the preprocessed file."/>
+        <Button x:Name="spectrogramButton" Content="             Visualize spectrogram" HorizontalAlignment="Left" VerticalAlignment="Top" Width="229" Margin="0,26,0,0" Height="40" Background="{x:Null}" Click="spectrogramButton_Click" Foreground="White" FontWeight="Bold" BorderBrush="{x:Null}" Grid.Row="1" ToolTip="Visualize the spectrogram of the preprocessed file."/>
         <Border HorizontalAlignment="Left" Height="30" Margin="10,18,0,0" VerticalAlignment="Top" Width="40" Grid.RowSpan="2">
             <Image x:Name="image" Source="Style/arrows.png" IsHitTestVisible="False"/>
         </Border>
-        <Label x:Name="fg_label" Content="" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="475" Width="750" BorderThickness="1" Foreground="Black" FontSize="14.667" Grid.Row="1" Grid.Column="1" Margin="1,0,-1,10"/>
+        <Label x:Name="fg_label" Content="" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="485" Width="750" BorderThickness="0,0,5,5" Foreground="Black" FontSize="14.667" Grid.Row="1" Grid.Column="1" Margin="1,0,-1,0" BorderBrush="#FF383838"/>
         <Button x:Name="purgebutton" Content="&#x9;  Truncate table (dangeous)" HorizontalAlignment="Left" Margin="0,480,0,0" VerticalAlignment="Top" Width="229" Height="40" Background="{x:Null}" Click="purgebutton_Click" Grid.Row="1" Foreground="White" FontWeight="Bold" BorderBrush="{x:Null}"/>
         <Button x:Name="closeButton" Content="X" HorizontalAlignment="Left" VerticalAlignment="Top" Width="25" Margin="725.5,0,0,0" RenderTransformOrigin="0.46,0.35" Height="25" Click="closeButton_Click" BorderBrush="{x:Null}" Foreground="White" FontSize="16" Grid.Column="1">
             <Button.Background>
                 <ImageBrush/>
             </Button.Background>
         </Button>
-        <Button x:Name="hashButton" Content="          Visualize fingerprints" HorizontalAlignment="Left" Margin="0,116,0,0" VerticalAlignment="Top" Width="229" Height="40" Background="{x:Null}" Foreground="White" FontWeight="Bold" Click="hashButton_Click" BorderBrush="{x:Null}" Grid.Row="1"/>
-        <Button x:Name="compareButton" Content="          Compare digital copy" HorizontalAlignment="Left" Margin="0,162,0,0" VerticalAlignment="Top" Width="229" Height="40" Background="{x:Null}" Foreground="White" FontWeight="Bold" Click="compareButton_Click" BorderBrush="{x:Null}" Grid.Row="1"/>
+        <Button x:Name="hashButton" Content="          Visualize fingerprints" HorizontalAlignment="Left" Margin="0,116,0,0" VerticalAlignment="Top" Width="229" Height="40" Background="{x:Null}" Foreground="White" FontWeight="Bold" Click="hashButton_Click" BorderBrush="{x:Null}" Grid.Row="1" ToolTip="Visualize the fingerprints of the preprocessed file."/>
+        <Button x:Name="compareButton" Content="          Compare digital copy" HorizontalAlignment="Left" Margin="0,162,0,0" VerticalAlignment="Top" Width="229" Height="40" Background="{x:Null}" Foreground="White" FontWeight="Bold" Click="compareButton_Click" BorderBrush="{x:Null}" Grid.Row="1" ToolTip="Compare the entire preprocessed file with a movie from the database."/>
         <Border HorizontalAlignment="Left" Height="30" Margin="10,30,0,0" VerticalAlignment="Top" Width="40" Grid.Row="1">
             <Image x:Name="image_Copy" Source="Style/interface.png" IsHitTestVisible="False"/>
         </Border>
@@ -47,6 +47,17 @@
             <Image x:Name="image_Copy4" Source="Style/database.png" IsHitTestVisible="False"/>
         </Border>
         <Image HorizontalAlignment="Left" Height="30" Margin="20,486,0,0" Grid.Row="1" VerticalAlignment="Top" Width="30" Source="Style/delete.png" RenderTransformOrigin="0.667,0.156"/>
-        <Button x:Name="openButton" Content="Preprocess file" HorizontalAlignment="Left" VerticalAlignment="Top" Width="229" Height="40" Background="{x:Null}" Click="openButton_Click" RenderTransformOrigin="0.504,1.525" Margin="0,13,0,0" Foreground="White" FontWeight="Bold" BorderBrush="{x:Null}" Grid.RowSpan="2"/>
+        <Button x:Name="openButton" Content="Preprocess file" HorizontalAlignment="Left" VerticalAlignment="Top" Width="229" Height="40" Background="{x:Null}" Click="openButton_Click" RenderTransformOrigin="0.504,1.525" Margin="0,13,0,0" Foreground="White" FontWeight="Bold" BorderBrush="{x:Null}" Grid.RowSpan="2" ToolTip="Transform a media file into 5512Hz, mono, PCM format."/>
+        <Rectangle Fill="#FF383838" HorizontalAlignment="Left" Height="5" Margin="224,521,0,0" Grid.Row="1" StrokeThickness="0.5" VerticalAlignment="Top" Width="80" Grid.ColumnSpan="2"/>
+        <Rectangle Fill="#FF383838" HorizontalAlignment="Left" Height="5" Margin="708,32,-39,0" Grid.Row="1" StrokeThickness="0.5" VerticalAlignment="Top" Width="81" Grid.Column="1" RenderTransformOrigin="0.5,0.5">
+            <Rectangle.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="89.721"/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Rectangle.RenderTransform>
+        </Rectangle>
     </Grid>
 </Window>
