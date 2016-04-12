@@ -7,12 +7,14 @@ using Foundation;
 using UIKit;
 using System.Threading;
 using System.Threading.Tasks;
+using AcousticFingerprintingLibrary_0._4._5;
 using CoreGraphics;
 
 namespace iOSApplication_0._5._3
 {
     public partial class ViewController : UIViewController
     {
+        
         string selectedMovie;
         UITableView table;
         public ViewController(IntPtr handle) : base(handle)
@@ -112,6 +114,7 @@ namespace iOSApplication_0._5._3
                     {
                         for (int i = 0; i < 10; i++)
                         {
+                            
                             var session = AVAudioSession.SharedInstance();
                             NSError error;
                             session.SetCategory(AVAudioSession.CategoryRecord, out error);
@@ -122,9 +125,8 @@ namespace iOSApplication_0._5._3
                             RecordManager.Recorder.Stop();
                             var kasdf = RecordManager.AudioFilePath;
                             Console.WriteLine("TEST: " + kasdf);
-                            RecordManager.ConsumeWaveFile(kasdf.RelativePath);
                             Console.WriteLine(RecordManager.AudioFilePath + " consume done");
-                            var test = RecordManager.ConsumeWaveFile(RecordManager.TempRecording);
+                            var test = RecordManager.ConsumeWaveFile(kasdf.RelativePath);
                             counter += test;
                             this.InvokeOnMainThread(() =>
                                 {

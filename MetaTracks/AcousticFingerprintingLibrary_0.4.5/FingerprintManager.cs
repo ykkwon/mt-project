@@ -15,7 +15,6 @@ namespace AcousticFingerprintingLibrary_0._4._5
         ///   Logarithmic frequency indexes
         /// </summary>
         private int[] _logFrequenciesIndex;
-        
 
         #region Properties
 
@@ -834,7 +833,7 @@ namespace AcousticFingerprintingLibrary_0._4._5
                     }
 
                     var count = counter;
-                    if (count >= 3)
+                    if (count >= 4)
                     {
                         _matchedFingerprints.Add(fingerprint1);
                         // Best matched fingerprint is the fingerprint with the highest number of hashes being equal to original fingerprint
@@ -873,9 +872,10 @@ namespace AcousticFingerprintingLibrary_0._4._5
                     }
 
                     var count = counter;
-                    if (count >= 3)
+                    if (count >= 4)
                     {
                         _matchedFingerprints.Add(fingerprint1);
+                        Console.WriteLine("LAST MATCHED: " + fingerprint1.Timestamp);
                         break; // jumps out of loop and on to next fingerprint
                     }
                 }
@@ -927,6 +927,8 @@ namespace AcousticFingerprintingLibrary_0._4._5
 
             #endregion
         }
+
+
 
     }
 }
