@@ -853,6 +853,10 @@ namespace AcousticFingerprintingLibrary_0._4._5
             return result > 5; // if result greater than 5, return true, else false
         }
 
+        // Get the newest timeStamp found in recognition
+        // Call this to get the newest timestamp found
+        public double LatestTimeStamp { get; set; }
+
         public double CompareFingerprintListsHighest(HashedFingerprint[] fingerprints, HashedFingerprint[] toCompare)
         {
             foreach (var fingerprint1 in fingerprints)
@@ -875,6 +879,8 @@ namespace AcousticFingerprintingLibrary_0._4._5
                     if (count >= 4)
                     {
                         _matchedFingerprints.Add(fingerprint1);
+                        // Sets updates LatestFingerprint with 
+                        LatestTimeStamp = fingerprint1.Timestamp;
                         Console.WriteLine("LAST MATCHED: " + fingerprint1.Timestamp);
                         break; // jumps out of loop and on to next fingerprint
                     }
@@ -927,8 +933,5 @@ namespace AcousticFingerprintingLibrary_0._4._5
 
             #endregion
         }
-
-
-
     }
 }
