@@ -150,12 +150,22 @@ namespace DatabasePopulationApplication_0._4._5
                             distance);
                         var test = manager.GetFingerHashes(distance, fingerprints);
                         Main.Status = "Sending hashes to database. This might take a long time, depending on the movie length.";
-
+                        
                         var csv = new StringBuilder();
                         foreach (var fingerprint in test)
                         {
+                            if (fingerprint.SequenceNumber%(test.Length/100) == 0)
+                            {
+                                this.Dispatcher.Invoke((Action) (() =>
+                                {
+                                    ProgressBar.Value += 1;
+
+                                }));
+                            }
+
                             for (int i = 0; i < fingerprint.HashBins.Length; i++)
                             {
+                                
                                 var currentHash = fingerprint.HashBins[i];
                                 //
                                 var naught = 0;
