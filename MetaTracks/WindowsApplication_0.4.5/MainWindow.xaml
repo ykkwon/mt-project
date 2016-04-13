@@ -14,11 +14,7 @@
             <RowDefinition Height="113*"/>
             <RowDefinition Height="29*"/>
         </Grid.RowDefinitions>
-        <Button x:Name="startButton" Content="Start" HorizontalAlignment="Left" VerticalAlignment="Top" Width="240" Height="40" Background="#FF343436" Click="startButton_Click" RenderTransformOrigin="0.504,1.525" Margin="10,382,0,0" Foreground="White" FontWeight="Bold"/>
-        <Button x:Name="toWaveButton" Content="To Wave" HorizontalAlignment="Left" VerticalAlignment="Top" Width="240" Height="40" Background="#FF343436" Click="toWaveButton_Click" RenderTransformOrigin="0.504,1.525" Margin="10,427,0,0" Foreground="White" FontWeight="Bold" Grid.RowSpan="2"/>
-        <Button x:Name="sendButton" Content="Send to database" HorizontalAlignment="Left" VerticalAlignment="Top" Width="240" Height="40" Background="#FF343436" Click="sendButton_Click" RenderTransformOrigin="0.504,1.525" Margin="10,21,0,0" Foreground="White" FontWeight="Bold" Grid.Row="1"/>
-        <Button x:Name="stopButton" Content="Stop" HorizontalAlignment="Left" VerticalAlignment="Top" Width="240" Height="40" Background="#FF343436" Click="stopButton_Click" RenderTransformOrigin="0.504,1.525" Margin="10,66,0,0" Foreground="White" FontWeight="Bold" Grid.Row="1"/>
-        <ListView x:Name="sourceList" Margin="276,106,25,144" SelectionChanged="sourceList_SelectionChanged" Background="White" Foreground="Black" FontSize="10.667">
+        <ListView x:Name="sourceList" Margin="234,58,25,199" SelectionChanged="sourceList_SelectionChanged" Background="White" Foreground="Black" FontSize="10.667">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Device" DisplayMemberBinding="{Binding Device}" Width="500"/>
@@ -26,7 +22,7 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <Label x:Name="label" Content="" HorizontalAlignment="Left" Margin="276,313,0,0" VerticalAlignment="Top" Height="240" Width="702" Background="White" Grid.RowSpan="2" BorderBrush="White" Foreground="White" FontSize="14.667"/>
+        <Label x:Name="label" Content="" HorizontalAlignment="Left" Margin="234,258,0,0" VerticalAlignment="Top" Height="273" Width="744" Background="White" Grid.RowSpan="2" BorderBrush="White" Foreground="Black" FontSize="14.667"/>
         <TextBlock x:Name="textBlock_Copy" HorizontalAlignment="Left" Height="87" TextWrapping="Wrap" VerticalAlignment="Top" Width="775" Margin="229,-34,-1,0" Foreground="White" FontFamily="Trebuchet MS" FontSize="24" TextAlignment="Center" Background="#FF383838" LineHeight="48"><Run/><LineBreak/><Run Text="ACOUSTIC FINGERPRINTING APPLICATION"/></TextBlock>
         <Button x:Name="refreshButton" Content="Refresh sources" HorizontalAlignment="Left" VerticalAlignment="Top" Width="229" Height="40" Background="#FF383838" Click="refreshButton_Click" RenderTransformOrigin="0.504,1.525" Margin="0,13,0,0" Foreground="White" FontWeight="Bold" BorderBrush="{x:Null}" ToolTip=""/>
         <Button x:Name="recordLongButton" Content="Record (long.)" HorizontalAlignment="Left" VerticalAlignment="Top" Width="229" Height="40" Background="#FF383838" Click="recordLongButton_Click" RenderTransformOrigin="0.504,1.525" Margin="0,213,0,0" Foreground="White" FontWeight="Bold" BorderBrush="{x:Null}" ToolTip=""/>
@@ -49,5 +45,6 @@
         <Image x:Name="image_Copy4" HorizontalAlignment="Left" Height="30" Margin="10,218,0,0" VerticalAlignment="Top" Width="30" RenderTransformOrigin="0.467,0.5" Source="Resources/clock.png" />
         <Image x:Name="image_Copy5" HorizontalAlignment="Left" Height="30" Margin="10,258,0,0" VerticalAlignment="Top" Width="30" RenderTransformOrigin="0.467,0.5" Source="Resources/stop.png" />
         <Image x:Name="image_Copy6" HorizontalAlignment="Left" Height="30" Margin="10,298,0,0" VerticalAlignment="Top" Width="30" RenderTransformOrigin="0.467,0.5" Source="Resources/technology.png" />
+        <TextBox x:Name="inputBox" HorizontalAlignment="Left" Height="22" Margin="234,84,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="744" Cursor="Arrow"/>
     </Grid>
 </Window>
