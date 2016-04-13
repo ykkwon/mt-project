@@ -339,8 +339,7 @@ namespace DatabasePopulationApplication_0._4._5
 
 
                             var toCompare = manager.GetFingerHashes(distance, fingerprints2);
-                            var movie = manager.GenerateHashedFingerprints(receivedHashes, receivedtime,
-                                toCompare[0].HashBins.Length);
+                            var movie = manager.GenerateHashedFingerprints(receivedHashes, receivedtime);
 
 
                             // NOTE TO SELF: We should split up fingerprints of movie into different lists, 

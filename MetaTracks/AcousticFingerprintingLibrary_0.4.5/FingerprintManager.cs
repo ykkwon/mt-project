@@ -88,8 +88,13 @@ namespace AcousticFingerprintingLibrary_0._4._5
 
         #endregion
 
+        public static int LSHtableSize;
+        public static int LSHkey;
+
         public FingerprintManager()
         {
+            LSHtableSize = 33;
+            LSHkey = 3;
             WindowFunction = new HanningWindow();
             HaarWavelet = new HaarWavelet();
             LogBins = 32;
@@ -736,7 +741,7 @@ namespace AcousticFingerprintingLibrary_0._4._5
             var listDb = listdb;
             var minHash = new MinHash();
             var minhashdb = listDb.Select(fing => minHash.ComputeMinHashSignatureByte(fing.Signature)).ToList();
-            var lshBuckets = minhashdb.Select(fing => minHash.GroupMinHashToLshBucketsByte(fing, 33, 3).Values.ToArray()).ToList();
+            var lshBuckets = minhashdb.Select(fing => minHash.GroupMinHashToLshBucketsByte(fing, LSHtableSize, LSHkey).Values.ToArray()).ToList();
 
             //List<HashedFingerprint> hashedFinger = new List<HashedFingerprint>();
             var hashedFinger = new HashedFingerprint[listDb.Count];
@@ -761,7 +766,7 @@ namespace AcousticFingerprintingLibrary_0._4._5
         /// <returns>
         /// An array of HashedFingerprint objects.
         /// </returns>
-        public HashedFingerprint[] GenerateHashedFingerprints(string[] receivedHashes, string[] receivedTimestamps, int tableSize)
+        public HashedFingerprint[] GenerateHashedFingerprints(string[] receivedHashes, string[] receivedTimestamps)
         {
             var hashBins = new List<long>();
             var timestamps = new List<double>();
@@ -784,10 +789,10 @@ namespace AcousticFingerprintingLibrary_0._4._5
             var timestampList = new List<double>();
             for (var j = 0; j < timestamps.Count - 1; j++)
             {
-                if (j % tableSize == 0 && hashBins.Count > j + tableSize)
+                if (j % LSHtableSize == 0 && hashBins.Count > j + LSHtableSize)
                 {
-                    var bins = new long[tableSize];
-                    for (var i = 0; i < tableSize; i++)
+                    var bins = new long[LSHtableSize];
+                    for (var i = 0; i < LSHtableSize; i++)
                     {
                         bins[i] = hashBins[i + j];
                     }

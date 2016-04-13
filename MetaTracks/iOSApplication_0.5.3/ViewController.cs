@@ -223,6 +223,8 @@ namespace iOSApplication_0._5._3
                 var responseString2 = response2.Content.ReadAsStringAsync().Result;
                 receivedTimestamps = responseString2.Split(';');
 
+                FingerprintManager manager = new FingerprintManager();
+                var movie = manager.GenerateHashedFingerprints(receivedHashes, receivedTimestamps);
                 RecordManager.SetReceivedHashes(receivedHashes);
                 RecordManager.SetReceivedTimestamps(receivedTimestamps);
                 ForegroundLabel.Text = "Found " + receivedHashes.Length + " fingerprints for " + selectedMovie + ".";
