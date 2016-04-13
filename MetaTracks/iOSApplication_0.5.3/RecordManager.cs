@@ -13,9 +13,7 @@ namespace iOSApplication_0._5._3
     {
         public static string[] ReceivedHashes;
         public static string[] ReceivedTimestamps;
-
-        public static HashedFingerprint[] movie;
-
+        public static HashedFingerprint[] Movie;
 
         public static AVAudioRecorder Recorder;
         public static AVPlayer Player;
@@ -102,7 +100,7 @@ namespace iOSApplication_0._5._3
                 storedFingerprints.Add(hash);
             //                                             // String[], String[], int lshSize
             //var results = manager.GetTimeStamps(movie, storedFingerprints.ToArray());
-            var results = manager.CompareFingerprintListsHighest(movie, storedFingerprints.ToArray());
+            var results = manager.CompareFingerprintListsHighest(Movie, storedFingerprints.ToArray());
             if (results != -1)
             {
                 // If amatch is found, print timestamp
@@ -127,9 +125,9 @@ namespace iOSApplication_0._5._3
             audioSession.SetCategory(AVAudioSessionCategory.PlayAndRecord);
         }
 
-        public static void setHashedFingerprints(HashedFingerprint[] fingerprint)
+        public static void SetHashedFingerprints(HashedFingerprint[] fingerprint)
         {
-            movie = fingerprint;
+            Movie = fingerprint;
         }
 
         public static void SetReceivedHashes(string[] receivedHashes)

@@ -6,9 +6,9 @@ namespace dbApp
     /// <summary>
     /// Interaction logic for Confirmation.xaml
     /// </summary>
-    public partial class Confirmation : Window
+    public partial class Popup_Confirmation
     {
-        public Confirmation()
+        public Popup_Confirmation()
         {
             InitializeComponent();
         }

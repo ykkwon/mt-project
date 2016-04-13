@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -38,7 +39,8 @@ namespace DatabasePopulationApplication_0._4._5
             if (nameDialog.ShowDialog() == true)
             {
                 _entryName = nameDialog.ResponseText;
-            } else {
+            }
+            else {
                 return;
             }
 
@@ -83,7 +85,7 @@ namespace DatabasePopulationApplication_0._4._5
                 new AcousticFingerprintingLibrary_0._4._5.FingerprintManager();
             // DistanceeSize is length between consecutive fingerprints
             int distanceSize = 1102;
-            int samplesPerFingerprint = 128*64; // 128 = width of fingerprint, 64 = overlap
+            int samplesPerFingerprint = 128 * 64; // 128 = width of fingerprint, 64 = overlap
             var distance = new IncrementalDistance(distanceSize, samplesPerFingerprint);
 
 
@@ -137,68 +139,79 @@ namespace DatabasePopulationApplication_0._4._5
 
         private void sendButton_Click(object sender, RoutedEventArgs e)
         {
-            Main.Status = "Staging the following file: " + _filename;
+            Stopwatch stopWatch = new Stopwatch();
+            stopWatch.Start();
             (new Thread(() =>
             {
-                    AcousticFingerprintingLibrary_0._4._5.FingerprintManager manager = new AcousticFingerprintingLibrary_0._4._5.FingerprintManager();
-                    int distanceSize = 1102;
-                    int samplesPerFingerprint = 128 * 64; // 128 = width of fingerprint, 64 = overlap
-                    var distance = new IncrementalDistance(distanceSize, samplesPerFingerprint);
-                    try
+
+                FingerprintManager manager = new FingerprintManager();
+                int distanceSize = 1102;
+                int samplesPerFingerprint = 128 * 64; // 128 = width of fingerprint, 64 = overlap
+                var distance = new IncrementalDistance(distanceSize, samplesPerFingerprint);
+                try
+                {
+                    if (_fileopened != true)
                     {
-                        List<Fingerprint> fingerprints = manager.CreateFingerprints(Path.GetFullPath(_filename),
+                        throw new ArgumentNullException();
+                    }
+                    Main.Status = "Staging the following file: " + _filename;
+                    List<Fingerprint> fingerprints = manager.CreateFingerprints(Path.GetFullPath(_filename),
                             distance);
-                        var test = manager.GetFingerHashes(distance, fingerprints);
-                        Main.Status = "Sending hashes to database. This might take a long time, depending on the movie length.";
-                        
-                        var csv = new StringBuilder();
-                        foreach (var fingerprint in test)
-                        {
-                            if (fingerprint.SequenceNumber%(test.Length/100) == 0)
-                            {
-                                this.Dispatcher.Invoke((Action) (() =>
-                                {
-                                    ProgressBar.Value += 1;
 
-                                }));
-                            }
+                    var test = manager.GetFingerHashes(distance, fingerprints);
+                    Main.Status = "Sending hashes to database. This might take a long time, depending on the movie length.";
 
-                            for (int i = 0; i < fingerprint.HashBins.Length; i++)
-                            {
-                                
-                                var currentHash = fingerprint.HashBins[i];
-                                //
-                                var naught = 0;
-                                var first = _entryName;
-                                var second = fingerprint.Timestamp;
-                                var third = fingerprint.SequenceNumber;
-                                var fourth = currentHash;
-                                var fifth = _typeName;
-                                var newLine = string.Format("{0};{1};{2};{3};{4};{5}", naught, first, second, third, fourth, fifth);
-                                csv.AppendLine(newLine) ;
-                            }
-                        }
-                        File.WriteAllText(Path.GetTempPath() + _entryName + "fingerprints.csv", csv.ToString());
-                        Console.WriteLine(Path.GetTempPath());
-                       
-                        
-
-                        Main.Status = "Printed CSV file to: " + Path.GetTempPath() + _entryName + "fingerprints.csv";
-                        _fdbm.WriteToMySql(Path.GetTempPath() + _entryName + "fingerprints.csv");
-                        Main.Status = "Done.";
-                        foregroundLabelCounter += 5;
-                    }
-                    catch(ArgumentNullException)
+                    var csv = new StringBuilder();
+                    foreach (var fingerprint in test)
                     {
-                        Main.Status = "You need to preprocess a file first.";
+                        if (fingerprint.SequenceNumber % (test.Length / 100) == 0)
+                        {
+                            this.Dispatcher.Invoke((Action)(() =>
+                           {
+                               ProgressBar.Value += 1;
+
+                           }));
+                        }
+
+                        for (int i = 0; i < fingerprint.HashBins.Length; i++)
+                        {
+
+                            var currentHash = fingerprint.HashBins[i];
+                            //
+                            var naught = 0;
+                            var first = _entryName;
+                            var second = fingerprint.Timestamp;
+                            var third = fingerprint.SequenceNumber;
+                            var fourth = currentHash;
+                            var fifth = _typeName;
+                            var newLine = string.Format("{0};{1};{2};{3};{4};{5}", naught, first, second, third, fourth, fifth);
+                            csv.AppendLine(newLine);
+                        }
                     }
+                    File.WriteAllText(Path.GetTempPath() + _entryName + "fingerprints.csv", csv.ToString());
+                    Console.WriteLine(Path.GetTempPath());
+
+
+
+                    Main.Status = "Printed CSV file to: " + Path.GetTempPath() + _entryName + "fingerprints.csv";
+                    Main.Status = "Wrapping up. . .";
+                    _fdbm.WriteToMySql(Path.GetTempPath() + _entryName + "fingerprints.csv");
+                    Main.Status = "Done.";
+                    foregroundLabelCounter += 5;
+                    Main.Status = "Elapsed time preprocessing and sending: " + stopWatch.Elapsed;
+                    stopWatch.Stop();
+                }
+                catch (ArgumentNullException)
+                {
+                    Main.Status = "You need to preprocess a file first.";
+                }
             })).Start();
         }
 
 
         internal string Status
         {
-            
+
             get { return fg_label.Content.ToString(); }
             set
             {
@@ -206,7 +219,7 @@ namespace DatabasePopulationApplication_0._4._5
                 {
                     fg_label.Content += value + "\n";
                     foregroundLabelCounter++;
-                    if(foregroundLabelCounter >= 18)
+                    if (foregroundLabelCounter >= 20)
                     {
                         fg_label.Content = "";
                         fg_label.Content += value + "\n";
@@ -220,7 +233,7 @@ namespace DatabasePopulationApplication_0._4._5
         private void purgebutton_Click(object sender, RoutedEventArgs e)
         {
 
-            Confirmation dialog = new Confirmation();
+            Popup_Confirmation dialog = new Popup_Confirmation();
             dialog.ShowDialog();
 
             if (dialog.DialogResult == true)
@@ -255,7 +268,8 @@ namespace DatabasePopulationApplication_0._4._5
                         }
                     })).Start();
                 }
-            } else Main.Status = "You need to preprocess a file first.";
+            }
+            else Main.Status = "You need to preprocess a file first.";
         }
 
         private void waveletButton_Click(object sender, RoutedEventArgs e)
@@ -323,7 +337,7 @@ namespace DatabasePopulationApplication_0._4._5
                         AcousticFingerprintingLibrary_0._4._5.FingerprintManager manager =
                             new AcousticFingerprintingLibrary_0._4._5.FingerprintManager();
                         int distanceSize = 1102;
-                        int samplesPerFingerprint = 128*64; // 128 = width of fingerprint, 64 = overlap
+                        int samplesPerFingerprint = 128 * 64; // 128 = width of fingerprint, 64 = overlap
                         var distance = new IncrementalDistance(distanceSize, samplesPerFingerprint);
 
 
@@ -332,7 +346,7 @@ namespace DatabasePopulationApplication_0._4._5
                             string address =
                                 "http://webapi-1.bwjyuhcr5p.eu-west-1.elasticbeanstalk.com/Fingerprints/GetAllFingerprintsSQL?inputTitle=" +
                                 $"'{Uri.EscapeDataString(titleInput)}'";
-                            var client = new HttpClient {BaseAddress = new Uri(address)};
+                            var client = new HttpClient { BaseAddress = new Uri(address) };
                             client.DefaultRequestHeaders.Accept.Clear();
                             client.DefaultRequestHeaders.Accept.Add(
                                 new MediaTypeWithQualityHeaderValue("application/json"));

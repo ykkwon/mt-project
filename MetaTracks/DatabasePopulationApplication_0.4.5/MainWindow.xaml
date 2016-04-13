@@ -23,7 +23,7 @@
             <Image x:Name="image" Source="Style/arrows.png" IsHitTestVisible="False"/>
         </Border>
         <Label x:Name="fg_label" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="485" Width="750" BorderThickness="0,0,5,5" Foreground="Black" FontSize="14.667" Grid.Row="1" Grid.Column="1" Margin="1,0,-1,0" BorderBrush="#FF383838"/>
-        <Button x:Name="purgebutton" Content="&#x9;  Truncate table (dangeous)" HorizontalAlignment="Left" Margin="0,480,0,0" VerticalAlignment="Top" Width="229" Height="40" Background="{x:Null}" Click="purgebutton_Click" Grid.Row="1" Foreground="White" FontWeight="Bold" BorderBrush="{x:Null}"/>
+        <Button x:Name="purgebutton" Content="Truncate table" HorizontalAlignment="Left" Margin="0,480,0,0" VerticalAlignment="Top" Width="229" Height="40" Background="{x:Null}" Click="purgebutton_Click" Grid.Row="1" Foreground="#FFFD4747" FontWeight="Bold" BorderBrush="{x:Null}"/>
         <Button x:Name="closeButton" Content="X" HorizontalAlignment="Left" VerticalAlignment="Top" Width="25" Margin="725.5,0,0,0" RenderTransformOrigin="0.46,0.35" Height="25" Click="closeButton_Click" BorderBrush="{x:Null}" Foreground="White" FontSize="16" Grid.Column="1">
             <Button.Background>
                 <ImageBrush/>
@@ -47,7 +47,7 @@
             <Image x:Name="image_Copy4" Source="Style/database.png" IsHitTestVisible="False"/>
         </Border>
         <Image HorizontalAlignment="Left" Height="30" Margin="20,486,0,0" Grid.Row="1" VerticalAlignment="Top" Width="30" Source="Style/delete.png" RenderTransformOrigin="0.667,0.156"/>
-        <Button x:Name="openButton" Content="Preprocess file" HorizontalAlignment="Left" VerticalAlignment="Top" Width="229" Height="40" Background="{x:Null}" Click="openButton_Click" RenderTransformOrigin="0.504,1.525" Margin="0,13,0,0" Foreground="White" FontWeight="Bold" BorderBrush="{x:Null}" Grid.RowSpan="2" ToolTip="Transform a media file into 5512Hz, mono, PCM format."/>
+        <Button x:Name="openButton" Content="Open file" HorizontalAlignment="Left" VerticalAlignment="Top" Width="229" Height="40" Background="{x:Null}" Click="openButton_Click" RenderTransformOrigin="0.504,1.525" Margin="0,13,0,0" Foreground="White" FontWeight="Bold" BorderBrush="{x:Null}" Grid.RowSpan="2" ToolTip="Transform a media file into 5512Hz, mono, PCM format."/>
         <Rectangle Fill="#FF383838" HorizontalAlignment="Left" Height="5" Margin="224,521,0,0" Grid.Row="1" StrokeThickness="0.5" VerticalAlignment="Top" Width="80" Grid.ColumnSpan="2"/>
         <Rectangle Fill="#FF383838" HorizontalAlignment="Left" Height="5" Margin="708,32,-39,0" Grid.Row="1" StrokeThickness="0.5" VerticalAlignment="Top" Width="81" Grid.Column="1" RenderTransformOrigin="0.5,0.5">
             <Rectangle.RenderTransform>

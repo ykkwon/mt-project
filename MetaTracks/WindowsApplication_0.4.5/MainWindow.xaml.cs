@@ -6,6 +6,7 @@ using NAudio.Wave;
 using Microsoft.Win32;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Windows.Input;
 using Newtonsoft.Json;
 
 namespace WindowsApplication_0._4._5
@@ -22,6 +23,7 @@ namespace WindowsApplication_0._4._5
             MouseDown += delegate { DragMove(); };
         }
 
+        private int foregroundLabelCounter;
         private string _entryName;
         internal static MainWindow Main;
         private WaveIn _sourceStream;
@@ -29,6 +31,7 @@ namespace WindowsApplication_0._4._5
         private WaveFileWriter _waveWriter;
         List<WaveInCapabilities> sources = new List<WaveInCapabilities>();
         private string _json;
+        string[] availableMovies;
 
         private void closeButton_Click(object sender, RoutedEventArgs e)
         {
@@ -38,9 +41,7 @@ namespace WindowsApplication_0._4._5
         private void refreshButton_Click(object sender, RoutedEventArgs e)
         {
             {
-                Main.Status = "Refreshing input sources";
                 // Creates a list that holds all in audio devices
-                
 
                 // Loops over all audio devices
                 for (int i = 0; i < WaveIn.DeviceCount; i++)
@@ -51,12 +52,17 @@ namespace WindowsApplication_0._4._5
 
                 // Clears the source list to make sure we start from a blank slate
                 sourceList.Items.Clear();
-                
+
                 // Adds each resource to the listView in the form
                 foreach (var source in sources)
                 {
-                    sourceList.Items.Add(new InputDevice() { DeviceName = source.ProductName, Channels = source.Channels.ToString()});
+                    sourceList.Items.Add(new InputDevice()
+                    {
+                        DeviceName = source.ProductName,
+                        Channels = source.Channels.ToString()
+                    });
                 }
+                Main.Status = "Refreshed input sources.";
             }
 
         }
@@ -76,7 +82,7 @@ namespace WindowsApplication_0._4._5
             public string Title { get; set; }
         }
 
-    private void sourceList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void sourceList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             sourceList.SelectedItem = this;
         }
@@ -124,13 +130,13 @@ namespace WindowsApplication_0._4._5
             SaveFileDialog save = new SaveFileDialog();
             // Sets a filter to only save .wav files
             save.Filter = "Wave File (*.wav)|*.wav*";
-            
+
             if (save.ShowDialog() != true) return;
 
             // Gets the device number of the selected source
             // ask sourcelist for the first selected item
             int deviceNumber = sourceList.SelectedIndex;
- 
+
 
             Console.WriteLine(@"Device number:" + deviceNumber);
 
@@ -167,8 +173,10 @@ namespace WindowsApplication_0._4._5
                 using (var client = new HttpClient())
                 {
                     var inputString =
-                    String.Format("http://webapi-1.bwjyuhcr5p.eu-west-1.elasticbeanstalk.com/Fingerprints/GetSingleFingerprintByHash?inputHash=" + "{0}",
-                    _entryName);
+                        String.Format(
+                            "http://webapi-1.bwjyuhcr5p.eu-west-1.elasticbeanstalk.com/Fingerprints/GetSingleFingerprintByHash?inputHash=" +
+                            "{0}",
+                            _entryName);
                     Main.Status = "Sending HTTP GET.";
                     client.BaseAddress = new Uri(inputString);
                     client.DefaultRequestHeaders.Accept.Clear();
@@ -183,7 +191,7 @@ namespace WindowsApplication_0._4._5
                     Main.Status = "You are watching the " + info.Type + " " + info.Title + " at " + info.Timestamp;
                 }
             }
-            
+
         }
 
         private void stopButton_Click(object sender, RoutedEventArgs e)
@@ -213,14 +221,33 @@ namespace WindowsApplication_0._4._5
             }
         }
 
-        private void indexButton_Click(object sender, RoutedEventArgs e)
+        private async void indexButton_Click(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            var client = new HttpClient();
+            var inputString =
+                @"http://webapi-1.bwjyuhcr5p.eu-west-1.elasticbeanstalk.com/Fingerprints/GetAllTitlesSQL";
+            client.BaseAddress = new Uri(inputString);
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            // HTTP GET
+            HttpResponseMessage response = await client.GetAsync(client.BaseAddress);
+            var responseString = response.Content.ReadAsStringAsync().Result;
+            availableMovies = responseString.Split(',');
+            Array.Sort(availableMovies);
+            Main.Status = "Indexing done. Found " + (availableMovies.Length - 1) + " movies in the database.";
         }
+
 
         private void chooseButton_Click(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            Main.Status = "";
+            for (int i = 1; i < 8; i++)
+            {
+                var movie = availableMovies[i];
+                Main.Status = i + " " + movie;
+            }
+            Main.Status = "Enter a number to choose a movie. For more movies, enter '0'.";
         }
 
         private void getFingerprintsButton_Click(object sender, RoutedEventArgs e)
@@ -250,12 +277,20 @@ namespace WindowsApplication_0._4._5
 
         internal string Status
         {
+
             get { return label.Content.ToString(); }
             set
             {
                 Dispatcher.Invoke(() =>
                 {
                     label.Content += value + "\n";
+                    foregroundLabelCounter++;
+                    if (foregroundLabelCounter >= 12)
+                    {
+                        label.Content = "";
+                        label.Content += value + "\n";
+                        foregroundLabelCounter = 0;
+                    }
                 });
             }
         }

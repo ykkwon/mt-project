@@ -14,8 +14,8 @@ namespace iOSApplication_0._5._3
 {
     public partial class ViewController : UIViewController
     {
-        string selectedMovie;
-        UITableView table;
+        string _selectedMovie;
+        UITableView _table;
         public ViewController(IntPtr handle) : base(handle)
         {
 
@@ -122,9 +122,10 @@ namespace iOSApplication_0._5._3
                         var test = RecordManager.ConsumeWaveFile(kasdf.RelativePath);
                         counter += test;
 
+                        var counter1 = counter;
                         InvokeOnMainThread(() =>
                         {
-                            ForegroundLabel.Text = "Matched second: " + (3 + FingerprintManager.LatestTimeStamp) + " s" + "\n" + counter + " fingerprints in total.";
+                            ForegroundLabel.Text = "Matched second: " + (3 + FingerprintManager.LatestTimeStamp) + " s" + "\n" + counter1 + " fingerprints in total.";
                         });
                     }
                 });
@@ -185,7 +186,8 @@ namespace iOSApplication_0._5._3
             GetFingerprintsButton.TouchUpInside += async (sender, e) =>
             {
                 var client = new HttpClient();
-                var inputString = string.Format("http://webapi-1.bwjyuhcr5p.eu-west-1.elasticbeanstalk.com/Fingerprints/GetAllFingerprintsSQL?inputTitle='{0}'", selectedMovie);
+                var inputString =
+                    $"http://webapi-1.bwjyuhcr5p.eu-west-1.elasticbeanstalk.com/Fingerprints/GetAllFingerprintsSQL?inputTitle='{_selectedMovie}'";
 
                 client.BaseAddress = new Uri(inputString);
                 client.DefaultRequestHeaders.Accept.Clear();
@@ -197,7 +199,8 @@ namespace iOSApplication_0._5._3
                 receivedHashes = responseString.Split(';');
 
 
-                var inputString2 = string.Format("http://webapi-1.bwjyuhcr5p.eu-west-1.elasticbeanstalk.com/Fingerprints/GetAllTimestampsSQL?inputTitle='{0}'", selectedMovie);
+                var inputString2 =
+                    $"http://webapi-1.bwjyuhcr5p.eu-west-1.elasticbeanstalk.com/Fingerprints/GetAllTimestampsSQL?inputTitle='{_selectedMovie}'";
                 client.BaseAddress = new Uri(inputString2);
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -209,10 +212,10 @@ namespace iOSApplication_0._5._3
 
                 FingerprintManager manager = new FingerprintManager();
                 var movie = manager.GenerateHashedFingerprints(receivedHashes, receivedTimestamps);
-                RecordManager.setHashedFingerprints(movie);
+                RecordManager.SetHashedFingerprints(movie);
                 RecordManager.SetReceivedHashes(receivedHashes);
                 RecordManager.SetReceivedTimestamps(receivedTimestamps);
-                ForegroundLabel.Text = "Found " + receivedHashes.Length + " fingerprints for " + selectedMovie + ".";
+                ForegroundLabel.Text = "Found " + receivedHashes.Length + " fingerprints for " + _selectedMovie + ".";
                 RecordButton.Enabled = true;
                 TestButton.Enabled = true;
             };
@@ -231,6 +234,7 @@ namespace iOSApplication_0._5._3
                 HttpResponseMessage response = await client.GetAsync(client.BaseAddress);
                 var responseString = response.Content.ReadAsStringAsync().Result;
                 availableMovies = responseString.Split(',');
+                Array.Sort(availableMovies);
                 ForegroundLabel.Text = "Indexing done. Found " + (availableMovies.Length - 1) + " movies in the database.";
                 MoviePicker.Enabled = true;
             };
@@ -239,16 +243,18 @@ namespace iOSApplication_0._5._3
             {
                 var width = View.Bounds.Width;
                 var height = View.Bounds.Height;
-                table = new UITableView(new CGRect(0, 0, width, height));
-                table.AutoresizingMask = UIViewAutoresizing.All;
-                table.Source = new TableSource(availableMovies, this);
-                Add(table);
+                _table = new UITableView(new CGRect(0, 0, width, height))
+                {
+                    AutoresizingMask = UIViewAutoresizing.All,
+                    Source = new TableSource(availableMovies, this)
+                };
+                Add(_table);
                 GetFingerprintsButton.Enabled = true;
             };
         }
         public void SetSelectedMovie(string inputMovie)
         {
-            selectedMovie = inputMovie;
+            _selectedMovie = inputMovie;
         }
 
         public void SetForegroundLabel(string text)

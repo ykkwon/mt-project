@@ -249,7 +249,7 @@ namespace AcousticFingerprintingLibrary_0._4._5
         public float[][] CreateLogSpectrogram(float[] samples)
         {
             NormalizeInPlace(samples);
-            var overlap = Overlap;
+            var overlap = Overlap;  
             var windowSize = WindowSize;
             var width = (samples.Length - windowSize)/overlap; /*width of the image*/
             var frames = new float[width][];
