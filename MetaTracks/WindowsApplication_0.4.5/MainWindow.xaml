@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:WindowsApplication_0._4._5"
         mc:Ignorable="d"
         Title="Windows Application" Height="568.432" Width="1003.069" ResizeMode="NoResize" Background="#FF292929" WindowStyle="None">
-    <Grid>
+    <Grid Background="#FF383838">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
@@ -14,32 +14,40 @@
             <RowDefinition Height="113*"/>
             <RowDefinition Height="29*"/>
         </Grid.RowDefinitions>
+        <Button x:Name="startButton" Content="Start" HorizontalAlignment="Left" VerticalAlignment="Top" Width="240" Height="40" Background="#FF343436" Click="startButton_Click" RenderTransformOrigin="0.504,1.525" Margin="10,382,0,0" Foreground="White" FontWeight="Bold"/>
+        <Button x:Name="toWaveButton" Content="To Wave" HorizontalAlignment="Left" VerticalAlignment="Top" Width="240" Height="40" Background="#FF343436" Click="toWaveButton_Click" RenderTransformOrigin="0.504,1.525" Margin="10,427,0,0" Foreground="White" FontWeight="Bold" Grid.RowSpan="2"/>
+        <Button x:Name="sendButton" Content="Send to database" HorizontalAlignment="Left" VerticalAlignment="Top" Width="240" Height="40" Background="#FF343436" Click="sendButton_Click" RenderTransformOrigin="0.504,1.525" Margin="10,21,0,0" Foreground="White" FontWeight="Bold" Grid.Row="1"/>
+        <Button x:Name="stopButton" Content="Stop" HorizontalAlignment="Left" VerticalAlignment="Top" Width="240" Height="40" Background="#FF343436" Click="stopButton_Click" RenderTransformOrigin="0.504,1.525" Margin="10,66,0,0" Foreground="White" FontWeight="Bold" Grid.Row="1"/>
+        <ListView x:Name="sourceList" Margin="276,106,25,144" SelectionChanged="sourceList_SelectionChanged" Background="White" Foreground="Black" FontSize="10.667">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Device" DisplayMemberBinding="{Binding Device}" Width="500"/>
+                    <GridViewColumn Header="Channels" DisplayMemberBinding="{Binding Channels}" Width="200"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <Label x:Name="label" Content="" HorizontalAlignment="Left" Margin="276,313,0,0" VerticalAlignment="Top" Height="240" Width="702" Background="White" Grid.RowSpan="2" BorderBrush="White" Foreground="White" FontSize="14.667"/>
+        <TextBlock x:Name="textBlock_Copy" HorizontalAlignment="Left" Height="87" TextWrapping="Wrap" VerticalAlignment="Top" Width="775" Margin="229,-34,-1,0" Foreground="White" FontFamily="Trebuchet MS" FontSize="24" TextAlignment="Center" Background="#FF383838" LineHeight="48"><Run/><LineBreak/><Run Text="ACOUSTIC FINGERPRINTING APPLICATION"/></TextBlock>
+        <Button x:Name="refreshButton" Content="Refresh sources" HorizontalAlignment="Left" VerticalAlignment="Top" Width="229" Height="40" Background="#FF383838" Click="refreshButton_Click" RenderTransformOrigin="0.504,1.525" Margin="0,13,0,0" Foreground="White" FontWeight="Bold" BorderBrush="{x:Null}" ToolTip=""/>
+        <Button x:Name="recordLongButton" Content="Record (long.)" HorizontalAlignment="Left" VerticalAlignment="Top" Width="229" Height="40" Background="#FF383838" Click="recordLongButton_Click" RenderTransformOrigin="0.504,1.525" Margin="0,213,0,0" Foreground="White" FontWeight="Bold" BorderBrush="{x:Null}" ToolTip=""/>
+        <Button x:Name="indexButton" Content="Index movies" HorizontalAlignment="Left" VerticalAlignment="Top" Width="229" Height="40" Background="#FF383838" Click="indexButton_Click" RenderTransformOrigin="0.504,1.525" Margin="0,53,0,0" Foreground="White" FontWeight="Bold" BorderBrush="{x:Null}" ToolTip=""/>
+        <Button x:Name="chooseButton" Content="Choose media" HorizontalAlignment="Left" VerticalAlignment="Top" Width="229" Height="40" Background="#FF383838" Click="chooseButton_Click" RenderTransformOrigin="0.504,1.525" Margin="0,93,0,0" Foreground="White" FontWeight="Bold" BorderBrush="{x:Null}" ToolTip=""/>
+        <Button x:Name="getFingerprintsButton_Copy" Content="Get fingerprints" HorizontalAlignment="Left" VerticalAlignment="Top" Width="229" Height="40" Background="#FF383838" Click="getFingerprintsButton_Click" RenderTransformOrigin="0.504,1.525" Margin="0,133,0,0" Foreground="White" FontWeight="Bold" BorderBrush="{x:Null}" ToolTip=""/>
+        <Button x:Name="recordContButton" Content="Record (cont.)" HorizontalAlignment="Left" VerticalAlignment="Top" Width="229" Height="40" Background="#FF383838" Click="recordContButton_Click" RenderTransformOrigin="0.504,1.525" Margin="0,173,0,0" Foreground="White" FontWeight="Bold" BorderBrush="{x:Null}" ToolTip=""/>
+        <Button x:Name="stopRecordButton" Content="Stop" HorizontalAlignment="Left" VerticalAlignment="Top" Width="229" Height="40" Background="#FF383838" Click="stopRecordButton_Click" RenderTransformOrigin="0.504,1.525" Margin="0,253,0,0" Foreground="White" FontWeight="Bold" BorderBrush="{x:Null}" ToolTip=""/>
+        <Button x:Name="sendToDBButton" Content="Send to database" HorizontalAlignment="Left" VerticalAlignment="Top" Width="229" Height="40" Background="#FF383838" Click="sendToDBButton_Click" RenderTransformOrigin="0.504,1.525" Margin="0,293,0,0" Foreground="White" FontWeight="Bold" BorderBrush="{x:Null}" ToolTip=""/>
         <Button x:Name="closeButton" Content="X" HorizontalAlignment="Left" VerticalAlignment="Top" Width="25" Margin="978,0,0,0" RenderTransformOrigin="0.46,0.35" Height="25" Click="closeButton_Click" BorderBrush="{x:Null}" Foreground="White" FontSize="16">
             <Button.Background>
                 <ImageBrush/>
             </Button.Background>
         </Button>
-        <Button x:Name="startButton" Content="Start" HorizontalAlignment="Left" VerticalAlignment="Top" Width="240" Height="40" Background="#FF343436" Click="startButton_Click" RenderTransformOrigin="0.504,1.525" Margin="10,382,0,0" Foreground="White" FontWeight="Bold"/>
-        <Button x:Name="toWaveButton" Content="To Wave" HorizontalAlignment="Left" VerticalAlignment="Top" Width="240" Height="40" Background="#FF343436" Click="toWaveButton_Click" RenderTransformOrigin="0.504,1.525" Margin="10,427,0,0" Foreground="White" FontWeight="Bold" Grid.RowSpan="2"/>
-        <Button x:Name="sendButton" Content="Send to database" HorizontalAlignment="Left" VerticalAlignment="Top" Width="240" Height="40" Background="#FF343436" Click="sendButton_Click" RenderTransformOrigin="0.504,1.525" Margin="10,21,0,0" Foreground="White" FontWeight="Bold" Grid.Row="1"/>
-        <Button x:Name="stopButton" Content="Stop" HorizontalAlignment="Left" VerticalAlignment="Top" Width="240" Height="40" Background="#FF343436" Click="stopButton_Click" RenderTransformOrigin="0.504,1.525" Margin="10,66,0,0" Foreground="White" FontWeight="Bold" Grid.Row="1"/>
-        <ListView x:Name="sourceList" Margin="276,106,25,144" SelectionChanged="sourceList_SelectionChanged" Background="#FF292929" Foreground="White" FontSize="14.667">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="Device" DisplayMemberBinding="{Binding Device}" Width="200"/>
-                    <GridViewColumn Header="Channels" DisplayMemberBinding="{Binding Channels}" Width="100"/>
-                </GridView>
-            </ListView.View>
-        </ListView>
-        <Label x:Name="label" Content="" HorizontalAlignment="Left" Margin="276,313,0,0" VerticalAlignment="Top" Height="240" Width="702" Background="#FF292929" Grid.RowSpan="2" BorderBrush="White" Foreground="White" FontSize="14.667"/>
-        <TextBlock x:Name="textBlock_Copy" HorizontalAlignment="Left" Height="87" TextWrapping="Wrap" VerticalAlignment="Top" Width="775" Margin="229,-34,-1,0" Foreground="White" FontFamily="Trebuchet MS" FontSize="24" TextAlignment="Center" Background="#FF383838" LineHeight="48"><Run/><LineBreak/><Run Text="ACOUSTIC FINGERPRINTING APPLICATION"/></TextBlock>
-        <Button x:Name="refreshButton" Content="Refresh sources" HorizontalAlignment="Left" VerticalAlignment="Top" Width="229" Height="40" Background="{x:Null}" Click="refreshButton_Click" RenderTransformOrigin="0.504,1.525" Margin="0,10,0,0" Foreground="White" FontWeight="Bold" BorderBrush="{x:Null}" ToolTip=""/>
-        <Button x:Name="recordLongButton" Content="Record (long.)" HorizontalAlignment="Left" VerticalAlignment="Top" Width="229" Height="40" Background="{x:Null}" Click="recordLongButton_Click" RenderTransformOrigin="0.504,1.525" Margin="0,210,0,0" Foreground="White" FontWeight="Bold" BorderBrush="{x:Null}" ToolTip=""/>
-        <Button x:Name="indexButton" Content="Index movies" HorizontalAlignment="Left" VerticalAlignment="Top" Width="229" Height="40" Background="{x:Null}" Click="indexButton_Click" RenderTransformOrigin="0.504,1.525" Margin="0,50,0,0" Foreground="White" FontWeight="Bold" BorderBrush="{x:Null}" ToolTip=""/>
-        <Button x:Name="chooseButton" Content="Choose media" HorizontalAlignment="Left" VerticalAlignment="Top" Width="229" Height="40" Background="{x:Null}" Click="chooseButton_Click" RenderTransformOrigin="0.504,1.525" Margin="0,90,0,0" Foreground="White" FontWeight="Bold" BorderBrush="{x:Null}" ToolTip=""/>
-        <Button x:Name="getFingerprintsButton_Copy" Content="Get fingerprints" HorizontalAlignment="Left" VerticalAlignment="Top" Width="229" Height="40" Background="{x:Null}" Click="getFingerprintsButton_Click" RenderTransformOrigin="0.504,1.525" Margin="0,130,0,0" Foreground="White" FontWeight="Bold" BorderBrush="{x:Null}" ToolTip=""/>
-        <Button x:Name="recordContButton" Content="Record (cont.)" HorizontalAlignment="Left" VerticalAlignment="Top" Width="229" Height="40" Background="{x:Null}" Click="recordContButton_Click" RenderTransformOrigin="0.504,1.525" Margin="0,170,0,0" Foreground="White" FontWeight="Bold" BorderBrush="{x:Null}" ToolTip=""/>
-        <Button x:Name="stopRecordButton" Content="Stop" HorizontalAlignment="Left" VerticalAlignment="Top" Width="229" Height="40" Background="{x:Null}" Click="stopRecordButton_Click" RenderTransformOrigin="0.504,1.525" Margin="0,250,0,0" Foreground="White" FontWeight="Bold" BorderBrush="{x:Null}" ToolTip=""/>
-        <Button x:Name="sendToDBButton" Content="Send to database" HorizontalAlignment="Left" VerticalAlignment="Top" Width="229" Height="40" Background="{x:Null}" Click="sendToDBButton_Click" RenderTransformOrigin="0.504,1.525" Margin="0,290,0,0" Foreground="White" FontWeight="Bold" BorderBrush="{x:Null}" ToolTip=""/>
+        <Image x:Name="image" HorizontalAlignment="Left" Height="30" Margin="10,18,0,0" VerticalAlignment="Top" Width="30" RenderTransformOrigin="0.467,0.5" Source="Resources/arrows.png" />
+        <Image x:Name="image_Copy" HorizontalAlignment="Left" Height="30" Margin="10,58,0,0" VerticalAlignment="Top" Width="30" RenderTransformOrigin="0.467,0.889" Source="Resources/black.png" />
+        <Image x:Name="image_Copy1" HorizontalAlignment="Left" Height="30" Margin="10,98,0,0" VerticalAlignment="Top" Width="30" RenderTransformOrigin="0.467,0.5" Source="Resources/arrows-1.png" />
+        <Image x:Name="image_Copy2" HorizontalAlignment="Left" Height="30" Margin="10,138,0,0" VerticalAlignment="Top" Width="30" RenderTransformOrigin="0.467,0.5" Source="Resources/signs.png" />
+        <Image x:Name="image_Copy3" HorizontalAlignment="Left" Height="30" Margin="10,178,0,0" VerticalAlignment="Top" Width="30" RenderTransformOrigin="0.467,0.5" Source="Resources/multimedia.png" />
+        <Image x:Name="image_Copy4" HorizontalAlignment="Left" Height="30" Margin="10,218,0,0" VerticalAlignment="Top" Width="30" RenderTransformOrigin="0.467,0.5" Source="Resources/clock.png" />
+        <Image x:Name="image_Copy5" HorizontalAlignment="Left" Height="30" Margin="10,258,0,0" VerticalAlignment="Top" Width="30" RenderTransformOrigin="0.467,0.5" Source="Resources/stop.png" />
+        <Image x:Name="image_Copy6" HorizontalAlignment="Left" Height="30" Margin="10,298,0,0" VerticalAlignment="Top" Width="30" RenderTransformOrigin="0.467,0.5" Source="Resources/technology.png" />
     </Grid>
 </Window>
