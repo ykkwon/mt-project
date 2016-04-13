@@ -110,9 +110,7 @@ namespace iOSApplication_0._5._3
 
                 Task.Factory.StartNew(() =>
                 {
-                    while (true)
-                    {
-                        for (int i = 0; i < 10; i++)
+                        for (int i = 0; i < 1000; i++)
                         {
                             
                             var session = AVAudioSession.SharedInstance();
@@ -124,17 +122,15 @@ namespace iOSApplication_0._5._3
                             Thread.Sleep(3000);
                             RecordManager.Recorder.Stop();
                             var kasdf = RecordManager.AudioFilePath;
-                            Console.WriteLine("TEST: " + kasdf);
-                            Console.WriteLine(RecordManager.AudioFilePath + " consume done");
                             var test = RecordManager.ConsumeWaveFile(kasdf.RelativePath);
                             counter += test;
-                            this.InvokeOnMainThread(() =>
+
+                                InvokeOnMainThread(() =>
                                 {
-                                    Console.WriteLine("COUNTER: " + counter);
-                                    ForegroundLabel.Text = "Matched " + counter + " fingerprints in total.";
+                                    ForegroundLabel.Text = "Matched second: " + FingerprintManager.LatestTimeStamp + "s" + " --- " + counter + "fingerprints in total.";
+                                    //ForegroundLabel.Text = "Matched " + counter + " fingerprints in total.";
                                 });
                         }
-                    }
                 });
             };
 

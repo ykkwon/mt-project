@@ -76,7 +76,7 @@ namespace iOSApplication_0._5._3
         {
             Recorder.Dispose();
             Recorder = null;
-            Console.WriteLine("Done Recording (status: {0})", e.Status);
+            //Console.WriteLine("Done Recording (status: {0})", e.Status);
         }
 
         public static void Dispose(bool disposing)
@@ -105,7 +105,7 @@ namespace iOSApplication_0._5._3
             if (results != -1)
             {
                 // If amatch is found, print timestamp
-                Console.WriteLine("Matched -- " + results);
+                // Console.WriteLine("Matched -- " + results);
                 storedFingerprints.Clear();
                 return results;
             }
