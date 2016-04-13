@@ -855,7 +855,7 @@ namespace AcousticFingerprintingLibrary_0._4._5
 
         // Get the newest timeStamp found in recognition
         // Call this to get the newest timestamp found
-        public double LatestTimeStamp { get; set; }
+        public static double LatestTimeStamp { get; set; }
 
         public double CompareFingerprintListsHighest(HashedFingerprint[] fingerprints, HashedFingerprint[] toCompare)
         {

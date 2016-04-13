@@ -104,15 +104,16 @@ namespace DatabasePopulationApplication_0._4._5
         {
             int width = 1000;
             int height = 800;
-            
-                Main.Status = "Generating spectrogram visualization.";
-                AcousticFingerprintingLibrary_0._4._5.FingerprintManager manager = new AcousticFingerprintingLibrary_0._4._5.FingerprintManager();
 
-                float[][] data = manager.CreateSpectrogram(Path.GetFullPath(_filename), 0, 0);
-                Bitmap image = Imaging.GetSpectrogramImage(data, width, height);
-                image.Save(sfd.FileName, ImageFormat.Jpeg);
-                image.Dispose();
-                Main.Status = "Visualization done. Image file saved to: " + Path.GetFullPath(sfd.FileName);
+            Main.Status = "Generating spectrogram visualization.";
+            AcousticFingerprintingLibrary_0._4._5.FingerprintManager manager =
+                new AcousticFingerprintingLibrary_0._4._5.FingerprintManager();
+
+            float[][] data = manager.CreateSpectrogram(Path.GetFullPath(_filename), 0, 0);
+            Bitmap image = Imaging.GetSpectrogramImage(data, width, height);
+            image.Save(sfd.FileName, ImageFormat.Jpeg);
+            image.Dispose();
+            Main.Status = "Visualization done. Image file saved to: " + Path.GetFullPath(sfd.FileName);
             foregroundLabelCounter += 2;
 
         }
