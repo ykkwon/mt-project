@@ -778,6 +778,7 @@ namespace AcousticFingerprintingLibrary_0._4._5
                 {
                     hashBins.Add(Convert.ToInt64(receivedHashes[index]));
                     //timestamps.Add(Convert.ToDouble(receivedTimestamps[index]));
+                    timestamps.Add(Math.Round(double.Parse(receivedTimestamps[index].Replace(',','.'))));
                 }
             }
             catch (Exception ex)

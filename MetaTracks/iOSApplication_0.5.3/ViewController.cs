@@ -29,7 +29,6 @@ namespace iOSApplication_0._5._3
             string[] receivedHashes;
             string[] receivedTimestamps;
             double counter = 0;
-            
 
             GetFingerprintsButton.Enabled = false;
             RecordButton.Enabled = false;
@@ -125,6 +124,7 @@ namespace iOSApplication_0._5._3
 
                         InvokeOnMainThread(() =>
                         {
+                            ForegroundLabel.Text = "Matched second: " + (3 + FingerprintManager.LatestTimeStamp) + " s" + "\n" + counter + " fingerprints in total.";
                         });
                     }
                 });
