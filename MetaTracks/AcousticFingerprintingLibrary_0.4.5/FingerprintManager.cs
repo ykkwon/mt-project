@@ -101,9 +101,9 @@ namespace AcousticFingerprintingLibrary_0._4._5
             FingerprintWidth = 128;
             Overlap = 64; // Spectrogram overlap
             SamplesPerFingerprint = FingerprintWidth*Overlap;
-            WindowSize = 2048 * 2;
-            MinFrequency = 2048; // Lowest Frequency
-            MaxFrequency = 5120; // Highest Frequency
+            WindowSize = 2048;
+            MinFrequency = 318; // Lowest Frequency
+            MaxFrequency = 2000; // Highest Frequency
             TopWavelets = 200;
             SampleRate = 5512;
             LogBase = Math.E;
@@ -777,7 +777,7 @@ namespace AcousticFingerprintingLibrary_0._4._5
                 for (var index = 0; index < receivedHashes.Length - 1; index++)
                 {
                     hashBins.Add(Convert.ToInt64(receivedHashes[index]));
-                    timestamps.Add(Convert.ToDouble(receivedTimestamps[index]));
+                    //timestamps.Add(Convert.ToDouble(receivedTimestamps[index]));
                 }
             }
             catch (Exception ex)

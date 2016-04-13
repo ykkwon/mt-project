@@ -44,10 +44,10 @@ namespace iOSApplication_0._5._3
             okAlertController.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));
             //owner.PresentViewController(okAlertController, true, null);
             selectedMovie = tableItems[indexPath.Row];
-            owner.setSelectedMovie(selectedMovie);
+            owner.SetSelectedMovie(selectedMovie);
             tableView.DeselectRow(indexPath, true);
             tableView.Hidden = true;
-            owner.setForegroundLabel("Selected movie: " + selectedMovie);
+            owner.SetForegroundLabel("Selected movie: " + selectedMovie);
         }
 
         /// <summary>

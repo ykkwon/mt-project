@@ -14,7 +14,6 @@ namespace iOSApplication_0._5._3
 {
     public partial class ViewController : UIViewController
     {
-        
         string selectedMovie;
         UITableView table;
         public ViewController(IntPtr handle) : base(handle)
@@ -110,56 +109,41 @@ namespace iOSApplication_0._5._3
 
                 Task.Factory.StartNew(() =>
                 {
-                        for (int i = 0; i < 1000; i++)
-                        {
-                            
-                            var session = AVAudioSession.SharedInstance();
-                            NSError error;
-                            session.SetCategory(AVAudioSession.CategoryRecord, out error);
-                            RecordManager.CreateOutputUrl(i);
-                            RecordManager.PrepareAudioRecording(i);
-                            RecordManager.Recorder.Record();
-                            Thread.Sleep(3000);
-                            RecordManager.Recorder.Stop();
-                            var kasdf = RecordManager.AudioFilePath;
-                            var test = RecordManager.ConsumeWaveFile(kasdf.RelativePath);
-                            counter += test;
+                    for (int i = 0; i < 1000; i++)
+                    {
+                        var session = AVAudioSession.SharedInstance();
+                        NSError error;
+                        session.SetCategory(AVAudioSession.CategoryRecord, out error);
+                        RecordManager.CreateOutputUrl(i);
+                        RecordManager.PrepareAudioRecording(i);
+                        RecordManager.Recorder.Record();
+                        Thread.Sleep(3000);
+                        RecordManager.Recorder.Stop();
+                        var kasdf = RecordManager.AudioFilePath;
+                        var test = RecordManager.ConsumeWaveFile(kasdf.RelativePath);
+                        counter += test;
 
-                                InvokeOnMainThread(() =>
-                                {
-                                    ForegroundLabel.Text = "Matched second: " + FingerprintManager.LatestTimeStamp + "s" + " --- " + counter + "fingerprints in total.";
-                                    //ForegroundLabel.Text = "Matched " + counter + " fingerprints in total.";
-                                });
-                        }
+                        InvokeOnMainThread(() =>
+                        {
+                        });
+                    }
                 });
             };
 
             // Event handler for simple "Stop" button click and release.
             StopButton.TouchUpInside += (sender, e) =>
             {
-                ForegroundLabel.Text = "Stopping the recorder.";
                 RecordManager.Recorder.Stop();
-                RecordManager.Stopwatch.Stop();
-
-                ForegroundLabel.Text = $"{RecordManager.Stopwatch.Elapsed:hh\\:mm\\:ss}";
-                ForegroundLabel.Text = "";
-                RecordButton.Enabled = true;
-                StopButton.Enabled = false;
-                PlayButton.Enabled = true;
-                SendButton.Enabled = true;
-
+                RecordManager.Recorder.Dispose();
+                RecordManager.Recorder = null;
             };
 
             SendButton.TouchUpInside += (sender, e) =>
             {
-
                 try
                 {
-
                     var test = RecordManager.ConsumeWaveFile(RecordManager.TempRecording);
                     ForegroundLabel.Text = "Matched " + test + " fingerprints in total.";
-
-
                 }
                 catch (Exception ex)
                 {
@@ -225,6 +209,7 @@ namespace iOSApplication_0._5._3
 
                 FingerprintManager manager = new FingerprintManager();
                 var movie = manager.GenerateHashedFingerprints(receivedHashes, receivedTimestamps);
+                RecordManager.setHashedFingerprints(movie);
                 RecordManager.SetReceivedHashes(receivedHashes);
                 RecordManager.SetReceivedTimestamps(receivedTimestamps);
                 ForegroundLabel.Text = "Found " + receivedHashes.Length + " fingerprints for " + selectedMovie + ".";
@@ -261,12 +246,12 @@ namespace iOSApplication_0._5._3
                 GetFingerprintsButton.Enabled = true;
             };
         }
-        public void setSelectedMovie(string inputMovie)
+        public void SetSelectedMovie(string inputMovie)
         {
             selectedMovie = inputMovie;
         }
 
-        public void setForegroundLabel(string text)
+        public void SetForegroundLabel(string text)
         {
             ForegroundLabel.Text = text;
         }
