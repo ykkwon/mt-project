@@ -778,7 +778,7 @@ namespace AcousticFingerprintingLibrary_0._4._5
                 {
                     hashBins.Add(Convert.ToInt64(receivedHashes[index]));
                     //timestamps.Add(Convert.ToDouble(receivedTimestamps[index]));
-                    timestamps.Add(Math.Round(double.Parse(receivedTimestamps[index].Replace(',','.'))));
+                    timestamps.Add(Math.Round(double.Parse(receivedTimestamps[index].Replace(',', '.'))));
                 }
             }
             catch (Exception ex)
@@ -808,6 +808,21 @@ namespace AcousticFingerprintingLibrary_0._4._5
             }
 
             return receivedFingerprints.ToArray();
+        }
+
+        public List<HashedFingerprint[]> SplitFingerprintLists(HashedFingerprint[] movieFingerprints)
+        {
+            var chunkSize = 1000;
+            List<HashedFingerprint[]> result = new List<HashedFingerprint[]>();
+            for (int i = 0; i < movieFingerprints.Length; i += chunkSize)
+            {
+                var remaining = movieFingerprints.Length - i;
+                var iteration = Math.Min(remaining, chunkSize);
+                HashedFingerprint[] buffer = new HashedFingerprint[iteration];
+                Array.Copy(movieFingerprints, i, buffer, 0, iteration);
+                result.Add(buffer);
+            }
+            return result;
         }
 
         #endregion
