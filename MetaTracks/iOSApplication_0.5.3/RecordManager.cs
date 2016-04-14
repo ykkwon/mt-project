@@ -128,12 +128,8 @@ namespace iOSApplication_0._5._3
             {
                 Console.WriteLine("SecondResult: " + Secondresults + " Index: " + ViewController.useThis.Count);
                 if (index >= Secondresults)
-                {
                     if (manager.CheckIteration(FingerprintManager.LatestTimeStamp, ViewController.useThis[Secondresults+1]))
-                    {
-                        index++;
-                    }
-                }
+                        Secondresults++;
                 // If amatch is found, print timestamp
                 // Console.WriteLine("Matched -- " + results);
                 storedFingerprints.Clear();

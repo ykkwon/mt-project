@@ -958,7 +958,9 @@ namespace AcousticFingerprintingLibrary_0._4._5
         private double previoustimestamp = 0.0;
         public bool CheckIteration(double timestamp, HashedFingerprint[] nextIteration)
         {
-            if (timestamp + 10 >= nextIteration[0].Timestamp) //|| timestamp - 10 >= nextIteration[0].Timestamp/*)
+            // if next starts at 100 and timestamp reaches 90+
+            // 90-100 = -10... correct i thinkkk
+            if (timestamp - nextIteration[0].Timestamp >= -10)
             {
                 counter++;
                 if (counter >= 2 && timestamp != previoustimestamp)
