@@ -21,12 +21,13 @@ namespace iOSApplication_0._5._3
         public static NSUrl AudioFilePath;
         public static NSObject Observer;
         public static string TempRecording;
+        public static int Secondresults;
 
         public static NSUrl CreateOutputUrl(int nameIterator)
         {
             string fileName = string.Format("Myfile{0}.wav", nameIterator);
             TempRecording = Path.Combine(Path.GetTempPath(), fileName);
-        
+            
             return NSUrl.FromFilename(TempRecording);
         }
 
@@ -88,6 +89,7 @@ namespace iOSApplication_0._5._3
 
         public static int ConsumeFirstFile(string filePath, List<HashedFingerprint[]> list)
         {
+            
             var monoArray = BassProxy.ReadMonoFromFileStatic(filePath, 5512, 0, 0);
             FingerprintManager manager = new FingerprintManager();
             Distance distance = new IncrementalDistance(1102, 128 * 64);
@@ -100,12 +102,14 @@ namespace iOSApplication_0._5._3
             //                                             // String[], String[], int lshSize
             //var results = manager.GetTimeStamps(movie, storedFingerprints.ToArray());
 
-            var results = manager.FindBestFingerprintList(list, storedFingerprints.ToArray());
-            return results;
+            Secondresults = manager.FindBestFingerprintList(list, storedFingerprints.ToArray());
+            
+            return Secondresults;
         }
 
         public static double ConsumeWaveFile(string filePath, int index)
         {
+            var twoLists = ViewController.useThis[index];
             // Read all the mono values from the input file.
             var monoArray = BassProxy.ReadMonoFromFileStatic(filePath, 5512, 0, 0);
             FingerprintManager manager = new FingerprintManager();
@@ -122,6 +126,14 @@ namespace iOSApplication_0._5._3
             var results = manager.CompareFingerprintListsHighest(ViewController.useThis[index], storedFingerprints.ToArray());
             if (results != -1)
             {
+                Console.WriteLine("SecondResult: " + Secondresults + " Index: " + ViewController.useThis.Count);
+                if (index >= Secondresults)
+                {
+                    if (manager.CheckIteration(FingerprintManager.LatestTimeStamp, ViewController.useThis[Secondresults+1]))
+                    {
+                        index++;
+                    }
+                }
                 // If amatch is found, print timestamp
                 // Console.WriteLine("Matched -- " + results);
                 storedFingerprints.Clear();
@@ -129,6 +141,19 @@ namespace iOSApplication_0._5._3
             }
             Console.WriteLine("NO MATCH -- " + storedFingerprints[0].HashBins[0]);
             storedFingerprints.Clear();
+
+            /*****
+            (useThis) var movieList = manager.SplitFingerprintLists(Movie);
+            (results) var newIndex = manager.FindBestFingerprintList(movieList, storedFingerprints.ToArray());
+            if (movieList.Count > newIndex)
+            {
+                if (manager.CheckIteration(results, movieList[newIndex + 1]))
+                {
+                    newIndex++;
+                }
+            }
+            ***********/////////
+
             return results;
         }
 

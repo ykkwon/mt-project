@@ -37,7 +37,7 @@
                                     <rect key="frame" x="20" y="66" width="360" height="30"/>
                                 </variation>
                                 <variation key="heightClass=regular-widthClass=regular" fixedFrame="YES">
-                                    <rect key="frame" x="252" y="191" width="265" height="79"/>
+                                    <rect key="frame" x="249" y="247" width="265" height="79"/>
                                 </variation>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="104" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
@@ -51,7 +51,7 @@
                                     <rect key="frame" x="20" y="171" width="360" height="30"/>
                                 </variation>
                                 <variation key="heightClass=regular-widthClass=regular" fixedFrame="YES">
-                                    <rect key="frame" x="252" y="351" width="265" height="30"/>
+                                    <rect key="frame" x="248" y="407" width="265" height="30"/>
                                 </variation>
                                 <connections/>
                             </button>
@@ -66,7 +66,7 @@
                                     <rect key="frame" x="20" y="228" width="360" height="30"/>
                                 </variation>
                                 <variation key="heightClass=regular-widthClass=regular" fixedFrame="YES">
-                                    <rect key="frame" x="253" y="416" width="155" height="30"/>
+                                    <rect key="frame" x="249" y="472" width="155" height="30"/>
                                 </variation>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="106" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
@@ -80,17 +80,17 @@
                                     <rect key="frame" x="20" y="283" width="360" height="30"/>
                                 </variation>
                                 <variation key="heightClass=regular-widthClass=regular" fixedFrame="YES">
-                                    <rect key="frame" x="361" y="479" width="46" height="30"/>
+                                    <rect key="frame" x="357" y="535" width="46" height="30"/>
                                 </variation>
                             </button>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" lineBreakMode="tailTruncation" minimumFontSize="10" id="119" translatesAutoresizingMaskIntoConstraints="NO" textAlignment="center" numberOfLines="3" fixedFrame="YES">
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" lineBreakMode="tailTruncation" minimumFontSize="10" id="119" translatesAutoresizingMaskIntoConstraints="NO" textAlignment="center" numberOfLines="4" fixedFrame="YES">
                                 <rect key="frame" x="363" y="468" width="42" height="21"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                                 <variation key="heightClass=regular-widthClass=regular" fixedFrame="YES">
-                                    <rect key="frame" x="170" y="90" width="429" height="103"/>
+                                    <rect key="frame" x="170" y="90" width="429" height="156"/>
                                 </variation>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="123" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
@@ -101,7 +101,7 @@
                                     <color key="titleColor" colorSpace="calibratedRGB" red="0.0196078431372549" green="0.4" blue="0.55294117647058827" alpha="1"/>
                                 </state>
                                 <variation key="heightClass=regular-widthClass=regular" fixedFrame="YES">
-                                    <rect key="frame" x="362" y="547" width="46" height="30"/>
+                                    <rect key="frame" x="358" y="603" width="46" height="30"/>
                                 </variation>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="127" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
@@ -112,7 +112,7 @@
                                     <color key="titleColor" colorSpace="calibratedRGB" red="0.0196078431372549" green="0.4" blue="0.55294117647058827" alpha="1"/>
                                 </state>
                                 <variation key="heightClass=regular-widthClass=regular" fixedFrame="YES">
-                                    <rect key="frame" x="330" y="605" width="109" height="30"/>
+                                    <rect key="frame" x="326" y="661" width="109" height="30"/>
                                 </variation>
                             </button>
                             <navigationBar contentMode="scaleToFill" id="134" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
@@ -148,7 +148,7 @@
                                     <color key="titleColor" colorSpace="calibratedRGB" red="0.0196078431372549" green="0.40784313725490196" blue="0.55294117647058827" alpha="1"/>
                                 </state>
                                 <variation key="heightClass=regular-widthClass=regular" fixedFrame="YES">
-                                    <rect key="frame" x="409" y="416" width="115" height="30"/>
+                                    <rect key="frame" x="405" y="472" width="115" height="30"/>
                                 </variation>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="164" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
@@ -159,7 +159,7 @@
                                     <color key="titleColor" colorSpace="calibratedRGB" red="0.0196078431372549" green="0.4" blue="0.55294117647058827" alpha="1"/>
                                 </state>
                                 <variation key="heightClass=regular-widthClass=regular" fixedFrame="YES">
-                                    <rect key="frame" x="336" y="278" width="99" height="30"/>
+                                    <rect key="frame" x="332" y="334" width="99" height="30"/>
                                 </variation>
                             </button>
                         </subviews>

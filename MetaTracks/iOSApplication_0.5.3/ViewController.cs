@@ -134,7 +134,8 @@ namespace iOSApplication_0._5._3
                             var counter1 = counter;
                             InvokeOnMainThread(() =>
                             {
-                                ForegroundLabel.Text = "Matched second: " + (3 + FingerprintManager.LatestTimeStamp) + " s" + "\n" + counter1 + " fingerprints in total." + "\n" + "~ " + (Math.Round(FingerprintManager.LatestTimeStamp / 60)) + " minutes.";
+
+                                ForegroundLabel.Text = "Current chunk: " + result + "\n" + "Matched second: " + (3 + FingerprintManager.LatestTimeStamp) + " s" + "\n" + counter1 + " fingerprints in total." + "\n" + "~ " + (Math.Round(FingerprintManager.LatestTimeStamp / 60)) + " minutes.";
                             });
                         }
                     });
