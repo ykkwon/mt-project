@@ -6,6 +6,7 @@ using AcousticFingerprintingLibrary_0._4._5.DistanceClasses;
 using AcousticFingerprintingLibrary_0._4._5.FFT;
 using AcousticFingerprintingLibrary_0._4._5.Hashing;
 using AcousticFingerprintingLibrary_0._4._5.Wavelets;
+using AssetsLibrary;
 
 namespace AcousticFingerprintingLibrary_0._4._5
 {
@@ -952,8 +953,26 @@ namespace AcousticFingerprintingLibrary_0._4._5
             }
             return bestIndex;
         }
-        #endregion
 
+        private int counter = 0;
+        private double previoustimestamp = 0.0;
+        public bool CheckIteration(double timestamp, HashedFingerprint[] nextIteration)
+        {
+            if (timestamp + 10 >= nextIteration[0].Timestamp || timestamp - 10 >= nextIteration[0].Timestamp)
+            {
+                counter++;
+                if (counter >= 2 && timestamp != previoustimestamp)
+                {
+                    counter = 0;
+                    previoustimestamp = 0.0;
+                    return true;
+                }
+                previoustimestamp = timestamp;
+            }
+            return false;
+        }
+
+        #endregion
         /// <summary>
         ///   Absolute value comparator
         /// </summary>
