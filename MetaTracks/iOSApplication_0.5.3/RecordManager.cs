@@ -86,7 +86,25 @@ namespace iOSApplication_0._5._3
 
         private static List<HashedFingerprint> storedFingerprints = new List<HashedFingerprint>();
 
-        public static double ConsumeWaveFile(string filePath)
+        public static int ConsumeFirstFile(string filePath, List<HashedFingerprint[]> list)
+        {
+            var monoArray = BassProxy.ReadMonoFromFileStatic(filePath, 5512, 0, 0);
+            FingerprintManager manager = new FingerprintManager();
+            Distance distance = new IncrementalDistance(1102, 128 * 64);
+            // Create an array of fingerprints to be hashed.
+            var preliminaryFingerprints = manager.CreateFingerprints(monoArray, distance);
+
+            var test = manager.GetFingerHashes(distance, preliminaryFingerprints);
+            foreach (var hash in test)
+                storedFingerprints.Add(hash);
+            //                                             // String[], String[], int lshSize
+            //var results = manager.GetTimeStamps(movie, storedFingerprints.ToArray());
+
+            var results = manager.FindBestFingerprintList(list, storedFingerprints.ToArray());
+            return results;
+        }
+
+        public static double ConsumeWaveFile(string filePath, int index)
         {
             // Read all the mono values from the input file.
             var monoArray = BassProxy.ReadMonoFromFileStatic(filePath, 5512, 0, 0);
@@ -100,7 +118,8 @@ namespace iOSApplication_0._5._3
                 storedFingerprints.Add(hash);
             //                                             // String[], String[], int lshSize
             //var results = manager.GetTimeStamps(movie, storedFingerprints.ToArray());
-            var results = manager.CompareFingerprintListsHighest(Movie, storedFingerprints.ToArray());
+            
+            var results = manager.CompareFingerprintListsHighest(ViewController.useThis[index], storedFingerprints.ToArray());
             if (results != -1)
             {
                 // If amatch is found, print timestamp

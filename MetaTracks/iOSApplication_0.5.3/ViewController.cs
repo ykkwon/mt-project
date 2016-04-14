@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -16,6 +17,7 @@ namespace iOSApplication_0._5._3
     {
         string _selectedMovie;
         UITableView _table;
+        public static List<HashedFingerprint[]> useThis = null;
         public ViewController(IntPtr handle) : base(handle)
         {
 
@@ -29,6 +31,8 @@ namespace iOSApplication_0._5._3
             string[] receivedHashes;
             string[] receivedTimestamps;
             double counter = 0;
+
+
 
             GetFingerprintsButton.Enabled = false;
             RecordButton.Enabled = false;
@@ -46,66 +50,18 @@ namespace iOSApplication_0._5._3
             MoviePicker.SetTitleColor(UIColor.FromRGBA(0, 0, 0, 150), UIControlState.Disabled);
             TestButton.SetTitleColor(UIColor.FromRGBA(0, 0, 0, 150), UIControlState.Disabled);
 
+            // short record
             // Event handler for simple "Record" button click and release.
             RecordButton.TouchUpInside += (sender, e) =>
             {
-                Console.WriteLine("Begin Recording");
-
-                var session = AVAudioSession.SharedInstance();
-
-                NSError error;
-                session.SetCategory(AVAudioSession.CategoryRecord, out error);
-                if (error != null)
-                {
-                    Console.WriteLine(error);
-                    return;
-                }
-
-                session.SetActive(true, out error);
-                if (error != null)
-                {
-                    Console.WriteLine(error);
-                    return;
-                }
-
-                if (!RecordManager.PrepareAudioRecording(1))
-                {
-                    ForegroundLabel.Text = "Error preparing.";
-                    return;
-                }
-
-                if (!RecordManager.Recorder.Record())
-                {
-                    ForegroundLabel.Text = "Error preparing.";
-                    return;
-                }
-
-                RecordManager.Stopwatch = new Stopwatch();
-                RecordManager.Stopwatch.Start();
-
-                ForegroundLabel.Text = "Recording . . .";
-                RecordButton.Enabled = false;
-                StopButton.Enabled = true;
-                PlayButton.Enabled = false;
-                IndexButton.Enabled = false;
-                GetFingerprintsButton.Enabled = false;
-
-                RecordButton.SetTitleColor(UIColor.FromRGBA(0, 0, 0, 150), UIControlState.Disabled);
-                PlayButton.SetTitleColor(UIColor.FromRGBA(0, 0, 0, 150), UIControlState.Disabled);
-                IndexButton.SetTitleColor(UIColor.FromRGBA(0, 0, 0, 150), UIControlState.Disabled);
-                GetFingerprintsButton.SetTitleColor(UIColor.FromRGBA(0, 0, 0, 150), UIControlState.Disabled);
-            };
-
-
-            TestButton.TouchUpInside += (sender, e) =>
-            {
+                TestButton.Enabled = false;
                 RecordButton.Enabled = false;
                 StopButton.Enabled = true;
                 PlayButton.Enabled = false;
                 SendButton.Enabled = false;
                 IndexButton.Enabled = false;
+                MoviePicker.Enabled = false;
                 GetFingerprintsButton.Enabled = false;
-
                 Task.Factory.StartNew(() =>
                 {
                     for (int i = 0; i < 1000; i++)
@@ -119,17 +75,70 @@ namespace iOSApplication_0._5._3
                         Thread.Sleep(3000);
                         RecordManager.Recorder.Stop();
                         var kasdf = RecordManager.AudioFilePath;
-                        var test = RecordManager.ConsumeWaveFile(kasdf.RelativePath);
+                        var test = RecordManager.ConsumeWaveFile(kasdf.RelativePath, 0);
                         counter += test;
 
                         var counter1 = counter;
                         InvokeOnMainThread(() =>
                         {
-                            ForegroundLabel.Text = "Matched second: " + (3 + FingerprintManager.LatestTimeStamp) + " s" + "\n" + counter1 + " fingerprints in total.";
+                            ForegroundLabel.Text = "Matched second: " + (3 + FingerprintManager.LatestTimeStamp) + " s" +
+                                                   "\n" + counter1 + " fingerprints in total." + "\n" + "~ " +
+                                                   (Math.Round(FingerprintManager.LatestTimeStamp/60)) + " minutes.";
                         });
                     }
                 });
             };
+
+
+            // Long record
+            TestButton.TouchUpInside += (sender, e) =>
+                {
+                    RecordButton.Enabled = false;
+                    StopButton.Enabled = true;
+                    PlayButton.Enabled = false;
+                    SendButton.Enabled = false;
+                    IndexButton.Enabled = false;
+                    GetFingerprintsButton.Enabled = false;
+
+                    var preSession = AVAudioSession.SharedInstance();
+                    NSError preError;
+                    preSession.SetCategory(AVAudioSession.CategoryRecord, out preError);
+                    RecordManager.CreateOutputUrl(0);
+                    RecordManager.PrepareAudioRecording(0);
+                    RecordManager.Recorder.Record();
+                    Thread.Sleep(10000);
+                    RecordManager.Recorder.Stop();
+                    var prePath = RecordManager.AudioFilePath;
+                    var result = RecordManager.ConsumeFirstFile(prePath.RelativePath, useThis);
+
+                    Task.Factory.StartNew(() =>
+                    {
+                        InvokeOnMainThread(() =>
+                        {
+                            ForegroundLabel.Text = "Guessed chunk: " + result;
+                        });
+                        for (int i = 0; i < 1000; i++)
+                        {
+                            var session = AVAudioSession.SharedInstance();
+                            NSError error;
+                            session.SetCategory(AVAudioSession.CategoryRecord, out error);
+                            RecordManager.CreateOutputUrl(i);
+                            RecordManager.PrepareAudioRecording(i);
+                            RecordManager.Recorder.Record();
+                            Thread.Sleep(3000);
+                            RecordManager.Recorder.Stop();
+                            var kasdf = RecordManager.AudioFilePath;
+                            var test = RecordManager.ConsumeWaveFile(kasdf.RelativePath, result);
+                            counter += test;
+
+                            var counter1 = counter;
+                            InvokeOnMainThread(() =>
+                            {
+                                ForegroundLabel.Text = "Matched second: " + (3 + FingerprintManager.LatestTimeStamp) + " s" + "\n" + counter1 + " fingerprints in total." + "\n" + "~ " + (Math.Round(FingerprintManager.LatestTimeStamp / 60)) + " minutes.";
+                            });
+                        }
+                    });
+                };
 
             // Event handler for simple "Stop" button click and release.
             StopButton.TouchUpInside += (sender, e) =>
@@ -143,7 +152,7 @@ namespace iOSApplication_0._5._3
             {
                 try
                 {
-                    var test = RecordManager.ConsumeWaveFile(RecordManager.TempRecording);
+                    var test = RecordManager.ConsumeWaveFile(RecordManager.TempRecording, 0);
                     ForegroundLabel.Text = "Matched " + test + " fingerprints in total.";
                 }
                 catch (Exception ex)
@@ -218,6 +227,7 @@ namespace iOSApplication_0._5._3
                 ForegroundLabel.Text = "Found " + receivedHashes.Length + " fingerprints for " + _selectedMovie + ".";
                 RecordButton.Enabled = true;
                 TestButton.Enabled = true;
+                useThis = manager.SplitFingerprintLists(movie);
             };
 
             // Event handler for simple "Index movies" button click and release.
