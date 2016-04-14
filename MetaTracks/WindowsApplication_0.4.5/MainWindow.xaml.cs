@@ -6,7 +6,10 @@ using NAudio.Wave;
 using Microsoft.Win32;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Input;
+using AcousticFingerprintingLibrary_0._4._5;
 using Newtonsoft.Json;
 
 namespace WindowsApplication_0._4._5
@@ -21,8 +24,12 @@ namespace WindowsApplication_0._4._5
             Main = this;
             InitializeComponent();
             MouseDown += delegate { DragMove(); };
+
         }
 
+        string[] receivedHashes;
+        string[] receivedTimestamps;
+        private static string selectedMovie = String.Empty;
         private int foregroundLabelCounter;
         private string _entryName;
         internal static MainWindow Main;
@@ -32,6 +39,7 @@ namespace WindowsApplication_0._4._5
         List<WaveInCapabilities> sources = new List<WaveInCapabilities>();
         private string _json;
         string[] availableMovies;
+        double counter = 0;
 
         private void closeButton_Click(object sender, RoutedEventArgs e)
         {
@@ -241,23 +249,65 @@ namespace WindowsApplication_0._4._5
 
         private void chooseButton_Click(object sender, RoutedEventArgs e)
         {
-            Main.Status = "";
-            for (int i = 1; i < 8; i++)
-            {
-                var movie = availableMovies[i];
-                Main.Status = i + " " + movie;
-            }
-            Main.Status = "Enter a number to choose a movie. For more movies, enter '0'.";
+            TableWindow win = new TableWindow();
+            win.setTableItems(availableMovies);
+            win.Show();
         }
 
-        private void getFingerprintsButton_Click(object sender, RoutedEventArgs e)
+        private async void getFingerprintsButton_Click(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            Main.Status = "Selected movie: " + selectedMovie;
+            var client = new HttpClient();
+            var inputString =
+                $"http://webapi-1.bwjyuhcr5p.eu-west-1.elasticbeanstalk.com/Fingerprints/GetAllFingerprintsSQL?inputTitle='{selectedMovie}'";
+
+            client.BaseAddress = new Uri(inputString);
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            // HTTP GET
+            HttpResponseMessage response = await client.GetAsync(client.BaseAddress);
+            var responseString = response.Content.ReadAsStringAsync().Result;
+            receivedHashes = responseString.Split(';');
+
+            var client2 = new HttpClient();
+
+            var inputString2 =
+                $"http://webapi-1.bwjyuhcr5p.eu-west-1.elasticbeanstalk.com/Fingerprints/GetAllTimestampsSQL?inputTitle='{selectedMovie}'";
+            client2.BaseAddress = new Uri(inputString2);
+            client2.DefaultRequestHeaders.Accept.Clear();
+            client2.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            // HTTP GET
+            HttpResponseMessage response2 = await client2.GetAsync(client.BaseAddress);
+            var responseString2 = response2.Content.ReadAsStringAsync().Result;
+            receivedTimestamps = responseString2.Split(';');
+
+            FingerprintManager manager = new FingerprintManager();
+            /*
+            var movie = manager.GenerateHashedFingerprints(receivedHashes, receivedTimestamps);
+            RecordManager.SetHashedFingerprints(movie);
+            RecordManager.SetReceivedHashes(receivedHashes);
+            RecordManager.SetReceivedTimestamps(receivedTimestamps);
+            */
+            Main.Status = "Found " + receivedHashes.Length + " fingerprints for " + selectedMovie + ".";
         }
 
         private void recordContButton_Click(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+                for (int i = 0; i < 1000; i++)
+                {
+                    RecordManager.CreateOutputUrl(i);
+                    RecordManager.PrepareAudioRecording(i);
+                    RecordManager.Recorder.StartRecording();
+                    Thread.Sleep(3000);
+                    RecordManager.Recorder.StopRecording();
+                    var kasdf = RecordManager.AudioFilePath;
+                    var test = RecordManager.ConsumeWaveFile(kasdf);
+                    counter += test;
+                    var counter1 = counter;
+                    Main.Status = "Matched second: " + (3 + FingerprintManager.LatestTimeStamp) + " s" + "\n" + counter1 + " fingerprints in total.";
+                }
         }
 
         private void recordLongButton_Click(object sender, RoutedEventArgs e)
@@ -293,6 +343,11 @@ namespace WindowsApplication_0._4._5
                     }
                 });
             }
+        }
+
+        public static void SetSelectedMovie(string movie)
+        {
+            selectedMovie = movie;
         }
     }
 }
