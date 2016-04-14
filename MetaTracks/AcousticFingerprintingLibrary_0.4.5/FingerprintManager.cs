@@ -877,7 +877,6 @@ namespace AcousticFingerprintingLibrary_0._4._5
         // Get the newest timeStamp found in recognition
         // Call this to get the newest timestamp found
         public static double LatestTimeStamp { get; set; }
-
         public double CompareFingerprintListsHighest(HashedFingerprint[] fingerprints, HashedFingerprint[] toCompare)
         {
             foreach (var fingerprint1 in fingerprints)
@@ -931,6 +930,27 @@ namespace AcousticFingerprintingLibrary_0._4._5
             }
             // Returns -1 if the lists are not a match
             return -1;
+        }
+
+        /// <summary>
+        /// Searches through all fingerprints from movie to find the section with most correct fingerprints.
+        /// This is for faster searching later on
+        /// </summary>
+        /// <param name="allFingerprints">List returned from of fingerprints in SplitFingerprintLists() method</param>
+        /// <param name="toCompare">Microphone recording</param>
+        /// <returns>Index of the list with most matched fingerprints.</returns>
+        public int FindBestFingerprintList(List<HashedFingerprint[]> allFingerprints, HashedFingerprint[] toCompare)
+        {
+            int bestIndex = -1;
+            for (var index = 0; index < allFingerprints.Count; index++)
+            {
+                var list = allFingerprints[index];
+                var fingerprints = CompareFingerprintListsHighest(list, toCompare);
+                if (fingerprints > bestIndex)
+                    bestIndex = index;
+                _matchedFingerprints.Clear();
+            }
+            return bestIndex;
         }
         #endregion
 
