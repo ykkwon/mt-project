@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Threading;
 using AcousticFingerprintingLibrary_0._4._5;
 using AcousticFingerprintingLibrary_0._4._5.DistanceClasses;
 using AVFoundation;
@@ -109,7 +110,6 @@ namespace iOSApplication_0._5._3
 
         public static double ConsumeWaveFile(string filePath, int index)
         {
-            var twoLists = ViewController.useThis[index];
             // Read all the mono values from the input file.
             var monoArray = BassProxy.ReadMonoFromFileStatic(filePath, 5512, 0, 0);
             FingerprintManager manager = new FingerprintManager();
@@ -126,7 +126,7 @@ namespace iOSApplication_0._5._3
             var results = manager.CompareFingerprintListsHighest(ViewController.useThis[index], storedFingerprints.ToArray());
             if (results != -1)
             {
-                Console.WriteLine("SecondResult: " + Secondresults + " Index: " + ViewController.useThis.Count);
+                //Console.WriteLine("SecondResult: " + Secondresults + " Index: " + ViewController.useThis.Count);
                 if (index >= Secondresults)
                     if (manager.CheckIteration(FingerprintManager.LatestTimeStamp, ViewController.useThis[Secondresults+1]))
                         Secondresults++;
@@ -153,10 +153,47 @@ namespace iOSApplication_0._5._3
             return results;
         }
 
-        public static void StopRecord()
+        public static double ConsumeWaveFileShort(string filePath)
         {
-            Recorder.Stop();
-            Recorder.Dispose();
+            // Read all the mono values from the input file.
+            var monoArray = BassProxy.ReadMonoFromFileStatic(filePath, 5512, 0, 0);
+            FingerprintManager manager = new FingerprintManager();
+            Distance distance = new IncrementalDistance(1102, 128 * 64);
+            // Create an array of fingerprints to be hashed.
+            var preliminaryFingerprints = manager.CreateFingerprints(monoArray, distance);
+
+            var test = manager.GetFingerHashes(distance, preliminaryFingerprints);
+            foreach (var hash in test)
+                storedFingerprints.Add(hash);
+            //                                             // String[], String[], int lshSize
+            //var results = manager.GetTimeStamps(movie, storedFingerprints.ToArray());
+            var results = manager.CompareFingerprintListsHighest(Movie, storedFingerprints.ToArray());
+            if (results != -1)
+            {
+                // If amatch is found, print timestamp
+                // Console.WriteLine("Matched -- " + results);
+                storedFingerprints.Clear();
+                return results;
+            }
+            Console.WriteLine("NO MATCH -- " + storedFingerprints[0].HashBins[0]);
+            storedFingerprints.Clear();
+            return results;
+        }
+
+        // TODO: Aware that this will run forever in some cases
+        public static void StopRecord()
+        {       
+            if (Recorder != null)
+            {
+                Recorder.Stop();
+                Recorder.Dispose();
+                ReceivedHashes = null;
+                ReceivedTimestamps = null;
+                Movie = null;
+                
+                
+                storedFingerprints.Clear();
+            }
         }
 
         public static void InitializeComponents()

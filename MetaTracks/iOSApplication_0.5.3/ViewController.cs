@@ -39,14 +39,12 @@ namespace iOSApplication_0._5._3
             TestButton.Enabled = false;
             MoviePicker.Enabled = false;
             StopButton.Enabled = false;
-            PlayButton.Enabled = false;
-            SendButton.Enabled = false;
+            IndexButton.Enabled = true;
 
+            IndexButton.SetTitleColor(UIColor.FromRGBA(0, 0, 0, 150), UIControlState.Disabled);
             GetFingerprintsButton.SetTitleColor(UIColor.FromRGBA(0, 0, 0, 150), UIControlState.Disabled);
             RecordButton.SetTitleColor(UIColor.FromRGBA(0, 0, 0, 150), UIControlState.Disabled);
             StopButton.SetTitleColor(UIColor.FromRGBA(0, 0, 0, 150), UIControlState.Disabled);
-            PlayButton.SetTitleColor(UIColor.FromRGBA(0, 0, 0, 150), UIControlState.Disabled);
-            SendButton.SetTitleColor(UIColor.FromRGBA(0, 0, 0, 150), UIControlState.Disabled);
             MoviePicker.SetTitleColor(UIColor.FromRGBA(0, 0, 0, 150), UIControlState.Disabled);
             TestButton.SetTitleColor(UIColor.FromRGBA(0, 0, 0, 150), UIControlState.Disabled);
 
@@ -57,8 +55,6 @@ namespace iOSApplication_0._5._3
                 TestButton.Enabled = false;
                 RecordButton.Enabled = false;
                 StopButton.Enabled = true;
-                PlayButton.Enabled = false;
-                SendButton.Enabled = false;
                 IndexButton.Enabled = false;
                 MoviePicker.Enabled = false;
                 GetFingerprintsButton.Enabled = false;
@@ -75,7 +71,7 @@ namespace iOSApplication_0._5._3
                         Thread.Sleep(3000);
                         RecordManager.Recorder.Stop();
                         var kasdf = RecordManager.AudioFilePath;
-                        var test = RecordManager.ConsumeWaveFile(kasdf.RelativePath, 0);
+                        var test = RecordManager.ConsumeWaveFileShort(kasdf.RelativePath);
                         counter += test;
 
                         var counter1 = counter;
@@ -92,13 +88,13 @@ namespace iOSApplication_0._5._3
 
             // Long record
             TestButton.TouchUpInside += (sender, e) =>
-                {
+            {
+                    IndexButton.Enabled = false;
                     RecordButton.Enabled = false;
                     StopButton.Enabled = true;
-                    PlayButton.Enabled = false;
-                    SendButton.Enabled = false;
                     IndexButton.Enabled = false;
                     GetFingerprintsButton.Enabled = false;
+                    MoviePicker.Enabled = false;
 
                     var preSession = AVAudioSession.SharedInstance();
                     NSError preError;
@@ -117,8 +113,14 @@ namespace iOSApplication_0._5._3
                         {
                             ForegroundLabel.Text = "Guessed chunk: " + result;
                         });
+
                         for (int i = 0; i < 1000; i++)
                         {
+                            if (i % 20 == 0)
+                            {
+                                Console.WriteLine("Running long search. . .");
+                                RecordManager.ConsumeFirstFile(prePath.RelativePath, useThis);
+                            }
                             var session = AVAudioSession.SharedInstance();
                             NSError error;
                             session.SetCategory(AVAudioSession.CategoryRecord, out error);
@@ -144,54 +146,19 @@ namespace iOSApplication_0._5._3
             // Event handler for simple "Stop" button click and release.
             StopButton.TouchUpInside += (sender, e) =>
             {
-                RecordManager.Recorder.Stop();
-                RecordManager.Recorder.Dispose();
-                RecordManager.Recorder = null;
+                RecordManager.StopRecord();
+                TestButton.Enabled = true;
+                RecordButton.Enabled = true;
+                MoviePicker.Enabled = true;
+                ForegroundLabel.Text = "Stopped recording.";
+                useThis = null;
+                _selectedMovie = null;
+                FingerprintManager.LatestTimeStamp = 0;
+                IndexButton.Enabled = true;
+                StopButton.Enabled = false;
+                GetFingerprintsButton.Enabled = true;
             };
-
-            SendButton.TouchUpInside += (sender, e) =>
-            {
-                try
-                {
-                    var test = RecordManager.ConsumeWaveFile(RecordManager.TempRecording, 0);
-                    ForegroundLabel.Text = "Matched " + test + " fingerprints in total.";
-                }
-                catch (Exception ex)
-                {
-                    ForegroundLabel.Text = "ERROR";
-                    Console.WriteLine("There was a problem sending the audio: ");
-                    Console.WriteLine(ex.Message);
-                }
-            };
-
-            // Event handler for simple "Play" button click and release.
-            PlayButton.TouchUpInside += (sender, e) =>
-            {
-                try
-                {
-                    Console.WriteLine("Playing Back Recording {0}", RecordManager.AudioFilePath);
-                    ForegroundLabel.Text = "Playing back recording until end.";
-
-                    // The following line prevents the audio from stopping
-                    // when the device autolocks. will also make sure that it plays, even
-                    // if the device is in mute
-                    NSError error;
-                    AVAudioSession.SharedInstance().SetCategory(AVAudioSession.CategoryPlayback, out error);
-                    if (error != null)
-                        throw new Exception(error.DebugDescription);
-
-                    RecordManager.Player = new AVPlayer(RecordManager.AudioFilePath);
-                    RecordManager.Player.Play();
-                    ForegroundLabel.Text = "Finished playback.";
-
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("There was a problem playing back audio: ");
-                    Console.WriteLine(ex.Message);
-                }
-            };
-
+            
             // Event handler for simple "Get fingerprints" button click and release.
             GetFingerprintsButton.TouchUpInside += async (sender, e) =>
             {
@@ -261,6 +228,9 @@ namespace iOSApplication_0._5._3
                 };
                 Add(_table);
                 GetFingerprintsButton.Enabled = true;
+                TestButton.Enabled = false;
+                RecordButton.Enabled = false;
+                StopButton.Enabled = false;
             };
         }
         public void SetSelectedMovie(string inputMovie)

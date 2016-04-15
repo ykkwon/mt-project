@@ -93,28 +93,6 @@
                                     <rect key="frame" x="170" y="90" width="429" height="156"/>
                                 </variation>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="123" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
-                                <rect key="frame" x="362" y="448" width="46" height="30"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
-                                <state key="normal" title="Play">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                    <color key="titleColor" colorSpace="calibratedRGB" red="0.0196078431372549" green="0.4" blue="0.55294117647058827" alpha="1"/>
-                                </state>
-                                <variation key="heightClass=regular-widthClass=regular" fixedFrame="YES">
-                                    <rect key="frame" x="358" y="603" width="46" height="30"/>
-                                </variation>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="127" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
-                                <rect key="frame" x="362" y="504" width="46" height="30"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
-                                <state key="normal" title="Send">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                    <color key="titleColor" colorSpace="calibratedRGB" red="0.0196078431372549" green="0.4" blue="0.55294117647058827" alpha="1"/>
-                                </state>
-                                <variation key="heightClass=regular-widthClass=regular" fixedFrame="YES">
-                                    <rect key="frame" x="326" y="661" width="109" height="30"/>
-                                </variation>
-                            </button>
                             <navigationBar contentMode="scaleToFill" id="134" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
                                 <rect key="frame" x="224" y="12" width="320" height="44"/>
                                 <items>
@@ -171,8 +149,6 @@
                                 <exclude reference="105"/>
                                 <exclude reference="106"/>
                                 <exclude reference="119"/>
-                                <exclude reference="123"/>
-                                <exclude reference="127"/>
                                 <exclude reference="134"/>
                                 <exclude reference="147"/>
                                 <exclude reference="155"/>
@@ -191,8 +167,6 @@
                                 <include reference="105"/>
                                 <include reference="106"/>
                                 <include reference="119"/>
-                                <include reference="123"/>
-                                <include reference="127"/>
                                 <include reference="134"/>
                                 <include reference="147"/>
                                 <include reference="155"/>
@@ -208,8 +182,6 @@
                         <outlet property="GetFingerprintsButton" destination="104" id="name-outlet-104"/>
                         <outlet property="IndexButton" destination="99" id="name-outlet-99"/>
                         <outlet property="ForegroundLabel" destination="119" id="name-outlet-119"/>
-                        <outlet property="PlayButton" destination="123" id="name-outlet-123"/>
-                        <outlet property="SendButton" destination="127" id="name-outlet-127"/>
                         <outlet property="RecordButton" destination="155" id="name-outlet-155"/>
                         <outlet property="MoviePicker" destination="164" id="name-outlet-164"/>
                     </connections>
