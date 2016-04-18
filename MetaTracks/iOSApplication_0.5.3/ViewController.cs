@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using AcousticFingerprintingLibrary_0._4._5;
 using CoreGraphics;
 using AudioToolbox;
+using static iOSApplication_0._5._3.RecordManager;
 
 namespace iOSApplication_0._5._3
 {
@@ -28,7 +29,7 @@ namespace iOSApplication_0._5._3
         private string[] _availableMovies;
         private string[] _receivedHashes;
         private string[] _receivedTimestamps;
-        private double matchCounter;
+        private double _matchCounter;
 
 
         /// <summary>
@@ -68,7 +69,7 @@ namespace iOSApplication_0._5._3
         /// </remarks>
         public override void ViewDidLoad()
         {
-            RecordManager.Observer = AVPlayerItem.Notifications.ObserveDidPlayToEndTime(RecordManager.OnDidPlayToEndTime);
+            Observer = AVPlayerItem.Notifications.ObserveDidPlayToEndTime(OnDidPlayToEndTime);
            
             _sampleRate = 5512;
             _channels = 1;
@@ -91,22 +92,21 @@ namespace iOSApplication_0._5._3
 
                 Task.Factory.StartNew(() =>
                 {
-                    for (var i = 0; i < 1000; i++)
+                    for (var i = 0; i < int.MaxValue; i++) // TODO: Replace this.
                     {
                         var session = AVAudioSession.SharedInstance();
                         NSError error;
                         session.SetCategory(AVAudioSession.CategoryRecord, out error);
-                        RecordManager.CreateOutputUrl(i);
-                        RecordManager.PrepareAudioRecording(i, _sampleRate, _audioFormat, _channels, _audioQuality);
-               
-                        RecordManager.Recorder.Record();
-                        Thread.Sleep(3000);
-                        RecordManager.Recorder.Stop();
-                        var currentWaveFile = RecordManager.AudioFilePath;
-                        var consumedWaveFileShort = RecordManager.ConsumeWaveFile(currentWaveFile.RelativePath);
-                        matchCounter += consumedWaveFileShort;
+                        CreateOutputUrl(i);
+                        PrepareAudioRecording(i, _sampleRate, _audioFormat, _channels, _audioQuality);
+                        Recorder.Record();
+                        Thread.Sleep(3000); // TODO: Improve this. 
+                        Recorder.Stop();
+                        var currentWaveFile = AudioFilePath;
+                        var consumedWaveFileShort = ConsumeWaveFile(currentWaveFile.RelativePath);
+                        _matchCounter += consumedWaveFileShort;
 
-                        var internalMatchCounter = matchCounter;
+                        var internalMatchCounter = _matchCounter;
                         InvokeOnMainThread(() =>
                         {
                             ForegroundLabel.Text = "Matched second: " + (3 + FingerprintManager.LatestTimeStamp) + " s" +
@@ -125,13 +125,13 @@ namespace iOSApplication_0._5._3
                     var preSession = AVAudioSession.SharedInstance();
                     NSError preError;
                     preSession.SetCategory(AVAudioSession.CategoryRecord, out preError);
-                    RecordManager.CreateOutputUrl(0);
-                    RecordManager.PrepareAudioRecording(0, _sampleRate, _audioFormat, _channels, _audioQuality);
-                    RecordManager.Recorder.Record();
+                    CreateOutputUrl(0);
+                    PrepareAudioRecording(0, _sampleRate, _audioFormat, _channels, _audioQuality);
+                    Recorder.Record();
                     Thread.Sleep(10000);
-                    RecordManager.Recorder.Stop();
-                    var prePath = RecordManager.AudioFilePath;
-                    var result = RecordManager.ConsumeWaveFile(prePath.RelativePath, _hashedFingerprints);
+                    Recorder.Stop();
+                    var prePath = AudioFilePath;
+                    var result = ConsumeWaveFile(prePath.RelativePath, _hashedFingerprints);
 
                     Task.Factory.StartNew(() =>
                     {
@@ -140,27 +140,21 @@ namespace iOSApplication_0._5._3
                             ForegroundLabel.Text = "Guessed chunk: " + result;
                         });
 
-                        for (int i = 0; i < 1000; i++)
+                        for (var i = 0; i < int.MaxValue; i++)
                         {
-                            if (i % 20 == 0)
-                            {
-                                Console.WriteLine("Running long search. . .");
-                                RecordManager.ConsumeWaveFile(prePath.RelativePath, _hashedFingerprints);
-                            }
-
                             var session = AVAudioSession.SharedInstance();
                             NSError error;
                             session.SetCategory(AVAudioSession.CategoryRecord, out error);
-                            RecordManager.CreateOutputUrl(i);
-                            RecordManager.PrepareAudioRecording(i, _sampleRate, _audioFormat, _channels, _audioQuality);
-                            RecordManager.Recorder.Record();
+                            CreateOutputUrl(i);
+                            PrepareAudioRecording(i, _sampleRate, _audioFormat, _channels, _audioQuality);
+                            Recorder.Record();
                             Thread.Sleep(3000);
-                            RecordManager.Recorder.Stop();
-                            var currentWaveFile = RecordManager.AudioFilePath;
-                            var consumedWaveFileShort = RecordManager.ConsumeWaveFile(currentWaveFile.RelativePath, result);
-                            matchCounter += consumedWaveFileShort;
+                            Recorder.Stop();
+                            var currentWaveFile = AudioFilePath;
+                            var consumedWaveFileShort = ConsumeWaveFile(currentWaveFile.RelativePath, result);
+                            _matchCounter += consumedWaveFileShort;
 
-                            var internalMatchCounter = matchCounter;
+                            var internalMatchCounter = _matchCounter;
                             InvokeOnMainThread(() =>
                             {
                                 ForegroundLabel.Text = "Current chunk: " + result + "\n" + "Matched second: " + (3 + FingerprintManager.LatestTimeStamp) + " s" + "\n" + internalMatchCounter + " fingerprints in total." + "\n" + "~ " + (Math.Round(FingerprintManager.LatestTimeStamp / 60)) + " minutes.";
@@ -173,7 +167,7 @@ namespace iOSApplication_0._5._3
             StopButton.TouchUpInside += (sender, e) =>
             {
                 SetButtonAvailability(true, true, true, true, false);
-                RecordManager.StopRecord();
+                StopRecord();
                 ForegroundLabel.Text = "Stopped recording.";
                 _hashedFingerprints = null;
                 _selectedMovie = null;
@@ -210,9 +204,9 @@ namespace iOSApplication_0._5._3
 
                 FingerprintManager manager = new FingerprintManager();
                 var movie = manager.GenerateHashedFingerprints(_receivedHashes, _receivedTimestamps);
-                RecordManager.SetHashedFingerprints(movie);
-                RecordManager.SetReceivedHashes(_receivedHashes);
-                RecordManager.SetReceivedTimestamps(_receivedTimestamps);
+                SetHashedFingerprints(movie);
+                SetReceivedHashes(_receivedHashes);
+                SetReceivedTimestamps(_receivedTimestamps);
                 ForegroundLabel.Text = "Found " + _receivedHashes.Length + " fingerprints for " + _selectedMovie + ".";
                 _hashedFingerprints = manager.SplitFingerprintLists(movie);
                 SetButtonAvailability(true, true, true, true, false);

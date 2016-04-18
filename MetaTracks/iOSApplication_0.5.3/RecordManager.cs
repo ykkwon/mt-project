@@ -20,8 +20,8 @@ namespace iOSApplication_0._5._3
         internal static string[] ReceivedHashes;
         internal static string[] ReceivedTimestamps;
 
-        private static HashedFingerprint[] _movie;
         private static readonly List<HashedFingerprint> StoredFingerprints = new List<HashedFingerprint>();
+        private static HashedFingerprint[] _movie;
         private static List<HashedFingerprint[]> _hashedFingerprints;
         private static string _tempRecording;
         private static int _secondaryIndex;
@@ -75,7 +75,6 @@ namespace iOSApplication_0._5._3
             Recorder = AVAudioRecorder.Create(AudioFilePath, audioSettings, out error);
             if (error != null)
             {
-                Console.WriteLine(error);
                 return false;
             }
 
@@ -131,6 +130,7 @@ namespace iOSApplication_0._5._3
                 StoredFingerprints.Add(hash);
             }
             _secondaryIndex = manager.FindBestFingerprintList(list, StoredFingerprints.ToArray());
+            File.Delete(filePath);
             return _secondaryIndex;
         }
 
@@ -158,6 +158,7 @@ namespace iOSApplication_0._5._3
                 if (manager.CheckIteration(FingerprintManager.LatestTimeStamp, _hashedFingerprints[_secondaryIndex + 1]))
                     _secondaryIndex++;
             StoredFingerprints.Clear();
+            File.Delete(filePath);
             return results;
         }
 
@@ -179,6 +180,7 @@ namespace iOSApplication_0._5._3
                 StoredFingerprints.Add(hash);
             var results = manager.CompareFingerprintListsHighest(_movie, StoredFingerprints.ToArray());
             StoredFingerprints.Clear();
+            File.Delete(filePath);
             return results;
         }
 
