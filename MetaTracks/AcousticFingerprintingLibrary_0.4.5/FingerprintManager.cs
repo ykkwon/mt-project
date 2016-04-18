@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using AcousticFingerprintingLibrary_0._4._5.FFT;
 using AcousticFingerprintingLibrary_0._4._5.Hashing;
-using AssetsLibrary;
 
 namespace AcousticFingerprintingLibrary_0._4._5
 {
@@ -89,13 +87,13 @@ namespace AcousticFingerprintingLibrary_0._4._5
 
         #endregion
 
-        public static int LSHtableSize;
-        public static int LSHkey;
+        private static int _lshTableSize;
+        private static int _lshKey;
 
         public FingerprintManager()
         {
-            LSHtableSize = 33;
-            LSHkey = 3;
+            _lshTableSize = 33;
+            _lshKey = 3;
             WindowFunction = new HanningWindow();
             HaarWavelet = new HaarWavelet();
             LogBins = 32;
@@ -528,31 +526,31 @@ namespace AcousticFingerprintingLibrary_0._4._5
 
         private struct SorterObjectArray
         {
-            private Object[] keys;
-            private Object[] items;
-            private AbsComparator comparer;
+            private readonly Object[] _keys;
+            private readonly Object[] _items;
+            private readonly AbsComparator _comparer;
 
             internal SorterObjectArray(Object[] keys, Object[] items, AbsComparator comparer)
             {
-                this.keys = keys;
-                this.items = items;
-                this.comparer = comparer;
+                _keys = keys;
+                _items = items;
+                _comparer = comparer;
             }
 
-            internal void SwapIfGreaterWithItems(int a, int b)
+            private void SwapIfGreaterWithItems(int a, int b)
             {
                 if (a != b)
                 {
-                    if (comparer.Compare((float) keys[a], (float) keys[b]) > 0)
+                    if (_comparer.Compare((float) _keys[a], (float) _keys[b]) > 0)
                     {
-                        var temp = keys[a];
-                        keys[a] = keys[b];
-                        keys[b] = temp;
-                        if (items != null)
+                        var temp = _keys[a];
+                        _keys[a] = _keys[b];
+                        _keys[b] = temp;
+                        if (_items != null)
                         {
-                            var item = items[a];
-                            items[a] = items[b];
-                            items[b] = item;
+                            var item = _items[a];
+                            _items[a] = _items[b];
+                            _items[b] = item;
                         }
                     }
                 }
@@ -575,24 +573,24 @@ namespace AcousticFingerprintingLibrary_0._4._5
                     SwapIfGreaterWithItems(i, j); // swap the low with the high 
                     SwapIfGreaterWithItems(middle, j); // swap the middle with the high
 
-                    var x = keys[middle];
+                    var x = _keys[middle];
                     do
                     {
                         // Add a try block here to detect IComparers (or their 
                         // underlying IComparables, etc) that are bogus.
-                        while (comparer.Compare((float) keys[i], (float) x) < 0) i++;
-                        while (comparer.Compare((float) x, (float) keys[j]) < 0) j--;
+                        while (_comparer.Compare((float) _keys[i], (float) x) < 0) i++;
+                        while (_comparer.Compare((float) x, (float) _keys[j]) < 0) j--;
                         if (i > j) break;
                         if (i < j)
                         {
-                            var key = keys[i];
-                            keys[i] = keys[j];
-                            keys[j] = key;
-                            if (items != null)
+                            var key = _keys[i];
+                            _keys[i] = _keys[j];
+                            _keys[j] = key;
+                            if (_items != null)
                             {
-                                var item = items[i];
-                                items[i] = items[j];
-                                items[j] = item;
+                                var item = _items[i];
+                                _items[i] = _items[j];
+                                _items[j] = item;
                             }
                         }
                         i++;
@@ -617,31 +615,31 @@ namespace AcousticFingerprintingLibrary_0._4._5
         // to access the elements.  We must use GetValue & SetValue.
         private struct SorterGenericArray
         {
-            private Array keys;
-            private Array items;
-            private AbsComparator comparer;
+            private readonly Array _keys;
+            private readonly Array _items;
+            private readonly AbsComparator _comparer;
 
             internal SorterGenericArray(Array keys, Array items, AbsComparator comparer)
             {
-                this.keys = keys;
-                this.items = items;
-                this.comparer = comparer;
+                _keys = keys;
+                _items = items;
+                _comparer = comparer;
             }
 
             internal void SwapIfGreaterWithItems(int a, int b)
             {
                 if (a != b)
                 {
-                    if (comparer.Compare((float) keys.GetValue(a), (float) keys.GetValue(b)) > 0)
+                    if (_comparer.Compare((float) _keys.GetValue(a), (float) _keys.GetValue(b)) > 0)
                     {
-                        var key = keys.GetValue(a);
-                        keys.SetValue(keys.GetValue(b), a);
-                        keys.SetValue(key, b);
-                        if (items != null)
+                        var key = _keys.GetValue(a);
+                        _keys.SetValue(_keys.GetValue(b), a);
+                        _keys.SetValue(key, b);
+                        if (_items != null)
                         {
-                            var item = items.GetValue(a);
-                            items.SetValue(items.GetValue(b), a);
-                            items.SetValue(item, b);
+                            var item = _items.GetValue(a);
+                            _items.SetValue(_items.GetValue(b), a);
+                            _items.SetValue(item, b);
                         }
                     }
                 }
@@ -663,24 +661,24 @@ namespace AcousticFingerprintingLibrary_0._4._5
                     SwapIfGreaterWithItems(i, j); // swap the low with the high
                     SwapIfGreaterWithItems(middle, j); // swap the middle with the high
 
-                    var x = keys.GetValue(middle);
+                    var x = _keys.GetValue(middle);
                     do
                     {
                         // Add a try block here to detect IComparers (or their 
                         // underlying IComparables, etc) that are bogus.
-                        while (comparer.Compare((float) keys.GetValue(i), (float) x) < 0) i++;
-                        while (comparer.Compare((float) x, (float) keys.GetValue(j)) < 0) j--;
+                        while (_comparer.Compare((float) _keys.GetValue(i), (float) x) < 0) i++;
+                        while (_comparer.Compare((float) x, (float) _keys.GetValue(j)) < 0) j--;
                         if (i > j) break;
                         if (i < j)
                         {
-                            var key = keys.GetValue(i);
-                            keys.SetValue(keys.GetValue(j), i);
-                            keys.SetValue(key, j);
-                            if (items != null)
+                            var key = _keys.GetValue(i);
+                            _keys.SetValue(_keys.GetValue(j), i);
+                            _keys.SetValue(key, j);
+                            if (_items != null)
                             {
-                                var item = items.GetValue(i);
-                                items.SetValue(items.GetValue(j), i);
-                                items.SetValue(item, j);
+                                var item = _items.GetValue(i);
+                                _items.SetValue(_items.GetValue(j), i);
+                                _items.SetValue(item, j);
                             }
                         }
                         if (i != Int32.MaxValue) ++i;
@@ -738,7 +736,7 @@ namespace AcousticFingerprintingLibrary_0._4._5
             var listDb = listdb;
             var minHash = new MinHash();
             var minhashdb = listDb.Select(fing => minHash.ComputeMinHashSignatureByte(fing.Signature)).ToList();
-            var lshBuckets = minhashdb.Select(fing => minHash.GroupMinHashToLshBucketsByte(fing, LSHtableSize, LSHkey).Values.ToArray()).ToList();
+            var lshBuckets = minhashdb.Select(fing => minHash.GroupMinHashToLshBucketsByte(fing, _lshTableSize, _lshKey).Values.ToArray()).ToList();
 
             //List<HashedFingerprint> hashedFinger = new List<HashedFingerprint>();
             var hashedFinger = new HashedFingerprint[listDb.Count];
@@ -759,7 +757,6 @@ namespace AcousticFingerprintingLibrary_0._4._5
         /// </summary>
         /// <param name="receivedHashes">Hashbins received from database, will be converted to long[]</param>
         /// <param name="receivedTimestamps">Timestamps received from database, will be converted to double</param>
-        /// <param name="tableSize">Number of hashes per array</param>
         /// <returns>
         /// An array of HashedFingerprint objects.
         /// </returns>
@@ -768,7 +765,6 @@ namespace AcousticFingerprintingLibrary_0._4._5
             var hashBins = new List<long>();
             var timestamps = new List<double>();
 
-            var receivedFingerprints = new List<HashedFingerprint>();
             try
             {
                 for (var index = 0; index < receivedHashes.Length - 1; index++)
@@ -787,10 +783,10 @@ namespace AcousticFingerprintingLibrary_0._4._5
             var timestampList = new List<double>();
             for (var j = 0; j < timestamps.Count - 1; j++)
             {
-                if (j % LSHtableSize == 0 && hashBins.Count > j + LSHtableSize)
+                if (j % _lshTableSize == 0 && hashBins.Count > j + _lshTableSize)
                 {
-                    var bins = new long[LSHtableSize];
-                    for (var i = 0; i < LSHtableSize; i++)
+                    var bins = new long[_lshTableSize];
+                    for (var i = 0; i < _lshTableSize; i++)
                     {
                         bins[i] = hashBins[i + j];
                     }
@@ -798,13 +794,8 @@ namespace AcousticFingerprintingLibrary_0._4._5
                     timestampList.Add(timestamps[j]);
                 }
             }
-            for (var i = 0; i < hashBinsList.Count; i++)
-            {
-                var finger = new HashedFingerprint(hashBinsList[i], timestampList[i]);
-                receivedFingerprints.Add(finger);
-            }
 
-            return receivedFingerprints.ToArray();
+            return hashBinsList.Select((t, i) => new HashedFingerprint(t, timestampList[i])).ToArray();
         }
 
         public List<HashedFingerprint[]> SplitFingerprintLists(HashedFingerprint[] movieFingerprints)
@@ -841,16 +832,9 @@ namespace AcousticFingerprintingLibrary_0._4._5
                     //var commonNumbers = fingerprint1.HashBins.Intersect(fingerprint2.HashBins);
 
                     HashSet<long> set2 = new HashSet<long>(fingerprint2.HashBins); // 7643
-                    var counter = 0;
-                    for (int index = 0; index < fingerprint1.HashBins.Length; index++)
-                    {
-                        var hash = fingerprint1.HashBins[index];
-                        var qwe = set2.Contains(hash);
-                        if (qwe)
-                            counter++;
-                    }
+                    var i = fingerprint1.HashBins.Select(hash => set2.Contains(hash)).Count(qwe => qwe);
 
-                    var count = counter;
+                    var count = i;
                     if (count >= 4)
                     {
                         _matchedFingerprints.Add(fingerprint1);
@@ -883,16 +867,9 @@ namespace AcousticFingerprintingLibrary_0._4._5
                     //var commonNumbers = fingerprint1.HashBins.Intersect(fingerprint2.HashBins);
 
                     HashSet<long> set2 = new HashSet<long>(fingerprint2.HashBins); // 7643
-                    var counter = 0;
-                    for (int index = 0; index < fingerprint1.HashBins.Length; index++)
-                    {
-                        var hash = fingerprint1.HashBins[index];
-                        var qwe = set2.Contains(hash);
-                        if (qwe)
-                            counter++;
-                    }
+                    var i = fingerprint1.HashBins.Select(hash => set2.Contains(hash)).Count(qwe => qwe);
 
-                    var count = counter;
+                    var count = i;
                     if (count >= 4)
                     {
                         _matchedFingerprints.Add(fingerprint1);
@@ -950,22 +927,22 @@ namespace AcousticFingerprintingLibrary_0._4._5
             return bestIndex;
         }
 
-        private int counter = 0;
-        private double previoustimestamp = 0.0;
+        private int _counter;
+        private double _previoustimestamp;
         public bool CheckIteration(double timestamp, HashedFingerprint[] nextIteration)
         {
             // if next starts at 100 and timestamp reaches 90+
             // 90-100 = -10... correct i thinkkk
             if (timestamp - nextIteration[0].Timestamp >= -10)
             {
-                counter++;
-                if (counter >= 2 && timestamp != previoustimestamp)
+                _counter++;
+                if (_counter >= 2 && Math.Abs(timestamp - _previoustimestamp) > 0)
                 {
-                    counter = 0;
-                    previoustimestamp = 0.0;
+                    _counter = 0;
+                    _previoustimestamp = 0.0;
                     return true;
                 }
-                previoustimestamp = timestamp;
+                _previoustimestamp = timestamp;
             }
             return false;
         }

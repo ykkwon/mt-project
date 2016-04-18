@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using AcousticFingerprintingLibrary_0._4._5;
 using AVFoundation;
@@ -33,7 +32,7 @@ namespace iOSApplication_0._5._3
         /// <returns>Returns the file path in the temporary system folder.</returns>
         public static NSUrl CreateOutputUrl(int nameIterator)
         {
-            string fileName = $"split{nameIterator}.wav";
+            var fileName = $"split{nameIterator}.wav";
             _tempRecording = Path.Combine(Path.GetTempPath(), fileName);
 
             return NSUrl.FromFilename(_tempRecording);

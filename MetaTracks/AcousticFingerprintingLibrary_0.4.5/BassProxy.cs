@@ -35,18 +35,13 @@ namespace AcousticFingerprintingLibrary_0._4._5
             //Call to avoid the freeware splash screen. Didn't see it, but maybe it will appear if the Forms are used :D
             BassNet.Registration("kristian.stoylen93@gmail.com", "2X20371028152222");
             //Dummy calls made for loading the assemblies
-            int bassMixVersion = BassMix.BASS_Mixer_GetVersion();
+            BassMix.BASS_Mixer_GetVersion();
 
             if (!Bass.BASS_Init(-1, DefaultSampleRate, BASSInit.BASS_DEVICE_DEFAULT | BASSInit.BASS_DEVICE_MONO, IntPtr.Zero)) //Set Sample Rate / MONO
                 throw new Exception(Bass.BASS_ErrorGetCode().ToString());
             if (!Bass.BASS_SetConfig(BASSConfig.BASS_CONFIG_FLOATDSP, true)) /*Set floating parameters to be passed*/
                 throw new Exception(Bass.BASS_ErrorGetCode().ToString());
         }
-
-        /// <summary>
-        ///   Public Constructor
-        /// </summary>
-        public BassProxy(){}
 
         #endregion
 
