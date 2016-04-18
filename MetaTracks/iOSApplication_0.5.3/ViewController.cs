@@ -10,11 +10,17 @@ using System.Threading;
 using System.Threading.Tasks;
 using AcousticFingerprintingLibrary_0._4._5;
 using CoreGraphics;
+using AudioToolbox;
 
 namespace iOSApplication_0._5._3
 {
     public partial class ViewController : UIViewController
     {
+        public static int SAMPLE_RATE;
+        public static int CHANNELS;
+        public static AudioFormatType AUDIO_FORMAT;
+        public static AVAudioQuality AUDIO_QUALITY;
+
         string _selectedMovie;
         UITableView _table;
         public static List<HashedFingerprint[]> useThis = null;
@@ -25,6 +31,11 @@ namespace iOSApplication_0._5._3
 
         public override void ViewDidLoad()
         {
+            SAMPLE_RATE = 5512;
+            CHANNELS = 1;
+            AUDIO_FORMAT = AudioFormatType.LinearPCM;
+            AUDIO_QUALITY = AVAudioQuality.Max;
+
             base.ViewDidLoad();
             RecordManager.Observer = AVPlayerItem.Notifications.ObserveDidPlayToEndTime(RecordManager.OnDidPlayToEndTime);
             string[] availableMovies = null;
@@ -66,7 +77,7 @@ namespace iOSApplication_0._5._3
                         NSError error;
                         session.SetCategory(AVAudioSession.CategoryRecord, out error);
                         RecordManager.CreateOutputUrl(i);
-                        RecordManager.PrepareAudioRecording(i);
+                        RecordManager.PrepareAudioRecording(i, SAMPLE_RATE, AUDIO_FORMAT, CHANNELS, AUDIO_QUALITY);
                         RecordManager.Recorder.Record();
                         Thread.Sleep(3000);
                         RecordManager.Recorder.Stop();
@@ -100,7 +111,7 @@ namespace iOSApplication_0._5._3
                     NSError preError;
                     preSession.SetCategory(AVAudioSession.CategoryRecord, out preError);
                     RecordManager.CreateOutputUrl(0);
-                    RecordManager.PrepareAudioRecording(0);
+                    RecordManager.PrepareAudioRecording(0, SAMPLE_RATE, AUDIO_FORMAT, CHANNELS, AUDIO_QUALITY);
                     RecordManager.Recorder.Record();
                     Thread.Sleep(10000);
                     RecordManager.Recorder.Stop();
@@ -125,7 +136,7 @@ namespace iOSApplication_0._5._3
                             NSError error;
                             session.SetCategory(AVAudioSession.CategoryRecord, out error);
                             RecordManager.CreateOutputUrl(i);
-                            RecordManager.PrepareAudioRecording(i);
+                            RecordManager.PrepareAudioRecording(i, SAMPLE_RATE, AUDIO_FORMAT, CHANNELS, AUDIO_QUALITY);
                             RecordManager.Recorder.Record();
                             Thread.Sleep(3000);
                             RecordManager.Recorder.Stop();
