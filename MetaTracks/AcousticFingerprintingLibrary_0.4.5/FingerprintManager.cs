@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Linq;
 using AcousticFingerprintingLibrary_0._4._5.FFT;
 using AcousticFingerprintingLibrary_0._4._5.Hashing;
-using AcousticFingerprintingLibrary_0._4._5.Wavelets;
 using AssetsLibrary;
 
 namespace AcousticFingerprintingLibrary_0._4._5
@@ -372,8 +371,6 @@ namespace AcousticFingerprintingLibrary_0._4._5
                 }
 
                 HaarWavelet.TransformImage(frames); /*Compute wavelets*/
-                
-
                 var image = ExtractTopWavelets(frames);
                 fingerPrints.Add(new Fingerprint
                 {
