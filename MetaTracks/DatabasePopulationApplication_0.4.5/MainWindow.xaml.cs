@@ -10,7 +10,6 @@ using System.Text;
 using System.Threading;
 using System.Windows;
 using AcousticFingerprintingLibrary_0._4._5;
-using AcousticFingerprintingLibrary_0._4._5.DistanceClasses;
 using dbApp;
 using Microsoft.Win32;
 
@@ -86,11 +85,10 @@ namespace DatabasePopulationApplication_0._4._5
             // DistanceeSize is length between consecutive fingerprints
             int distanceSize = 1102;
             int samplesPerFingerprint = 128 * 64; // 128 = width of fingerprint, 64 = overlap
-            var distance = new IncrementalDistance(distanceSize, samplesPerFingerprint);
 
 
             //List<bool[]> fingerprints = manager.CreateFingerprints(proxy, Path.GetFullPath(filename), Distance);
-            List<Fingerprint> fingerprints = manager.CreateFingerprints(Path.GetFullPath(_filename), distance);
+            List<Fingerprint> fingerprints = manager.CreateFingerprints(Path.GetFullPath(_filename));
 
             //manager.GetHashSimilarity(Distance, Distance, proxy, filename, filename);
             int width = manager.FingerprintWidth;
@@ -126,10 +124,9 @@ namespace DatabasePopulationApplication_0._4._5
             using (BassProxy proxy = new BassProxy())
             {
                 Main.Status = "Generating wavelet visualization.";
-                AcousticFingerprintingLibrary_0._4._5.FingerprintManager manager = new AcousticFingerprintingLibrary_0._4._5.FingerprintManager();
-
-                Distance distance = new Distance(1102);
-                Image image = Imaging.GetWaveletSpectralImage(Path.GetFullPath(_filename), distance, proxy, manager);
+                FingerprintManager manager = new FingerprintManager();
+                
+                Image image = Imaging.GetWaveletSpectralImage(Path.GetFullPath(_filename), proxy, manager);
                 image.Save(path);
                 image.Dispose();
                 Main.Status = "Visualization done. Image file saved to: " + Path.GetFullPath(sfd.FileName);
@@ -145,9 +142,6 @@ namespace DatabasePopulationApplication_0._4._5
             {
 
                 FingerprintManager manager = new FingerprintManager();
-                int distanceSize = 1102;
-                int samplesPerFingerprint = 128 * 64; // 128 = width of fingerprint, 64 = overlap
-                var distance = new IncrementalDistance(distanceSize, samplesPerFingerprint);
                 try
                 {
                     if (_fileopened != true)
@@ -155,10 +149,9 @@ namespace DatabasePopulationApplication_0._4._5
                         throw new ArgumentNullException();
                     }
                     Main.Status = "Staging the following file: " + _filename;
-                    List<Fingerprint> fingerprints = manager.CreateFingerprints(Path.GetFullPath(_filename),
-                            distance);
+                    List<Fingerprint> fingerprints = manager.CreateFingerprints(Path.GetFullPath(_filename));
 
-                    var test = manager.GetFingerHashes(distance, fingerprints);
+                    var test = manager.GetFingerHashes(fingerprints);
                     Main.Status = "Sending hashes to database. This might take a long time, depending on the movie length.";
 
                     var csv = new StringBuilder();
@@ -334,11 +327,8 @@ namespace DatabasePopulationApplication_0._4._5
                     {
 
                         Main.Status = "Comparing chosen digital file with fingerprints from database.";
-                        AcousticFingerprintingLibrary_0._4._5.FingerprintManager manager =
-                            new AcousticFingerprintingLibrary_0._4._5.FingerprintManager();
-                        int distanceSize = 1102;
-                        int samplesPerFingerprint = 128 * 64; // 128 = width of fingerprint, 64 = overlap
-                        var distance = new IncrementalDistance(distanceSize, samplesPerFingerprint);
+                        FingerprintManager manager =
+                            new FingerprintManager();
 
 
                         if (titleInput != null)
@@ -359,10 +349,10 @@ namespace DatabasePopulationApplication_0._4._5
 
                             string[] receivedtime = new string[receivedHashes.Length];
 
-                            var fingerprints2 = manager.CreateFingerprints(_filename, distance);
+                            var fingerprints2 = manager.CreateFingerprints(_filename);
 
 
-                            var toCompare = manager.GetFingerHashes(distance, fingerprints2);
+                            var toCompare = manager.GetFingerHashes(fingerprints2);
                             var movie = manager.GenerateHashedFingerprints(receivedHashes, receivedtime);
 
                             // Splits the list of fingerprints into smaller chunks, for faster searching

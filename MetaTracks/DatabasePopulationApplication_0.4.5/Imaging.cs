@@ -4,7 +4,6 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
 using AcousticFingerprintingLibrary_0._4._5;
-using AcousticFingerprintingLibrary_0._4._5.DistanceClasses;
 
 
 namespace DatabasePopulationApplication_0._4._5
@@ -160,19 +159,15 @@ namespace DatabasePopulationApplication_0._4._5
         ///   Gets the spectrum of the wavelet decomposition before extracting top wavelets and binary transformation
         /// </summary>
         /// <param name = "pathToFile">Path to file to be drawn</param>
-        /// <param name = "distance">Distance within the fingerprint creation</param>
         /// <param name = "proxy">Proxy manager</param>
         /// <param name = "manager">Fingerprint manager</param>
         /// <returns>Image to be saved</returns>
-        public static Image GetWaveletSpectralImage(string pathToFile,
-                                                    Distance distance,
-                                                    BassProxy proxy,
-                                                    AcousticFingerprintingLibrary_0._4._5.FingerprintManager manager)
+        public static Image GetWaveletSpectralImage(string pathToFile, BassProxy proxy, FingerprintManager manager)
         {
             List<float[][]> wavelets = new List<float[][]>();
             float[][] spectrum = manager.CreateLogSpectrogram(pathToFile, 0, 0);
             int specLen = spectrum.GetLength(0);
-            int start = distance.GetFirstDistance() / manager.Overlap;
+            int start = 0 / manager.Overlap;
             int logbins = manager.LogBins;
             int fingerprintLength = manager.FingerprintWidth;
             int overlap = manager.Overlap;
@@ -184,7 +179,7 @@ namespace DatabasePopulationApplication_0._4._5
                     frames[i] = new float[logbins];
                     Array.Copy(spectrum[start + i], frames[i], logbins);
                 }
-                start += fingerprintLength + distance.GetDistance() / overlap;
+                start += fingerprintLength + manager.Stride / overlap;
                 wavelets.Add(frames);
             }
 

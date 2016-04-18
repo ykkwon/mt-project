@@ -31,8 +31,9 @@
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Bass.Net.iOS">
-      <HintPath>..\..\..\..\Dropbox\Bacheloroppgave 2016 MetaTracks\Bass.net ExampleCodes\iOS\Bass.Net.iOS.dll</HintPath>
+    <Reference Include="Bass.Net, Version=2.4.11.1, Culture=neutral, PublicKeyToken=b7566c273e6ef480, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Dropbox\Bacheloroppgave 2016 MetaTracks\c# References\Bass.Net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
@@ -44,8 +45,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BassProxy.cs" />
-    <Compile Include="DistanceClasses\Distance.cs" />
-    <Compile Include="DistanceClasses\IncrementalDistance.cs" />
     <Compile Include="FFT\Complex.cs" />
     <Compile Include="FFT\ComplexF.cs" />
     <Compile Include="FFT\Fourier.cs" />

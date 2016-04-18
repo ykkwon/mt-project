@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using AcousticFingerprintingLibrary_0._4._5.DistanceClasses;
 using AcousticFingerprintingLibrary_0._4._5.FFT;
 using AcousticFingerprintingLibrary_0._4._5.Hashing;
 using AcousticFingerprintingLibrary_0._4._5.Wavelets;
@@ -87,6 +86,8 @@ namespace AcousticFingerprintingLibrary_0._4._5
 
         public int DistanceSize { get; set; }
 
+        public int Stride { get; set; }
+
         #endregion
 
         public static int LSHtableSize;
@@ -109,6 +110,7 @@ namespace AcousticFingerprintingLibrary_0._4._5
             SampleRate = 5512;
             LogBase = Math.E;
             DistanceSize = 1102;
+            Stride = -(Overlap * FingerprintWidth) + 1102;
             _logFrequenciesIndex = GetLogFrequenciesIndex(SampleRate, MinFrequency, MaxFrequency, LogBins, WindowSize,
                 LogBase);
             _windowArray = WindowFunction.GetWindow(WindowSize);
@@ -312,57 +314,53 @@ namespace AcousticFingerprintingLibrary_0._4._5
         ///   Create fingerprints according to the Google's researchers algorithm
         /// </summary>
         /// <param name = "filename">Filename to be analyzed</param>
-        /// <param name = "distance">Distance between 2 consecutive fingerprints</param>
         /// <param name = "milliseconds">Milliseconds to analyze</param>
         /// <param name = "startmilliseconds">Starting point of analysis</param>
         /// <returns>Fingerprint signatures</returns>
-        public List<Fingerprint> CreateFingerprints(string filename, Distance distance, int milliseconds, int startmilliseconds)
+        public List<Fingerprint> CreateFingerprints(string filename, int milliseconds, int startmilliseconds)
         {
             var spectrum = CreateLogSpectrogram(filename, milliseconds, startmilliseconds);
             
-            return CreateFingerprints(spectrum, distance);
+            return CreateFingerprints(spectrum);
         }
 
         /// <summary>
         ///   Create fingerprints from already written samples
         /// </summary>
         /// <param name = "samples">Samples from a song</param>
-        /// <param name = "distance">Distance between 2 consecutive fingerprints</param>
         /// <returns>Fingerprint signatures</returns>
-        public List<Fingerprint> CreateFingerprints(float[] samples, Distance distance)
+        public List<Fingerprint> CreateFingerprints(float[] samples)
         {
             var spectrum = CreateLogSpectrogram(samples);
-            return CreateFingerprints(spectrum, distance);
+            return CreateFingerprints(spectrum);
         }
 
         /// <summary>
         ///   Create fingerprints gathered from one specific song
         /// </summary>
         /// <param name = "filename">Filename</param>
-        /// <param name = "distance">Distance used in fingerprint creation</param>
         /// <returns>List of fingerprint signatures</returns>
-        public List<Fingerprint> CreateFingerprints(string filename, Distance distance)
+        public List<Fingerprint> CreateFingerprints(string filename)
         {
-            return CreateFingerprints(filename, distance, 0, 0);
+            return CreateFingerprints(filename, 0, 0);
         }
 
         /// <summary>
         ///   Create fingerprints according to the Google's researchers algorithm
         /// </summary>
         /// <param name = "spectrogram">Spectrogram of the song</param>
-        /// <param name = "distance">Distance between 2 consecutive fingerprints</param>
         /// <returns>Fingerprint signatures</returns>
-        public List<Fingerprint> CreateFingerprints(float[][] spectrogram, Distance distance)
+        public List<Fingerprint> CreateFingerprints(float[][] spectrogram)
         {
             var fingerprintWidth = FingerprintWidth; /*128*/
             var overlap = Overlap; /*64*/
             var fingerprintHeight = LogBins;
-            var start = distance.GetFirstDistance()/overlap;
+            var start = 0;
             var sampleRate = SampleRate;
 
             var sequenceNr = 0;
             var fingerPrints = new List<Fingerprint>();
-
+            
             var length = spectrogram.GetLength(0);
             while (start + fingerprintWidth <= length)
             {
@@ -382,7 +380,7 @@ namespace AcousticFingerprintingLibrary_0._4._5
                     Signature = image,
                     Timestamp = start*((double) overlap/sampleRate)
                 });
-                start += fingerprintWidth + distance.GetDistance() / overlap;
+                start += fingerprintWidth + Stride / overlap;
             }
             return fingerPrints;
         }
@@ -737,7 +735,7 @@ namespace AcousticFingerprintingLibrary_0._4._5
 
         #region Hashing
 
-        public HashedFingerprint[] GetFingerHashes(Distance distance, List<Fingerprint> listdb)
+        public HashedFingerprint[] GetFingerHashes(List<Fingerprint> listdb)
         {
             var listDb = listdb;
             var minHash = new MinHash();

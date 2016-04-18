@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using AcousticFingerprintingLibrary_0._4._5;
-using AcousticFingerprintingLibrary_0._4._5.DistanceClasses;
 using NAudio.Wave;
 
 namespace WindowsApplication_0._4._5
@@ -63,11 +62,10 @@ namespace WindowsApplication_0._4._5
             // Read all the mono values from the input file.
             var monoArray = BassProxy.ReadMonoFromFileStatic(filePath, 5512, 0, 0);
             FingerprintManager manager = new FingerprintManager();
-            Distance distance = new IncrementalDistance(1102, 128 * 64);
             // Create an array of fingerprints to be hashed.
-            var preliminaryFingerprints = manager.CreateFingerprints(monoArray, distance);
+            var preliminaryFingerprints = manager.CreateFingerprints(monoArray);
 
-            var test = manager.GetFingerHashes(distance, preliminaryFingerprints);
+            var test = manager.GetFingerHashes(preliminaryFingerprints);
             foreach(var hash in test)
                 storedFingerprints.Add(hash);
             //                                             // String[], String[], int lshSize

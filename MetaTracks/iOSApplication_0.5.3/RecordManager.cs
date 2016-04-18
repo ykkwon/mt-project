@@ -95,9 +95,9 @@ namespace iOSApplication_0._5._3
             FingerprintManager manager = new FingerprintManager();
             Distance distance = new IncrementalDistance(1102, 128 * 64);
             // Create an array of fingerprints to be hashed.
-            var preliminaryFingerprints = manager.CreateFingerprints(monoArray, distance);
+            var preliminaryFingerprints = manager.CreateFingerprints(monoArray);
 
-            var test = manager.GetFingerHashes(distance, preliminaryFingerprints);
+            var test = manager.GetFingerHashes(preliminaryFingerprints);
             foreach (var hash in test)
                 storedFingerprints.Add(hash);
             //                                             // String[], String[], int lshSize
@@ -115,9 +115,9 @@ namespace iOSApplication_0._5._3
             FingerprintManager manager = new FingerprintManager();
             Distance distance = new IncrementalDistance(1102, 128 * 64);
             // Create an array of fingerprints to be hashed.
-            var preliminaryFingerprints = manager.CreateFingerprints(monoArray, distance);
+            var preliminaryFingerprints = manager.CreateFingerprints(monoArray);
 
-            var test = manager.GetFingerHashes(distance, preliminaryFingerprints);
+            var test = manager.GetFingerHashes(preliminaryFingerprints);
             foreach(var hash in test)
                 storedFingerprints.Add(hash);
             //                                             // String[], String[], int lshSize
@@ -160,9 +160,9 @@ namespace iOSApplication_0._5._3
             FingerprintManager manager = new FingerprintManager();
             Distance distance = new IncrementalDistance(1102, 128 * 64);
             // Create an array of fingerprints to be hashed.
-            var preliminaryFingerprints = manager.CreateFingerprints(monoArray, distance);
+            var preliminaryFingerprints = manager.CreateFingerprints(monoArray);
 
-            var test = manager.GetFingerHashes(distance, preliminaryFingerprints);
+            var test = manager.GetFingerHashes(preliminaryFingerprints);
             foreach (var hash in test)
                 storedFingerprints.Add(hash);
             //                                             // String[], String[], int lshSize
