@@ -92,8 +92,8 @@ namespace AcousticFingerprintingLibrary_0._4._5
 
         public FingerprintManager()
         {
-            _lshTableSize = 33;
-            _lshKey = 3;
+            _lshTableSize = 25;
+            _lshKey = 4;
             WindowFunction = new HanningWindow();
             HaarWavelet = new HaarWavelet();
             LogBins = 32;
