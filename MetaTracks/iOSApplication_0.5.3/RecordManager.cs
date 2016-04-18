@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using AcousticFingerprintingLibrary_0._4._5;
 using AVFoundation;
@@ -116,7 +117,7 @@ namespace iOSApplication_0._5._3
         /// <param name="filePath">Current wave recording file path</param>
         /// <param name="list">List of all possible sublist chunks</param>
         /// <returns>The index of the most probable playback section.</returns>
-        public static int ConsumeWaveFile(string filePath, List<HashedFingerprint[]> list)
+        public static int ConsumeWaveFileBest(string filePath, List<HashedFingerprint[]> list)
         {
             var monoArray = BassProxy.ReadMonoFromFileStatic(filePath, 5512, 0, 0);
             var manager = new FingerprintManager();
@@ -129,7 +130,6 @@ namespace iOSApplication_0._5._3
                 StoredFingerprints.Add(hash);
             }
             _secondaryIndex = manager.FindBestFingerprintList(list, StoredFingerprints.ToArray());
-            File.Delete(filePath);
             return _secondaryIndex;
         }
 
@@ -139,7 +139,7 @@ namespace iOSApplication_0._5._3
         /// <param name="filePath">Current wave recording file path</param>
         /// <param name="index">Current index</param>
         /// <returns>Double where -1 is no match, anything else is a probable match.</returns>
-        public static double ConsumeWaveFile(string filePath, int index)
+        public static double ConsumeWaveFileLong(string filePath, int index)
         {
             // Read all the mono values from the input file.
             var monoArray = BassProxy.ReadMonoFromFileStatic(filePath, 5512, 0, 0);
@@ -149,15 +149,14 @@ namespace iOSApplication_0._5._3
 
             var test = manager.GetFingerHashes(preliminaryFingerprints);
             foreach (var hash in test)
+            {
                 StoredFingerprints.Add(hash);
-
+            }
             var results = manager.CompareFingerprintListsHighest(_hashedFingerprints[index], StoredFingerprints.ToArray());
-
-            if (index >= _secondaryIndex)
-                if (manager.CheckIteration(FingerprintManager.LatestTimeStamp, _hashedFingerprints[_secondaryIndex + 1]))
-                    _secondaryIndex++;
-            StoredFingerprints.Clear();
-            File.Delete(filePath);
+            //if (index >= _secondaryIndex)
+              //  if (manager.CheckIteration(FingerprintManager.LatestTimeStamp, _hashedFingerprints[_secondaryIndex + 1]))
+                //    _secondaryIndex++;
+            //StoredFingerprints.Clear();
             return results;
         }
 
@@ -166,7 +165,7 @@ namespace iOSApplication_0._5._3
         /// </summary>
         /// <param name="filePath">Current wave recording file path</param>
         /// <returns>Double where -1 is no match, anything else is a probable match.</returns>
-        public static double ConsumeWaveFile(string filePath)
+        public static double ConsumeWaveFileShort(string filePath)
         {
             // Read all the mono values from the input file.
             var monoArray = BassProxy.ReadMonoFromFileStatic(filePath, 5512, 0, 0);
@@ -179,7 +178,6 @@ namespace iOSApplication_0._5._3
                 StoredFingerprints.Add(hash);
             var results = manager.CompareFingerprintListsHighest(_movie, StoredFingerprints.ToArray());
             StoredFingerprints.Clear();
-            File.Delete(filePath);
             return results;
         }
 

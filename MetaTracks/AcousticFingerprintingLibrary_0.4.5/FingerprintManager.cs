@@ -81,8 +81,8 @@ namespace AcousticFingerprintingLibrary_0._4._5
 
         public FingerprintManager()
         {
-            _lshTableSize = 25;
-            _lshKey = 4;
+            _lshTableSize = 33;
+            _lshKey = 3;
             WindowFunction = new HanningWindow();
             HaarWavelet = new HaarWavelet();
             LogBins = 32;
@@ -854,10 +854,15 @@ namespace AcousticFingerprintingLibrary_0._4._5
                     //var commonNumbers = fingerprint1.HashBins.Intersect(fingerprint2.HashBins);
 
                     HashSet<long> set2 = new HashSet<long>(fingerprint2.HashBins); // 7643
-                    var i = fingerprint1.HashBins.Select(hash => set2.Contains(hash)).Count(qwe => qwe);
+                    var i = 0;
+                    foreach (var hash in fingerprint1.HashBins)
+                    {
+                        var qwe = set2.Contains(hash);
+                        if (qwe) i++;
+                    }
 
                     var count = i;
-                    if (count >= 4)
+                    if (count >= 3)
                     {
                         _matchedFingerprints.Add(fingerprint1);
                         // Sets updates LatestFingerprint with 

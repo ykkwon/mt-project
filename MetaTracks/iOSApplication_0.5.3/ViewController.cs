@@ -92,7 +92,7 @@ namespace iOSApplication_0._5._3
 
                 Task.Factory.StartNew(() =>
                 {
-                    for (var i = 0; i < int.MaxValue; i++) // TODO: Replace this.
+                    for (var i = 0; i < 1000; i++) // TODO: Replace this.
                     {
                         var session = AVAudioSession.SharedInstance();
                         NSError error;
@@ -103,7 +103,7 @@ namespace iOSApplication_0._5._3
                         Thread.Sleep(3000); // TODO: Improve this. 
                         Recorder.Stop();
                         var currentWaveFile = AudioFilePath;
-                        var consumedWaveFileShort = ConsumeWaveFile(currentWaveFile.RelativePath);
+                        var consumedWaveFileShort = ConsumeWaveFileShort(currentWaveFile.RelativePath);
                         _matchCounter += consumedWaveFileShort;
 
                         var internalMatchCounter = _matchCounter;
@@ -121,7 +121,6 @@ namespace iOSApplication_0._5._3
             LongRecordButton.TouchUpInside += (sender, e) =>
             {
                     SetButtonAvailability(false, false, false, false, true);
-
                     var preSession = AVAudioSession.SharedInstance();
                     NSError preError;
                     preSession.SetCategory(AVAudioSession.CategoryRecord, out preError);
@@ -131,16 +130,12 @@ namespace iOSApplication_0._5._3
                     Thread.Sleep(10000);
                     Recorder.Stop();
                     var prePath = AudioFilePath;
-                    var result = ConsumeWaveFile(prePath.RelativePath, _hashedFingerprints);
-
-                    Task.Factory.StartNew(() =>
+                    var result = ConsumeWaveFileBest(prePath.RelativePath, _hashedFingerprints);
+                    InvokeOnMainThread(() =>
                     {
-                        InvokeOnMainThread(() =>
-                        {
-                            ForegroundLabel.Text = "Guessed chunk: " + result;
-                        });
-
-                        for (var i = 0; i < int.MaxValue; i++)
+                        ForegroundLabel.Text = "Guessed chunk: " + result;
+                    });
+                        for (var i = 1; i < 1000; i++)
                         {
                             var session = AVAudioSession.SharedInstance();
                             NSError error;
@@ -151,16 +146,15 @@ namespace iOSApplication_0._5._3
                             Thread.Sleep(3000);
                             Recorder.Stop();
                             var currentWaveFile = AudioFilePath;
-                            var consumedWaveFileShort = ConsumeWaveFile(currentWaveFile.RelativePath, result);
+                            var consumedWaveFileShort = ConsumeWaveFileLong(currentWaveFile.RelativePath, result);
                             _matchCounter += consumedWaveFileShort;
-
                             var internalMatchCounter = _matchCounter;
+
                             InvokeOnMainThread(() =>
                             {
                                 ForegroundLabel.Text = "Current chunk: " + result + "\n" + "Matched second: " + (3 + FingerprintManager.LatestTimeStamp) + " s" + "\n" + internalMatchCounter + " fingerprints in total." + "\n" + "~ " + (Math.Round(FingerprintManager.LatestTimeStamp / 60)) + " minutes.";
                             });
                         }
-                    });
                 };
 
             // Event handler for simple "Stop" button click and release.
