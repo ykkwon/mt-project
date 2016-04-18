@@ -103,7 +103,7 @@ namespace iOSApplication_0._5._3
                         Thread.Sleep(3000);
                         RecordManager.Recorder.Stop();
                         var currentWaveFile = RecordManager.AudioFilePath;
-                        var consumedWaveFileShort = RecordManager.ConsumeWaveFileShort(currentWaveFile.RelativePath);
+                        var consumedWaveFileShort = RecordManager.ConsumeWaveFile(currentWaveFile.RelativePath);
                         matchCounter += consumedWaveFileShort;
 
                         var internalMatchCounter = matchCounter;
@@ -131,7 +131,7 @@ namespace iOSApplication_0._5._3
                     Thread.Sleep(10000);
                     RecordManager.Recorder.Stop();
                     var prePath = RecordManager.AudioFilePath;
-                    var result = RecordManager.ConsumeFirstFile(prePath.RelativePath, _hashedFingerprints);
+                    var result = RecordManager.ConsumeWaveFile(prePath.RelativePath, _hashedFingerprints);
 
                     Task.Factory.StartNew(() =>
                     {
@@ -145,7 +145,7 @@ namespace iOSApplication_0._5._3
                             if (i % 20 == 0)
                             {
                                 Console.WriteLine("Running long search. . .");
-                                RecordManager.ConsumeFirstFile(prePath.RelativePath, _hashedFingerprints);
+                                RecordManager.ConsumeWaveFile(prePath.RelativePath, _hashedFingerprints);
                             }
 
                             var session = AVAudioSession.SharedInstance();

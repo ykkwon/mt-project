@@ -11,7 +11,7 @@ namespace iOSApplication_0._5._3
     /// <summary>
     ///  Class responsible for recording, observing and processing microphone input. 
     /// </summary>
-    public static class RecordManager
+    public class RecordManager
     {
         internal static AVAudioRecorder Recorder;
         internal static AVPlayer Player;
@@ -113,16 +113,15 @@ namespace iOSApplication_0._5._3
 
         /// <summary>
         /// Processes the first "long" wave file, only used in ViewController's Record (LONG).
-        /// TODO: Should be merged with ConsumeWaveFile as different overloads.
         /// TODO: Make the first consume work properly.
         /// </summary>
         /// <param name="filePath">Current wave recording file path</param>
         /// <param name="list">List of all possible sublist chunks</param>
         /// <returns>The index of the most probable playback section.</returns>
-        public static int ConsumeFirstFile(string filePath, List<HashedFingerprint[]> list)
+        public static int ConsumeWaveFile(string filePath, List<HashedFingerprint[]> list)
         {
             var monoArray = BassProxy.ReadMonoFromFileStatic(filePath, 5512, 0, 0);
-            FingerprintManager manager = new FingerprintManager();
+            var manager = new FingerprintManager();
             // Create an array of fingerprints to be hashed.
             var preliminaryFingerprints = manager.CreateFingerprints(monoArray);
 
@@ -137,14 +136,12 @@ namespace iOSApplication_0._5._3
 
         /// <summary>
         /// Processes wave files continuously, only used in ViewController's Record (LONG).
-        /// TODO: Should be merged with ConsumeWaveFile as different overloads.
         /// </summary>
         /// <param name="filePath">Current wave recording file path</param>
         /// <param name="index">Current index</param>
         /// <returns>Double where -1 is no match, anything else is a probable match.</returns>
         public static double ConsumeWaveFile(string filePath, int index)
         {
-
             // Read all the mono values from the input file.
             var monoArray = BassProxy.ReadMonoFromFileStatic(filePath, 5512, 0, 0);
             var manager = new FingerprintManager();
@@ -166,11 +163,10 @@ namespace iOSApplication_0._5._3
 
         /// <summary>
         /// Processes wave files continuously, only used in ViewController's Record (SHORT).
-        /// TODO: Should be merged with ConsumeWaveFile as different overloads.
         /// </summary>
         /// <param name="filePath">Current wave recording file path</param>
         /// <returns>Double where -1 is no match, anything else is a probable match.</returns>
-        public static double ConsumeWaveFileShort(string filePath)
+        public static double ConsumeWaveFile(string filePath)
         {
             // Read all the mono values from the input file.
             var monoArray = BassProxy.ReadMonoFromFileStatic(filePath, 5512, 0, 0);
@@ -192,15 +188,13 @@ namespace iOSApplication_0._5._3
         /// </summary>
         public static void StopRecord()
         {
-            if (Recorder != null)
-            {
-                Recorder.Stop();
-                Recorder.Dispose();
-                ReceivedHashes = null;
-                ReceivedTimestamps = null;
-                _movie = null;
-                StoredFingerprints.Clear();
-            }
+            if (Recorder == null) return;
+            Recorder.Stop();
+            Recorder.Dispose();
+            ReceivedHashes = null;
+            ReceivedTimestamps = null;
+            _movie = null;
+            StoredFingerprints.Clear();
         }
 
         /// <summary>
