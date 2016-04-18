@@ -33,12 +33,6 @@ namespace AcousticFingerprintingLibrary_0._4._5
         public int LogBins { get; set; }
 
         /// <summary>
-        ///   Number of samples to read in order to create single fingerprint.
-        ///   The granularity is 1.48 seconds
-        /// </summary>
-        public int SamplesPerFingerprint { get; set; }
-
-        /// <summary>
         ///   Overlap between the sub fingerprints, 11.6 ms
         /// </summary>
         public int Overlap { get; set; }
@@ -49,16 +43,13 @@ namespace AcousticFingerprintingLibrary_0._4._5
         public int WindowSize { get; set; }
 
         /// <summary>
-        ///   Frequency range which is taken into account
+        ///   Frequency range, minimum
         /// </summary>
         public int MinFrequency { get; set; }
 
         /// <summary>
-        ///   Frequency range which is taken into account
+        ///   Frequency range, maximum
         /// </summary>
-        /// <remarks>
-        ///   Default = 2000
-        /// </remarks>
         public int MaxFrequency { get; set; }
 
         /// <summary>
@@ -81,8 +72,6 @@ namespace AcousticFingerprintingLibrary_0._4._5
         /// </summary>
         public int FingerprintWidth { get; set; }
 
-        public int DistanceSize { get; set; }
-
         public int Stride { get; set; }
 
         #endregion
@@ -99,15 +88,13 @@ namespace AcousticFingerprintingLibrary_0._4._5
             LogBins = 32;
             FingerprintWidth = 128;
             Overlap = 64; // Spectrogram overlap
-            SamplesPerFingerprint = FingerprintWidth*Overlap;
             WindowSize = 2048;
             MinFrequency = 318; // Lowest Frequency
             MaxFrequency = 2000; // Highest Frequency
             TopWavelets = 200;
             SampleRate = 5512;
             LogBase = Math.E;
-            DistanceSize = 1102;
-            Stride = -(Overlap * FingerprintWidth) + 1102;
+            Stride = -(Overlap * FingerprintWidth) + 1024;
             _logFrequenciesIndex = GetLogFrequenciesIndex(SampleRate, MinFrequency, MaxFrequency, LogBins, WindowSize,
                 LogBase);
             _windowArray = WindowFunction.GetWindow(WindowSize);
