@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Threading;
 using AcousticFingerprintingLibrary_0._4._5;
 using AVFoundation;
 using Foundation;
@@ -15,17 +13,18 @@ namespace iOSApplication_0._5._3
     /// </summary>
     public static class RecordManager
     {
-        public static string[] ReceivedHashes;
-        public static string[] ReceivedTimestamps;
-        public static HashedFingerprint[] Movie;
-        public static AVAudioRecorder Recorder;
-        public static AVPlayer Player;
-        public static Stopwatch Stopwatch;
-        public static NSUrl AudioFilePath;
-        public static NSObject Observer;
-        public static string TempRecording;
-        public static int SecondaryIndex;
-        private static List<HashedFingerprint> storedFingerprints = new List<HashedFingerprint>();
+        internal static AVAudioRecorder Recorder;
+        internal static AVPlayer Player;
+        internal static NSUrl AudioFilePath;
+        internal static NSObject Observer;
+        internal static string[] ReceivedHashes;
+        internal static string[] ReceivedTimestamps;
+
+        private static HashedFingerprint[] _movie;
+        private static readonly List<HashedFingerprint> StoredFingerprints = new List<HashedFingerprint>();
+        private static List<HashedFingerprint[]> _hashedFingerprints;
+        private static string _tempRecording;
+        private static int _secondaryIndex;
 
         /// <summary>
         /// Creates the disposable Wave file.
@@ -34,10 +33,10 @@ namespace iOSApplication_0._5._3
         /// <returns>Returns the file path in the temporary system folder.</returns>
         public static NSUrl CreateOutputUrl(int nameIterator)
         {
-            string fileName = string.Format("disp{0}.wav", nameIterator);
-            TempRecording = Path.Combine(Path.GetTempPath(), fileName);
+            string fileName = $"split{nameIterator}.wav";
+            _tempRecording = Path.Combine(Path.GetTempPath(), fileName);
 
-            return NSUrl.FromFilename(TempRecording);
+            return NSUrl.FromFilename(_tempRecording);
         }
 
         /// <summary>
@@ -67,7 +66,7 @@ namespace iOSApplication_0._5._3
             var audioSettings = new AudioSettings
             {
                 SampleRate = 5512,
-                Format = AudioToolbox.AudioFormatType.LinearPCM,
+                Format = AudioFormatType.LinearPCM,
                 NumberChannels = 1,
                 AudioQuality = AVAudioQuality.Max,
             };
@@ -115,6 +114,7 @@ namespace iOSApplication_0._5._3
         /// <summary>
         /// Processes the first "long" wave file, only used in ViewController's Record (LONG).
         /// TODO: Should be merged with ConsumeWaveFile as different overloads.
+        /// TODO: Make the first consume work properly.
         /// </summary>
         /// <param name="filePath">Current wave recording file path</param>
         /// <param name="list">List of all possible sublist chunks</param>
@@ -129,48 +129,44 @@ namespace iOSApplication_0._5._3
             var test = manager.GetFingerHashes(preliminaryFingerprints);
             foreach (var hash in test)
             {
-                storedFingerprints.Add(hash);
+                StoredFingerprints.Add(hash);
             }
-            SecondaryIndex = manager.FindBestFingerprintList(list, storedFingerprints.ToArray());
-            return SecondaryIndex;
+            _secondaryIndex = manager.FindBestFingerprintList(list, StoredFingerprints.ToArray());
+            return _secondaryIndex;
         }
 
         /// <summary>
         /// Processes wave files continuously, only used in ViewController's Record (LONG).
-        /// /// TODO: Should be merged with ConsumeWaveFile as different overloads.
+        /// TODO: Should be merged with ConsumeWaveFile as different overloads.
         /// </summary>
         /// <param name="filePath">Current wave recording file path</param>
-        /// <param name="list">Current index</param>
+        /// <param name="index">Current index</param>
         /// <returns>Double where -1 is no match, anything else is a probable match.</returns>
         public static double ConsumeWaveFile(string filePath, int index)
         {
+
             // Read all the mono values from the input file.
             var monoArray = BassProxy.ReadMonoFromFileStatic(filePath, 5512, 0, 0);
-            FingerprintManager manager = new FingerprintManager();
+            var manager = new FingerprintManager();
             // Create an array of fingerprints to be hashed.
             var preliminaryFingerprints = manager.CreateFingerprints(monoArray);
 
             var test = manager.GetFingerHashes(preliminaryFingerprints);
             foreach (var hash in test)
-                storedFingerprints.Add(hash);
+                StoredFingerprints.Add(hash);
 
-            var results = manager.CompareFingerprintListsHighest(ViewController.useThis[index], storedFingerprints.ToArray());
-            if (results != -1)
-            {
-                if (index >= SecondaryIndex)
-                    if (manager.CheckIteration(FingerprintManager.LatestTimeStamp, ViewController.useThis[SecondaryIndex + 1]))
-                        SecondaryIndex++;
-                storedFingerprints.Clear();
-                return results;
-            }
-            Console.WriteLine("NO MATCH -- " + storedFingerprints[0].HashBins[0]);
-            storedFingerprints.Clear();
+            var results = manager.CompareFingerprintListsHighest(_hashedFingerprints[index], StoredFingerprints.ToArray());
+
+            if (index >= _secondaryIndex)
+                if (manager.CheckIteration(FingerprintManager.LatestTimeStamp, _hashedFingerprints[_secondaryIndex + 1]))
+                    _secondaryIndex++;
+            StoredFingerprints.Clear();
             return results;
         }
 
         /// <summary>
         /// Processes wave files continuously, only used in ViewController's Record (SHORT).
-        /// /// TODO: Should be merged with ConsumeWaveFile as different overloads.
+        /// TODO: Should be merged with ConsumeWaveFile as different overloads.
         /// </summary>
         /// <param name="filePath">Current wave recording file path</param>
         /// <returns>Double where -1 is no match, anything else is a probable match.</returns>
@@ -178,25 +174,15 @@ namespace iOSApplication_0._5._3
         {
             // Read all the mono values from the input file.
             var monoArray = BassProxy.ReadMonoFromFileStatic(filePath, 5512, 0, 0);
-            FingerprintManager manager = new FingerprintManager();
+            var manager = new FingerprintManager();
             // Create an array of fingerprints to be hashed.
             var preliminaryFingerprints = manager.CreateFingerprints(monoArray);
 
             var test = manager.GetFingerHashes(preliminaryFingerprints);
             foreach (var hash in test)
-                storedFingerprints.Add(hash);
-            //                                             // String[], String[], int lshSize
-            //var results = manager.GetTimeStamps(movie, storedFingerprints.ToArray());
-            var results = manager.CompareFingerprintListsHighest(Movie, storedFingerprints.ToArray());
-            if (results != -1)
-            {
-                // If amatch is found, print timestamp
-                // Console.WriteLine("Matched -- " + results);
-                storedFingerprints.Clear();
-                return results;
-            }
-            Console.WriteLine("NO MATCH -- " + storedFingerprints[0].HashBins[0]);
-            storedFingerprints.Clear();
+                StoredFingerprints.Add(hash);
+            var results = manager.CompareFingerprintListsHighest(_movie, StoredFingerprints.ToArray());
+            StoredFingerprints.Clear();
             return results;
         }
 
@@ -212,8 +198,8 @@ namespace iOSApplication_0._5._3
                 Recorder.Dispose();
                 ReceivedHashes = null;
                 ReceivedTimestamps = null;
-                Movie = null;
-                storedFingerprints.Clear();
+                _movie = null;
+                StoredFingerprints.Clear();
             }
         }
 
@@ -224,18 +210,31 @@ namespace iOSApplication_0._5._3
         {
             var audioSession = AVAudioSession.SharedInstance();
             audioSession.SetCategory(AVAudioSessionCategory.Record);
+            _hashedFingerprints = ViewController.GetHashedFingerprints();
         }
 
+        /// <summary>
+        /// Set the HashedFingerprints array.
+        /// </summary>
+        /// <param name="fingerprint"></param>
         public static void SetHashedFingerprints(HashedFingerprint[] fingerprint)
         {
-            Movie = fingerprint;
+            _movie = fingerprint;
         }
 
+        /// <summary>
+        /// Get the ReceivedHashes array.
+        /// </summary>
+        /// <param name="receivedHashes"></param>
         public static void SetReceivedHashes(string[] receivedHashes)
         {
             ReceivedHashes = receivedHashes;
         }
 
+        /// <summary>
+        /// Set the ReceivedTimestamps array.
+        /// </summary>
+        /// <param name="receivedTimestamps"></param>
         public static void SetReceivedTimestamps(string[] receivedTimestamps)
         {
             ReceivedTimestamps = receivedTimestamps;

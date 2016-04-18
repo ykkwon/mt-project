@@ -4,18 +4,25 @@ using UIKit;
 
 namespace iOSApplication_0._5._3
 {
+    /// <summary>
+    /// Responsible for populating the 'Select movie' table view.
+    /// </summary>
     public class TableSource : UITableViewSource
     {
+        internal string[] TableItems;
+        internal string CellIdentifier = "TableCell";
+        readonly ViewController _owner;
+        internal static string SelectedMovie;
 
-        protected string[] tableItems;
-        protected string cellIdentifier = "TableCell";
-        ViewController owner;
-        public static string selectedMovie;
-
+        /// <summary>
+        /// The 'Select movie' table source.
+        /// </summary>
+        /// <param name="items"></param>
+        /// <param name="owner"></param>
         public TableSource(string[] items, ViewController owner)
         {
-            tableItems = items;
-            this.owner = owner;
+            TableItems = items;
+            _owner = owner;
 
         }
 
@@ -32,7 +39,7 @@ namespace iOSApplication_0._5._3
         /// </summary>
         public override nint RowsInSection(UITableView tableview, nint section)
         {
-            return tableItems.Length;
+            return TableItems.Length;
         }
 
         /// <summary>
@@ -40,14 +47,14 @@ namespace iOSApplication_0._5._3
         /// </summary>
         public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
         {
-            UIAlertController okAlertController = UIAlertController.Create("Row Selected", tableItems[indexPath.Row], UIAlertControllerStyle.Alert);
+            UIAlertController okAlertController = UIAlertController.Create("Row Selected", TableItems[indexPath.Row], UIAlertControllerStyle.Alert);
             okAlertController.AddAction(UIAlertAction.Create("OK", UIAlertActionStyle.Default, null));
             //owner.PresentViewController(okAlertController, true, null);
-            selectedMovie = tableItems[indexPath.Row];
-            owner.SetSelectedMovie(selectedMovie);
+            SelectedMovie = TableItems[indexPath.Row];
+            _owner.SetSelectedMovie(SelectedMovie);
             tableView.DeselectRow(indexPath, true);
             tableView.Hidden = true;
-            owner.SetForegroundLabel("Selected movie: " + selectedMovie);
+            _owner.SetForegroundLabel("Selected movie: " + SelectedMovie);
         }
 
         /// <summary>
@@ -55,12 +62,12 @@ namespace iOSApplication_0._5._3
         /// </summary>
         public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
         {
-            UITableViewCell cell = tableView.DequeueReusableCell(cellIdentifier);
-            string item = tableItems[indexPath.Row];
+            UITableViewCell cell = tableView.DequeueReusableCell(CellIdentifier);
+            string item = TableItems[indexPath.Row];
 
             //---- if there are no cells to reuse, create a new one
             if (cell == null)
-            { cell = new UITableViewCell(UITableViewCellStyle.Default, cellIdentifier); }
+            { cell = new UITableViewCell(UITableViewCellStyle.Default, CellIdentifier); }
 
             cell.TextLabel.Text = item;
 

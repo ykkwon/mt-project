@@ -4,6 +4,7 @@
 // actions declared in your storyboard file.
 // Manual changes to this file will not be maintained.
 //
+using AcousticFingerprintingLibrary_0._4._5;
 using Foundation;
 using System;
 using System.CodeDom.Compiler;
@@ -24,7 +25,7 @@ namespace iOSApplication_0._5._3
 
 		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
-		UIButton IndexButton { get; set; }
+		UIButton LongRecordButton { get; set; }
 
 		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
@@ -38,10 +39,6 @@ namespace iOSApplication_0._5._3
 		[GeneratedCode ("iOS Designer", "1.0")]
 		UIButton StopButton { get; set; }
 
-		[Outlet]
-		[GeneratedCode ("iOS Designer", "1.0")]
-		UIButton TestButton { get; set; }
-
 		void ReleaseDesignerOutlets ()
 		{
 			if (ForegroundLabel != null) {
@@ -52,9 +49,9 @@ namespace iOSApplication_0._5._3
 				GetFingerprintsButton.Dispose ();
 				GetFingerprintsButton = null;
 			}
-			if (IndexButton != null) {
-				IndexButton.Dispose ();
-				IndexButton = null;
+			if (LongRecordButton != null) {
+				LongRecordButton.Dispose ();
+				LongRecordButton = null;
 			}
 			if (MoviePicker != null) {
 				MoviePicker.Dispose ();
@@ -67,10 +64,6 @@ namespace iOSApplication_0._5._3
 			if (StopButton != null) {
 				StopButton.Dispose ();
 				StopButton = null;
-			}
-			if (TestButton != null) {
-				TestButton.Dispose ();
-				TestButton = null;
 			}
 		}
 	}
