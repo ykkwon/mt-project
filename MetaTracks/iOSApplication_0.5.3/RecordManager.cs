@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using AcousticFingerprintingLibrary_0._4._5;
 using AVFoundation;
 using Foundation;
@@ -153,11 +154,13 @@ namespace iOSApplication_0._5._3
                 StoredFingerprints.Add(hash);
             }
             var results = manager.CompareFingerprintListsHighest(_hashedFingerprints[index], StoredFingerprints.ToArray());
-            //if (index >= _secondaryIndex)
-              //  if (manager.CheckIteration(FingerprintManager.LatestTimeStamp, _hashedFingerprints[_secondaryIndex + 1]))
-                //    _secondaryIndex++;
-            //StoredFingerprints.Clear();
             return results;
+
+            //if (manager.CheckIteration(FingerprintManager.LatestTimeStamp, _hashedFingerprints[index + 1]))
+            //{
+            //    index++;
+            //    StoredFingerprints.Clear();
+            //    return results;
         }
 
         /// <summary>

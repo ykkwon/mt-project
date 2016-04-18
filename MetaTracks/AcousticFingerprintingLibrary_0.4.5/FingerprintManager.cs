@@ -862,12 +862,12 @@ namespace AcousticFingerprintingLibrary_0._4._5
                     }
 
                     var count = i;
-                    if (count >= 3)
+                    if (count >= 4)
                     {
                         _matchedFingerprints.Add(fingerprint1);
                         // Sets updates LatestFingerprint with 
                         LatestTimeStamp = fingerprint1.Timestamp;
-                        Console.WriteLine("LAST MATCHED: " + fingerprint1.Timestamp);
+                        //Console.WriteLine("LAST MATCHED: " + fingerprint1.Timestamp);
                         break; // jumps out of loop and on to next fingerprint
                     }
                 }
@@ -923,18 +923,13 @@ namespace AcousticFingerprintingLibrary_0._4._5
         private double _previoustimestamp;
         public bool CheckIteration(double timestamp, HashedFingerprint[] nextIteration)
         {
-            // if next starts at 100 and timestamp reaches 90+
-            // 90-100 = -10... correct i thinkkk
-            if (timestamp - nextIteration[0].Timestamp >= -10)
+            for (int i = 0; i <= nextIteration.Length; i++)
             {
-                _counter++;
-                if (_counter >= 2 && Math.Abs(timestamp - _previoustimestamp) > 0)
+                if (timestamp.Equals(nextIteration[i].Timestamp))
                 {
-                    _counter = 0;
-                    _previoustimestamp = 0.0;
+                    Console.WriteLine("FP could be in the next array iteration.");
                     return true;
                 }
-                _previoustimestamp = timestamp;
             }
             return false;
         }
