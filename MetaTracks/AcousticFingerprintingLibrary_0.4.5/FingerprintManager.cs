@@ -371,7 +371,8 @@ namespace AcousticFingerprintingLibrary_0._4._5
                     Array.Copy(spectrogram[start + index], frames[index], fingerprintHeight);
                 }
 
-                HaarWavelet.DecomposeImageInPlace(frames); /*Compute wavelets*/
+                HaarWavelet.TransformImage(frames); /*Compute wavelets*/
+                
 
                 var image = ExtractTopWavelets(frames);
                 fingerPrints.Add(new Fingerprint
