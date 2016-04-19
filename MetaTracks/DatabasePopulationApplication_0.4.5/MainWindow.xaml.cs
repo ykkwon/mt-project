@@ -29,6 +29,7 @@ namespace DatabasePopulationApplication_0._4._5
         private readonly FingerprintDatabaseManager _fdbm = new FingerprintDatabaseManager();
         private string _entryName;
         private string _typeName;
+        private string _tmdbId;
         private string _filename;
         private bool _fileopened;
 
@@ -53,6 +54,17 @@ namespace DatabasePopulationApplication_0._4._5
                 return;
             }
 
+            var idDialog = new Popup_Title();
+            idDialog.textBlock.Text = "Write in the movie database ID for the movie.";
+            if (idDialog.ShowDialog() == true)
+            {
+                _tmdbId = idDialog.ResponseText;
+            }
+            else
+            {
+                return;
+            }
+
             (new Thread(() =>
             {
                 try
@@ -66,6 +78,7 @@ namespace DatabasePopulationApplication_0._4._5
                         Main.Status = "The file will appear in the database as:";
                         Main.Status = "Name: " + _entryName;
                         Main.Status = "Type: " + _typeName;
+                        Main.Status = "The Movie Database ID: " + _tmdbId;
                     }
                 }
                 catch (TypeInitializationException exception)
@@ -177,7 +190,8 @@ namespace DatabasePopulationApplication_0._4._5
                             var third = fingerprint.SequenceNumber;
                             var fourth = currentHash;
                             var fifth = _typeName;
-                            var newLine = string.Format("{0};{1};{2};{3};{4};{5}", naught, first, second, third, fourth, fifth);
+                            var sixth = _tmdbId;
+                            var newLine = string.Format("{0};{1};{2};{3};{4};{5};{6}", naught, first, second, third, fourth, fifth, sixth);
                             csv.AppendLine(newLine);
                         }
                     }

@@ -31,7 +31,7 @@ namespace DatabasePopulationApplication_0._4._5
             }
         }
 
-        public void InsertFingerprints(string title, double timestamp, int sequenceNumber, long hash)
+        public void InsertFingerprints(string title, double timestamp, int sequenceNumber, long hash, string tmdbId)
          {
              {
                  string cs = @"server=webapidb.c7tab1cc7vsa.eu-west-1.rds.amazonaws.com;userid=glennskjong;
@@ -54,6 +54,7 @@ namespace DatabasePopulationApplication_0._4._5
                      cmd.Parameters.AddWithValue("@timestamp", timestamp);
                      cmd.Parameters.AddWithValue("@sequenceNo", sequenceNumber);
                      cmd.Parameters.AddWithValue("@hash", hash);
+                     cmd.Parameters.AddWithValue("@tmdbId", tmdbId);
                      cmd.ExecuteNonQuery();
                      Console.ReadLine();
                  }
