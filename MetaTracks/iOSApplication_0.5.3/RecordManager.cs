@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using AcousticFingerprintingLibrary_0._4._5;
 using AVFoundation;
 using Foundation;
@@ -60,7 +58,8 @@ namespace iOSApplication_0._5._3
         /// <param name="channels">The desired number of channels. (1: mono, 2: stereo)</param>
         /// <param name="quality">The input quality.</param>
         /// <returns>Returns true if no errors are encountered.</returns>
-        public static bool PrepareAudioRecording(int nameIterator, int sampleRate, AudioFormatType format, int channels, AVAudioQuality quality)
+        public static bool PrepareAudioRecording(int nameIterator, int sampleRate, AudioFormatType format, int channels,
+            AVAudioQuality quality)
         {
             AudioFilePath = CreateOutputUrl(nameIterator);
 
@@ -118,7 +117,7 @@ namespace iOSApplication_0._5._3
         /// <param name="filePath">Current wave recording file path</param>
         /// <param name="list">List of all possible sublist chunks</param>
         /// <returns>The index of the most probable playback section.</returns>
-        public static int ConsumeWaveFileBest(string filePath, List<HashedFingerprint[]> list)
+        public static int RecordLongFirst(string filePath, List<HashedFingerprint[]> list)
         {
             var monoArray = BassProxy.GetSamplesMono(filePath, 5512);
             var manager = new FingerprintManager();
@@ -140,7 +139,7 @@ namespace iOSApplication_0._5._3
         /// <param name="filePath">Current wave recording file path</param>
         /// <param name="index">Current index</param>
         /// <returns>Double where -1 is no match, anything else is a probable match.</returns>
-        public static double ConsumeWaveFileLong(string filePath, int index)
+        public static double RecordLongSecond(string filePath, int index)
         {
             // Read all the mono values from the input file.
             var monoArray = BassProxy.GetSamplesMono(filePath, 5512);
@@ -153,14 +152,9 @@ namespace iOSApplication_0._5._3
             {
                 StoredFingerprints.Add(hash);
             }
-            var results = manager.CompareFingerprintListsHighest(_hashedFingerprints[index], StoredFingerprints.ToArray());
+            var results = manager.CompareFingerprintListsHighest(_hashedFingerprints[index],
+                StoredFingerprints.ToArray());
             return results;
-
-            //if (manager.CheckIteration(FingerprintManager.LatestTimeStamp, _hashedFingerprints[index + 1]))
-            //{
-            //    index++;
-            //    StoredFingerprints.Clear();
-            //    return results;
         }
 
         /// <summary>
@@ -168,7 +162,7 @@ namespace iOSApplication_0._5._3
         /// </summary>
         /// <param name="filePath">Current wave recording file path</param>
         /// <returns>Double where -1 is no match, anything else is a probable match.</returns>
-        public static double ConsumeWaveFileShort(string filePath)
+        public static double RecordShortFirst(string filePath)
         {
             // Read all the mono values from the input file.
             var monoArray = BassProxy.GetSamplesMono(filePath, 5512);
@@ -183,8 +177,9 @@ namespace iOSApplication_0._5._3
             StoredFingerprints.Clear();
             return results;
         }
+    
 
-        /// <summary>
+/// <summary>
         /// Attempts to stop the recording.
         /// TODO: Fix the possible infinite loop error
         /// </summary>

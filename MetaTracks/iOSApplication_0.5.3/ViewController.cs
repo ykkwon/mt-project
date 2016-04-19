@@ -52,7 +52,7 @@ namespace iOSApplication_0._5._3
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            HttpResponseMessage titleResponse = await client.GetAsync(client.BaseAddress);
+            var titleResponse = await client.GetAsync(client.BaseAddress);
             var responseString = titleResponse.Content.ReadAsStringAsync().Result;
             _availableMovies = responseString.Split(',');
             Array.Sort(_availableMovies);
@@ -63,7 +63,7 @@ namespace iOSApplication_0._5._3
         /// Called after the controller’s <see cref="P:UIKit.UIViewController.View"/> is loaded into memory.
         /// </summary>
         /// <remarks>
-        /// <para>
+        /// <para> 
         /// This method is called after <c>this</c> <see cref="T:UIKit.UIViewController"/>'s <see cref="P:UIKit.UIViewController.View"/> and its entire view hierarchy have been loaded into memory. This method is called whether the <see cref="T:UIKit.UIView"/> was loaded from a .xib file or programmatically.
         /// </para>
         /// </remarks>
@@ -71,7 +71,7 @@ namespace iOSApplication_0._5._3
         {
             Observer = AVPlayerItem.Notifications.ObserveDidPlayToEndTime(OnDidPlayToEndTime);
 
-            _sampleRate = 5512;
+            _sampleRate = 5512*2;
             _channels = 1;
             _audioFormat = AudioFormatType.LinearPCM;
             _audioQuality = AVAudioQuality.Max;
@@ -82,78 +82,93 @@ namespace iOSApplication_0._5._3
             RecordButton.SetTitleColor(UIColor.FromRGBA(0, 0, 0, 150), UIControlState.Disabled);
             StopButton.SetTitleColor(UIColor.FromRGBA(0, 0, 0, 150), UIControlState.Disabled);
             MoviePicker.SetTitleColor(UIColor.FromRGBA(0, 0, 0, 150), UIControlState.Disabled);
-            LongRecordButton.SetTitleColor(UIColor.FromRGBA(0, 0, 0, 150), UIControlState.Disabled);
-            SetButtonAvailability(false, false, false, false, false);
+            SetButtonAvailability(false, false, false, false);
 
-            // Event handler for simple "Record (short)" button click and release.
+            // Event handler for simple "Record" button click and release.
             RecordButton.TouchUpInside += (sender, e) =>
             {
-                SetButtonAvailability(false, false, false, false, true);
-
-                Task.Factory.StartNew(() =>
+                SetButtonAvailability(false, false, false, true);
+                // Is short, i.e trailer (6.2 min or less) and can be sequentially iterated as a whole.
+                if (_hashedFingerprints.Count <= 2)
                 {
-                    for (var i = 0; i < 1000; i++) // TODO: Replace this.
+                    InitializeComponents();
+                    Task.Run(() =>
                     {
                         var session = AVAudioSession.SharedInstance();
                         NSError error;
                         session.SetCategory(AVAudioSession.CategoryRecord, out error);
-                        CreateOutputUrl(i);
-                        PrepareAudioRecording(i, _sampleRate, _audioFormat, _channels, _audioQuality);
-                        Recorder.Record();
-                        Thread.Sleep(3000); // TODO: Improve this. 
-                        Recorder.Stop();
-                        var currentWaveFile = AudioFilePath;
-                        var consumedWaveFileShort = ConsumeWaveFileShort(currentWaveFile.RelativePath);
-                        _matchCounter += consumedWaveFileShort;
 
-                        var internalMatchCounter = _matchCounter;
-                        InvokeOnMainThread(() =>
+                        for (var i = 0; i < int.MaxValue; i++) // TODO: Replace this.
                         {
-                            ForegroundLabel.Text = "Matched second: " + (3 + FingerprintManager.LatestTimeStamp) + " s" +
-                                                   "\n" + internalMatchCounter + " fingerprints in total." + "\n" + "~ " +
-                                                   (Math.Round(FingerprintManager.LatestTimeStamp/60)) + " minutes.";
-                        });
-                    }
-                });
-            };
+                            CreateOutputUrl(i);
+                            PrepareAudioRecording(i, _sampleRate, _audioFormat, _channels, _audioQuality);
+                            Recorder.Record();
+                            Thread.Sleep(3000); // TODO: Improve this. 
+                            Recorder.Stop();
+                            var currentWaveFile = AudioFilePath;
+                            var consumedWaveFileShort = RecordShortFirst(currentWaveFile.RelativePath);
+                            _matchCounter += consumedWaveFileShort;
 
-            // Event handler for simple "Record (long)" button click and release.
-            LongRecordButton.TouchUpInside += (sender, e) =>
-            {
-                var result = DoFirstRecord();
-
-                Task.Factory.StartNew(() =>
-                {
-                    for (var i = 1; i < 1000; i++)
-                {
-                    var session = AVAudioSession.SharedInstance();
-                    NSError error;
-                    session.SetCategory(AVAudioSession.CategoryRecord, out error);
-                    CreateOutputUrl(i);
-                    PrepareAudioRecording(i, _sampleRate, _audioFormat, _channels, _audioQuality);
-                    Recorder.Record();
-                    Thread.Sleep(2500);
-                    Recorder.Stop();
-                    var currentWaveFile = AudioFilePath;
-                    var consumedWaveFileShort = ConsumeWaveFileLong(currentWaveFile.RelativePath, result);
-                    _matchCounter += consumedWaveFileShort;
-                    var internalMatchCounter = _matchCounter;
-
-                    InvokeOnMainThread(() =>
-                    {
-                        ForegroundLabel.Text = "Chunk:" + result + "\n" + "Matched second: " + (3 + FingerprintManager.LatestTimeStamp) + " s" +
-                                               "\n" + internalMatchCounter + " fingerprints in total." + "\n" + "~ " +
-                                               (Math.Round(FingerprintManager.LatestTimeStamp / 60)) + " minutes.";
+                            var internalMatchCounter = _matchCounter;
+                            InvokeOnMainThread(() =>
+                            {
+                                ForegroundLabel.Text = "Matched second: " + (3 + FingerprintManager.LatestTimeStamp) + " s" +
+                                                       "\n" + internalMatchCounter + " fingerprints in total." + "\n" + "~ " +
+                                                       (Math.Round(FingerprintManager.LatestTimeStamp / 60)) + " minutes.";
+                            });
+                        }
                     });
-                    }
-                });
-            };
+                }
 
+                // Is long (6.2 min or more), should be split.
+                else if (_hashedFingerprints.Count > 2)
+                {
+                    InitializeComponents();
+                    SetButtonAvailability(false, false, false, true);
+                    var preSession = AVAudioSession.SharedInstance();
+                    NSError preError;
+                    preSession.SetCategory(AVAudioSession.CategoryRecord, out preError);
+                    CreateOutputUrl(0);
+                    PrepareAudioRecording(0, _sampleRate, _audioFormat, _channels, _audioQuality);
+                    Recorder.Record();
+                    Thread.Sleep(10000);
+                    Recorder.Stop();
+                    var prePath = AudioFilePath;
+                    var firstChunk = RecordLongFirst(prePath.RelativePath, _hashedFingerprints);
+
+                    Task.Run(() =>
+                    {
+                        var session = AVAudioSession.SharedInstance();
+                        NSError error;
+                        session.SetCategory(AVAudioSession.CategoryRecord, out error);
+
+                        for (var i = 1; i < int.MaxValue; i++)
+                        {
+                            CreateOutputUrl(i);
+                            PrepareAudioRecording(i, _sampleRate, _audioFormat, _channels, _audioQuality);
+                            Recorder.Record();
+                            Thread.Sleep(3000);
+                            Recorder.Stop();
+                            var currentWaveFile = AudioFilePath;
+                            var consumedWaveFileShort = RecordLongSecond(currentWaveFile.RelativePath, firstChunk);
+                            _matchCounter += consumedWaveFileShort;
+                            var internalMatchCounter = _matchCounter;
+
+                            InvokeOnMainThread(() =>
+                            {
+                                ForegroundLabel.Text = "Chunk:" + firstChunk + "\n" + "Matched second: " + (3 + FingerprintManager.LatestTimeStamp) + " s" +
+                                                       "\n" + internalMatchCounter + " fingerprints in total." + "\n" + "~ " +
+                                                       (Math.Round(FingerprintManager.LatestTimeStamp / 60)) + " minutes.";
+                            });
+                        }
+                    });
+                }
+            };
 
             // Event handler for simple "Stop" button click and release.
             StopButton.TouchUpInside += (sender, e) =>
             {
-                SetButtonAvailability(true, true, true, true, false);
+                SetButtonAvailability(true, true, true, false);
                 StopRecord();
                 ForegroundLabel.Text = "Stopped recording.";
                 _hashedFingerprints = null;
@@ -167,13 +182,11 @@ namespace iOSApplication_0._5._3
                 var client = new HttpClient();
                 var inputString =
                     $"http://webapi-1.bwjyuhcr5p.eu-west-1.elasticbeanstalk.com/Fingerprints/GetAllFingerprintsSQL?inputTitle='{_selectedMovie}'";
-
                 client.BaseAddress = new Uri(inputString);
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-                // HTTP GET
-                HttpResponseMessage response = await client.GetAsync(client.BaseAddress);
+                
+                var response = await client.GetAsync(client.BaseAddress);
                 var responseString = response.Content.ReadAsStringAsync().Result;
                 _receivedHashes = responseString.Split(';');
 
@@ -185,18 +198,18 @@ namespace iOSApplication_0._5._3
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                 // HTTP GET
-                HttpResponseMessage response2 = await client.GetAsync(client.BaseAddress);
+                var response2 = await client.GetAsync(client.BaseAddress);
                 var responseString2 = response2.Content.ReadAsStringAsync().Result;
                 _receivedTimestamps = responseString2.Split(';');
 
-                FingerprintManager manager = new FingerprintManager();
+                var manager = new FingerprintManager();
                 var movie = manager.GenerateHashedFingerprints(_receivedHashes, _receivedTimestamps);
                 SetHashedFingerprints(movie);
                 SetReceivedHashes(_receivedHashes);
                 SetReceivedTimestamps(_receivedTimestamps);
                 ForegroundLabel.Text = "Found " + _receivedHashes.Length + " fingerprints for " + _selectedMovie + ".";
                 _hashedFingerprints = manager.SplitFingerprintLists(movie);
-                SetButtonAvailability(true, true, true, true, false);
+                SetButtonAvailability(true, true, true, false);
             };
 
             MoviePicker.TouchUpInside += (sender, e) =>
@@ -209,25 +222,8 @@ namespace iOSApplication_0._5._3
                     Source = new TableSource(_availableMovies, this)
                 };
                 Add(_table);
-                SetButtonAvailability(true, true, false, false, false);
+                SetButtonAvailability(true, true, false, false);
             };
-        }
-
-        private int DoFirstRecord()
-        {
-            InitializeComponents();
-            SetButtonAvailability(false, false, false, false, true);
-            var preSession = AVAudioSession.SharedInstance();
-            NSError preError;
-            preSession.SetCategory(AVAudioSession.CategoryRecord, out preError);
-            CreateOutputUrl(0);
-            PrepareAudioRecording(0, _sampleRate, _audioFormat, _channels, _audioQuality);
-            Recorder.Record();
-            Thread.Sleep(10000);
-            Recorder.Stop();
-            var prePath = AudioFilePath;
-            var result = ConsumeWaveFileBest(prePath.RelativePath, _hashedFingerprints);
-            return result;
         }
 
         /// <summary>
@@ -260,11 +256,10 @@ namespace iOSApplication_0._5._3
         /// <summary>
         /// Set button states to enabled or disabled.
         /// </summary>
-        public void SetButtonAvailability(bool moviePicker, bool getFingerprints, bool longRecord, bool shortRecord, bool stop)
+        public void SetButtonAvailability(bool moviePicker, bool getFingerprints, bool shortRecord, bool stop)
         {
             MoviePicker.Enabled = moviePicker;
             GetFingerprintsButton.Enabled = getFingerprints;
-            LongRecordButton.Enabled = longRecord;
             RecordButton.Enabled = shortRecord;
             StopButton.Enabled = stop;
         }

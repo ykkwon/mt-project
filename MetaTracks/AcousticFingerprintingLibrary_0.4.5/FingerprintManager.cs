@@ -94,8 +94,8 @@ namespace AcousticFingerprintingLibrary_0._4._5
             TopWavelets = 200;
             SampleRate = 5512;
             LogBase = Math.E;
-            Stride = -(Overlap * FingerprintWidth) + 1024;
-            if(_spacedLogFreq == null)
+            Stride = -(Overlap*FingerprintWidth) + 1024;
+            if (_spacedLogFreq == null)
                 _spacedLogFreq = GetLogSpacedFrequencies(MinFrequency, MaxFrequency, WindowSize);
             _windowArray = WindowFunction.GetWindow(WindowSize);
         }
@@ -105,23 +105,16 @@ namespace AcousticFingerprintingLibrary_0._4._5
         /// <summary>
         ///   Get logarithmically spaced indices
         /// </summary>
-        /// <param name = "minFreq">Min frequency</param>
-        /// <param name = "maxFreq">Max frequency</param>
-        /// <param name = "fftSize">FFT Size</param>
+        /// <param name="fftSize">
+        ///     FFT Size
+        ///     FFT Size
+        /// </param>
         /// <returns>Gets an array of indexes</returns>
-        /*public int[] GetLogSpacedFrequencies(int minFreq, int maxFreq, int fftSize)
-        {
-            if (_spacedLogFreq == null)
-                GetSpacedLogFrequencies(minFreq, maxFreq, fftSize);
-            return _spacedLogFreq;
-        }*/
-
         /// <summary>
         ///   Get logarithmically spaced arrays
         /// </summary>
         /// <param name = "minFrequencies">Min frequency</param>
         /// <param name = "maxFrequencies">Max frequency</param>
-        /// <param name = "fftSize">FFT Size</param>
         private int[] GetLogSpacedFrequencies(int minFrequencies, int maxFrequencies, int fftSize)
         {
             var logMin = Math.Log(minFrequencies, LogBase);
@@ -191,7 +184,7 @@ namespace AcousticFingerprintingLibrary_0._4._5
         public float[][] CreateLogSpectrogram(float[] samples)
         {
             NormalizeInPlace(samples);
-            var overlap = Overlap;  
+            var overlap = Overlap;
             var windowSize = WindowSize;
             var width = (samples.Length - windowSize)/overlap; /*width of the image*/
             var frames = new float[width][];
@@ -201,7 +194,9 @@ namespace AcousticFingerprintingLibrary_0._4._5
                 //take 371 ms each 11.6 ms (2048 samples each 64 samples)
                 for (var windowIndex = 0; windowIndex < windowSize; windowIndex++)
                 {
-                    fftSamples[2*windowIndex] = (float) (_windowArray[windowIndex]*samples[widthIndex*overlap + windowIndex]); /*Weight by Hann Window*/
+                    fftSamples[2*windowIndex] =
+                        (float) (_windowArray[windowIndex]*samples[widthIndex*overlap + windowIndex]);
+                        /*Weight by Hann Window*/
                     fftSamples[2*windowIndex + 1] = 0;
                 }
                 //FFT transform for gathering the spectrogram
@@ -286,7 +281,7 @@ namespace AcousticFingerprintingLibrary_0._4._5
 
             var sequenceNr = 0;
             var fingerPrints = new List<Fingerprint>();
-            
+
             var length = spectrogram.GetLength(0);
             while (start + fingerprintWidth <= length)
             {
@@ -305,7 +300,7 @@ namespace AcousticFingerprintingLibrary_0._4._5
                     Signature = image,
                     Timestamp = start*((double) overlap/sampleRate)
                 });
-                start += fingerprintWidth + Stride / overlap;
+                start += fingerprintWidth + Stride/overlap;
             }
             return fingerPrints;
         }
@@ -388,15 +383,15 @@ namespace AcousticFingerprintingLibrary_0._4._5
             //var result = EncodeFingerprint(concatenated, indexes, topWavelets);
             //return result;
 
-            var result = new bool[concatenated.Length * 2]; /*Concatenated float array*/
+            var result = new bool[concatenated.Length*2]; /*Concatenated float array*/
             for (var i = 0; i < topWavelets; i++)
             {
                 var index = indexes[i];
                 double value = concatenated[i];
                 if (value > 0) /*positive wavelet*/
-                    result[index * 2] = true;
+                    result[index*2] = true;
                 else if (value < 0) /*negative wavelet*/
-                    result[index * 2 + 1] = true;
+                    result[index*2 + 1] = true;
             }
             return result;
         }
@@ -628,7 +623,7 @@ namespace AcousticFingerprintingLibrary_0._4._5
         }
 
         #endregion
-        
+
         #region Fingerprint Encoding
 
         /// <summary>
@@ -665,7 +660,10 @@ namespace AcousticFingerprintingLibrary_0._4._5
             var listDb = listdb;
             var minHash = new MinHash();
             var minhashdb = listDb.Select(fing => minHash.ComputeMinHashSignatureByte(fing.Signature)).ToList();
-            var lshBuckets = minhashdb.Select(fing => minHash.GroupMinHashToLshBucketsByte(fing, _lshTableSize, _lshKey).Values.ToArray()).ToList();
+            var lshBuckets =
+                minhashdb.Select(
+                    fing => minHash.GroupMinHashToLshBucketsByte(fing, _lshTableSize, _lshKey).Values.ToArray())
+                    .ToList();
 
             //List<HashedFingerprint> hashedFinger = new List<HashedFingerprint>();
             var hashedFinger = new HashedFingerprint[listDb.Count];
@@ -712,7 +710,7 @@ namespace AcousticFingerprintingLibrary_0._4._5
             var timestampList = new List<double>();
             for (var j = 0; j < timestamps.Count - 1; j++)
             {
-                if (j % _lshTableSize == 0 && hashBins.Count > j + _lshTableSize)
+                if (j%_lshTableSize == 0 && hashBins.Count > j + _lshTableSize)
                 {
                     var bins = new long[_lshTableSize];
                     for (var i = 0; i < _lshTableSize; i++)
@@ -745,8 +743,11 @@ namespace AcousticFingerprintingLibrary_0._4._5
         #endregion
 
         #region Recognition
+
         private readonly List<HashedFingerprint> _matchedFingerprints = new List<HashedFingerprint>();
+        private readonly List<double> _matchedTimestamps = new List<double>();
         private HashedFingerprint _bestMatchedFingerprint;
+
         public bool CompareFingerprintLists(HashedFingerprint[] fingerprints, HashedFingerprint[] toCompare)
         {
             var fingerprintList = fingerprints;
@@ -780,13 +781,14 @@ namespace AcousticFingerprintingLibrary_0._4._5
                 }
             }
             // If result is greater than 5% it is a potential match
-            var result = (double) (100 * commonCounter)/fingerprints.Length;
+            var result = (double) (100*commonCounter)/fingerprints.Length;
             return result > 5; // if result greater than 5, return true, else false
         }
 
         // Get the newest timeStamp found in recognition
         // Call this to get the newest timestamp found
         public static double LatestTimeStamp { get; set; }
+
         public double CompareFingerprintListsHighest(HashedFingerprint[] fingerprints, HashedFingerprint[] toCompare)
         {
             foreach (var fingerprint1 in fingerprints)
@@ -806,6 +808,7 @@ namespace AcousticFingerprintingLibrary_0._4._5
                     var count = i;
                     if (count >= 4)
                     {
+                        _matchedTimestamps.Add(fingerprint1.Timestamp);
                         _matchedFingerprints.Add(fingerprint1);
                         // Sets updates LatestFingerprint with 
                         LatestTimeStamp = fingerprint1.Timestamp;
@@ -815,7 +818,7 @@ namespace AcousticFingerprintingLibrary_0._4._5
                 }
             }
 
-            
+
             // If result is greater than 5% it is a potential match
             //var result = (double)(100 * commonCounter) / fingerprints.Length;
             return _matchedFingerprints.Count; // if result greater than 5, return true, else false
@@ -861,22 +864,16 @@ namespace AcousticFingerprintingLibrary_0._4._5
             return bestIndex;
         }
 
-        private int _counter;
-        private double _previoustimestamp;
-        public bool CheckIteration(double timestamp, HashedFingerprint[] nextIteration)
-        {
-            for (int i = 0; i <= nextIteration.Length; i++)
-            {
-                if (timestamp.Equals(nextIteration[i].Timestamp))
-                {
-                    Console.WriteLine("FP could be in the next array iteration.");
-                    return true;
-                }
-            }
-            return false;
-        }
+        //public bool CheckIteration(double timestamp, HashedFingerprint[] nextIteration)
+        //{
+        //    (new Thread(() =>
+        //    {
 
-        #endregion
+        //    })).Start();
+       // }
+   // }
+
+    #endregion
         /// <summary>
         ///   Absolute value comparator
         /// </summary>

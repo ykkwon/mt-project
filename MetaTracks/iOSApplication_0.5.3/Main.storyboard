@@ -41,20 +41,6 @@
                                 </variation>
                                 <connections/>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="105" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
-                                <rect key="frame" x="177" y="173" width="46" height="30"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
-                                <state key="normal" title="Record (long)">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                    <color key="titleColor" colorSpace="calibratedRGB" red="0.0196078431372549" green="0.4" blue="0.55294117647058827" alpha="1"/>
-                                </state>
-                                <variation key="heightClass=regular-widthClass=compact" fixedFrame="YES">
-                                    <rect key="frame" x="20" y="228" width="360" height="30"/>
-                                </variation>
-                                <variation key="heightClass=regular-widthClass=regular" fixedFrame="YES">
-                                    <rect key="frame" x="249" y="472" width="155" height="30"/>
-                                </variation>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="106" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
                                 <rect key="frame" x="177" y="236" width="46" height="30"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
@@ -107,12 +93,12 @@
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="155" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
                                 <rect key="frame" x="432" y="454" width="46" height="30"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
-                                <state key="normal" title="Record (short)">
+                                <state key="normal" title="Record">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleColor" colorSpace="calibratedRGB" red="0.0196078431372549" green="0.40784313725490196" blue="0.55294117647058827" alpha="1"/>
                                 </state>
                                 <variation key="heightClass=regular-widthClass=regular" fixedFrame="YES">
-                                    <rect key="frame" x="405" y="472" width="115" height="30"/>
+                                    <rect key="frame" x="324" y="469" width="115" height="30"/>
                                 </variation>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="164" translatesAutoresizingMaskIntoConstraints="NO" fixedFrame="YES">
@@ -131,7 +117,6 @@
                             <mask key="subviews">
                                 <exclude reference="5"/>
                                 <exclude reference="104"/>
-                                <exclude reference="105"/>
                                 <exclude reference="106"/>
                                 <exclude reference="119"/>
                                 <exclude reference="134"/>
@@ -148,7 +133,6 @@
                         <variation key="heightClass=regular-widthClass=regular">
                             <mask key="subviews">
                                 <include reference="104"/>
-                                <include reference="105"/>
                                 <include reference="106"/>
                                 <include reference="119"/>
                                 <include reference="134"/>
@@ -162,7 +146,6 @@
                     <connections>
                         <outlet property="ForegroundLabel" destination="5" id="name-outlet-5"/>
                         <outlet property="StopButton" destination="106" id="name-outlet-106"/>
-                        <outlet property="LongRecordButton" destination="105" id="name-outlet-105"/>
                         <outlet property="GetFingerprintsButton" destination="104" id="name-outlet-104"/>
                         <outlet property="ForegroundLabel" destination="119" id="name-outlet-119"/>
                         <outlet property="RecordButton" destination="155" id="name-outlet-155"/>
