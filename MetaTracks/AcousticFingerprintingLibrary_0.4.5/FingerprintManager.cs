@@ -89,10 +89,10 @@ namespace AcousticFingerprintingLibrary_0._4._5
             FingerprintWidth = 128;
             Overlap = 64; // Spectrogram overlap
             WindowSize = 2048;
-            MinFrequency = 318; // Lowest Frequency
-            MaxFrequency = 2000; // Highest Frequency
+            MinFrequency = 2048; // Lowest Frequency
+            MaxFrequency = 8144; // Highest Frequency
             TopWavelets = 200;
-            SampleRate = 5512;
+            SampleRate = 5512*2;
             LogBase = Math.E;
             Stride = -(Overlap * FingerprintWidth) + 1024;
             _logFrequenciesIndex = GetLogFrequenciesIndex(SampleRate, MinFrequency, MaxFrequency, LogBins, WindowSize,
