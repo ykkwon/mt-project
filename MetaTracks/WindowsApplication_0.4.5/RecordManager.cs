@@ -60,7 +60,7 @@ namespace WindowsApplication_0._4._5
         public static double ConsumeWaveFile(string filePath)
         {
             // Read all the mono values from the input file.
-            var monoArray = BassProxy.ReadMonoFromFileStatic(filePath, 5512, 0, 0);
+            var monoArray = BassProxy.GetSamplesMono(filePath, 5512, 0, 0);
             FingerprintManager manager = new FingerprintManager();
             // Create an array of fingerprints to be hashed.
             var preliminaryFingerprints = manager.CreateFingerprints(monoArray);

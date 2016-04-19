@@ -90,7 +90,7 @@ namespace AcousticFingerprintingLibrary_0._4._5
             Overlap = 64; // Spectrogram overlap
             WindowSize = 2048;
             MinFrequency = 2048; // Lowest Frequency
-            MaxFrequency = 8144; // Highest Frequency
+            MaxFrequency = 8192; // Highest Frequency
             TopWavelets = 200;
             SampleRate = 5512*2;
             LogBase = Math.E;
@@ -188,7 +188,7 @@ namespace AcousticFingerprintingLibrary_0._4._5
         public float[][] CreateSpectrogram(string filename, int milliseconds, int startmilliseconds)
         {
             //read 5512 Hz, Mono, PCM, with a specific bassproxy
-            var samples = BassProxy.ReadMonoFromFileStatic(filename, SampleRate, milliseconds, startmilliseconds);
+            var samples = BassProxy.GetSamplesMono(filename, SampleRate, milliseconds, startmilliseconds);
             NormalizeInPlace(samples);
             var overlap = Overlap;
             var windowSize = WindowSize;
@@ -229,7 +229,7 @@ namespace AcousticFingerprintingLibrary_0._4._5
         public float[][] CreateLogSpectrogram(string filename, int milliseconds, int startmilliseconds)
         {
             //read 5512 Hz, Mono, PCM
-            var samples = BassProxy.ReadMonoFromFileStatic(filename, SampleRate, milliseconds, startmilliseconds);
+            var samples = BassProxy.GetSamplesMono(filename, SampleRate, milliseconds, startmilliseconds);
             return CreateLogSpectrogram(samples);
         }
 

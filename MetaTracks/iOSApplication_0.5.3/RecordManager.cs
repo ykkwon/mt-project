@@ -120,7 +120,7 @@ namespace iOSApplication_0._5._3
         /// <returns>The index of the most probable playback section.</returns>
         public static int ConsumeWaveFileBest(string filePath, List<HashedFingerprint[]> list)
         {
-            var monoArray = BassProxy.ReadMonoFromFileStatic(filePath, 5512, 0, 0);
+            var monoArray = BassProxy.GetSamplesMono(filePath, 5512, 0, 0);
             var manager = new FingerprintManager();
             // Create an array of fingerprints to be hashed.
             var preliminaryFingerprints = manager.CreateFingerprints(monoArray);
@@ -143,7 +143,7 @@ namespace iOSApplication_0._5._3
         public static double ConsumeWaveFileLong(string filePath, int index)
         {
             // Read all the mono values from the input file.
-            var monoArray = BassProxy.ReadMonoFromFileStatic(filePath, 5512, 0, 0);
+            var monoArray = BassProxy.GetSamplesMono(filePath, 5512, 0, 0);
             var manager = new FingerprintManager();
             // Create an array of fingerprints to be hashed.
             var preliminaryFingerprints = manager.CreateFingerprints(monoArray);
@@ -171,7 +171,7 @@ namespace iOSApplication_0._5._3
         public static double ConsumeWaveFileShort(string filePath)
         {
             // Read all the mono values from the input file.
-            var monoArray = BassProxy.ReadMonoFromFileStatic(filePath, 5512, 0, 0);
+            var monoArray = BassProxy.GetSamplesMono(filePath, 5512, 0, 0);
             var manager = new FingerprintManager();
             // Create an array of fingerprints to be hashed.
             var preliminaryFingerprints = manager.CreateFingerprints(monoArray);

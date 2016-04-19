@@ -57,7 +57,7 @@ namespace AcousticFingerprintingLibrary_0._4._5
         }
         
         
-        public /*static*/ float[] GetSamplesMono(string filename, int samplerate)
+        public /*static*/ float[] GetSamplesMonosss(string filename, int samplerate)
         {
             int totalmilliseconds = int.MaxValue;
             float[] data;
@@ -108,7 +108,7 @@ namespace AcousticFingerprintingLibrary_0._4._5
             return data;
         }
 
-        public static float[] ReadMonoFromFileStatic(string filename, int samplerate, int milliseconds, int startmillisecond)
+        public static float[] GetSamplesMono(string filename, int samplerate, int milliseconds, int startmillisecond)
         {
             int totalmilliseconds = int.MaxValue;
             float[] data;
@@ -123,7 +123,7 @@ namespace AcousticFingerprintingLibrary_0._4._5
 
             if (BassMix.BASS_Mixer_StreamAddChannel(mixerStream, bassStream, BASSFlag.BASS_STREAM_DECODE | BASSFlag.BASS_SAMPLE_MONO | BASSFlag.BASS_SAMPLE_FLOAT))
             {
-                var bufferSize = samplerate * 10 * 4; /*read 10 seconds at each iteration*/
+                var bufferSize = samplerate * 20 * 4; /*read 10 seconds at each iteration*/
                 var buffer = new float[bufferSize];
                 var chunks = new List<float[]>();
                 var size = 0;
