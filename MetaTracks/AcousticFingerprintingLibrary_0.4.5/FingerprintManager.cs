@@ -157,7 +157,7 @@ namespace AcousticFingerprintingLibrary_0._4._5
         public float[][] CreateSpectrogram(string filename, int milliseconds, int startmilliseconds)
         {
             //read 5512 Hz, Mono, PCM, with a specific bassproxy
-            var samples = BassProxy.GetSamplesMono(filename, SampleRate, milliseconds, startmilliseconds);
+            var samples = BassProxy.GetSamplesMono(filename, SampleRate);
             NormalizeInPlace(samples);
             var overlap = Overlap;
             var windowSize = WindowSize;
@@ -186,20 +186,6 @@ namespace AcousticFingerprintingLibrary_0._4._5
                 frames[i] = temp;
             }
             return frames;
-        }
-
-        /// <summary>
-        ///   Create log-spectrogram (spaced according to manager's parameters)
-        /// </summary>
-        /// <param name = "filename">Filename to be processed</param>
-        /// <param name = "milliseconds">Milliseconds to be analyzed</param>
-        /// <param name = "startmilliseconds">Starting point</param>
-        /// <returns>Logarithmically spaced bins within the power spectrogram</returns>
-        public float[][] CreateLogSpectrogram(string filename, int milliseconds, int startmilliseconds)
-        {
-            //read 5512 Hz, Mono, PCM
-            var samples = BassProxy.GetSamplesMono(filename, SampleRate, milliseconds, startmilliseconds);
-            return CreateLogSpectrogram(samples);
         }
 
         public float[][] CreateLogSpectrogram(float[] samples)
@@ -267,14 +253,11 @@ namespace AcousticFingerprintingLibrary_0._4._5
         ///   Create fingerprints according to the Google's researchers algorithm
         /// </summary>
         /// <param name = "filename">Filename to be analyzed</param>
-        /// <param name = "milliseconds">Milliseconds to analyze</param>
-        /// <param name = "startmilliseconds">Starting point of analysis</param>
         /// <returns>Fingerprint signatures</returns>
-        public List<Fingerprint> CreateFingerprints(string filename, int milliseconds, int startmilliseconds)
+        public List<Fingerprint> CreateFingerprints(string filename)
         {
-            var spectrum = CreateLogSpectrogram(filename, milliseconds, startmilliseconds);
-            
-            return CreateFingerprints(spectrum);
+            var samples = BassProxy.GetSamplesMono(filename, SampleRate);
+            return CreateFingerprints(samples);
         }
 
         /// <summary>
@@ -286,16 +269,6 @@ namespace AcousticFingerprintingLibrary_0._4._5
         {
             var spectrum = CreateLogSpectrogram(samples);
             return CreateFingerprints(spectrum);
-        }
-
-        /// <summary>
-        ///   Create fingerprints gathered from one specific song
-        /// </summary>
-        /// <param name = "filename">Filename</param>
-        /// <returns>List of fingerprint signatures</returns>
-        public List<Fingerprint> CreateFingerprints(string filename)
-        {
-            return CreateFingerprints(filename, 0, 0);
         }
 
         /// <summary>

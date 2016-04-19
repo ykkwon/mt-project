@@ -44,7 +44,7 @@ namespace AcousticFingerprintingLibrary_0._4._5
 
         #endregion
 
-        public static float[] GetSamplesMono(string filename, int samplerate, int milliseconds, int startmillisecond)
+        public static float[] GetSamplesMono(string filename, int samplerate)
         {
             int totalmilliseconds = int.MaxValue;
             float[] data;

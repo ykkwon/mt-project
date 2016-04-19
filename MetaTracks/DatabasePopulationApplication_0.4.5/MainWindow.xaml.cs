@@ -102,12 +102,12 @@ namespace DatabasePopulationApplication_0._4._5
 
         private void DrawSpectrogram(SaveFileDialog sfd)
         {
-            int width = 1000;
-            int height = 800;
+            const int width = 1000;
+            const int height = 800;
 
             Main.Status = "Generating spectrogram visualization.";
-            AcousticFingerprintingLibrary_0._4._5.FingerprintManager manager =
-                new AcousticFingerprintingLibrary_0._4._5.FingerprintManager();
+            FingerprintManager manager =
+                new FingerprintManager();
 
             float[][] data = manager.CreateSpectrogram(Path.GetFullPath(_filename), 0, 0);
             Bitmap image = Imaging.GetSpectrogramImage(data, width, height);
