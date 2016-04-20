@@ -921,7 +921,7 @@ namespace AcousticFingerprintingLibrary_0._4._5
             //
             var commonCounter = 0;
             var highestCommon = 0;
-            if (LatestTimeStamp > 0)
+            if (false)
             {
                 bool foundAnyFingerprints = false;
                 List<double> timeStamps = fingerprints.Select(hash => hash.Timestamp).ToList();

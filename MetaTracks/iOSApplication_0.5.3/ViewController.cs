@@ -83,7 +83,7 @@ namespace iOSApplication_0._5._3
         {
             Observer = AVPlayerItem.Notifications.ObserveDidPlayToEndTime(OnDidPlayToEndTime);
 
-            _sampleRate = 5512*2;
+            _sampleRate = 5512;
             _channels = 1;
             _audioFormat = AudioFormatType.LinearPCM;
             _audioQuality = AVAudioQuality.Max;
@@ -103,21 +103,18 @@ namespace iOSApplication_0._5._3
                 // Is short, i.e trailer (6.2 min or less) and can be sequentially iterated as a whole.
                 if (_hashedFingerprints.Count <= 2)
                 {
-                    
-                    InitializeComponents();
+                    var session = AVAudioSession.SharedInstance();
+                    NSError error;
+                    session.SetCategory(AVAudioSession.CategoryRecord, out error);
+
                     Task.Run(() =>
                     {
-                        InvokeOnMainThread(() =>
+                        
+                        for (var i = 1; i <= 1000; i++) // TODO: Replace this.
                         {
-                            ForegroundLabel.Text = "Media is short. Recording is starting.";
-                        });
-                        var session = AVAudioSession.SharedInstance();
-                        NSError error;
-                        session.SetCategory(AVAudioSession.CategoryRecord, out error);
-
-                        for (var i = 0; i < int.MaxValue; i++) // TODO: Replace this.
-                        {
+                            InitializeComponents();
                             CreateOutputUrl(i);
+                            Console.WriteLine(i);
                             PrepareAudioRecording(i, _sampleRate, _audioFormat, _channels, _audioQuality);
                             Recorder.Record();
                             Thread.Sleep(3000); // TODO: Improve this. 
