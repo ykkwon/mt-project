@@ -57,6 +57,7 @@ namespace iOSApplication_0._5._3
             _availableMovies = responseString.Split(',');
             Array.Sort(_availableMovies);
             MoviePicker.Enabled = true;
+            ForegroundLabel.Text = "Indexing done.";
         }
 
         /// <summary>
@@ -77,7 +78,7 @@ namespace iOSApplication_0._5._3
             _audioQuality = AVAudioQuality.Max;
 
             base.ViewDidLoad();
-
+            ForegroundLabel.Text = "Movies are being indexed . . .";
             GetFingerprintsButton.SetTitleColor(UIColor.FromRGBA(0, 0, 0, 150), UIControlState.Disabled);
             RecordButton.SetTitleColor(UIColor.FromRGBA(0, 0, 0, 150), UIControlState.Disabled);
             StopButton.SetTitleColor(UIColor.FromRGBA(0, 0, 0, 150), UIControlState.Disabled);
@@ -91,9 +92,14 @@ namespace iOSApplication_0._5._3
                 // Is short, i.e trailer (6.2 min or less) and can be sequentially iterated as a whole.
                 if (_hashedFingerprints.Count <= 2)
                 {
+                    
                     InitializeComponents();
                     Task.Run(() =>
                     {
+                        InvokeOnMainThread(() =>
+                        {
+                            ForegroundLabel.Text = "Media is short. Recording is starting.";
+                        });
                         var session = AVAudioSession.SharedInstance();
                         NSError error;
                         session.SetCategory(AVAudioSession.CategoryRecord, out error);
@@ -156,7 +162,7 @@ namespace iOSApplication_0._5._3
 
                             InvokeOnMainThread(() =>
                             {
-                                ForegroundLabel.Text = "Chunk:" + firstChunk + "\n" + "Matched second: " + (3 + FingerprintManager.LatestTimeStamp) + " s" +
+                                ForegroundLabel.Text = "Chunk: " + firstChunk + "\n" + "Matched second: " + (3 + FingerprintManager.LatestTimeStamp) + " s" +
                                                        "\n" + internalMatchCounter + " fingerprints in total." + "\n" + "~ " +
                                                        (Math.Round(FingerprintManager.LatestTimeStamp / 60)) + " minutes.";
                             });
@@ -179,6 +185,7 @@ namespace iOSApplication_0._5._3
             // Event handler for simple "Get fingerprints" button click and release.
             GetFingerprintsButton.TouchUpInside += async (sender, e) =>
             {
+                ForegroundLabel.Text = "Getting fingerprints for " + _selectedMovie + " . . . \n" + "This might take a while, depending on the media length.";
                 var client = new HttpClient();
                 var inputString =
                     $"http://webapi-1.bwjyuhcr5p.eu-west-1.elasticbeanstalk.com/Fingerprints/GetAllFingerprintsSQL?inputTitle='{_selectedMovie}'";

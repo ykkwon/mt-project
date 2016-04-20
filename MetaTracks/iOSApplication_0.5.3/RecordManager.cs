@@ -199,8 +199,6 @@ namespace iOSApplication_0._5._3
         /// </summary>
         public static void InitializeComponents()
         {
-            var audioSession = AVAudioSession.SharedInstance();
-            audioSession.SetCategory(AVAudioSessionCategory.Record);
             _hashedFingerprints = ViewController.GetHashedFingerprints();
         }
 

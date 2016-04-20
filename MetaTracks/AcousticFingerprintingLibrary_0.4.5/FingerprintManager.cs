@@ -261,7 +261,7 @@ namespace AcousticFingerprintingLibrary_0._4._5
         /// <summary>
         ///   Create fingerprints from already written samples
         /// </summary>
-        /// <param name = "samples">Samples from a song</param>
+        /// <param name = "samples">Samples from a media file</param>
         /// <returns>Fingerprint signatures</returns>
         public List<Fingerprint> CreateFingerprints(float[] samples)
         {
@@ -272,7 +272,7 @@ namespace AcousticFingerprintingLibrary_0._4._5
         /// <summary>
         ///   Create fingerprints according to the Google's researchers algorithm
         /// </summary>
-        /// <param name = "spectrogram">Spectrogram of the song</param>
+        /// <param name = "spectrogram">Spectrogram of the media file</param>
         /// <returns>Fingerprint signatures</returns>
         public List<Fingerprint> CreateFingerprints(float[][] spectrogram)
         {

@@ -44,7 +44,7 @@ namespace DatabasePopulationApplication_0._4._5
         }
 
         /// <summary>
-        ///   Gets the full song representation of the fingerprints
+        ///   Gets the full media representation of the fingerprints
         /// </summary>
         /// <param name = "data">Fingerprints</param>
         /// <param name = "width">Width of the image</param>
