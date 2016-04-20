@@ -27,6 +27,7 @@ namespace iOSApplication_0._5._3
         private string _selectedMovie;
         private UITableView _table;
         private string[] _availableMovies;
+        private string[] _mediaTypes;
         private string[] _receivedHashes;
         private string[] _receivedTimestamps;
         private double _matchCounter;
@@ -55,7 +56,17 @@ namespace iOSApplication_0._5._3
             var titleResponse = await client.GetAsync(client.BaseAddress);
             var responseString = titleResponse.Content.ReadAsStringAsync().Result;
             _availableMovies = responseString.Split(',');
-            Array.Sort(_availableMovies);
+
+            const string mediaTypeQuery = @"http://webapi-1.bwjyuhcr5p.eu-west-1.elasticbeanstalk.com/Fingerprints/GetAllMediaTypesSQL";
+            client.BaseAddress = new Uri(mediaTypeQuery);
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            var mediaTypeResponse = await client.GetAsync(client.BaseAddress);
+            var mediaTypeString = mediaTypeResponse.Content.ReadAsStringAsync().Result;
+            _mediaTypes = mediaTypeString.Split(',');
+
+
             MoviePicker.Enabled = true;
             ForegroundLabel.Text = "Indexing done.";
         }
@@ -226,7 +237,7 @@ namespace iOSApplication_0._5._3
                 _table = new UITableView(new CGRect(0, 0, width, height))
                 {
                     AutoresizingMask = UIViewAutoresizing.All,
-                    Source = new TableSource(_availableMovies, this)
+                    Source = new TableSource(_availableMovies, _mediaTypes, this)
                 };
                 Add(_table);
                 SetButtonAvailability(true, true, false, false);

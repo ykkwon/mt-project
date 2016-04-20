@@ -65,8 +65,26 @@ namespace WebAPI.Models
             {
                 titles.Append(rdr.GetString("title") + ",");
             }
-            Console.WriteLine(titles.ToString());
             return titles.ToString();
+        }
+
+        public string GetAllMediaTypesSQL()
+        {
+            string cs = @"server=webapidb.c7tab1cc7vsa.eu-west-1.rds.amazonaws.com;userid=glennskjong;
+                password=Bachelor2016!;database=system_users";
+            MySqlConnection conn = null;
+            conn = new MySqlConnection(cs);
+            conn.Open();
+            string sql = "SELECT distinct title, mediaType from fingerprintTable";
+            MySqlCommand cmd = new MySqlCommand(sql, conn);
+            MySqlDataReader rdr = cmd.ExecuteReader();
+            var mediaTypes = new StringBuilder();
+
+            while (rdr.Read())
+            {
+                mediaTypes.Append(rdr.GetString("mediaType") + ",");
+            }
+            return mediaTypes.ToString();
         }
 
         public string GetAllFingerprintsSQL(string title)

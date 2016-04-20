@@ -10,6 +10,7 @@ namespace iOSApplication_0._5._3
     public class TableSource : UITableViewSource
     {
         internal string[] TableItems;
+        internal string[] SubTableItems;
         internal string CellIdentifier = "TableCell";
         readonly ViewController _owner;
         internal static string SelectedMovie;
@@ -19,9 +20,10 @@ namespace iOSApplication_0._5._3
         /// </summary>
         /// <param name="items"></param>
         /// <param name="owner"></param>
-        public TableSource(string[] items, ViewController owner)
+        public TableSource(string[] items, string [] subitems, ViewController owner)
         {
             TableItems = items;
+            SubTableItems = subitems;
             _owner = owner;
 
         }
@@ -64,12 +66,13 @@ namespace iOSApplication_0._5._3
         {
             UITableViewCell cell = tableView.DequeueReusableCell(CellIdentifier);
             string item = TableItems[indexPath.Row];
-
+            string subitem = SubTableItems[indexPath.Row];
             //---- if there are no cells to reuse, create a new one
             if (cell == null)
-            { cell = new UITableViewCell(UITableViewCellStyle.Default, CellIdentifier); }
+            { cell = new UITableViewCell(UITableViewCellStyle.Subtitle, CellIdentifier); }
 
             cell.TextLabel.Text = item;
+            cell.DetailTextLabel.Text = subitem;
 
             return cell;
         }
