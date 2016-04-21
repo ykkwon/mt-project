@@ -916,12 +916,15 @@ namespace AcousticFingerprintingLibrary_0._4._5
 
         public double CompareFingerprintListsHighest(HashedFingerprint[] fingerprints, HashedFingerprint[] toCompare)
         {
+            Console.WriteLine("NEED TO EXPAND? " + _needToExpandSearch);
+            Console.WriteLine(_searchFieldSize);
+
             var fingerprintList = fingerprints;
             var toCompareList = toCompare;
             //
             var commonCounter = 0;
             var highestCommon = 0;
-            if (false)
+            if (LatestTimeStamp > 0)
             {
                 bool foundAnyFingerprints = false;
                 List<double> timeStamps = fingerprints.Select(hash => hash.Timestamp).ToList();

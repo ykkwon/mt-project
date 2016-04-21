@@ -109,7 +109,7 @@ namespace iOSApplication_0._5._3
 
                     Task.Run(() =>
                     {
-                        
+
                         for (var i = 1; i <= 1000; i++) // TODO: Replace this.
                         {
                             InitializeComponents();
@@ -126,9 +126,11 @@ namespace iOSApplication_0._5._3
                             var internalMatchCounter = _matchCounter;
                             InvokeOnMainThread(() =>
                             {
-                                ForegroundLabel.Text = "Matched second: " + (3 + FingerprintManager.LatestTimeStamp) + " s" +
-                                                       "\n" + internalMatchCounter + " fingerprints in total." + "\n" + "~ " +
-                                                       (Math.Round(FingerprintManager.LatestTimeStamp / 60)) + " minutes.";
+                                ForegroundLabel.Text = "Matched second: " + (3 + FingerprintManager.LatestTimeStamp) +
+                                                       " s" +
+                                                       "\n" + internalMatchCounter + " fingerprints in total." + "\n" +
+                                                       "~ " +
+                                                       (Math.Round(FingerprintManager.LatestTimeStamp/60)) + " minutes.";
                             });
                         }
                     });
@@ -137,50 +139,42 @@ namespace iOSApplication_0._5._3
                 // Is long (6.2 min or more), should be split.
                 else if (_hashedFingerprints.Count > 2)
                 {
-                    InitializeComponents();
-                    SetButtonAvailability(false, false, false, true);
-                    var preSession = AVAudioSession.SharedInstance();
-                    NSError preError;
-                    preSession.SetCategory(AVAudioSession.CategoryRecord, out preError);
-                    CreateOutputUrl(0);
-                    PrepareAudioRecording(0, _sampleRate, _audioFormat, _channels, _audioQuality);
-                    Recorder.Record();
-                    Thread.Sleep(10000);
-                    Recorder.Stop();
-                    var prePath = AudioFilePath;
-                    var firstChunk = RecordLongFirst(prePath.RelativePath, _hashedFingerprints);
+                    var session = AVAudioSession.SharedInstance();
+                    NSError error;
+                    session.SetCategory(AVAudioSession.CategoryRecord, out error);
 
                     Task.Run(() =>
                     {
-                        var session = AVAudioSession.SharedInstance();
-                        NSError error;
-                        session.SetCategory(AVAudioSession.CategoryRecord, out error);
 
-                        for (var i = 1; i < int.MaxValue; i++)
+                        for (var i = 1; i <= 1000; i++) // TODO: Replace this.
                         {
+                            InitializeComponents();
                             CreateOutputUrl(i);
+                            Console.WriteLine(i);
                             PrepareAudioRecording(i, _sampleRate, _audioFormat, _channels, _audioQuality);
                             Recorder.Record();
-                            Thread.Sleep(3000);
+                            Thread.Sleep(3000); // TODO: Improve this. 
                             Recorder.Stop();
                             var currentWaveFile = AudioFilePath;
-                            var consumedWaveFileShort = RecordLongSecond(currentWaveFile.RelativePath, firstChunk);
+                            var consumedWaveFileShort = RecordShortFirst(currentWaveFile.RelativePath);
                             _matchCounter += consumedWaveFileShort;
-                            var internalMatchCounter = _matchCounter;
 
+                            var internalMatchCounter = _matchCounter;
                             InvokeOnMainThread(() =>
                             {
-                                ForegroundLabel.Text = "Chunk: " + firstChunk + "\n" + "Matched second: " + (3 + FingerprintManager.LatestTimeStamp) + " s" +
-                                                       "\n" + internalMatchCounter + " fingerprints in total." + "\n" + "~ " +
-                                                       (Math.Round(FingerprintManager.LatestTimeStamp / 60)) + " minutes.";
+                                ForegroundLabel.Text = "Matched second: " + (3 + FingerprintManager.LatestTimeStamp) +
+                                                       " s" +
+                                                       "\n" + internalMatchCounter + " fingerprints in total." + "\n" +
+                                                       "~ " +
+                                                       (Math.Round(FingerprintManager.LatestTimeStamp/60)) + " minutes.";
                             });
                         }
                     });
                 }
             };
 
-            // Event handler for simple "Stop" button click and release.
-            StopButton.TouchUpInside += (sender, e) =>
+                // Event handler for simple "Stop" button click and release.
+                StopButton.TouchUpInside += (sender, e) =>
             {
                 SetButtonAvailability(true, true, true, false);
                 StopRecord();

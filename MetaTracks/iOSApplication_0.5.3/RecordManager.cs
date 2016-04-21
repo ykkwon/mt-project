@@ -16,6 +16,7 @@ namespace iOSApplication_0._5._3
         internal static AVPlayer Player;
         internal static NSUrl AudioFilePath;
         internal static NSObject Observer;
+        internal static FingerprintManager Manager = new FingerprintManager();
         internal static string[] ReceivedHashes;
         internal static string[] ReceivedTimestamps;
 
@@ -120,16 +121,15 @@ namespace iOSApplication_0._5._3
         public static int RecordLongFirst(string filePath, List<HashedFingerprint[]> list)
         {
             var monoArray = BassProxy.GetSamplesMono(filePath, 5512);
-            var manager = new FingerprintManager();
             // Create an array of fingerprints to be hashed.
-            var preliminaryFingerprints = manager.CreateFingerprints(monoArray);
+            var preliminaryFingerprints = Manager.CreateFingerprints(monoArray);
 
-            var test = manager.GetFingerHashes(preliminaryFingerprints);
+            var test = Manager.GetFingerHashes(preliminaryFingerprints);
             foreach (var hash in test)
             {
                 StoredFingerprints.Add(hash);
             }
-            _secondaryIndex = manager.FindBestFingerprintList(list, StoredFingerprints.ToArray());
+            _secondaryIndex = Manager.FindBestFingerprintList(list, StoredFingerprints.ToArray());
             return _secondaryIndex;
         }
 
@@ -143,16 +143,15 @@ namespace iOSApplication_0._5._3
         {
             // Read all the mono values from the input file.
             var monoArray = BassProxy.GetSamplesMono(filePath, 5512);
-            var manager = new FingerprintManager();
             // Create an array of fingerprints to be hashed.
-            var preliminaryFingerprints = manager.CreateFingerprints(monoArray);
+            var preliminaryFingerprints = Manager.CreateFingerprints(monoArray);
 
-            var test = manager.GetFingerHashes(preliminaryFingerprints);
+            var test = Manager.GetFingerHashes(preliminaryFingerprints);
             foreach (var hash in test)
             {
                 StoredFingerprints.Add(hash);
             }
-            var results = manager.CompareFingerprintListsHighest(_hashedFingerprints[index],
+            var results = Manager.CompareFingerprintListsHighest(_hashedFingerprints[index],
                 StoredFingerprints.ToArray());
             return results;
         }
@@ -166,14 +165,13 @@ namespace iOSApplication_0._5._3
         {
             // Read all the mono values from the input file.
             var monoArray = BassProxy.GetSamplesMono(filePath, 5512);
-            var manager = new FingerprintManager();
             // Create an array of fingerprints to be hashed.
-            var preliminaryFingerprints = manager.CreateFingerprints(monoArray);
+            var preliminaryFingerprints = Manager.CreateFingerprints(monoArray);
 
-            var test = manager.GetFingerHashes(preliminaryFingerprints);
+            var test = Manager.GetFingerHashes(preliminaryFingerprints);
             foreach (var hash in test)
                 StoredFingerprints.Add(hash);
-            var results = manager.CompareFingerprintListsHighest(_movie, StoredFingerprints.ToArray());
+            var results = Manager.CompareFingerprintListsHighest(_movie, StoredFingerprints.ToArray());
             StoredFingerprints.Clear();
             return results;
         }
