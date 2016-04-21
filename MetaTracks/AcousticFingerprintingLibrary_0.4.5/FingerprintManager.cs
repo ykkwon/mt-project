@@ -924,8 +924,9 @@ namespace AcousticFingerprintingLibrary_0._4._5
             //
             var commonCounter = 0;
             var highestCommon = 0;
-            if (LatestTimeStamp > 0)
+            if (_bestMatchedFingerprint != null) // Check if a best fingerprint is found
             {
+
                 bool foundAnyFingerprints = false;
                 List<double> timeStamps = fingerprints.Select(hash => hash.Timestamp).ToList();
                 var lastTime = LatestTimeStamp;
@@ -997,12 +998,12 @@ namespace AcousticFingerprintingLibrary_0._4._5
                         var count = i;
                         if (count >= 4)
                         {
-                            LatestTimeStamp = fingerprint1.Timestamp;
                             _matchedFingerprints.Add(fingerprint1);
                             // Best matched fingerprint is the fingerprint with the highest number of hashes being equal to original fingerprint
                             if (highestCommon <= count)
                             {
                                 _bestMatchedFingerprint = fingerprint1;
+                                LatestTimeStamp = _bestMatchedFingerprint.Timestamp;
                                 highestCommon = count;
                             }
                             // potential match
