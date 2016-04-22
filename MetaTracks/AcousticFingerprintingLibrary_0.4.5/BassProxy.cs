@@ -47,7 +47,7 @@ namespace AcousticFingerprintingLibrary_0._4._5
         public static float[] GetSamplesMono(string filename, int samplerate)
         {
             int totalmilliseconds = int.MaxValue;
-            float[] data;
+            float[] samples;
             //create streams for re-sampling
             var bassStream = Bass.BASS_StreamCreateFile(filename, 0, 0, BASSFlag.BASS_STREAM_DECODE | BASSFlag.BASS_SAMPLE_MONO | BASSFlag.BASS_SAMPLE_FLOAT); //Decode the stream
             if (bassStream == 0)
@@ -76,14 +76,14 @@ namespace AcousticFingerprintingLibrary_0._4._5
                     size += bytesToRead / 4; //size of the data
                 }
 
-                data = new float[size];
+                samples = new float[size];
 
                 /*Concatenate*/
                 var cursor = 0;
                 for (var i = 0; i < chunks.Count; i++)
                 {
                     var chunk = chunks[i];
-                    Array.Copy(chunk, 0, data, cursor, chunk.Length);
+                    Array.Copy(chunk, 0, samples, cursor, chunk.Length);
                     cursor += chunk.Length;
                 }
             }
@@ -93,7 +93,7 @@ namespace AcousticFingerprintingLibrary_0._4._5
             // Free bass from memory
             Bass.BASS_StreamFree(mixerStream);
             Bass.BASS_StreamFree(bassStream);
-            return data;
+            return samples;
         }
 
         /// <summary>
