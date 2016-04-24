@@ -8,12 +8,15 @@
       <sourceFolder url="file://$MODULE_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/DefaultPermutations.swift" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/HaarWavelet.swift" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/Info.plist" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/MinHash.swift" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/FingerprintManager.swift" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/Fourier.swift" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/libbassmix.a" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/AudioRecognitionLibrary.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/bassmix.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/ComplexF.swift" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/HanningWindow.swift" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/Fingerprint.swift" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/libbass.a" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/bass.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/FourierDirection.swift" isTestSource="false" />
@@ -28,6 +31,7 @@
       <sourceFolder url="file://$MODULE_DIR$/iOSApplication053/iOSApplication053/Info.plist" isTestSource="false" />
     </content>
     <content url="file://$USER_HOME$/Library/Caches/AppCode2016.1/DerivedData/MetaTracksAcoustic-cgefswfbxihzrpfrctowiyycyixg/Build/Intermediates/AudioRecognitionLibrary.build/Debug-iphoneos/AudioRecognitionLibrary.build/DerivedSources" />
+    <content url="file://$USER_HOME$/Library/Caches/AppCode2016.1/DerivedData/MetaTracksAcoustic-cgefswfbxihzrpfrctowiyycyixg/Build/Intermediates/iOSApplication053.build/Debug-iphoneos/iOSApplication053.build/DerivedSources" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module-library">
       <library name="Header Search Paths">

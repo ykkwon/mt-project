@@ -7,8 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6BEFF0ED23D803B0727412E4 /* Fingerprint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BEFF26CEA588B5CC2BBAD4F /* Fingerprint.swift */; };
 		6BEFF10D6C5AC8BE1FBFB369 /* HanningWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BEFF3BC7BD89637F6F02333 /* HanningWindow.swift */; };
 		6BEFF4DE1950176F9DCD78AA /* DefaultPermutations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BEFF08A20A7B8010834C82F /* DefaultPermutations.swift */; };
+		6BEFF543923B7E42EC9BD497 /* FingerprintManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BEFFC666F04C2707CF35C6F /* FingerprintManager.swift */; };
+		6BEFF925AE7F46D9EDAA66B0 /* MinHash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BEFF62B97885805292E87A0 /* MinHash.swift */; };
 		6BEFFC16829054C1239EFFB3 /* HaarWavelet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BEFFF8205D8B3D1DBC83FEA /* HaarWavelet.swift */; };
 		8B50B2991CCA07800019F8A7 /* AudioRecognitionLibrary.h in Headers */ = {isa = PBXBuildFile; fileRef = 8B50B2981CCA07800019F8A7 /* AudioRecognitionLibrary.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8B50B2A51CCA08170019F8A7 /* BassProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B50B2A41CCA08170019F8A7 /* BassProxy.swift */; };
@@ -41,7 +44,10 @@
 
 /* Begin PBXFileReference section */
 		6BEFF08A20A7B8010834C82F /* DefaultPermutations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultPermutations.swift; sourceTree = "<group>"; };
+		6BEFF26CEA588B5CC2BBAD4F /* Fingerprint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fingerprint.swift; sourceTree = "<group>"; };
 		6BEFF3BC7BD89637F6F02333 /* HanningWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HanningWindow.swift; sourceTree = "<group>"; };
+		6BEFF62B97885805292E87A0 /* MinHash.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MinHash.swift; sourceTree = "<group>"; };
+		6BEFFC666F04C2707CF35C6F /* FingerprintManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FingerprintManager.swift; sourceTree = "<group>"; };
 		6BEFFF8205D8B3D1DBC83FEA /* HaarWavelet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HaarWavelet.swift; sourceTree = "<group>"; };
 		8B50B2951CCA07800019F8A7 /* AudioRecognitionLibrary.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AudioRecognitionLibrary.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B50B2981CCA07800019F8A7 /* AudioRecognitionLibrary.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioRecognitionLibrary.h; sourceTree = "<group>"; };
@@ -115,6 +121,9 @@
 				6BEFF3BC7BD89637F6F02333 /* HanningWindow.swift */,
 				6BEFF08A20A7B8010834C82F /* DefaultPermutations.swift */,
 				6BEFFF8205D8B3D1DBC83FEA /* HaarWavelet.swift */,
+				6BEFF62B97885805292E87A0 /* MinHash.swift */,
+				6BEFF26CEA588B5CC2BBAD4F /* Fingerprint.swift */,
+				6BEFFC666F04C2707CF35C6F /* FingerprintManager.swift */,
 			);
 			path = AudioRecognitionLibrary;
 			sourceTree = "<group>";
@@ -210,6 +219,9 @@
 				6BEFF10D6C5AC8BE1FBFB369 /* HanningWindow.swift in Sources */,
 				6BEFF4DE1950176F9DCD78AA /* DefaultPermutations.swift in Sources */,
 				6BEFFC16829054C1239EFFB3 /* HaarWavelet.swift in Sources */,
+				6BEFF925AE7F46D9EDAA66B0 /* MinHash.swift in Sources */,
+				6BEFF0ED23D803B0727412E4 /* Fingerprint.swift in Sources */,
+				6BEFF543923B7E42EC9BD497 /* FingerprintManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

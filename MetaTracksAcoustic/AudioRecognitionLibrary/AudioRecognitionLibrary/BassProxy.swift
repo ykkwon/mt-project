@@ -58,7 +58,7 @@ public class BassProxy{
             }
             BASS_StreamFree(mixerStream)
             BASS_StreamFree(bassStream)
-            //return data
+            //TODO: return data
             print(size)
             return [10.0]
         }
@@ -66,7 +66,7 @@ public class BassProxy{
         return [0.0]
     }
     public static func Dispose(){
-        // Trenge vi dinne?
+        // TODO: Trenge vi dinne?
     }
     
 }
