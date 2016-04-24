@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		8B967C2C1CCA610300C02A35 /* AudioRecognitionLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B967C2B1CCA610300C02A35 /* AudioRecognitionLibrary.framework */; };
-		8B967C2D1CCA610B00C02A35 /* AudioRecognitionLibrary.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8B967C2B1CCA610300C02A35 /* AudioRecognitionLibrary.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		8B967C2E1CCA611000C02A35 /* AudioRecognitionLibrary.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8B967C2B1CCA610300C02A35 /* AudioRecognitionLibrary.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		8B545EFC1CCD4CEE004C27D2 /* AudioRecognitionLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B545EFB1CCD4CEE004C27D2 /* AudioRecognitionLibrary.framework */; };
+		8B545EFD1CCD4D19004C27D2 /* AudioRecognitionLibrary.framework in Resources */ = {isa = PBXBuildFile; fileRef = 8B545EFB1CCD4CEE004C27D2 /* AudioRecognitionLibrary.framework */; };
+		8B545EFE1CCD4D1F004C27D2 /* AudioRecognitionLibrary.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8B545EFB1CCD4CEE004C27D2 /* AudioRecognitionLibrary.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		8B9A85411CCA416F0070E94E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9A85401CCA416F0070E94E /* AppDelegate.swift */; };
 		8B9A85431CCA416F0070E94E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9A85421CCA416F0070E94E /* ViewController.swift */; };
 		8B9A85461CCA416F0070E94E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8B9A85441CCA416F0070E94E /* Main.storyboard */; };
@@ -24,7 +24,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 6;
 			files = (
-				8B967C2D1CCA610B00C02A35 /* AudioRecognitionLibrary.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -34,7 +33,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				8B967C2E1CCA611000C02A35 /* AudioRecognitionLibrary.framework in Embed Frameworks */,
+				8B545EFE1CCD4D1F004C27D2 /* AudioRecognitionLibrary.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -42,7 +41,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		8B967C2B1CCA610300C02A35 /* AudioRecognitionLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioRecognitionLibrary.framework; path = "../../Library/Developer/Xcode/DerivedData/MetaTracksAcoustic-fhyljktiuuojojfzispodmffwzmw/Build/Products/Debug-iphoneos/AudioRecognitionLibrary.framework"; sourceTree = "<group>"; };
+		8B545EFB1CCD4CEE004C27D2 /* AudioRecognitionLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioRecognitionLibrary.framework; path = "../../../../Library/Developer/Xcode/DerivedData/MetaTracksAcoustic-cgefswfbxihzrpfrctowiyycyixg/Build/Products/Debug-iphoneos/AudioRecognitionLibrary.framework"; sourceTree = "<group>"; };
 		8B9A853D1CCA416F0070E94E /* iOSApplication053.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iOSApplication053.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B9A85401CCA416F0070E94E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8B9A85421CCA416F0070E94E /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -57,7 +56,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8B967C2C1CCA610300C02A35 /* AudioRecognitionLibrary.framework in Frameworks */,
+				8B545EFC1CCD4CEE004C27D2 /* AudioRecognitionLibrary.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -67,7 +66,7 @@
 		8B9A85341CCA416F0070E94E = {
 			isa = PBXGroup;
 			children = (
-				8B967C2B1CCA610300C02A35 /* AudioRecognitionLibrary.framework */,
+				8B545EFB1CCD4CEE004C27D2 /* AudioRecognitionLibrary.framework */,
 				8B9A853F1CCA416F0070E94E /* iOSApplication053 */,
 				8B9A853E1CCA416F0070E94E /* Products */,
 			);
@@ -155,6 +154,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8B545EFD1CCD4D19004C27D2 /* AudioRecognitionLibrary.framework in Resources */,
 				8B9A854B1CCA416F0070E94E /* LaunchScreen.storyboard in Resources */,
 				8B9A85481CCA416F0070E94E /* Assets.xcassets in Resources */,
 				8B9A85461CCA416F0070E94E /* Main.storyboard in Resources */,
