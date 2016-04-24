@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using AcousticFingerprintingLibrary_0._4._5.FFT;
 using AcousticFingerprintingLibrary_0._4._5.Hashing;
@@ -12,7 +11,7 @@ namespace AcousticFingerprintingLibrary_0._4._5
         /// <summary>
         ///   Logarithmic frequency indexes
         /// </summary>
-        private int[] _spacedLogFreq;
+        private readonly int[] _spacedLogFreq;
 
         #region Properties
 
@@ -671,7 +670,7 @@ namespace AcousticFingerprintingLibrary_0._4._5
 
             //List<HashedFingerprint> hashedFinger = new List<HashedFingerprint>();
             var hashedFinger = new HashedFingerprint[listDb.Count];
-            for (var index = 0; index < listDb.Count; index++)
+            for(var index = 0; index < listDb.Count; index++)
             {
                 var hashfinger = new HashedFingerprint(lshBuckets[index], listDb[index].SequenceNumber,
                     listDb[index].Timestamp);
@@ -746,66 +745,9 @@ namespace AcousticFingerprintingLibrary_0._4._5
 
         #endregion
 
-        public void testing(HashedFingerprint[] fingerprints, HashedFingerprint[] toCompare)
-        {
-            var fingerprintList = fingerprints;
-            var toCompareList = toCompare;
-            //
-            var commonCounter = 0;
-            var highestCommon = 0;
-            if (LatestTimeStamp != null)
-            {
-                List<double> timeStamps = fingerprints.Select(hash => hash.Timestamp).ToList();
-                var lastTime = LatestTimeStamp;
-                List<int> matchingIndexes = new List<int>();
-                var seconds = 15;
-
-                var plusTime = Math.Min(timeStamps.Last(), lastTime + seconds);
-                var minusTime = Math.Max(0, lastTime - seconds);
-                for (var i = 0; i < timeStamps.Count; i++)
-                {
-                    if (timeStamps[i] < plusTime && timeStamps[i] >= minusTime)
-                        matchingIndexes.Add(i);
-                }
-
-                HashedFingerprint[] currentList = new HashedFingerprint[matchingIndexes.Count];
-                for (var i = 0; i < matchingIndexes.Count; i++)
-                {
-                    currentList[i] = fingerprints[matchingIndexes[i]];
-                }
-                foreach (var list in currentList)
-                {
-                    foreach (var fingerprint2 in toCompareList)
-                    {
-                        //var commonNumbers = fingerprint1.HashBins.Intersect(fingerprint2.HashBins);
-
-                        HashSet<long> set2 = new HashSet<long>(fingerprint2.HashBins); // 7643
-                        var i = list.HashBins.Select(hash => set2.Contains(hash)).Count(qwe => qwe);
-
-                        var count = i;
-                        if (count >= 4)
-                        {
-                            LatestTimeStamp = list.Timestamp;
-                            _matchedFingerprints.Add(list);
-                            // Best matched fingerprint is the fingerprint with the highest number of hashes being equal to original fingerprint
-                            if (highestCommon <= count)
-                            {
-                                _bestMatchedFingerprint = list;
-                                highestCommon = count;
-                            }
-                            // potential match
-                            commonCounter++;
-                            break; // jumps out of loop and on to next fingerprint
-                        }
-                    }
-                }
-            }
-        }
-
         #region Recognition
 
         private readonly List<HashedFingerprint> _matchedFingerprints = new List<HashedFingerprint>();
-        private readonly List<double> _matchedTimestamps = new List<double>();
         private HashedFingerprint _bestMatchedFingerprint;
         private bool _needToExpandSearch = false;
         private int _searchFieldSize = 15;
@@ -847,33 +789,24 @@ namespace AcousticFingerprintingLibrary_0._4._5
                 }
                 foreach (var list in currentList)
                 {
-                    foreach (var fingerprint2 in toCompareList)
+                    foreach (var count in toCompareList.Select(fingerprint2 => new HashSet<long>(fingerprint2.HashBins)).Select(set2 => list.HashBins.Select(hash => set2.Contains(hash)).Count(qwe => qwe)).Select(i => i).Where(count => count >= 4))
                     {
-                        //var commonNumbers = fingerprint1.HashBins.Intersect(fingerprint2.HashBins);
+                        LatestTimeStamp = list.Timestamp;
+                        _matchedFingerprints.Add(list);
 
-                        HashSet<long> set2 = new HashSet<long>(fingerprint2.HashBins); // 7643
-                        var i = list.HashBins.Select(hash => set2.Contains(hash)).Count(qwe => qwe);
+                        foundAnyFingerprints = true; // Found a fingerprint
+                        _needToExpandSearch = false; // found a fingerprint, so no need to expand searchfield
+                        _searchFieldSize = 15; // Reset searchfield to 15 seconds.
 
-                        var count = i;
-                        if (count >= 4)
+                        // Best matched fingerprint is the fingerprint with the highest number of hashes being equal to original fingerprint
+                        if (highestCommon <= count)
                         {
-                            LatestTimeStamp = list.Timestamp;
-                            _matchedFingerprints.Add(list);
-
-                            foundAnyFingerprints = true; // Found a fingerprint
-                            _needToExpandSearch = false; // found a fingerprint, so no need to expand searchfield
-                            _searchFieldSize = 15; // Reset searchfield to 15 seconds.
-
-                            // Best matched fingerprint is the fingerprint with the highest number of hashes being equal to original fingerprint
-                            if (highestCommon <= count)
-                            {
-                                _bestMatchedFingerprint = list;
-                                highestCommon = count;
-                            }
-                            // potential match
-                            commonCounter++;
-                            break; // jumps out of loop and on to next fingerprint
+                            _bestMatchedFingerprint = list;
+                            highestCommon = count;
                         }
+                        // potential match
+                        commonCounter++;
+                        break; // jumps out of loop and on to next fingerprint
                     }
                 }
                 if (!foundAnyFingerprints)
@@ -883,28 +816,19 @@ namespace AcousticFingerprintingLibrary_0._4._5
             { // Searches entire list if no fingerprint has been found
                 foreach (var fingerprint1 in fingerprintList)
                 {
-                    foreach (var fingerprint2 in toCompareList)
+                    foreach (var count in toCompareList.Select(fingerprint2 => new HashSet<long>(fingerprint2.HashBins)).Select(set2 => fingerprint1.HashBins.Select(hash => set2.Contains(hash)).Count(qwe => qwe)).Select(i => i).Where(count => count >= 4))
                     {
-                        //var commonNumbers = fingerprint1.HashBins.Intersect(fingerprint2.HashBins);
-
-                        HashSet<long> set2 = new HashSet<long>(fingerprint2.HashBins); // 7643
-                        var i = fingerprint1.HashBins.Select(hash => set2.Contains(hash)).Count(qwe => qwe);
-
-                        var count = i;
-                        if (count >= 4)
+                        LatestTimeStamp = fingerprint1.Timestamp;
+                        _matchedFingerprints.Add(fingerprint1);
+                        // Best matched fingerprint is the fingerprint with the highest number of hashes being equal to original fingerprint
+                        if (highestCommon <= count)
                         {
-                            LatestTimeStamp = fingerprint1.Timestamp;
-                            _matchedFingerprints.Add(fingerprint1);
-                            // Best matched fingerprint is the fingerprint with the highest number of hashes being equal to original fingerprint
-                            if (highestCommon <= count)
-                            {
-                                _bestMatchedFingerprint = fingerprint1;
-                                highestCommon = count;
-                            }
-                            // potential match
-                            commonCounter++;
-                            break; // jumps out of loop and on to next fingerprint
+                            _bestMatchedFingerprint = fingerprint1;
+                            highestCommon = count;
                         }
+                        // potential match
+                        commonCounter++;
+                        break; // jumps out of loop and on to next fingerprint
                     }
                 }
             }
@@ -952,33 +876,24 @@ namespace AcousticFingerprintingLibrary_0._4._5
                 }
                 foreach (var list in currentList)
                 {
-                    foreach (var fingerprint2 in toCompareList)
+                    foreach (var count in toCompareList.Select(fingerprint2 => new HashSet<long>(fingerprint2.HashBins)).Select(set2 => list.HashBins.Select(hash => set2.Contains(hash)).Count(qwe => qwe)).Select(i => i).Where(count => count >= 4))
                     {
-                        //var commonNumbers = fingerprint1.HashBins.Intersect(fingerprint2.HashBins);
+                        LatestTimeStamp = list.Timestamp;
+                        _matchedFingerprints.Add(list);
 
-                        HashSet<long> set2 = new HashSet<long>(fingerprint2.HashBins); // 7643
-                        var i = list.HashBins.Select(hash => set2.Contains(hash)).Count(qwe => qwe);
+                        foundAnyFingerprints = true; // Found a fingerprint
+                        _needToExpandSearch = false; // found a fingerprint, so no need to expand searchfield
+                        _searchFieldSize = 15; // Reset searchfield to 15 seconds.
 
-                        var count = i;
-                        if (count >= 4)
+                        // Best matched fingerprint is the fingerprint with the highest number of hashes being equal to original fingerprint
+                        if (highestCommon <= count)
                         {
-                            LatestTimeStamp = list.Timestamp;
-                            _matchedFingerprints.Add(list);
-
-                            foundAnyFingerprints = true; // Found a fingerprint
-                            _needToExpandSearch = false; // found a fingerprint, so no need to expand searchfield
-                            _searchFieldSize = 15; // Reset searchfield to 15 seconds.
-
-                            // Best matched fingerprint is the fingerprint with the highest number of hashes being equal to original fingerprint
-                            if (highestCommon <= count)
-                            {
-                                _bestMatchedFingerprint = list;
-                                highestCommon = count;
-                            }
-                            // potential match
-                            commonCounter++;
-                            break; // jumps out of loop and on to next fingerprint
+                            _bestMatchedFingerprint = list;
+                            highestCommon = count;
                         }
+                        // potential match
+                        commonCounter++;
+                        break; // jumps out of loop and on to next fingerprint
                     }
                 }
                 if (!foundAnyFingerprints)
@@ -988,28 +903,19 @@ namespace AcousticFingerprintingLibrary_0._4._5
             { // Searches entire list if no fingerprint has been found
                 foreach (var fingerprint1 in fingerprintList)
                 {
-                    foreach (var fingerprint2 in toCompareList)
+                    foreach (var count in toCompareList.Select(fingerprint2 => new HashSet<long>(fingerprint2.HashBins)).Select(set2 => fingerprint1.HashBins.Select(hash => set2.Contains(hash)).Count(qwe => qwe)).Select(i => i).Where(count => count >= 4))
                     {
-                        //var commonNumbers = fingerprint1.HashBins.Intersect(fingerprint2.HashBins);
-
-                        HashSet<long> set2 = new HashSet<long>(fingerprint2.HashBins); // 7643
-                        var i = fingerprint1.HashBins.Select(hash => set2.Contains(hash)).Count(qwe => qwe);
-
-                        var count = i;
-                        if (count >= 4)
+                        _matchedFingerprints.Add(fingerprint1);
+                        // Best matched fingerprint is the fingerprint with the highest number of hashes being equal to original fingerprint
+                        if (highestCommon <= count)
                         {
-                            _matchedFingerprints.Add(fingerprint1);
-                            // Best matched fingerprint is the fingerprint with the highest number of hashes being equal to original fingerprint
-                            if (highestCommon <= count)
-                            {
-                                _bestMatchedFingerprint = fingerprint1;
-                                LatestTimeStamp = _bestMatchedFingerprint.Timestamp;
-                                highestCommon = count;
-                            }
-                            // potential match
-                            commonCounter++;
-                            break; // jumps out of loop and on to next fingerprint
+                            _bestMatchedFingerprint = fingerprint1;
+                            LatestTimeStamp = _bestMatchedFingerprint.Timestamp;
+                            highestCommon = count;
                         }
+                        // potential match
+                        commonCounter++;
+                        break; // jumps out of loop and on to next fingerprint
                     }
                 }
             }
