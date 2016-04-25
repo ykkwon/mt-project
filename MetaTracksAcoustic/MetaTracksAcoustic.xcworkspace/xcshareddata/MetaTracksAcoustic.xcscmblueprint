@@ -1,0 +1,29 @@
+{
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "9F65A476A58933AE6B22EAE730A194955F98FC66" : 0,
+    "C0760CCEC540336DF46F25D790D0D8BF249D4DF5" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "5065070C-54A6-4D3D-BA72-0D9DBD025899",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "9F65A476A58933AE6B22EAE730A194955F98FC66" : "MetaTracksAcoustic\/Surge\/",
+    "C0760CCEC540336DF46F25D790D0D8BF249D4DF5" : ""
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "MetaTracksAcoustic",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "MetaTracksAcoustic.xcworkspace",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "git:\/\/github.com\/mattt\/Surge.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "9F65A476A58933AE6B22EAE730A194955F98FC66"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/nekris\/mt-project.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "C0760CCEC540336DF46F25D790D0D8BF249D4DF5"
+    }
+  ]
+}

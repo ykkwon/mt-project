@@ -26,12 +26,12 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
     var matchCounter:Double = Double()
     
     
-    
     var tableView:UITableView = UITableView()
     var out:String = String()
     
     
     override func viewDidLoad() {
+        
         super.viewDidLoad()
         IndexMovies()
         tableView = UITableView(frame: UIScreen.mainScreen().bounds, style: UITableViewStyle.Plain)
@@ -68,6 +68,7 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         print(BASSVERSION);
         super.viewDidLoad()
         BassProxy.Initialize()
+    
         BassProxy.GetSamplesMono("test", sampleRate : 44100)
         
     }
@@ -118,12 +119,14 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
     }
     
     func recordButtonAction(sender:UIButton!){
-        var session:AVAudioSession = AVAudioSession.sharedInstance()
-    
+        for(var i = 0; i <= 1000; i += 1){
+            RecordManager.PrepareAudioRecording(i)
+            RecordManager.Record()
+            }
     }
     
     func stopButtonAction(sender:UIButton!){
-        print("Stop.")
+       
     }
 
     override func didReceiveMemoryWarning() {

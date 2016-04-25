@@ -7,41 +7,32 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		8B545EFC1CCD4CEE004C27D2 /* AudioRecognitionLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B545EFB1CCD4CEE004C27D2 /* AudioRecognitionLibrary.framework */; };
-		8B545EFD1CCD4D19004C27D2 /* AudioRecognitionLibrary.framework in Resources */ = {isa = PBXBuildFile; fileRef = 8B545EFB1CCD4CEE004C27D2 /* AudioRecognitionLibrary.framework */; };
-		8B545EFE1CCD4D1F004C27D2 /* AudioRecognitionLibrary.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8B545EFB1CCD4CEE004C27D2 /* AudioRecognitionLibrary.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		8B9A85411CCA416F0070E94E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9A85401CCA416F0070E94E /* AppDelegate.swift */; };
 		8B9A85431CCA416F0070E94E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9A85421CCA416F0070E94E /* ViewController.swift */; };
 		8B9A85461CCA416F0070E94E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8B9A85441CCA416F0070E94E /* Main.storyboard */; };
 		8B9A85481CCA416F0070E94E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8B9A85471CCA416F0070E94E /* Assets.xcassets */; };
 		8B9A854B1CCA416F0070E94E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8B9A85491CCA416F0070E94E /* LaunchScreen.storyboard */; };
+		8BC18DA41CCE8FB9003A665B /* AudioRecognitionLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BC18DA31CCE8FB9003A665B /* AudioRecognitionLibrary.framework */; };
+		8BC18DA61CCE8FE4003A665B /* AudioRecognitionLibrary.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8BC18DA31CCE8FB9003A665B /* AudioRecognitionLibrary.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		8BC18DAA1CCE90AD003A665B /* Surge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BC18DA91CCE90AD003A665B /* Surge.framework */; };
+		8BC18DAB1CCE90AD003A665B /* Surge.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8BC18DA91CCE90AD003A665B /* Surge.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		8B967C271CCA5FC600C02A35 /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 6;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		8B9A85571CCA43200070E94E /* Embed Frameworks */ = {
+		8BC18DA51CCE8FDB003A665B /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				8B545EFE1CCD4D1F004C27D2 /* AudioRecognitionLibrary.framework in Embed Frameworks */,
+				8BC18DA61CCE8FE4003A665B /* AudioRecognitionLibrary.framework in CopyFiles */,
+				8BC18DAB1CCE90AD003A665B /* Surge.framework in CopyFiles */,
 			);
-			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		8B545EFB1CCD4CEE004C27D2 /* AudioRecognitionLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioRecognitionLibrary.framework; path = "../../../../Library/Developer/Xcode/DerivedData/MetaTracksAcoustic-cgefswfbxihzrpfrctowiyycyixg/Build/Products/Debug-iphoneos/AudioRecognitionLibrary.framework"; sourceTree = "<group>"; };
 		8B9A853D1CCA416F0070E94E /* iOSApplication053.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iOSApplication053.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B9A85401CCA416F0070E94E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8B9A85421CCA416F0070E94E /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -49,6 +40,8 @@
 		8B9A85471CCA416F0070E94E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8B9A854A1CCA416F0070E94E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8B9A854C1CCA416F0070E94E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8BC18DA31CCE8FB9003A665B /* AudioRecognitionLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioRecognitionLibrary.framework; path = "../../../../Library/Developer/Xcode/DerivedData/MetaTracksAcoustic-cgefswfbxihzrpfrctowiyycyixg/Build/Products/Debug-iphoneos/AudioRecognitionLibrary.framework"; sourceTree = "<group>"; };
+		8BC18DA91CCE90AD003A665B /* Surge.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = Surge.framework; path = "/Users/metatracks/Library/Developer/Xcode/DerivedData/MetaTracksAcoustic-cgefswfbxihzrpfrctowiyycyixg/Build/Products/Debug-iphoneos/Surge.framework"; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,7 +49,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8B545EFC1CCD4CEE004C27D2 /* AudioRecognitionLibrary.framework in Frameworks */,
+				8BC18DA41CCE8FB9003A665B /* AudioRecognitionLibrary.framework in Frameworks */,
+				8BC18DAA1CCE90AD003A665B /* Surge.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -66,7 +60,8 @@
 		8B9A85341CCA416F0070E94E = {
 			isa = PBXGroup;
 			children = (
-				8B545EFB1CCD4CEE004C27D2 /* AudioRecognitionLibrary.framework */,
+				8BC18DA91CCE90AD003A665B /* Surge.framework */,
+				8BC18DA31CCE8FB9003A665B /* AudioRecognitionLibrary.framework */,
 				8B9A853F1CCA416F0070E94E /* iOSApplication053 */,
 				8B9A853E1CCA416F0070E94E /* Products */,
 			);
@@ -103,8 +98,7 @@
 				8B9A85391CCA416F0070E94E /* Sources */,
 				8B9A853A1CCA416F0070E94E /* Frameworks */,
 				8B9A853B1CCA416F0070E94E /* Resources */,
-				8B9A85571CCA43200070E94E /* Embed Frameworks */,
-				8B967C271CCA5FC600C02A35 /* CopyFiles */,
+				8BC18DA51CCE8FDB003A665B /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -154,7 +148,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8B545EFD1CCD4D19004C27D2 /* AudioRecognitionLibrary.framework in Resources */,
 				8B9A854B1CCA416F0070E94E /* LaunchScreen.storyboard in Resources */,
 				8B9A85481CCA416F0070E94E /* Assets.xcassets in Resources */,
 				8B9A85461CCA416F0070E94E /* Main.storyboard in Resources */,

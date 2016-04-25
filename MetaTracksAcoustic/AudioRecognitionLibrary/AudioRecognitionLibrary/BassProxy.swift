@@ -15,7 +15,8 @@ public class BassProxy{
         BASS_Init(-1, 44100, 0, nil, nil)
         print("BASS initialized.")
     }
-    public static func GetSamplesMono(filename: String, sampleRate: Int) -> Array<Double>{
+    public static func GetSamplesMono(filename: String, sampleRate: Int) -> Array<Float>{
+        var samples:[Float] = []
         var totalMilliseconds = Int.max
         var data: Array<Float>
         var flags = UInt32(BASS_STREAM_DECODE | BASS_SAMPLE_MONO | BASS_SAMPLE_FLOAT)
@@ -46,21 +47,16 @@ public class BassProxy{
                     var newBytes:Float = Float(bytesToRead)
                     size += newBytes / 4
                 }
-                    //data.capacity = size
-                
-                
                 var cursor = 0
                 for var i = 0; i < chunks.count; i++ {
                     var chunk = chunks[i]
-                    // Array.Copy om nødvendig
                     // cursor += chunk.Length
                 }
+                samples = chunks
             }
             BASS_StreamFree(mixerStream)
             BASS_StreamFree(bassStream)
-            //TODO: return data
-            print(size)
-            return [10.0]
+            return samples
         }
         print("nil")
         return [0.0]

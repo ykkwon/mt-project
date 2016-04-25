@@ -23,6 +23,7 @@
 		8B99A0511CCB9765001B2F32 /* Fourier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B99A0501CCB9765001B2F32 /* Fourier.swift */; };
 		8B9A85321CCA408D0070E94E /* bass.h in Headers */ = {isa = PBXBuildFile; fileRef = 8B9A85301CCA408D0070E94E /* bass.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8B9A85331CCA408D0070E94E /* libbass.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B9A85311CCA408D0070E94E /* libbass.a */; };
+		8BC18DA81CCE904E003A665B /* Surge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BC18DA71CCE904E003A665B /* Surge.framework */; };
 		8BE103211CCA56F700B3F3C2 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8B50B29A1CCA07800019F8A7 /* Info.plist */; };
 		8BE103231CCA582300B3F3C2 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BE103221CCA582300B3F3C2 /* Accelerate.framework */; };
 		8BE103251CCA582F00B3F3C2 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BE103241CCA582F00B3F3C2 /* AudioToolbox.framework */; };
@@ -62,6 +63,7 @@
 		8B99A0501CCB9765001B2F32 /* Fourier.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fourier.swift; sourceTree = "<group>"; };
 		8B9A85301CCA408D0070E94E /* bass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bass.h; sourceTree = "<group>"; };
 		8B9A85311CCA408D0070E94E /* libbass.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbass.a; sourceTree = "<group>"; };
+		8BC18DA71CCE904E003A665B /* Surge.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Surge.framework; path = "../../../../Library/Developer/Xcode/DerivedData/MetaTracksAcoustic-cgefswfbxihzrpfrctowiyycyixg/Build/Products/Debug-iphoneos/Surge.framework"; sourceTree = "<group>"; };
 		8BE103221CCA582300B3F3C2 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		8BE103241CCA582F00B3F3C2 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		8BE103261CCA583600B3F3C2 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
@@ -74,6 +76,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8BC18DA81CCE904E003A665B /* Surge.framework in Frameworks */,
 				8BE103291CCA583B00B3F3C2 /* CFNetwork.framework in Frameworks */,
 				8B967C301CCA657600C02A35 /* libbassmix.a in Frameworks */,
 				8BE103271CCA583600B3F3C2 /* SystemConfiguration.framework in Frameworks */,
@@ -89,6 +92,7 @@
 		8B50B28B1CCA07800019F8A7 = {
 			isa = PBXGroup;
 			children = (
+				8BC18DA71CCE904E003A665B /* Surge.framework */,
 				8BE103281CCA583B00B3F3C2 /* CFNetwork.framework */,
 				8BE103261CCA583600B3F3C2 /* SystemConfiguration.framework */,
 				8BE103241CCA582F00B3F3C2 /* AudioToolbox.framework */,
@@ -218,6 +222,7 @@
 				8B967C341CCA7BA600C02A35 /* Complex.swift in Sources */,
 				8B967C361CCA811A00C02A35 /* FourierDirection.swift in Sources */,
 				8B99A0511CCB9765001B2F32 /* Fourier.swift in Sources */,
+				6BEFF543923B7E42EC9BD497 /* FingerprintManager.swift in Sources */,
 				8B50B2A51CCA08170019F8A7 /* BassProxy.swift in Sources */,
 				8B99A04F1CCB95E9001B2F32 /* ComplexF.swift in Sources */,
 				6BEFF10D6C5AC8BE1FBFB369 /* HanningWindow.swift in Sources */,
@@ -225,7 +230,6 @@
 				6BEFFC16829054C1239EFFB3 /* HaarWavelet.swift in Sources */,
 				6BEFF925AE7F46D9EDAA66B0 /* MinHash.swift in Sources */,
 				6BEFF0ED23D803B0727412E4 /* Fingerprint.swift in Sources */,
-				6BEFF543923B7E42EC9BD497 /* FingerprintManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -339,6 +343,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/AudioRecognitionLibrary",
 				);
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "$(inherited)";
 				"OTHER_LDFLAGS[arch=*]" = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = mt.metatracks.AudioRecognitionLibrary;
@@ -346,6 +351,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -365,12 +371,14 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/AudioRecognitionLibrary",
 				);
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "$(inherited)";
 				"OTHER_LDFLAGS[arch=*]" = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = mt.metatracks.AudioRecognitionLibrary;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};

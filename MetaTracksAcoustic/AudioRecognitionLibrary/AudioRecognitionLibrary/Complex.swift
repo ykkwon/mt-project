@@ -8,9 +8,9 @@
 
 import Foundation
 
-public struct Complex{
-    var Re = 0.0
-    var Im = 0.0
+public struct Complex {
+    var Re:Double = Double()
+    var Im:Double = Double()
     
     init(Real: Double, Imaginary: Double){
         Re = Real
@@ -37,19 +37,20 @@ public struct Complex{
     }
     
     public func Clone() -> Complex{
-        var c = Complex(Real: self.Re, Imaginary: self.Im)
+        let c = Complex(Real: self.Re, Imaginary: self.Im)
         return c
     }
     
     public func GetModulus() -> Double{
-        var x = Double(Re)
-        var y = Double(Im)
+        let x = Double(Re)
+        let y = Double(Im)
         return sqrt(x * x + y * y)
     }
     
-    //public func /* override */ GetHashCode() -> Int{
-        // return Re.GetHashCode ^ Im.GetHashcode
-    //}
+    // TODO: Different implementations?
+    public func GetHashCode() -> Int{
+        return Re.hashValue ^ Im.hashValue
+    }
     
     
     public func CompareTo(o: AnyObject) -> Int{
@@ -57,7 +58,9 @@ public struct Complex{
             return 1
         }
         if ((o as? Complex) != nil) {
-            //return GetModulus().CompareTo((Complex)o).GetModulus
+            
+            
+            //return GetModulus() o.GetModulus()
         }
         if ((o as? Double) != nil) {
             //return GetModulus.CompareTo((double)o)
@@ -79,12 +82,4 @@ public struct Complex{
         let timeString = String(format: "%02d:%02d", Re, Im)
         return timeString
     }
-    
-    
-    
-    
-    
 }
-
-
-
