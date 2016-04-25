@@ -8,14 +8,14 @@
       <sourceFolder url="file://$MODULE_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/DefaultPermutations.swift" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/HaarWavelet.swift" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/Info.plist" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/MinHash.swift" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/FingerprintManager.swift" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/HanningWindow.swift" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/Fourier.swift" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/libbassmix.a" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/AudioRecognitionLibrary.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/bassmix.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/ComplexF.swift" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/HanningWindow.swift" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/MinHash.swift" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/Fingerprint.swift" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/libbass.a" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/bass.h" isTestSource="false" />

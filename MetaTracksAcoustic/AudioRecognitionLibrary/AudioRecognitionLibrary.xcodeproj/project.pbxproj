@@ -28,6 +28,7 @@
 		8BE103251CCA582F00B3F3C2 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BE103241CCA582F00B3F3C2 /* AudioToolbox.framework */; };
 		8BE103271CCA583600B3F3C2 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BE103261CCA583600B3F3C2 /* SystemConfiguration.framework */; };
 		8BE103291CCA583B00B3F3C2 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BE103281CCA583B00B3F3C2 /* CFNetwork.framework */; };
+		8BFB96DD1CCE3D400065988C /* RecordManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFB96DC1CCE3D400065988C /* RecordManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -65,6 +66,7 @@
 		8BE103241CCA582F00B3F3C2 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		8BE103261CCA583600B3F3C2 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		8BE103281CCA583B00B3F3C2 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		8BFB96DC1CCE3D400065988C /* RecordManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,6 +126,7 @@
 				6BEFF62B97885805292E87A0 /* MinHash.swift */,
 				6BEFF26CEA588B5CC2BBAD4F /* Fingerprint.swift */,
 				6BEFFC666F04C2707CF35C6F /* FingerprintManager.swift */,
+				8BFB96DC1CCE3D400065988C /* RecordManager.swift */,
 			);
 			path = AudioRecognitionLibrary;
 			sourceTree = "<group>";
@@ -211,6 +214,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8BFB96DD1CCE3D400065988C /* RecordManager.swift in Sources */,
 				8B967C341CCA7BA600C02A35 /* Complex.swift in Sources */,
 				8B967C361CCA811A00C02A35 /* FourierDirection.swift in Sources */,
 				8B99A0511CCB9765001B2F32 /* Fourier.swift in Sources */,
