@@ -19,6 +19,7 @@ public class MinHash {
     }
 
     public func ComputeMinHashSignatureByte(fingerprint: [Bool]) -> [UInt8] {
+        // Should work
         var signature:[Bool] = fingerprint
         var perms:[[Int]] = []
         var minHash:[UInt8] = []
@@ -36,6 +37,7 @@ public class MinHash {
     }
 
     public func GroupMinHashToLshBucketsByte(minHashes: [UInt8], numberOfHashTables: Int, numberOfMinHashesPerKey: Int) -> NSDictionary{
+        // Should work
         var result:NSDictionary = NSDictionary()
         let maxNumber = 8
         for (var i = 0; i < numberOfHashTables; i++){

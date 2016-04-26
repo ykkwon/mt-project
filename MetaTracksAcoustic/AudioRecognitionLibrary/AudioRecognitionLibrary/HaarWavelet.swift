@@ -5,13 +5,9 @@
 
 import Foundation
 
-class HaarWavelet {
+public class HaarWavelet {
 
-    public func TransformImage(array: [[Float]]){
-        //Transform(array)
-    }
-
-    private static func Transform(var array: [Float]){
+    public static func Transform(var array: [Float]){
         var haar = array.count
         for(var i = 0; i < haar; i++) {
             array[i] /= Float(sqrt(Float(haar)))
@@ -32,7 +28,24 @@ class HaarWavelet {
             }
         }
     }
-    private static func Transform(var array: [[Float]]){
-        // TODO: This one is not working
+    public static func Transform(var array: [[Float]]){
+        var rowWidth: Int = array.count
+        var columnHeight: Int = array.count
+        for var row = 0; row < rowWidth; row++ {
+            Transform(array[row])
+        }
+        for (var col = 0; col < columnHeight; col++) {
+            var column = [Double](count: rowWidth, repeatedValue: 0.0)
+            for (var row = 0; row < rowWidth; row++) {
+                column.append(Double(row)) //TODO: possible bug
+            
+                
+                // TODO: Transform(column)
+            
+            for var row = 0; row < rowWidth; row++ {
+                //TODO: array.append(column[[Double(row)]])
+            }
+        }
     }
+}
 }
