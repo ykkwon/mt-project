@@ -4,6 +4,7 @@
 //
 
 import Foundation
+import Surge
 
 public class HanningWindow {
     public func WindowInPlace(var outerspace: [Float], length: Int) {
@@ -15,7 +16,10 @@ public class HanningWindow {
     }
 
     public func WindowInPlace(var outerspace: [Complex], length: Int) {
-        // TODO: Gives a compiler segfault for some reason
+        var internalOuterspace = outerspace
+        for (var i = 0, n = length; i < n; i++) {
+            //outerspace[i] = mul(0.5, (1 - cos(2*M_PI * i / (n-1))))
+        }
 
     }
 

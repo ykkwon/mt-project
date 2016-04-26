@@ -68,9 +68,6 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         print(BASSVERSION);
         super.viewDidLoad()
         BassProxy.Initialize()
-    
-        BassProxy.GetSamplesMono("test", sampleRate : 44100)
-        
     }
 
     func moviePickerButtonAction(sender:UIButton!){
@@ -119,10 +116,8 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
     }
     
     func recordButtonAction(sender:UIButton!){
-        for(var i = 0; i <= 1000; i += 1){
-            RecordManager.PrepareAudioRecording(i)
-            RecordManager.Record()
-            }
+            let manager : RecordManager = RecordManager()
+            manager.record()
     }
     
     func stopButtonAction(sender:UIButton!){

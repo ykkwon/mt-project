@@ -6,17 +6,17 @@
       <sourceFolder url="file://$MODULE_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/Complex.swift" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/BassProxy.swift" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/DefaultPermutations.swift" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/HaarWavelet.swift" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/RecordManager.swift" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/Info.plist" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/MinHash.swift" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/libbassmix.a" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/FingerprintManager.swift" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/Fourier.swift" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/libbassmix.a" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/HaarWavelet.swift" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/AudioRecognitionLibrary.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/bassmix.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/ComplexF.swift" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/HanningWindow.swift" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/MinHash.swift" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/Fingerprint.swift" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/libbass.a" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/bass.h" isTestSource="false" />
@@ -28,22 +28,22 @@
       <sourceFolder url="file://$MODULE_DIR$/Surge/Tests/HyperbolicTests.swift" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Surge/Tests/ExponentialTests.swift" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Surge/Tests/ArithmeticTests.swift" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Surge/Tests/MatrixTests.swift" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Surge/Tests/ConvolutionTests.swift" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Surge/Tests/XCTestCase+Surge.swift" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Surge/Tests/TrigonometricTests.swift" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Surge/Tests/Info.plist" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Surge/Tests/SurgeTests-Bridging-Header.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Surge/Tests/MatrixTests.swift" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Surge/Tests/TrigonometricTests.swift" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Surge/Tests/XCTestCase+Surge.swift" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Surge/Tests/Info.plist" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Surge/Tests/PowerTests.swift" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Surge/Surge/Supporting Files/Info.plist" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Surge/Source/Hyperbolic.swift" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Surge/Source/Matrix.swift" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Surge/Source/Convolution.swift" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Surge/Source/Auxiliary.swift" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Surge/Source/Trigonometric.swift" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Surge/Source/FFT.swift" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Surge/Source/Auxiliary.swift" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Surge/Source/Hyperbolic.swift" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Surge/Source/Convolution.swift" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Surge/Source/Exponential.swift" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Surge/Source/Surge.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Surge/Source/Trigonometric.swift" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Surge/Source/Matrix.swift" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Surge/Source/Arithmetic.swift" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Surge/Source/Power.swift" isTestSource="false" />
     </content>

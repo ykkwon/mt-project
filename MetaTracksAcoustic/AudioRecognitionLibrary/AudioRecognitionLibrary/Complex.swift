@@ -17,6 +17,8 @@ public struct Complex {
         Im = Imaginary
     }
     
+    
+    
     //init(Complex c){
     // Re = c.Re
     // Im = c.Im
