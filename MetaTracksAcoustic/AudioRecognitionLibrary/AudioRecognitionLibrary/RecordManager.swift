@@ -2,7 +2,8 @@ import UIKit
 import AVFoundation
 
 public class RecordManager {
-    
+    var movie:[HashedFingerprint] = []
+    var storedFingerprints:[HashedFingerprint] = []
     var audioPlayer : AVAudioPlayer?
     var audioRecorder : AVAudioRecorder?
     let baseString : String = NSTemporaryDirectory()
@@ -36,14 +37,29 @@ public class RecordManager {
     public func record(){
         var iterator = 0
         while(true){
-            var t = setRecorder(iterator)
+            do{
+            var filePath = setRecorder(iterator)
             audioRecorder?.record()
             sleep(3)
             audioRecorder?.stop()
-            iterator++
-            var u = FingerprintManager.CreateSpectrogram(t, milliseconds: 0, startMilliseconds: 0)
-            var v = FingerprintManager.ExtractLogBins(u)
-            var w = FingerprintManager.NormalizeInPlace(v)
+            let monoArray = try BassProxy.GetSamplesMono(filePath, sampleRate: 5512)
+            var preliminaryFingerprints = FingerprintManager.CreateFingerprints(monoArray)
+            var test = FingerprintManager.GetFingerHashes(preliminaryFingerprints)
+            var result = FingerprintManager.CompareFingerprintListsHighest(movie, toCompare: storedFingerprints)
+            }catch (_) {
+                
+            }
+        
+        
+            
+            
+            
+            ///var u = FingerprintManager.CreateSpectrogram(t, milliseconds: 0, startMilliseconds: 0)
+            ///var v = FingerprintManager.ExtractLogBins(u)
+            ///var w = FingerprintManager.NormalizeInPlace(v)
+            
+            
+            
             print("Everything is good.")
             }
         }

@@ -23,13 +23,12 @@ public class HanningWindow {
 
     }
 
-    // TODO: Fix this
-    public func GetWindow(length: Int) /*-> [Double]*/ {
-        var array = [Double?](count: length, repeatedValue: nil)
+    public func GetWindow(length: Int) -> [Double] {
+        var array = [Double](count: length, repeatedValue: 0.0)
         for(var i = 0; i < length; i++){
-            //array[i] = 0.5 * (1-cos(2 * M_PI * i / (length - 1))
+            array[i] = 0.5 * (1 - cos(2 * M_PI * Double(i) / (Double(length) - 1)))
         }
-        //return array
+        return array
     }
 }
 

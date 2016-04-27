@@ -9,12 +9,10 @@ import Surge
 public var FingerprintWidth:Int = 128
 public var lshTableSize:Int = 33
 public var lshKey:Int = 3
-public var spacedLogFreq:[Int] = []
-public var windowArray:[Double] = []
-public  var WindowFunction:HanningWindow = HanningWindow()
+public var WindowFunction:HanningWindow = HanningWindow()
 public var Stride:Int = -(Overlap * FingerprintWidth) + 1024
 public var LogBins:Int = 32
-public var Overlap:Int = 128
+public var Overlap:Int = 64
 public var WindowSize:Int = 2048
 public var MinFrequency:Int = 318
 public var MaxFrequency:Int = 2000
@@ -38,25 +36,39 @@ public class FingerprintManager {
     return [0.0]
     }
 }
-    public static func ExtractLogBins(spectrum: [Float]) -> [Float]{
-        for(var i = 0; i <= LogBins + 1; i++){
-            spacedLogFreq.append(0)
-        }
-        var logBins:Int = LogBins
-        var totalFreq:[Float] = []
-        for(var i = 0; i < logBins; i++){
-            totalFreq.append(0.0)
-        }
-        for(var j = 0; j <= logBins; j++){
-            var low = spacedLogFreq[j]
-            var high = spacedLogFreq[j + 1]
+    
+    public static func GetLogSpacedFrequencies(minFrequencies: Int, maxFrequencies: Int, fftSize: Int) -> [Int]{
+        var logMin = log(Double(minFrequencies))
+        var logMax = log(Double(maxFrequencies))
+        var delta = (logMax - logMin) / Double(LogBins)
+        var indexes:[Int] = [Int](count: LogBins+1, repeatedValue: 0)
+        var accDelta:Double = 0
+        
+        for(var index0 = 0; index0 <= LogBins; index0++){
+            var freq = pow(LogBase, logMin+accDelta)
+            accDelta += delta
             
-            for(var k = low; k < high; k++){
-                var re:Float = spectrum[2 * k]
-                var img:Float = spectrum[2 * k + 1]
-                totalFreq[j] += sqrt(re*re + img*img)
+            var chunk = freq/(Double(SampleRate/2))
+            indexes[index0] = Int(round((Double(fftSize/2 + 1)*chunk)))
+        }
+        return indexes
+    }
+    
+    public static func ExtractLogBins(spectrum: [Float]) -> [Float]{
+        var spacedLogFreq = GetLogSpacedFrequencies(MinFrequency, maxFrequencies: MaxFrequency, fftSize: WindowSize)
+        var logBins:Int = LogBins
+        var totalFreq:[Float] = [Float](count: logBins, repeatedValue: 0.0)
+        
+        for(var index = 0; index < logBins; index++){
+            var low = spacedLogFreq[index]
+            var high = spacedLogFreq[index+1]
+            
+            for(var index2 = low; index2 < high; index2++){
+                var re = spectrum[2*index2];
+                var img = spectrum[(2*index2)+1];
+                totalFreq[index] += Float(sqrt(re*re + img*img))
             }
-            totalFreq[j] = totalFreq[j]/Float((high-low))
+            totalFreq[index] = (totalFreq[index] / Float((high-low)))
         }
         return totalFreq
     }
@@ -87,24 +99,26 @@ public class FingerprintManager {
             internalSamples = samples
         }
     }
-
+    public static func CreateFingerprints(monoArray: [Float]) -> [Fingerprint] {
+        var spectrum = CreateLogSpectrogram(monoArray)
+        return CreateFingerprints(spectrum)
+    }
+    
     public static func CreateLogSpectrogram(samples: [Float]) -> [[Float]]{
+        
         NormalizeInPlace(samples)
         var overlap = Overlap
         var windowSize = WindowSize
+        var windowArray = WindowFunction.GetWindow(windowSize)
         var width = (samples.count - windowSize) / overlap
 
-        var frames:[[Float]] = [[Float]]() //creates an empty matrix
-        var framesRow = [Float]() //fill this row
-        frames.append(framesRow) //add this row
-        var fftSamples:[Float] = [Float]()
-        var fftRow = [Float]()
-        frames.append(fftRow*2)
+        var frames:[[Float]] = [[Float]](count:width, repeatedValue:[Float](count:0, repeatedValue:0.0))
+        var fftSamples:[Float] = [Float](count:2*windowSize, repeatedValue:0.0)
+        
         for(var widthIndex = 0; widthIndex < width; widthIndex++){
+            
             for(var windowIndex = 0; windowIndex < windowSize; windowIndex++){
-                var o = fftSamples[2*windowIndex]
-                var ot = samples[widthIndex * overlap + windowIndex]
-                o = Float(windowArray[windowIndex]) * ot
+                fftSamples[2*windowIndex] = (Float(windowArray[windowIndex]) * samples[widthIndex * overlap + windowIndex])
                 fftSamples[2*windowIndex + 1] = 0
             }
             fft(fftSamples) // TODO: Possibly incomplete
@@ -122,34 +136,55 @@ public class FingerprintManager {
         var sampleRate = SampleRate
         var sequenceNr = 0
         var fingerPrints:[Fingerprint] = []
-        var length = spectrogram.count
-        var frames = spectrogram
-        HaarWavelet.Transform(frames)
-        var image = ExtractTopWavelets(frames)
-        var fp:Fingerprint = Fingerprint(sequenceNumber: sequenceNr++, signature: image, timeStamp: Double(start)*Double(overlap/sampleRate))
-        fingerPrints.append(fp)
-        start += fingerprintWidth + (Stride/overlap)
-        return fingerPrints
         
-    
-    }
-    
-    public static func ExtractTopWavelets(frames: [[Float]]) -> Bool{
-        // TODO: Broken afaik
-        var topWavelets = TopWavelets
-        var width = frames.count // 128
-        var height = frames.count // TODO: Should be 32, is not. Gotta figure out multi-dimensional arrays.
-        var result:[Bool] = []
-        for(var i = 0; i < topWavelets; i++){
-            var value = frames[i]
-            //if(value > 0){
+        
+        var length = spectrogram.count
+        while start + fingerprintWidth <= length {
+            var frames:[[Float]] = [[Float]](count:fingerprintHeight, repeatedValue:[Float](count:0, repeatedValue:0.0))
+            for(var index = 0; index < fingerprintWidth; index++){
+                frames[index] = [Float](count: fingerprintWidth, repeatedValue: 0.0)
+                frames.append(spectrogram[start+index])
+            }
+                HaarWavelet.Transform(frames)
+                var image = ExtractTopWavelets(frames)
+                var fp:Fingerprint = Fingerprint(sequenceNumber: sequenceNr++, signature: image[length], timeStamp: Double(start)*Double(overlap/sampleRate))
+                fingerPrints.append(fp)
+                start += fingerprintWidth + (Stride/overlap)
                 
             }
-            //else if(value < 0){
-                
-        
-        return true
+    
+        return fingerPrints
     }
+    
+    public static func ExtractTopWavelets(frames: [[Float]]) -> [Bool]{
+        var topWavelets = TopWavelets
+        var width = 128
+        var height = 32 // TODO: Should be 32, is not. Gotta go figure out multi-dimensional arrays.
+        var concatenated:[Float] = [Float](count: width*height, repeatedValue: 0.0)
+        
+        
+        for (var i = 0; i < width; i++)
+        {
+            for (var j = 0; j < height; j++)
+            {
+                concatenated.append(frames[i][j])
+            }
+            
+        
+        }
+        var result:[Bool] = [Bool](count: concatenated.count*2, repeatedValue: true)
+            for (var i = 0; i < topWavelets; i++)
+            {
+                var value = concatenated[i];
+                if (value > 0){ /*positive wavelet*/
+                result[i*2] = true;
+                }
+                else if (value < 0){ /*negative wavelet*/
+                result[i*2 + 1] = true;
+                }
+            }
+            return result;
+        }
     
     public static func funcEncodeFingerprint(concatenated: [Float], indexes: [Int], topWavelets: Int) -> [Bool]{
         var results:[Bool] = []

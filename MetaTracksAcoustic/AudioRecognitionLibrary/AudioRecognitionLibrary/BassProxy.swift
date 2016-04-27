@@ -16,9 +16,9 @@ public class BassProxy{
         print("BASS initialized.")
     }
     public static func GetSamplesMono(filename: NSURL!, sampleRate: Int) throws -> Array<Float>{
+        var totalMilliseconds = Int.max
         var samples:[Float] = []
         var newPath = filename.relativePath!
-        var totalMilliseconds = Int.max
         var data: Array<Float>
         var flags = UInt32(BASS_STREAM_DECODE | BASS_SAMPLE_MONO | BASS_SAMPLE_FLOAT)
         var bassStream:HSTREAM = BASS_StreamCreateFile(false, String(newPath), 0, 0, flags)
@@ -48,18 +48,17 @@ public class BassProxy{
                 }
                 else{
                     var chunkInt:Int = Int(bytesToRead)
-                    var chunk = [Float]()
+                    var chunk = [Float](count: Int(bytesToRead)/4, repeatedValue: 0.0)
                     chunk = buffer
                     chunks.appendContentsOf(chunk)
                     var newBytes:Float = Float(bytesToRead)
                     size += newBytes / 4
                 }
-                var cursor = 0
-                for var i = 0; i < chunks.count; i++ {
+
+                for var i = 0; i < Int(size); i++ {
                     var chunk = chunks[i]
-                    // cursor += chunk.Length
+                    samples.append(chunk)
                 }
-                samples = chunks
             }
             BASS_StreamFree(mixerStream)
             BASS_StreamFree(bassStream)
@@ -68,6 +67,7 @@ public class BassProxy{
         print("nil")
         return [0.0]
     }
+    
     public static func Dispose(){
         // TODO: Trenge vi dinne?
     }

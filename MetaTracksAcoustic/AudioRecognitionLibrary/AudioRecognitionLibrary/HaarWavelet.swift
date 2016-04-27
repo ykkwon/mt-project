@@ -29,23 +29,21 @@ public class HaarWavelet {
         }
     }
     public static func Transform(var array: [[Float]]){
-        var rowWidth: Int = array.count
-        var columnHeight: Int = array.count
+        var rowWidth: Int = 128
+        var columnHeight: Int = 32
         for var row = 0; row < rowWidth; row++ {
             Transform(array[row])
         }
         for (var col = 0; col < columnHeight; col++) {
-            var column = [Double](count: rowWidth, repeatedValue: 0.0)
+            var column = [Float](count: rowWidth, repeatedValue: 0.0)
             for (var row = 0; row < rowWidth; row++) {
-                column.append(Double(row)) //TODO: possible bug
-            
+                column.append(Float(row)) //TODO: possible bug
+            }
+                Transform(column)
                 
-                // TODO: Transform(column)
-            
-            for var row = 0; row < rowWidth; row++ {
-                //TODO: array.append(column[[Double(row)]])
+            for (var row = 0; row < rowWidth; row++) {
+                array[row][col] = column[row];
             }
         }
     }
-}
 }
