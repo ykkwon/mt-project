@@ -203,9 +203,10 @@ public class FingerprintManager {
     }
     
     public static func GetFingerHashes(listdb: [Fingerprint]) -> [HashedFingerprint]{
+        var listDb = listdb
         var minHash:MinHash = MinHash()
-        var minhashdb:[BYTE] = [] // TODO: rewrite
-        var lshbuckets:[CLong] = []
+        var minhashdb:[HashedFingerprint] = [] // TODO: rewrite
+        var lshbuckets:[u_long] = []
         
         var hashedFinger:[HashedFingerprint] = []
         for(var index = 0; index < listdb.count; index++){ // TODO fix this
@@ -235,12 +236,10 @@ public class FingerprintManager {
             searchFieldSize *= 4
         }
         var seconds = searchFieldSize
-        var plusTime:Double = 0
-        var minusTime:Double = 0
-        // TODO var plusTime = min(timestamps)
-        // TODO var minusTime = min(0. . .)
+        var plusTime = min(Int(timestamps.last!), Int(lastTime) + seconds)
+        var minusTime = max(0, Int(lastTime) - seconds)
         for(var i = 0; i < timestamps.count; i++){
-            if timestamps[i] < plusTime && timestamps[i] >= minusTime {
+            if timestamps[i] < Double(plusTime) && timestamps[i] >= Double(minusTime) {
                 matchingIndexes.append(i)
             }
             var currentList:[HashedFingerprint] = []
