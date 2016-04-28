@@ -6,11 +6,11 @@
 import Foundation
 
 public class Fingerprint {
-    var Signature:Bool = true
+    var Signature:[Bool] = [true]
     var SequenceNumber:Int = 0
     var Timestamp:Double = 0
     
-    public init(sequenceNumber: Int, signature: Bool, timeStamp: Double){
+    public init(sequenceNumber: Int, signature: [Bool], timeStamp: Double){
     }
 }
 

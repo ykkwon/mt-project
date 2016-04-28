@@ -68,7 +68,7 @@ public class FingerprintManager {
                 var img = spectrum[(2*index2)+1];
                 totalFreq[index] += Float(sqrt(re*re + img*img))
             }
-            totalFreq[index] = (totalFreq[index] / Float((high-low)))
+            totalFreq[index] = (totalFreq[index] / Float((high-low)) * (1000))
         }
         return totalFreq
     }
@@ -124,6 +124,7 @@ public class FingerprintManager {
             fft(fftSamples) // TODO: Possibly incomplete
             frames[widthIndex] = ExtractLogBins(fftSamples)
         }
+        
         return frames
     }
     
@@ -147,11 +148,11 @@ public class FingerprintManager {
             }
                 HaarWavelet.Transform(frames)
                 var image = ExtractTopWavelets(frames)
-                var fp:Fingerprint = Fingerprint(sequenceNumber: sequenceNr++, signature: image[length], timeStamp: Double(start)*Double(overlap/sampleRate))
-                fingerPrints.append(fp)
-                start += fingerprintWidth + (Stride/overlap)
+                fingerPrints.append(Fingerprint(sequenceNumber: sequenceNr++, signature: image, timeStamp: Double(start)*Double(overlap/sampleRate)))
+              start += fingerprintWidth + (Stride/overlap)
                 
             }
+      
     
         return fingerPrints
     }
@@ -172,6 +173,7 @@ public class FingerprintManager {
             
         
         }
+
         var result:[Bool] = [Bool](count: concatenated.count*2, repeatedValue: true)
             for (var i = 0; i < topWavelets; i++)
             {
@@ -205,7 +207,12 @@ public class FingerprintManager {
     public static func GetFingerHashes(listdb: [Fingerprint]) -> [HashedFingerprint]{
         var listDb = listdb
         var minHash:MinHash = MinHash()
-        var minhashdb:[HashedFingerprint] = [] // TODO: rewrite
+        var minhashdb:[BYTE] = []
+        
+        for fingerprint in listDb {
+          //  var fing:Fingerprint = Fingerprint()
+        }
+
         var lshbuckets:[u_long] = []
         
         var hashedFinger:[HashedFingerprint] = []
@@ -215,6 +222,8 @@ public class FingerprintManager {
         }
         return hashedFinger
     }
+    
+
     
     
     public static func CompareFingerprintListsHighest(fingerprints: [HashedFingerprint], toCompare: [HashedFingerprint]) -> Double {
