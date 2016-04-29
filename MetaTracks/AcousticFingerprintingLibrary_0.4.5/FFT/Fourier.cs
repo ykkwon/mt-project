@@ -242,8 +242,6 @@ namespace AcousticFingerprintingLibrary_0._4._5.FFT
                 int level = (int)Math.Ceiling(Math.Log(length, 2));
                 InitializeReverseBits(level);
                 InitializeComplexRotations(level);
-                //_cFFTData	= new Complex[ Math2.CeilingBase( length, 2 ) ];
-                //_cFFTDataF	= new ComplexF[ Math2.CeilingBase( length, 2 ) ];
                 _lookupTabletLength = length;
             }
         }
@@ -251,8 +249,6 @@ namespace AcousticFingerprintingLibrary_0._4._5.FFT
         private static void InitializeComplexRotations(int levels)
         {
             int ln = levels;
-            //_wRLookup = new float[ levels + 1, 2 ];
-            //_wILookup = new float[ levels + 1, 2 ];
 
             _uRLookup = new double[levels + 1, 2][];
             _uILookup = new double[levels + 1, 2][];
@@ -265,10 +261,6 @@ namespace AcousticFingerprintingLibrary_0._4._5.FFT
             {
                 int M = N;
                 N <<= 1;
-
-                //float scale = (float)( 1 / Math.Sqrt( 1 << ln ) );
-
-                // positive sign ( i.e. [M,0] )
                 {
                     double uR = 1;
                     double uI = 0;
@@ -315,15 +307,6 @@ namespace AcousticFingerprintingLibrary_0._4._5.FFT
             }
         }
 
-        //======================================================================================
-        //======================================================================================
-
-        /// <summary>
-        ///   Compute a 1D fast Fourier transform of a dataset of complex numbers (as pairs of float's).
-        /// </summary>
-        /// <param name = "data"></param>
-        /// <param name = "length"></param>
-        /// <param name = "direction"></param>
         public static void FFT(float[] data, int length, FourierDirection direction)
         {
             Debug.Assert(data != null);

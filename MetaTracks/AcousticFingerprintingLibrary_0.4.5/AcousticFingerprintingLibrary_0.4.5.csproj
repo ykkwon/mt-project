@@ -46,7 +46,6 @@
   <ItemGroup>
     <Compile Include="BassProxy.cs" />
     <Compile Include="FFT\Complex.cs" />
-    <Compile Include="FFT\ComplexF.cs" />
     <Compile Include="FFT\Fourier.cs" />
     <Compile Include="FFT\FourierDirection.cs" />
     <Compile Include="FFT\HanningWindow.cs" />
