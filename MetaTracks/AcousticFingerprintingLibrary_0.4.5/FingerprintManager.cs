@@ -662,11 +662,16 @@ namespace AcousticFingerprintingLibrary_0._4._5
         {
             var listDb = listdb;
             var minHash = new MinHash();
-            var minhashdb = listDb.Select(fing => minHash.ComputeMinHashSignatureByte(fing.Signature)).ToList();
-            var lshBuckets =
-                minhashdb.Select(
-                    fing => minHash.GroupMinHashToLshBucketsByte(fing, _lshTableSize, _lshKey).Values.ToArray())
-                    .ToList();
+            var minhashdb = new List<byte[]>();
+            foreach (Fingerprint fing in listDb)
+            {
+                minhashdb.Add(minHash.ComputeMinHashSignatureByte(fing.Signature));
+            }
+            var lshBuckets = new List<long[]>();
+            foreach (byte[] fing in minhashdb)
+            {
+                lshBuckets.Add(minHash.GroupMinHashToLshBucketsByte(fing, _lshTableSize, _lshKey).Values.ToArray());
+            }
 
             //List<HashedFingerprint> hashedFinger = new List<HashedFingerprint>();
             var hashedFinger = new HashedFingerprint[listDb.Count];
