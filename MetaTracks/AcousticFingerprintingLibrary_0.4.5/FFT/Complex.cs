@@ -3,18 +3,12 @@ using System.Runtime.InteropServices;
 
 namespace AcousticFingerprintingLibrary_0._4._5.FFT
 {
-    // Comments? Questions? Bugs? Tell Ben Houston at ben@exocortex.org
-    // Version: May 4, 2002
-
     /// <summary>
-    ///   <p>A double-precision complex number representation.</p>
+    ///   A double-precision complex number representation.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
     public struct Complex : IComparable
     {
-        //-----------------------------------------------------------------------------------
-        //-----------------------------------------------------------------------------------
-
         /// <summary>
         ///   The real component of the complex number
         /// </summary>
@@ -45,35 +39,6 @@ namespace AcousticFingerprintingLibrary_0._4._5.FFT
             return (Re.GetHashCode() ^ Im.GetHashCode());
         }
 
-        //-----------------------------------------------------------------------------------
-        //-----------------------------------------------------------------------------------
-
-        /// <summary>
-        ///   Compare to other complex numbers or real numbers
-        /// </summary>
-        /// <param name = "o"></param>
-        /// <returns></returns>
-        public int CompareTo(object o)
-        {
-            if (o == null)
-            {
-                return 1; // null sorts before current
-            }
-            if (o is Complex)
-            {
-                return GetModulus().CompareTo(((Complex)o).GetModulus());
-            }
-            if (o is double)
-            {
-                return GetModulus().CompareTo((double)o);
-            }
-            if (o is float)
-            {
-                return GetModulus().CompareTo((float)o);
-            }
-            throw new ArgumentException();
-        }
-
         public static Complex Multiplier(Complex a, double f)
         {
             a.Re = (a.Re * f);
@@ -81,7 +46,6 @@ namespace AcousticFingerprintingLibrary_0._4._5.FFT
             return a;
         }
         
-
         /// <summary>
         ///   Get the string representation
         /// </summary>
@@ -91,8 +55,9 @@ namespace AcousticFingerprintingLibrary_0._4._5.FFT
             return String.Format("( {0}, {1}i )", Re, Im);
         }
 
-        //----------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------
-        
+        public int CompareTo(object obj)
+        {
+            return 1;
+        }
     }
 }

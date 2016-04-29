@@ -3,7 +3,7 @@
 namespace AcousticFingerprintingLibrary_0._4._5.FFT
 {
     /// <summary>
-    ///   Hanning window function
+    /// Hanning window function
     /// </summary>
     public class HanningWindow
     {

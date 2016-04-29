@@ -3,7 +3,7 @@
 namespace AcousticFingerprintingLibrary_0._4._5.Hashing
 {
     /// <summary>
-    ///   Haar wavelet transformation algorithm
+    ///  Haar wavelet transformation algorithm
     /// </summary>
     public class HaarWavelet
     {

@@ -3,19 +3,13 @@ using System.Diagnostics;
 
 namespace AcousticFingerprintingLibrary_0._4._5.FFT
 {
-    // Comments? Questions? Bugs? Tell Ben Houston at ben@exocortex.org
-    // Version: May 4, 2002
-
     /// <summary>
-    ///   <p>Static functions for doing various Fourier Operations.</p>
+    ///   Static functions for doing various Fourier Operations.
     /// </summary>
     public class Fourier
     {
-        //======================================================================================
-
         private const int cMaxLength = 4096;
         private const int cMinLength = 1;
-
         private const int cMaxBits = 12;
         private const int cMinBits = 0;
         private static readonly int[][] _reversedBits = new int[cMaxBits][];
@@ -29,8 +23,6 @@ namespace AcousticFingerprintingLibrary_0._4._5.FFT
         private Fourier()
         {
         }
-
-        //======================================================================================
 
         private static void Swap(ref float a, ref float b)
         {
@@ -151,10 +143,6 @@ namespace AcousticFingerprintingLibrary_0._4._5.FFT
                     return 29;
                 return 30;
             }
-            //	since int is unsigned it can never be higher than 2,147,483,647
-            //	if( x <= 2147483648 )
-            //		return	31;	
-            //	return	32;	
             return 31;
         }
 
@@ -181,9 +169,7 @@ namespace AcousticFingerprintingLibrary_0._4._5.FFT
             }
             return _reversedBits[numberOfBits - 1];
         }
-
-        //-------------------------------------------------------------------------------------
-
+        
         private static void ReorderArray(float[] data)
         {
             Debug.Assert(data != null);
@@ -205,8 +191,6 @@ namespace AcousticFingerprintingLibrary_0._4._5.FFT
                 }
             }
         }
-
-        //======================================================================================
 
         private static int _ReverseBits(int bits, int n)
         {

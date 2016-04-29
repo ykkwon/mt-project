@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace AcousticFingerprintingLibrary_0._4._5.Hashing
 {
     /// <summary>
-    ///   Class for Min Hash algorithm implementation
+    ///  Class for Min Hash algorithm implementation
     /// </summary>
     public class MinHash
     {
