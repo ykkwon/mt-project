@@ -68,7 +68,7 @@ public class FingerprintManager {
                 var img = spectrum[(2*index2)+1];
                 totalFreq[index] += Float(sqrt(re*re + img*img))
             }
-            totalFreq[index] = (totalFreq[index] / Float((high-low)) * (1000))
+            totalFreq[index] = (totalFreq[index] / Float((high-low)))
         }
         return totalFreq
     }
@@ -118,9 +118,10 @@ public class FingerprintManager {
         for(var widthIndex = 0; widthIndex < width; widthIndex++){
             
             for(var windowIndex = 0; windowIndex < windowSize; windowIndex++){
-                fftSamples[2*windowIndex] = (Float(windowArray[windowIndex]) * samples[widthIndex * overlap + windowIndex])
+                fftSamples[2*windowIndex] = (Float(windowArray[windowIndex])*samples[widthIndex * overlap + windowIndex])
                 fftSamples[2*windowIndex + 1] = 0
             }
+            
             fft(fftSamples) // TODO: Possibly incomplete
             frames[widthIndex] = ExtractLogBins(fftSamples)
         }

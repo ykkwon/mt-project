@@ -92,13 +92,9 @@
 		8B50B28B1CCA07800019F8A7 = {
 			isa = PBXGroup;
 			children = (
-				8BC18DA71CCE904E003A665B /* Surge.framework */,
-				8BE103281CCA583B00B3F3C2 /* CFNetwork.framework */,
-				8BE103261CCA583600B3F3C2 /* SystemConfiguration.framework */,
-				8BE103241CCA582F00B3F3C2 /* AudioToolbox.framework */,
-				8BE103221CCA582300B3F3C2 /* Accelerate.framework */,
-				8B50B2971CCA07800019F8A7 /* AudioRecognitionLibrary */,
+				8B9B0CAC1CD25E2300448304 /* Frameworks */,
 				8B50B2961CCA07800019F8A7 /* Products */,
+				8B50B2971CCA07800019F8A7 /* AudioRecognitionLibrary */,
 			);
 			sourceTree = "<group>";
 		};
@@ -113,26 +109,78 @@
 		8B50B2971CCA07800019F8A7 /* AudioRecognitionLibrary */ = {
 			isa = PBXGroup;
 			children = (
-				8B967C311CCA693400C02A35 /* bassmix.h */,
-				8B967C2F1CCA657600C02A35 /* libbassmix.a */,
-				8B9A85301CCA408D0070E94E /* bass.h */,
-				8B9A85311CCA408D0070E94E /* libbass.a */,
-				8B50B2981CCA07800019F8A7 /* AudioRecognitionLibrary.h */,
-				8B50B29A1CCA07800019F8A7 /* Info.plist */,
+				8B9B0CAB1CD25DF900448304 /* Headers */,
+				8B9B0CAA1CD25DE800448304 /* Support files */,
+				8B9B0CA91CD25DAA00448304 /* Bass */,
+				8B9B0CA71CD25D2C00448304 /* Hashing */,
+				8B9B0CA61CD25D1E00448304 /* Fourier */,
 				8B50B2A41CCA08170019F8A7 /* BassProxy.swift */,
-				8B99A04E1CCB95E9001B2F32 /* ComplexF.swift */,
-				8B967C331CCA7BA600C02A35 /* Complex.swift */,
-				8B967C351CCA811A00C02A35 /* FourierDirection.swift */,
-				8B99A0501CCB9765001B2F32 /* Fourier.swift */,
-				6BEFF3BC7BD89637F6F02333 /* HanningWindow.swift */,
-				6BEFF08A20A7B8010834C82F /* DefaultPermutations.swift */,
-				6BEFFF8205D8B3D1DBC83FEA /* HaarWavelet.swift */,
-				6BEFF62B97885805292E87A0 /* MinHash.swift */,
 				6BEFF26CEA588B5CC2BBAD4F /* Fingerprint.swift */,
 				6BEFFC666F04C2707CF35C6F /* FingerprintManager.swift */,
 				8BFB96DC1CCE3D400065988C /* RecordManager.swift */,
 			);
 			path = AudioRecognitionLibrary;
+			sourceTree = "<group>";
+		};
+		8B9B0CA61CD25D1E00448304 /* Fourier */ = {
+			isa = PBXGroup;
+			children = (
+				6BEFF3BC7BD89637F6F02333 /* HanningWindow.swift */,
+				8B99A04E1CCB95E9001B2F32 /* ComplexF.swift */,
+				8B967C331CCA7BA600C02A35 /* Complex.swift */,
+				8B967C351CCA811A00C02A35 /* FourierDirection.swift */,
+				8B99A0501CCB9765001B2F32 /* Fourier.swift */,
+			);
+			name = Fourier;
+			sourceTree = "<group>";
+		};
+		8B9B0CA71CD25D2C00448304 /* Hashing */ = {
+			isa = PBXGroup;
+			children = (
+				6BEFF08A20A7B8010834C82F /* DefaultPermutations.swift */,
+				6BEFFF8205D8B3D1DBC83FEA /* HaarWavelet.swift */,
+				6BEFF62B97885805292E87A0 /* MinHash.swift */,
+			);
+			name = Hashing;
+			sourceTree = "<group>";
+		};
+		8B9B0CA91CD25DAA00448304 /* Bass */ = {
+			isa = PBXGroup;
+			children = (
+				8B967C2F1CCA657600C02A35 /* libbassmix.a */,
+				8B9A85311CCA408D0070E94E /* libbass.a */,
+			);
+			name = Bass;
+			sourceTree = "<group>";
+		};
+		8B9B0CAA1CD25DE800448304 /* Support files */ = {
+			isa = PBXGroup;
+			children = (
+				8B50B29A1CCA07800019F8A7 /* Info.plist */,
+			);
+			name = "Support files";
+			sourceTree = "<group>";
+		};
+		8B9B0CAB1CD25DF900448304 /* Headers */ = {
+			isa = PBXGroup;
+			children = (
+				8B50B2981CCA07800019F8A7 /* AudioRecognitionLibrary.h */,
+				8B967C311CCA693400C02A35 /* bassmix.h */,
+				8B9A85301CCA408D0070E94E /* bass.h */,
+			);
+			name = Headers;
+			sourceTree = "<group>";
+		};
+		8B9B0CAC1CD25E2300448304 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				8BC18DA71CCE904E003A665B /* Surge.framework */,
+				8BE103281CCA583B00B3F3C2 /* CFNetwork.framework */,
+				8BE103261CCA583600B3F3C2 /* SystemConfiguration.framework */,
+				8BE103241CCA582F00B3F3C2 /* AudioToolbox.framework */,
+				8BE103221CCA582300B3F3C2 /* Accelerate.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
