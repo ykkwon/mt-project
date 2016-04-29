@@ -97,37 +97,12 @@ namespace AcousticFingerprintingLibrary_0._4._5
         }
 
         /// <summary>
-        ///   Dispose the resources
-        /// </summary>
-        /// <param name = "isDisposing">If value is disposing</param>
-        protected virtual void Dispose(bool isDisposing)
-        {
-            if (!_alreadyDisposed)
-            {
-                if (!isDisposing)
-                {
-                    //release managed resources
-                }
-                // Bass.BASS_Free();
-            }
-        }
-
-        /// <summary>
         ///   Dispose the unmanaged resource. Free bass.dll.
         /// </summary>
         public void Dispose()
         {
-            Dispose(false);
             _alreadyDisposed = true;
             GC.SuppressFinalize(this);
-        }
-
-        /// <summary>
-        ///   Finalizer
-        /// </summary>
-        ~BassProxy()
-        {
-            Dispose(true);
         }
     }
 }
