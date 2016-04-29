@@ -67,10 +67,6 @@ namespace AcousticFingerprintingLibrary_0._4._5.FFT
             {
                 return GetModulus().CompareTo((double)o);
             }
-            if (o is ComplexF)
-            {
-                return GetModulus().CompareTo(((ComplexF)o).GetModulus());
-            }
             if (o is float)
             {
                 return GetModulus().CompareTo((float)o);
@@ -78,14 +74,7 @@ namespace AcousticFingerprintingLibrary_0._4._5.FFT
             throw new ArgumentException();
         }
 
-        
-        /// <summary>
-        ///   Multiply a complex number by a real
-        /// </summary>
-        /// <param name = "a"></param>
-        /// <param name = "f"></param>
-        /// <returns></returns>
-        public static Complex operator *(Complex a, double f)
+        public static Complex Multiplier(Complex a, double f)
         {
             a.Re = (a.Re * f);
             a.Im = (a.Im * f);

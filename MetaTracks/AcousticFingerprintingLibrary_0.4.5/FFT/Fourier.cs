@@ -25,12 +25,6 @@ namespace AcousticFingerprintingLibrary_0._4._5.FFT
         private static double[,][] _uILookup;
         private static float[,][] _uRLookupF;
         private static float[,][] _uILookupF;
-        private static bool _bufferFLocked;
-        private static float[] _bufferF = new float[0];
-        private static bool _bufferCFLocked;
-        private static ComplexF[] _bufferCF = new ComplexF[0];
-        private static bool _bufferCLocked;
-        private static Complex[] _bufferC = new Complex[0];
 
         private Fourier()
         {

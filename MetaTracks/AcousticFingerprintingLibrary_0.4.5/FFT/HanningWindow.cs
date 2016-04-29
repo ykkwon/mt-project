@@ -49,7 +49,9 @@ namespace AcousticFingerprintingLibrary_0._4._5.FFT
 
             //Hanning window of the whole signal
             for (int i = 0, n = length; i < n; i++)
-                outerspace[i] *= 0.5 * (1 - Math.Cos(2 * Math.PI * i / (n - 1)));
+            {
+                outerspace[i] = Complex.Multiplier(outerspace[i], 0.5 * (1 - Math.Cos(2 * Math.PI * i / (n - 1))));
+            }
         }
 
         /// <summary>
