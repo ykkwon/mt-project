@@ -12,17 +12,8 @@ namespace AcousticFingerprintingLibrary_0._4._5.Hashing
         ///   Maximum number of hash buckets in the database
         /// </summary>
         private const int HashBucketSize = 100000;
-
-        /// <summary>
-        ///   The smallest Prime number that exceeds (D / 2)
-        ///   <remarks>
-        ///     D - domain of values. D = 2^(8*nrKeys)
-        ///     5 Keys - 549755813911
-        ///     4 Keys - 2147483659
-        ///     3 Keys - 8388617
-        ///     2 Keys - 32771
-        ///   </remarks>
-        /// </summary>
+        
+        // Highest primenumber
         private const long PrimeP = 2147483659;
 
         /// <summary>
@@ -55,7 +46,6 @@ namespace AcousticFingerprintingLibrary_0._4._5.Hashing
         public MinHash()
         {
             _permutations = DefaultPermutations.GetDefaultPermutations();
-            //_permutations = DefaultPermutations.GeneratePermutations(20*5, 255, 0, 8192);
 
             if (_permutations == null || _permutations.Length == 0)
                 throw new Exception("Permutations are null or not enough to create the Min Hash signature");
