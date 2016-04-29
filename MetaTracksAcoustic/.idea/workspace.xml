@@ -24,14 +24,37 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="RecordManager.swift" pinned="false" current-in-tab="true">
+      <file leaf-file-name="RecordManager.swift" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/RecordManager.swift">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="199">
-              <caret line="33" column="23" selection-start-line="33" selection-start-column="23" selection-end-line="33" selection-end-column="23" />
+            <state relative-caret-position="360">
+              <caret line="28" column="31" selection-start-line="28" selection-start-column="31" selection-end-line="28" selection-end-column="31" />
               <folding>
-                <element signature="e#155#172#0" expanded="true" />
+                <marker date="1461941543000" expanded="true" signature="61:2145" placeholder="{...}" />
+                <marker date="1461941543000" expanded="true" signature="357:369" placeholder="{...}" />
+                <marker date="1461941543000" expanded="true" signature="427:1382" placeholder="{...}" />
+                <marker date="1461941543000" expanded="true" signature="1407:2130" placeholder="{...}" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="BassProxy.swift" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/BassProxy.swift">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="135">
+              <caret line="21" column="16" selection-start-line="21" selection-start-column="16" selection-end-line="21" selection-end-column="16" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="DefaultPermutations.swift" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/DefaultPermutations.swift">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="397">
+              <caret line="3095" column="21" selection-start-line="3095" selection-start-column="21" selection-end-line="3095" selection-end-column="21" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -39,8 +62,8 @@
       <file leaf-file-name="Fourier.swift" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/Fourier.swift">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
-              <caret line="216" column="21" selection-start-line="216" selection-start-column="20" selection-end-line="216" selection-end-column="21" />
+            <state relative-caret-position="1095">
+              <caret line="73" column="21" selection-start-line="73" selection-start-column="21" selection-end-line="73" selection-end-column="21" />
               <folding />
             </state>
           </provider>
@@ -49,9 +72,12 @@
       <file leaf-file-name="ViewController.swift" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/iOSApplication053/iOSApplication053/ViewController.swift">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="462">
-              <caret line="122" column="22" selection-start-line="122" selection-start-column="22" selection-end-line="122" selection-end-column="22" />
-              <folding />
+            <state relative-caret-position="1710">
+              <caret line="117" column="22" selection-start-line="117" selection-start-column="22" selection-end-line="117" selection-end-column="22" />
+              <folding>
+                <marker date="1461748347000" expanded="true" signature="913:3036" placeholder="{...}" />
+                <marker date="1461748347000" expanded="true" signature="5406:5412" placeholder="{...}" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -70,6 +96,7 @@
         <option value="$PROJECT_DIR$/iOSApplication053/iOSApplication053/ViewController.swift" />
         <option value="$PROJECT_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/Fourier.swift" />
         <option value="$PROJECT_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/RecordManager.swift" />
+        <option value="$PROJECT_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/DefaultPermutations.swift" />
       </list>
     </option>
   </component>
@@ -79,8 +106,8 @@
     <detection-done>true</detection-done>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="width" value="1280" />
-    <option name="height" value="800" />
+    <option name="width" value="1440" />
+    <option name="height" value="900" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -115,12 +142,18 @@
               <option name="myItemId" />
               <option name="myItemType" value="com.jetbrains.cidr.projectView.XcodeRootNode" />
             </PATH_ELEMENT>
+          </PATH>
+          <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Front-end" />
+              <option name="myItemId" />
+              <option name="myItemType" value="com.jetbrains.cidr.projectView.XcodeRootNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Audio Recognition Library" />
               <option name="myItemType" value="com.jetbrains.cidr.projectView.XcodeViewNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="iOSApplication053" />
+              <option name="myItemId" value="AudioRecognitionLibrary" />
               <option name="myItemType" value="com.jetbrains.cidr.projectView.XcodeProjectNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -130,15 +163,15 @@
               <option name="myItemType" value="com.jetbrains.cidr.projectView.XcodeRootNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Front-end" />
+              <option name="myItemId" value="Audio Recognition Library" />
               <option name="myItemType" value="com.jetbrains.cidr.projectView.XcodeViewNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="iOSApplication053" />
+              <option name="myItemId" value="AudioRecognitionLibrary" />
               <option name="myItemType" value="com.jetbrains.cidr.projectView.XcodeProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="iOSApplication053" />
+              <option name="myItemId" value="AudioRecognitionLibrary" />
               <option name="myItemType" value="com.jetbrains.cidr.projectView.XcodeViewNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -146,6 +179,22 @@
             <PATH_ELEMENT>
               <option name="myItemId" />
               <option name="myItemType" value="com.jetbrains.cidr.projectView.XcodeRootNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Audio Recognition Library" />
+              <option name="myItemType" value="com.jetbrains.cidr.projectView.XcodeViewNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="AudioRecognitionLibrary" />
+              <option name="myItemType" value="com.jetbrains.cidr.projectView.XcodeProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="AudioRecognitionLibrary" />
+              <option name="myItemType" value="com.jetbrains.cidr.projectView.XcodeViewNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Hashing" />
+              <option name="myItemType" value="com.jetbrains.cidr.projectView.XcodeViewNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -206,10 +255,9 @@
       </EXTENSION>
       <method />
     </configuration>
-    <list size="3">
+    <list size="2">
       <item index="0" class="java.lang.String" itemvalue="Application.iOSApplication053" />
       <item index="1" class="java.lang.String" itemvalue="Application.AudioRecognitionLibrary" />
-      <item index="2" class="java.lang.String" itemvalue="Application.Surge" />
     </list>
   </component>
   <component name="ShelveChangesManager" show_recycled="false">
@@ -229,28 +277,28 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1280" height="800" extended-state="0" />
-    <editor active="true" />
+    <frame x="0" y="0" width="1440" height="900" extended-state="0" />
+    <editor active="false" />
     <layout>
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2494043" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24876674" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32876712" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32876712" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32876712" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32876712" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -266,13 +314,6 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/RecordManager.swift</url>
-          <line>30</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
       <option name="time" value="2" />
     </breakpoint-manager>
     <watches-manager />
@@ -283,7 +324,10 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#155#172#0" expanded="true" />
+            <marker date="1461941543000" expanded="true" signature="61:2145" placeholder="{...}" />
+            <marker date="1461941543000" expanded="true" signature="357:369" placeholder="{...}" />
+            <marker date="1461941543000" expanded="true" signature="427:1382" placeholder="{...}" />
+            <marker date="1461941543000" expanded="true" signature="1407:2130" placeholder="{...}" />
           </folding>
         </state>
       </provider>
@@ -293,7 +337,10 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#155#172#0" expanded="true" />
+            <marker date="1461941543000" expanded="true" signature="61:2145" placeholder="{...}" />
+            <marker date="1461941543000" expanded="true" signature="357:369" placeholder="{...}" />
+            <marker date="1461941543000" expanded="true" signature="427:1382" placeholder="{...}" />
+            <marker date="1461941543000" expanded="true" signature="1407:2130" placeholder="{...}" />
           </folding>
         </state>
       </provider>
@@ -303,7 +350,68 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#155#172#0" expanded="true" />
+            <marker date="1461941543000" expanded="true" signature="61:2145" placeholder="{...}" />
+            <marker date="1461941543000" expanded="true" signature="357:369" placeholder="{...}" />
+            <marker date="1461941543000" expanded="true" signature="427:1382" placeholder="{...}" />
+            <marker date="1461941543000" expanded="true" signature="1407:2130" placeholder="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/Fourier.swift">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3240">
+          <caret line="216" column="21" selection-start-line="216" selection-start-column="20" selection-end-line="216" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/iOSApplication053/iOSApplication053/ViewController.swift">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1785">
+          <caret line="122" column="22" selection-start-line="122" selection-start-column="22" selection-end-line="122" selection-end-column="22" />
+          <folding>
+            <marker date="1461748347000" expanded="true" signature="913:3036" placeholder="{...}" />
+            <marker date="1461748347000" expanded="true" signature="5406:5412" placeholder="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/RecordManager.swift">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <marker date="1461941543000" expanded="true" signature="61:2145" placeholder="{...}" />
+            <marker date="1461941543000" expanded="true" signature="357:369" placeholder="{...}" />
+            <marker date="1461941543000" expanded="true" signature="427:1382" placeholder="{...}" />
+            <marker date="1461941543000" expanded="true" signature="1407:2130" placeholder="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/RecordManager.swift">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <marker date="1461941543000" expanded="true" signature="61:2145" placeholder="{...}" />
+            <marker date="1461941543000" expanded="true" signature="357:369" placeholder="{...}" />
+            <marker date="1461941543000" expanded="true" signature="427:1382" placeholder="{...}" />
+            <marker date="1461941543000" expanded="true" signature="1407:2130" placeholder="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/RecordManager.swift">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <marker date="1461941543000" expanded="true" signature="61:2145" placeholder="{...}" />
+            <marker date="1461941543000" expanded="true" signature="357:369" placeholder="{...}" />
+            <marker date="1461941543000" expanded="true" signature="427:1382" placeholder="{...}" />
+            <marker date="1461941543000" expanded="true" signature="1407:2130" placeholder="{...}" />
           </folding>
         </state>
       </provider>
@@ -315,20 +423,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/DefaultPermutations.swift">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/ComplexF.swift">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/ComplexF.swift" />
     <entry file="file://$PROJECT_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/FourierDirection.swift">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -371,29 +466,51 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/RecordManager.swift">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="28" column="31" selection-start-line="28" selection-start-column="31" selection-end-line="28" selection-end-column="31" />
+          <folding>
+            <marker date="1461941543000" expanded="true" signature="61:2145" placeholder="{...}" />
+            <marker date="1461941543000" expanded="true" signature="357:369" placeholder="{...}" />
+            <marker date="1461941543000" expanded="true" signature="427:1382" placeholder="{...}" />
+            <marker date="1461941543000" expanded="true" signature="1407:2130" placeholder="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/BassProxy.swift">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="21" column="16" selection-start-line="21" selection-start-column="16" selection-end-line="21" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/Fourier.swift">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="216" column="21" selection-start-line="216" selection-start-column="20" selection-end-line="216" selection-end-column="21" />
+        <state relative-caret-position="1095">
+          <caret line="73" column="21" selection-start-line="73" selection-start-column="21" selection-end-line="73" selection-end-column="21" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/iOSApplication053/iOSApplication053/ViewController.swift">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="462">
-          <caret line="122" column="22" selection-start-line="122" selection-start-column="22" selection-end-line="122" selection-end-column="22" />
-          <folding />
+        <state relative-caret-position="1710">
+          <caret line="117" column="22" selection-start-line="117" selection-start-column="22" selection-end-line="117" selection-end-column="22" />
+          <folding>
+            <marker date="1461748347000" expanded="true" signature="913:3036" placeholder="{...}" />
+            <marker date="1461748347000" expanded="true" signature="5406:5412" placeholder="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/RecordManager.swift">
+    <entry file="file://$PROJECT_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/DefaultPermutations.swift">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="199">
-          <caret line="33" column="23" selection-start-line="33" selection-start-column="23" selection-end-line="33" selection-end-column="23" />
-          <folding>
-            <element signature="e#155#172#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="397">
+          <caret line="3095" column="21" selection-start-line="3095" selection-start-column="21" selection-end-line="3095" selection-end-column="21" />
+          <folding />
         </state>
       </provider>
     </entry>

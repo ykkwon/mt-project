@@ -4,7 +4,6 @@
 //
 
 import Foundation
-import Surge
 
 public var FingerprintWidth:Int = 128
 public var lshTableSize:Int = 33
@@ -30,8 +29,7 @@ public class FingerprintManager {
     public static func CreateSpectrogram(filename: NSURL, milliseconds: Int, startMilliseconds: Int) -> [Float]{
         do{
         var samples = try BassProxy.GetSamplesMono(filename, sampleRate: 5512)
-        var t = fft(samples)
-        return t
+        return [0.0]
         } catch (_) {
     return [0.0]
     }
@@ -118,11 +116,10 @@ public class FingerprintManager {
         for(var widthIndex = 0; widthIndex < width; widthIndex++){
             
             for(var windowIndex = 0; windowIndex < windowSize; windowIndex++){
-                fftSamples[2*windowIndex] = (Float(windowArray[windowIndex])*samples[widthIndex * overlap + windowIndex])
+                fftSamples[2*windowIndex] = (Float(windowArray[windowIndex])*samples[widthIndex * overlap + windowIndex] * 1000)
                 fftSamples[2*windowIndex + 1] = 0
             }
-            
-            fft(fftSamples) // TODO: Possibly incomplete
+            Fourier.FFT(fftSamples, length: windowSize, direction: FourierDirection.Forward)
             frames[widthIndex] = ExtractLogBins(fftSamples)
         }
         

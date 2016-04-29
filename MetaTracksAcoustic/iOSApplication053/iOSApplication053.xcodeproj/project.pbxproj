@@ -14,8 +14,6 @@
 		8B9A854B1CCA416F0070E94E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8B9A85491CCA416F0070E94E /* LaunchScreen.storyboard */; };
 		8BC18DA41CCE8FB9003A665B /* AudioRecognitionLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BC18DA31CCE8FB9003A665B /* AudioRecognitionLibrary.framework */; };
 		8BC18DA61CCE8FE4003A665B /* AudioRecognitionLibrary.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8BC18DA31CCE8FB9003A665B /* AudioRecognitionLibrary.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		8BC18DAA1CCE90AD003A665B /* Surge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BC18DA91CCE90AD003A665B /* Surge.framework */; };
-		8BC18DAB1CCE90AD003A665B /* Surge.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8BC18DA91CCE90AD003A665B /* Surge.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -26,7 +24,6 @@
 			dstSubfolderSpec = 10;
 			files = (
 				8BC18DA61CCE8FE4003A665B /* AudioRecognitionLibrary.framework in CopyFiles */,
-				8BC18DAB1CCE90AD003A665B /* Surge.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -50,7 +47,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				8BC18DA41CCE8FB9003A665B /* AudioRecognitionLibrary.framework in Frameworks */,
-				8BC18DAA1CCE90AD003A665B /* Surge.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

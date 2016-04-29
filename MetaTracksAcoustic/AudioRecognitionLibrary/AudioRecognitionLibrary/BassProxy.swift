@@ -1,7 +1,4 @@
 //
-//  _dummy.swift
-//  AudioRecognitionLibrary
-//
 //  Created by metatracks on 22/04/16.
 //  Copyright © 2016 metatracks. All rights reserved.
 //
@@ -64,12 +61,7 @@ public class BassProxy{
             BASS_StreamFree(bassStream)
             return samples
         }
-        print("nil")
+        print("An error occured.")
         return [0.0]
     }
-    
-    public static func Dispose(){
-        // TODO: Trenge vi dinne?
-    }
-    
 }

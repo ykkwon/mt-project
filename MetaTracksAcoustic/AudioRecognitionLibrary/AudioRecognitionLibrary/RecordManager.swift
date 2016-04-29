@@ -35,7 +35,9 @@ public class RecordManager {
         }
     }
     public func record(){
-        var iterator = 0
+        
+        DefaultPermutations.GetDefaultPermutations()
+        /*var iterator = 0
         while(true){
             do{
             var filePath = setRecorder(iterator)
@@ -49,19 +51,8 @@ public class RecordManager {
             }catch (_) {
                 
             }
-        
-        
-            
-            
-            
-            ///var u = FingerprintManager.CreateSpectrogram(t, milliseconds: 0, startMilliseconds: 0)
-            ///var v = FingerprintManager.ExtractLogBins(u)
-            ///var w = FingerprintManager.NormalizeInPlace(v)
-            
-            
-            
-            print("Everything is good.")
             }
+ */
         }
         
     }

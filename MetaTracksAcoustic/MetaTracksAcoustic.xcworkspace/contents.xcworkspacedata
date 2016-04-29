@@ -15,7 +15,4 @@
          location = "group:AudioRecognitionLibrary/AudioRecognitionLibrary.xcodeproj">
       </FileRef>
    </Group>
-   <FileRef
-      location = "group:Surge/Surge.xcodeproj">
-   </FileRef>
 </Workspace>
