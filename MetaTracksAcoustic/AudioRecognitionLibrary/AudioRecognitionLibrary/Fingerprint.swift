@@ -9,27 +9,24 @@ public class Fingerprint {
     var Signature:[Bool] = [true]
     var SequenceNumber:Int = 0
     var Timestamp:Double = 0
-    
-    public init(sequenceNumber: Int, signature: [Bool], timeStamp: Double){
-    }
 }
 
 
 
 public class HashedFingerprint {
-    init(hashBins: [CLong], sequenceNumber: Int, sequenceAt: Double){
+    init(hashBins: [Int64], sequenceNumber: Int, sequenceAt: Double){
         HashBins = hashBins;
         SequenceNumber = sequenceNumber
         Timestamp = sequenceAt
     }
     
-    init(hashBins: [CLong], timestamp: Double){
+    init(hashBins: [Int64], timestamp: Double){
         HashBins = hashBins
         Timestamp = timestamp
         SequenceNumber = 0
     }
     
-    public var HashBins:[CLong]
+    public var HashBins:[Int64]
     public var SequenceNumber:Int
     public var Timestamp:Double
     

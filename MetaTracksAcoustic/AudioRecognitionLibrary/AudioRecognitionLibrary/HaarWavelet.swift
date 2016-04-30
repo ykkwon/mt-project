@@ -6,7 +6,7 @@
 import Foundation
 
 public class HaarWavelet {
-
+    
     public static func Transform(var array: [Float]){
         var haar = array.count
         for(var i = 0; i < haar; i++) {

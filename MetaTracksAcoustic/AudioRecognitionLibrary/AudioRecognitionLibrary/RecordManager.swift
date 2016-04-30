@@ -35,9 +35,8 @@ public class RecordManager {
         }
     }
     public func record(){
-        
-        DefaultPermutations.GetDefaultPermutations()
-        /*var iterator = 0
+        var manager:FingerprintManager = FingerprintManager()
+        var iterator = 0
         while(true){
             do{
             var filePath = setRecorder(iterator)
@@ -45,14 +44,14 @@ public class RecordManager {
             sleep(3)
             audioRecorder?.stop()
             let monoArray = try BassProxy.GetSamplesMono(filePath, sampleRate: 5512)
-            var preliminaryFingerprints = FingerprintManager.CreateFingerprints(monoArray)
-            var test = FingerprintManager.GetFingerHashes(preliminaryFingerprints)
-            var result = FingerprintManager.CompareFingerprintListsHighest(movie, toCompare: storedFingerprints)
+            var preliminaryFingerprints = manager.CreateFingerprints(monoArray)
+            var test = manager.GetFingerHashes(preliminaryFingerprints)
+            var result = manager.CompareFingerprintListsHighest(movie, toCompare: storedFingerprints)
             }catch (_) {
                 
             }
             }
- */
+ 
         }
         
     }
