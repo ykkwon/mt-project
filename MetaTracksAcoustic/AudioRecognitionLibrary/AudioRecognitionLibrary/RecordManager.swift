@@ -45,8 +45,8 @@ public class RecordManager {
             audioRecorder?.stop()
             let monoArray = try BassProxy.GetSamplesMono(filePath, sampleRate: 5512)
             var preliminaryFingerprints = manager.CreateFingerprints(monoArray)
-            var test = manager.GetFingerHashes(preliminaryFingerprints)
-            var result = manager.CompareFingerprintListsHighest(movie, toCompare: storedFingerprints)
+            //var test = manager.GetFingerHashes(preliminaryFingerprints)
+            //var result = manager.CompareFingerprintListsHighest(movie, toCompare: storedFingerprints)
             }catch (_) {
                 
             }

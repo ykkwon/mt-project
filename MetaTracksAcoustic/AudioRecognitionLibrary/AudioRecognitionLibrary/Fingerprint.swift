@@ -9,6 +9,7 @@ public class Fingerprint {
     var Signature:[Bool] = [true]
     var SequenceNumber:Int = 0
     var Timestamp:Double = 0
+    init(signature: [Bool], sequenceNo: Int, timestamp: Double){}
 }
 
 

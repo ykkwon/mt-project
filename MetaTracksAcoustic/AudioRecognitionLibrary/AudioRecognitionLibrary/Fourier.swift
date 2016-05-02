@@ -12,8 +12,8 @@ var cMaxLength : Int = 4096
 var cMinLength : Int = 1
 var cMaxBits : Int = 12
 var cMinBits : Int = 0
-var reversedBits = [[Int]]()
-var reverseBits = [[Int]]()
+var reversedBits:Array<Array<Int>> = Array<Array<Int>>()
+var reverseBits:Array<Array<Int>> = Array<Array<Int>>()
 var lookupTabletLength : Int = -1
 var uRLookup = [[[Double]]]()
 var uILookup = [[[Double]]]()
@@ -72,7 +72,7 @@ public class Fourier{
         assert(IsPowerOf2(length))
         assert(length >= cMinLength)
         assert(length <= cMaxLength)
-        var reversedBits = GetReversedBits(Log2(length))
+        var reversedBits = GetReversedBits(log2(length))
         for (var i = 0; i < length; i++){
             var swap:Int = reversedBits[i]
             if(swap > i){
@@ -81,24 +81,26 @@ public class Fourier{
             }
         }
     }
-    */
+     */
+ 
     private static func ReverseBits(bits: Int, n: Int) -> Int{
         var bitsIn = bits
         var bitsReversed:Int = 0
         for (var i = 0; i < n; i++){
-            bitsReversed = (bitsReversed << 1) | (bits & 1)
-            bitsIn = (bits >> 1)
+            bitsReversed = (bitsReversed << 1) | (bitsIn & 1)
+            bitsIn = (bitsIn >> 1)
+            bitsReversed = bitsIn
         }
         return bitsReversed
     }
     
     private static func InitializeReverseBits(levels: Int){
-        reverseBits = [[levels+1]]
-        for(var j = 0; j < levels+1; j++){
-            var count:Double = pow(2, Double(j))
-            reverseBits[j] = [Int(count)]
-            for (var i = 0; i < Int(count); i += 1){
-                reverseBits[j][i] = ReverseBits(i, n: j) // TODO: Possible bug here
+        
+        for(var j = 0; j < (levels+1); j++){
+            reversedBits.append([Int]())
+            var count = Pow2(j)
+            for (var i = 0; i < count; i++){
+                    reversedBits[j].append(ReverseBits(i, n: j))
             }
         }
     }
@@ -113,11 +115,12 @@ public class Fourier{
     }
     
     private static func InitializeComplexRotations(levels: Int){
-        // TODO
-        
+        var ln = levels
+        uRLookup = [[[Double]]](count:levels+1, repeatedValue:[[Double]](count:2, repeatedValue:[Double](count:0, repeatedValue:0)))
+        var t = 0
     }
 
     public static func FFT(data: [Float], length: Int, direction: FourierDirection){
-        // TODO
+        SyncLookupTableLength(length)
     }
 }

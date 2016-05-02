@@ -82,7 +82,7 @@ public class FingerprintManager {
         for(var widthIndex = 0; widthIndex < width; widthIndex++){
             
             for(var windowIndex = 0; windowIndex < windowSize; windowIndex++){
-                fftSamples[2*windowIndex] = (Float(windowArray[windowIndex])*samples[widthIndex * overlap + windowIndex] * 1000)
+                fftSamples[2*windowIndex] = (Float(windowArray[windowIndex])*samples[widthIndex * overlap + windowIndex])
                 fftSamples[2*windowIndex + 1] = 0
             }
             Fourier.FFT(fftSamples, length: windowSize, direction: FourierDirection.Forward)
@@ -135,20 +135,18 @@ public class FingerprintManager {
         
         var length = spectrogram.count // TODO is this equal to GetLength(0)? Appearently.
         while start + fingerprintWidth <= length {
-            var frames:[[Float]] = [[Float]](count:fingerprintHeight, repeatedValue:[Float](count:0, repeatedValue:0.0))
+            var frames:[[Float]] = [[Float]](count:fingerprintWidth, repeatedValue:[Float](count:fingerprintHeight, repeatedValue:0.0))
             
             for(var index = 0; index < fingerprintWidth; index++){
                 
-                frames[index] = [Float](count: fingerprintWidth, repeatedValue: 0.0)
-                frames.append(spectrogram[start+index])
+                frames[index] = [Float](count: fingerprintHeight, repeatedValue: 0.0)
+                frames[index] = (spectrogram[start+index])
             }
             HaarWavelet.Transform(frames)
             var image = ExtractTopWavelets(frames)
+            fingerPrints.append(Fingerprint(signature: image, sequenceNo: sequenceNr+1, timestamp: Double(start)*Double(overlap/sampleRate)))
             start += fingerprintWidth + (Stride/overlap)
-            
         }
-        
-        
         return fingerPrints
     }
     
@@ -174,93 +172,143 @@ public class FingerprintManager {
     public func ExtractTopWavelets(frames: [[Float]]) -> [Bool]{
         var topWavelets = TopWavelets
         var width = 128
-        var height = 32 // TODO: Should be 32, is not. Gotta go figure out multi-dimensional arrays.
-        var concatenated:[Float] = [Float](count: width*height, repeatedValue: 0.0)
-        
-        
-        for (var i = 0; i < width; i++)
+        var height = 32
+        var concatenated:[Float] = []
+        var it = 0;
+        for (var row = 0; row < width; row++)
         {
-            for (var j = 0; j < height; j++)
-            {
-                concatenated.append(frames[i][j])
+            for(var col = 0; col < height; col++){
+                concatenated.append(frames[row][col])
             }
-            
-            
         }
+        var indexes:[Int] = [Int](count: concatenated.count, repeatedValue: 0)
+        for(var i = 0; i >= indexes.count; i++){
+            indexes[i] = i
+        }
+        var sorter = SorterGenericArray(keys: concatenated, items: indexes)
+        sorter.QuickSort(0, right: concatenated.count-1)
         
         var result:[Bool] = [Bool](count: concatenated.count*2, repeatedValue: true)
         for (var i = 0; i < topWavelets; i++)
         {
-            var value = concatenated[i];
-            if (value > 0){ /*positive wavelet*/
+            var index = indexes[i]
+            var value = concatenated[i]
+            if (value > 0){
                 result[i*2] = true;
             }
-            else if (value < 0){ /*negative wavelet*/
+            else if (value < 0){
                 result[i*2 + 1] = true;
             }
         }
         return result;
     }
-
-    private func ArraySort(keys: Array<Int>, items: Array<Int>, comparer: AbsComparator){
-        // TODO
+    
+    public static func GetMedian(low: Int, hi: Int) -> Int{
+        return low + ((hi - low) >> 1)
     }
     
-    public static func Sort(keys: Array<Int>, items: Array<Int>, index: Int, length: Int, comparer: AbsComparator){
-        // TODO
+    public static func Compare(x: Float, y: Float) -> Int{
+        return CompareTo(y, b: x)
     }
     
-    private static func GetMedian(low: Int, hi: Int){
-    
-    }
-    
-    private struct SorterObjectArray{
-        init(){
-            // TODO
+    public static func CompareTo(a: Float, b: Float) -> Int{
+        var intA = abs(a)
+        var intB = abs(b)
+        
+        if intA > intB {
+            return -1
         }
-        
-        private func SwapIfGreaterWithItems(a: Int, b: Int){
-            // TODO
+        else if intA == intB{
+            return 0
         }
-        
-        private func QuickSort(left: Int, right: Int){
-            // TODO
+        else {
+            return 1
         }
-        
-        
     }
     
     private struct SorterGenericArray{
-        init(){
-            // TODO
+        private var intKeys:Array<Float> = Array<Float>()
+        private var intItems:Array<Int> = Array<Int>()
+        
+        init(keys: Array<Float>, items: Array<Int>){
+            intKeys = keys
+            intItems = items
         }
         
-        private func SwapIfGreaterWithItems(a: Int, b: Int){
-            // TODO
-        }
-        
-        private func QuickSort(left: Int, right: Int){
-            // TODO
-        }
-        
-        
-    }
-    
-    public func EncodeFingerprint(concatenated: [Float], indexes: [Int], topWavelets: Int) -> [Bool]{
-        var results:[Bool] = []
-        for(var i = 0; i < topWavelets; i++){
-            var index = indexes[i]
-            var value:Float = concatenated[i]
-            if value > 0 {
-                results[index*2] = true // TODO: Possible indexoutofbounds
+        private mutating func SwapIfGreaterWithItems(a: Int, b: Int){
+            if(a != b){
+                var keytesta = intKeys[a]
+                var keytestb = intKeys[b]
+                
+                if FingerprintManager.CompareTo(intKeys[a], b: intKeys[b]) > 0{
+                    var key = intKeys[a]
+                    key = Float(b)
+                    intKeys[b] = key
+                    if !intItems.isEmpty {
+                        var item = intItems[a]
+                        intItems[b] = item
+                    }
+                    
+                }
             }
-            else if value < 0{
-                results[index*2 + 1] = true // TODO: Possible indexoutofbounds
-            }
-            
         }
-        return results
-    }
+  
+        private mutating func QuickSort(left: Int, right: Int){
+            do{
+                var i = left
+                var j = right
+                var middle = FingerprintManager.GetMedian(left, hi: right)
+                SwapIfGreaterWithItems(i, b: middle)
+                SwapIfGreaterWithItems(i, b: j)
+                SwapIfGreaterWithItems(middle, b: j)
+                
+                var x = intKeys[middle]
+                do{
+                    while (FingerprintManager.Compare(intKeys[i], y: x) < 0) {
+                        i++
+                    }
+                    while(FingerprintManager.Compare(x, y: intKeys[j]) < 0){
+                        j--
+                    }
+                    if( i > j ){
+                        return
+                    }
+                    if( i < j){
+                        var key = intKeys[i]
+                        intKeys[i] = Float(j)
+                        // keys.setvalue key j
+                        if !intItems.isEmpty {
+                            var item = intItems[i]
+                            intItems[i] = intItems[j]
+                            intItems[item] = j
+                        }
+                    }
+                    if(Int32(i) != Int32.max){
+                        i++
+                    }
+                    if(Int32(j) != Int32.min) {
+                        j--
+                    }
+                    while(i > j){
+                        break
+                    }
+                    while(i < j){
+                        if j-left <= right-i {
+                            if left < j {
+                                QuickSort(left, right: j)
+                            }
+                            else if (i < right){
+                                QuickSort(i, right: right)
+                            }
+                            while left < right {
+                            }
+                        }
+                    }
+        	}
+        
+            }
+        }
+        
     
     public func GetFingerHashes(listdb: [Fingerprint]) -> [HashedFingerprint]{
         var listDb = listdb
@@ -334,21 +382,9 @@ public class FingerprintManager {
         return 0.0
     }
     
-    public func GetTimeStamps(fingerprints: [HashedFingerprint], toCompare: [HashedFingerprint]) -> Double{
-        // TODO
-        return 0.0
-    }
-    
     public func FindBestFingerprintList(allFingerprints: [HashedFingerprint], toCompare: [HashedFingerprint]) -> Int{
         // TODO
         return 0
     }
-    
-    public class AbsComparator{
-        init(){}
-        public func Compare(x: Float, y: Float) -> Int{
-            // TODO
-            return 0
-        }
-    }
+}
 }
