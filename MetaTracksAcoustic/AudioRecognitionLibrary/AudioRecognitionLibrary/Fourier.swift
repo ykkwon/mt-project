@@ -13,12 +13,12 @@ var cMinLength : Int = 1
 var cMaxBits : Int = 12
 var cMinBits : Int = 0
 var reversedBits:Array<Array<Int>> = Array<Array<Int>>()
-var reverseBits:Array<Array<Int>> = Array<Array<Int>>()
+var reverseBits:[[Int]] = [[Int]](count: cMaxBits, repeatedValue: [Int](count: 0, repeatedValue: 0))
 var lookupTabletLength : Int = -1
-var uRLookup = [[[Double]]]()
-var uILookup = [[[Double]]]()
-var uRLookupF = [[[Float]]]()
-var uILookupF = [[[Float]]]()
+var uRLookup = [[Double]]()
+var uILookup = [[Double]]()
+var uRLookupF = [[Float]]()
+var uILookupF = [[Float]]()
 var bufferFLocked : Bool = true
 var bufferCFLocked : Bool = true
 var bufferCLocked : Bool = true
@@ -44,11 +44,9 @@ public class Fourier{
     }
     
     private static func GetReversedBits(numberOfBits: Int) -> [Int]{
-        assert(numberOfBits >= cMinBits)
-        assert(numberOfBits <= cMaxBits)
-        if reversedBits[numberOfBits-1].isEmpty { // TODO: equivalent to == null?
+        if reverseBits[numberOfBits-1].isEmpty { // TODO: equivalent to == null?
             var maxBits:Int = Pow2(numberOfBits)
-            var reversedBitsTwo:[Int] = [maxBits]
+            var reversedBitsTwo:[Int] = [Int](count: maxBits, repeatedValue: 0)
             for (var i = 0; i < maxBits; i++){
                 var oldBits:Int = i
                 var newBits:Int = 0
@@ -59,37 +57,35 @@ public class Fourier{
                 }
                 reversedBitsTwo[i] = newBits
             }
-            reversedBits[numberOfBits-1] = reversedBitsTwo
+            reverseBits[numberOfBits-1] = reversedBitsTwo
         }
-        return reversedBits[numberOfBits-1]
+        return reverseBits[numberOfBits-1]
     }
 
-    /*
+    
     private static func ReorderArray(data: [Float]){
-        var data = [Float]()
-        assert(!data.isEmpty)
-        var length:Int = data.count / 2
-        assert(IsPowerOf2(length))
-        assert(length >= cMinLength)
-        assert(length <= cMaxLength)
-        var reversedBits = GetReversedBits(log2(length))
+        var data2 = data
+        var length:Int = data2.count / 2
+        var inputLog = log2(Double(length))
+        var reversedBits = GetReversedBits(Int(inputLog))
         for (var i = 0; i < length; i++){
             var swap:Int = reversedBits[i]
             if(swap > i){
-                Swap(&data[i], b: &data[swap])
-                Swap(&data[i+1], b: &data[swap+1])
+                Swap(&data2[i], b: &data2[swap])
+                Swap(&data2[i+1], b: &data2[swap+1])
             }
         }
     }
-     */
+    
  
     private static func ReverseBits(bits: Int, n: Int) -> Int{
         var bitsIn = bits
+        var inN = n
         var bitsReversed:Int = 0
-        for (var i = 0; i < n; i++){
-            bitsReversed = (bitsReversed << 1) | (bitsIn & 1)
+        for (var i = 0; i < inN; i++){
+            bitsReversed = ((bitsReversed << 1) | (bitsIn & 1))
             bitsIn = (bitsIn >> 1)
-            bitsReversed = bitsIn
+            
         }
         return bitsReversed
     }
@@ -107,7 +103,7 @@ public class Fourier{
 
     private static func SyncLookupTableLength(length: Int){
         if (length > lookupTabletLength){
-            let level : Double = ceil(log(Double(length)))
+            let level : Double = ceil(log2(Double(length)))
             InitializeReverseBits(Int(level))
             InitializeComplexRotations(Int(level))
             lookupTabletLength = length
@@ -116,11 +112,72 @@ public class Fourier{
     
     private static func InitializeComplexRotations(levels: Int){
         var ln = levels
-        uRLookup = [[[Double]]](count:levels+1, repeatedValue:[[Double]](count:2, repeatedValue:[Double](count:0, repeatedValue:0)))
-        var t = 0
+        uRLookup = [[Double]](count:levels+1, repeatedValue:[Double](count:0, repeatedValue:0.0))
+        uILookup = [[Double]](count:levels+1, repeatedValue:[Double](count:0, repeatedValue:0.0))
+        
+        uRLookupF = [[Float]](count:levels+1, repeatedValue:[Float](count:0, repeatedValue:0))
+        uILookupF = [[Float]](count:levels+1, repeatedValue:[Float](count:0, repeatedValue:0))
+        
+        var N = 1
+        for(var level = 1; level <= ln; level++){
+            var M = N
+            N <<= 1
+            var uR:Double = 1
+            var uI:Double = 0
+            var angle = M_PI / Double(M*1)
+            var wR = cos(angle)
+            var wI = sin(angle)
+            
+            // TODO
+            for(var j = 0; j < M; j++){
+                uRLookupF[level].append(Float(uR))
+                uILookupF[level].append(Float(uI))
+                //uRLookupF[level][j] += Float(uR)
+                //uILookupF[level][j] += Float(uI)
+                var uwI:Double = Double(uR) * wI + Double(uI) * wR
+                uI = uwI
+            }
+            
+        }
     }
 
-    public static func FFT(data: [Float], length: Int, direction: FourierDirection){
+    public static func FFT(localData: [Float], length: Int, direction: FourierDirection){
+        var data = localData
         SyncLookupTableLength(length)
+        var ln = log2(Double(length))
+        var lnNew = Int(ln)
+        ReorderArray(data)
+        var N = 1
+        for(var level = 1; level <= lnNew; level++){
+            var M = N
+            N <<= 1
+            var uRLookupLocal = uRLookupF[level]
+            var uILookupLocal = uILookupF[level]
+            
+            for(var j = 0; j < M; j++){
+                var uR = uRLookupLocal[j]
+                var uI = uILookupLocal[j]
+                
+                for(var evenT = j; evenT < length; evenT += N){
+                    var even = evenT << 1
+                    var odd = (evenT + M) << 1
+                    var r = data[odd]
+                    var i = data[odd+1]
+                    
+                    var odduR = r * uR - i * uI
+                    var odduI = r * uI - i * uR
+                    
+                    r = data[even]
+                    i = data[even+1]
+                    
+                    data[even] = r + odduR
+                    data[even+1] = i + odduI
+                    
+                    data[odd] = r - odduR
+                    data[odd+1] = i - odduI
+                }
+            }
+        }
+        
     }
 }
