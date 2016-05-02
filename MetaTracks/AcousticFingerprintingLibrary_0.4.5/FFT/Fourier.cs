@@ -15,10 +15,11 @@ namespace AcousticFingerprintingLibrary_0._4._5.FFT
         private static readonly int[][] _reversedBits = new int[cMaxBits][];
         private static int[][] _reverseBits;
         private static int _lookupTabletLength = -1;
-        private static double[,][] _uRLookup;
-        private static double[,][] _uILookup;
-        private static float[,][] _uRLookupF;
-        private static float[,][] _uILookupF;
+        
+        private static double[][] _uRLookup;
+        private static double[][] _uILookup;
+        private static float[][] _uRLookupF;
+        private static float[][] _uILookupF;
 
         private Fourier()
         {
@@ -234,11 +235,11 @@ namespace AcousticFingerprintingLibrary_0._4._5.FFT
         {
             int ln = levels;
 
-            _uRLookup = new double[levels + 1, 2][];
-            _uILookup = new double[levels + 1, 2][];
+            _uRLookup = new double[levels + 1][];
+            _uILookup = new double[levels + 1][];
 
-            _uRLookupF = new float[levels + 1, 2][];
-            _uILookupF = new float[levels + 1, 2][];
+            _uRLookupF = new float[levels + 1][];
+            _uILookupF = new float[levels + 1][];
 
             int N = 1;
             for (int level = 1; level <= ln; level++)
@@ -252,37 +253,15 @@ namespace AcousticFingerprintingLibrary_0._4._5.FFT
                     double wR = Math.Cos(angle);
                     double wI = Math.Sin(angle);
 
-                    _uRLookup[level, 0] = new double[M];
-                    _uILookup[level, 0] = new double[M];
-                    _uRLookupF[level, 0] = new float[M];
-                    _uILookupF[level, 0] = new float[M];
+                    _uRLookup[level] = new double[M];
+                    _uILookup[level] = new double[M];
+                    _uRLookupF[level] = new float[M];
+                    _uILookupF[level] = new float[M];
 
                     for (int j = 0; j < M; j++)
                     {
-                        _uRLookupF[level, 0][j] = (float)(_uRLookup[level, 0][j] = uR);
-                        _uILookupF[level, 0][j] = (float)(_uILookup[level, 0][j] = uI);
-                        double uwI = uR * wI + uI * wR;
-                        uR = uR * wR - uI * wI;
-                        uI = uwI;
-                    }
-                }
-                {
-                    // negative sign ( i.e. [M,1] )
-                    double uR = 1;
-                    double uI = 0;
-                    double angle = Math.PI / M * -1;
-                    double wR = Math.Cos(angle);
-                    double wI = Math.Sin(angle);
-
-                    _uRLookup[level, 1] = new double[M];
-                    _uILookup[level, 1] = new double[M];
-                    _uRLookupF[level, 1] = new float[M];
-                    _uILookupF[level, 1] = new float[M];
-
-                    for (int j = 0; j < M; j++)
-                    {
-                        _uRLookupF[level, 1][j] = (float)(_uRLookup[level, 1][j] = uR);
-                        _uILookupF[level, 1][j] = (float)(_uILookup[level, 1][j] = uI);
+                        _uRLookupF[level][j] = (float)(_uRLookup[level][j] = uR);
+                        _uILookupF[level][j] = (float)(_uILookup[level][j] = uI);
                         double uwI = uR * wI + uI * wR;
                         uR = uR * wR - uI * wI;
                         uI = uwI;
@@ -306,14 +285,17 @@ namespace AcousticFingerprintingLibrary_0._4._5.FFT
 
             // successive doubling
             int N = 1;
-            int signIndex = (direction == FourierDirection.Forward) ? 0 : 1;
+            int signIndex;
+            if (direction == FourierDirection.Forward) signIndex = 0;
+            else signIndex = 1;
+
             for (int level = 1; level <= ln; level++)
             {
                 int M = N;
                 N <<= 1;
 
-                float[] uRLookup = _uRLookupF[level, signIndex];
-                float[] uILookup = _uILookupF[level, signIndex];
+                float[] uRLookup = _uRLookupF[level];
+                float[] uILookup = _uILookupF[level];
 
                 for (int j = 0; j < M; j++)
                 {

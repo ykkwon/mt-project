@@ -685,17 +685,7 @@ namespace AcousticFingerprintingLibrary_0._4._5
         }
 
     #endregion
-
-        public class AbsComparer : IComparer<float>
-        {
-            /// <summary>
-            ///   Compare absolute decending numbers ( 15, -14, -13, 11, 10, -9, 6, 5, -4 etc...)
-            /// </summary>
-            public int Compare(float x, float y)
-            {
-                return Math.Abs(y).CompareTo(Math.Abs(x));
-            }
-        }
+        
         
         #region Sorting code taken from C# .NET sourcecode
         
