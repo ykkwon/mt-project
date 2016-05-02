@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using AcousticFingerprintingLibrary_0._4._5.FFT;
@@ -360,12 +361,15 @@ namespace AcousticFingerprintingLibrary_0._4._5
 
             var concatenated = new float[width*height]; // 128, 32
             for (var row = 0; row < width; row++)
-                Array.Copy(frames[row], 0, concatenated, row*frames[row].Length, frames[row].Length);
+            {
+                Array.Copy(frames[row], 0, concatenated, row * frames[row].Length, frames[row].Length);
+            }
 
             var indexes = Enumerable.Range(0, concatenated.Length).ToArray();
-            var abs = new AbsComparer();
-            ArraySort(concatenated, indexes, abs); // Sorts concatenated into decending order, indexes contains indexes that was changed
-            
+
+            var sorter = new SorterGenericArray(concatenated, indexes);
+            sorter.QuickSort(0, 0 + concatenated.Length - 1);
+
             var result = new bool[concatenated.Length*2]; /*Concatenated float array*/
             for (var i = 0; i < TopWavelets; i++)
             {
@@ -379,6 +383,10 @@ namespace AcousticFingerprintingLibrary_0._4._5
             return result;
         }
 
+        public static int Compare(float x, float y)
+        {
+            return Math.Abs(y).CompareTo(Math.Abs(x));
+        }
         #endregion
 
         #region Hashing
@@ -690,139 +698,10 @@ namespace AcousticFingerprintingLibrary_0._4._5
         }
         
         #region Sorting code taken from C# .NET sourcecode
-
-        private void ArraySort(Array keys, Array items, AbsComparer comparer)
-        {
-            if (keys == null)
-                throw new ArgumentNullException(nameof(keys));
-
-            Sort(keys, items, keys.GetLowerBound(0), keys.Length, comparer);
-
-        }
-
-        public static void Sort(Array keys, Array items, int index, int length, AbsComparer comparer)
-        {
-            /* //Error handling, fuck that
-            if (keys == null)
-                throw new ArgumentNullException("keys");
-            if (keys.Rank != 1 || (items != null && items.Rank != 1))
-                throw new RankException(Environment.GetResourceString("Rank_MultiDimNotSupported"));
-            if (items != null && keys.GetLowerBound(0) != items.GetLowerBound(0))
-                throw new ArgumentException(Environment.GetResourceString("Arg_LowerBoundsMustMatch"));
-            if (index < keys.GetLowerBound(0) || length < 0)
-                throw new ArgumentOutOfRangeException((length < 0 ? "length" : "index"), Environment.GetResourceString("ArgumentOutOfRange_NeedNonNegNum"));
-            if (keys.Length - (index - keys.GetLowerBound(0)) < length || (items != null && (index - items.GetLowerBound(0)) > items.Length - length))
-                throw new ArgumentException(Environment.GetResourceString("Argument_InvalidOffLen"));
-            */
-
-            if (length > 1)
-            {
-                var objKeys = keys as Object[];
-                Object[] objItems = null;
-                if (objKeys != null)
-                    objItems = items as Object[];
-                if (objKeys != null && (items == null || objItems != null))
-                {
-                    var sorter = new SorterObjectArray(objKeys, objItems, comparer);
-                    sorter.QuickSort(index, index + length - 1);
-                }
-                else
-                {
-                    var sorter = new SorterGenericArray(keys, items, comparer);
-                    sorter.QuickSort(index, index + length - 1);
-                }
-            }
-        }
-
+        
         private static int GetMedian(int low, int hi)
         {
             return low + ((hi - low) >> 1);
-        }
-
-        private struct SorterObjectArray
-        {
-            private readonly Object[] _keys;
-            private readonly Object[] _items;
-            private readonly AbsComparer _comparer;
-
-            internal SorterObjectArray(Object[] keys, Object[] items, AbsComparer comparer)
-            {
-                _keys = keys;
-                _items = items;
-                _comparer = comparer;
-            }
-
-            private void SwapIfGreaterWithItems(int a, int b)
-            {
-                if (a != b)
-                {
-                    if (_comparer.Compare((float)_keys[a], (float)_keys[b]) > 0)
-                    {
-                        var temp = _keys[a];
-                        _keys[a] = _keys[b];
-                        _keys[b] = temp;
-                        if (_items != null)
-                        {
-                            var item = _items[a];
-                            _items[a] = _items[b];
-                            _items[b] = item;
-                        }
-                    }
-                }
-            }
-
-
-            internal void QuickSort(int left, int right)
-            {
-                // Can use the much faster jit helpers for array access.
-                do
-                {
-                    var i = left;
-                    var j = right;
-
-                    // pre-sort the low, middle (pivot), and high values in place.
-                    // this improves performance in the face of already sorted data, or 
-                    // data that is made up of multiple sorted runs appended together.
-                    var middle = GetMedian(i, j);
-                    SwapIfGreaterWithItems(i, middle); // swap the low with the mid point
-                    SwapIfGreaterWithItems(i, j); // swap the low with the high 
-                    SwapIfGreaterWithItems(middle, j); // swap the middle with the high
-
-                    var x = _keys[middle];
-                    do
-                    {
-                        // Add a try block here to detect IComparers (or their 
-                        // underlying IComparables, etc) that are bogus.
-                        while (_comparer.Compare((float)_keys[i], (float)x) < 0) i++;
-                        while (_comparer.Compare((float)x, (float)_keys[j]) < 0) j--;
-                        if (i > j) break;
-                        if (i < j)
-                        {
-                            var key = _keys[i];
-                            _keys[i] = _keys[j];
-                            _keys[j] = key;
-                            if (_items != null)
-                            {
-                                var item = _items[i];
-                                _items[i] = _items[j];
-                                _items[j] = item;
-                            }
-                        }
-                        i++;
-                        j--;
-                    } while (i <= j);
-                    if (j - left <= right - i)
-                    {
-                        if (left < j) QuickSort(left, j);
-                        left = i;
-                    }
-                    else
-                    {
-                        if (i < right) QuickSort(i, right);
-                        right = j;
-                    }
-                } while (left < right);
-            }
         }
 
         // Private value used by the Sort methods for instances of Array. 
@@ -832,20 +711,18 @@ namespace AcousticFingerprintingLibrary_0._4._5
         {
             private readonly Array _keys;
             private readonly Array _items;
-            private readonly AbsComparer _comparer;
 
-            internal SorterGenericArray(Array keys, Array items, AbsComparer comparer)
+            internal SorterGenericArray(Array keys, Array items)
             {
                 _keys = keys;
                 _items = items;
-                _comparer = comparer;
             }
 
-            internal void SwapIfGreaterWithItems(int a, int b)
+            private void SwapIfGreaterWithItems(int a, int b)
             {
                 if (a != b)
                 {
-                    if (_comparer.Compare((float)_keys.GetValue(a), (float)_keys.GetValue(b)) > 0)
+                    if (Compare((float)_keys.GetValue(a), (float)_keys.GetValue(b)) > 0)
                     {
                         var key = _keys.GetValue(a);
                         _keys.SetValue(_keys.GetValue(b), a);
@@ -881,8 +758,8 @@ namespace AcousticFingerprintingLibrary_0._4._5
                     {
                         // Add a try block here to detect IComparers (or their 
                         // underlying IComparables, etc) that are bogus.
-                        while (_comparer.Compare((float)_keys.GetValue(i), (float)x) < 0) i++;
-                        while (_comparer.Compare((float)x, (float)_keys.GetValue(j)) < 0) j--;
+                        while (Compare((float)_keys.GetValue(i), (float)x) < 0) i++;
+                        while (Compare((float)x, (float)_keys.GetValue(j)) < 0) j--;
                         if (i > j) break;
                         if (i < j)
                         {
