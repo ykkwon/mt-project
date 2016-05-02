@@ -39,29 +39,29 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         tableView.dataSource    =   self
         tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
         
-        var moviePickerButton = UIButton(type: UIButtonType.System) as UIButton
+        let moviePickerButton = UIButton(type: UIButtonType.System) as UIButton
         moviePickerButton.frame = CGRectMake(CGRectGetMidX(view.frame)-50, 150, 100, 50)
         moviePickerButton.setTitle("Pick movie", forState: UIControlState.Normal)
-        moviePickerButton.addTarget(self, action: "moviePickerButtonAction:", forControlEvents: UIControlEvents.TouchUpInside)
+        moviePickerButton.addTarget(self, action: #selector(ViewController.moviePickerButtonAction(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addSubview(moviePickerButton)
         
         
-        var getFingerprintsButton = UIButton(type: UIButtonType.System) as UIButton
+        let getFingerprintsButton = UIButton(type: UIButtonType.System) as UIButton
         getFingerprintsButton.frame = CGRectMake(CGRectGetMidX(view.frame)-50, 250, 100, 50)
         getFingerprintsButton.setTitle("Fingerprints", forState: UIControlState.Normal)
-        getFingerprintsButton.addTarget(self, action: "getFingerprintsButtonAction:", forControlEvents: UIControlEvents.TouchUpInside)
+        getFingerprintsButton.addTarget(self, action: #selector(ViewController.getFingerprintsButtonAction(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addSubview(getFingerprintsButton)
         
-        var recordButton = UIButton(type: UIButtonType.System) as UIButton
+        let recordButton = UIButton(type: UIButtonType.System) as UIButton
         recordButton.frame = CGRectMake(CGRectGetMidX(view.frame)-50, 350, 100, 50)
         recordButton.setTitle("Record", forState: UIControlState.Normal)
-        recordButton.addTarget(self, action: "recordButtonAction:", forControlEvents: UIControlEvents.TouchUpInside)
+        recordButton.addTarget(self, action: #selector(ViewController.recordButtonAction(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addSubview(recordButton)
         
-        var stopButton = UIButton(type: UIButtonType.System) as UIButton
+        let stopButton = UIButton(type: UIButtonType.System) as UIButton
         stopButton.frame = CGRectMake(CGRectGetMidX(view.frame)-50, 450, 100, 50)
         stopButton.setTitle("Stop", forState: UIControlState.Normal)
-        stopButton.addTarget(self, action: "stopButtonAction:", forControlEvents: UIControlEvents.TouchUpInside)
+        stopButton.addTarget(self, action: #selector(ViewController.stopButtonAction(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addSubview(stopButton)
 
         

@@ -52,17 +52,17 @@ public class FingerprintManager {
     }
     
     private func GetLogSpacedFrequencies(minFrequencies: Int, maxFrequencies: Int, fftSize: Int) -> [Int]{
-        var logMin = log(Double(minFrequencies))
-        var logMax = log(Double(maxFrequencies))
-        var delta = (logMax - logMin) / Double(LogBins)
+        let logMin = log(Double(minFrequencies))
+        let logMax = log(Double(maxFrequencies))
+        let delta = (logMax - logMin) / Double(LogBins)
         var indexes:[Int] = [Int](count: LogBins+1, repeatedValue: 0)
         var accDelta:Double = 0
         
-        for(var index0 = 0; index0 <= LogBins; index0++){
-            var freq = pow(LogBase, logMin+accDelta)
+        for(var index0 = 0; index0 <= LogBins; index0 += 1){
+            let freq = pow(LogBase, logMin+accDelta)
             accDelta += delta
             
-            var chunk = freq/(Double(SampleRate/2))
+            let chunk = freq/(Double(SampleRate/2))
             indexes[index0] = Int(round((Double(fftSize/2 + 1)*chunk)))
         }
         return indexes
@@ -71,17 +71,17 @@ public class FingerprintManager {
     public func CreateLogSpectrogram(samples: [Float]) -> [[Float]]{
         
         NormalizeInPlace(samples)
-        var overlap = Overlap
-        var windowSize = WindowSize
+        let overlap = Overlap
+        let windowSize = WindowSize
         var windowArray = WindowFunction.GetWindow(windowSize)
-        var width = (samples.count - windowSize) / overlap
+        let width = (samples.count - windowSize) / overlap
         
         var frames:[[Float]] = [[Float]](count:width, repeatedValue:[Float](count:0, repeatedValue:0.0))
         var fftSamples:[Float] = [Float](count:2*windowSize, repeatedValue:0.0)
         
-        for(var widthIndex = 0; widthIndex < width; widthIndex++){
+        for(var widthIndex = 0; widthIndex < width; widthIndex += 1){
             
-            for(var windowIndex = 0; windowIndex < windowSize; windowIndex++){
+            for(var windowIndex = 0; windowIndex < windowSize; windowIndex += 1){
                 fftSamples[2*windowIndex] = (Float(windowArray[windowIndex])*samples[widthIndex * overlap + windowIndex])
                 fftSamples[2*windowIndex + 1] = 0
             }
@@ -94,12 +94,12 @@ public class FingerprintManager {
     
     public func NormalizeInPlace(samples: [Float]){
         var internalSamples:[Float] = samples
-        var Minrms:Double = 0.1
-        var Maxrms:Double = 3.0
+        let Minrms:Double = 0.1
+        let Maxrms:Double = 3.0
         
         var squares:Double = 0
-        var nsamples = internalSamples.count
-        for(var i = 0; i < nsamples; i++){
+        let nsamples = internalSamples.count
+        for(var i = 0; i < nsamples; i += 1){
             squares += Double(internalSamples[i] * internalSamples[i])
             
         }
@@ -111,7 +111,7 @@ public class FingerprintManager {
         if rms > Maxrms {
             rms = Maxrms
         }
-        for(var i = 0; i < nsamples; i++){
+        for(var i = 0; i < nsamples; i += 1){
             internalSamples[i] = internalSamples[i] / Float(rms)
             internalSamples[i] = min(internalSamples[i], 1)
             internalSamples[i] = max(internalSamples[i], -1)
@@ -120,30 +120,30 @@ public class FingerprintManager {
     }
     
     public func CreateFingerprints(samples: [Float]) -> [Fingerprint] {
-        var spectrum = CreateLogSpectrogram(samples)
+        let spectrum = CreateLogSpectrogram(samples)
         return CreateFingerprints(spectrum)
     }
     
     public func CreateFingerprints(spectrogram: [[Float]]) -> [Fingerprint]{
-        var fingerprintWidth = FingerprintWidth
-        var overlap = Overlap
-        var fingerprintHeight = LogBins
+        let fingerprintWidth = FingerprintWidth
+        let overlap = Overlap
+        let fingerprintHeight = LogBins
         var start = 0
-        var sampleRate = SampleRate
-        var sequenceNr = 0
+        let sampleRate = SampleRate
+        let sequenceNr = 0
         var fingerPrints:[Fingerprint] = []
         
-        var length = spectrogram.count // TODO is this equal to GetLength(0)? Appearently.
+        let length = spectrogram.count // TODO is this equal to GetLength(0)? Appearently.
         while start + fingerprintWidth <= length {
             var frames:[[Float]] = [[Float]](count:fingerprintWidth, repeatedValue:[Float](count:fingerprintHeight, repeatedValue:0.0))
             
-            for(var index = 0; index < fingerprintWidth; index++){
+            for(var index = 0; index < fingerprintWidth; index += 1){
                 
                 frames[index] = [Float](count: fingerprintHeight, repeatedValue: 0.0)
                 frames[index] = (spectrogram[start+index])
             }
             HaarWavelet.Transform(frames)
-            var image = ExtractTopWavelets(frames)
+            let image = ExtractTopWavelets(frames)
             fingerPrints.append(Fingerprint(signature: image, sequenceNo: sequenceNr+1, timestamp: Double(start)*Double(overlap/sampleRate)))
             start += fingerprintWidth + (Stride/overlap)
         }
@@ -152,16 +152,16 @@ public class FingerprintManager {
     
     
     public func ExtractLogBins(spectrum: [Float]) -> [Float]{
-        var logBins:Int = LogBins
+        let logBins:Int = LogBins
         var totalFreq:[Float] = [Float](count: logBins, repeatedValue: 0.0)
         
-        for(var index = 0; index < logBins; index++){
-            var low = spacedLogFreq[index]
-            var high = spacedLogFreq[index+1]
+        for(var index = 0; index < logBins; index += 1){
+            let low = spacedLogFreq[index]
+            let high = spacedLogFreq[index+1]
             
-            for(var index2 = low; index2 < high; index2++){
-                var re = spectrum[2*index2];
-                var img = spectrum[(2*index2)+1];
+            for(var index2 = low; index2 < high; index2 += 1){
+                let re = spectrum[2*index2];
+                let img = spectrum[(2*index2)+1];
                 totalFreq[index] += Float(sqrt(re*re + img*img))
             }
             totalFreq[index] = (totalFreq[index] / Float((high-low)))
@@ -170,26 +170,26 @@ public class FingerprintManager {
     }
     
     public func ExtractTopWavelets(frames: [[Float]]) -> [Bool]{
-        var topWavelets = TopWavelets
+        let topWavelets = TopWavelets
         var width = 128
         var height = 32
         var concatenated:[Float] = []
         var it = 0;
-        for (var row = 0; row < width; row++)
+        for (var row = 0; row < width; row += 1)
         {
-            for(var col = 0; col < height; col++){
+            for(var col = 0; col < height; col += 1){
                 concatenated.append(frames[row][col])
             }
         }
         var indexes:[Int] = [Int](count: concatenated.count, repeatedValue: 0)
-        for(var i = 0; i >= indexes.count; i++){
+        for(var i = 0; i >= indexes.count; i += 1){
             indexes[i] = i
         }
         var sorter = SorterGenericArray(keys: concatenated, items: indexes)
         sorter.QuickSort(0, right: concatenated.count-1)
         
         var result:[Bool] = [Bool](count: concatenated.count*2, repeatedValue: true)
-        for (var i = 0; i < topWavelets; i++)
+        for (var i = 0; i < topWavelets; i += 1)
         {
             var index = indexes[i]
             var value = concatenated[i]
@@ -310,7 +310,7 @@ public class FingerprintManager {
         }
         
     
-    public func GetFingerHashes(listdb: [Fingerprint]) -> [HashedFingerprint]{
+    private func GetFingerHashes(listdb: [Fingerprint]) -> [HashedFingerprint]{
         var listDb = listdb
         var minHash:MinHash = MinHash()
         var minhashdb:[BYTE] = []
@@ -329,24 +329,24 @@ public class FingerprintManager {
         return hashedFinger
     }
     
-    public func GenerateHashedFingerprints(receivedHashes: [String], receivedTimestamps: [String]) -> [HashedFingerprint]{
+    private func GenerateHashedFingerprints(receivedHashes: [String], receivedTimestamps: [String]) -> [HashedFingerprint]{
         // TODO
         var matchedFingerprints:[HashedFingerprint] = []
         return matchedFingerprints
     }
     
-    public func SplitFingerprintLists(movieFingerprints: [HashedFingerprint]) -> [HashedFingerprint]{
+    private func SplitFingerprintLists(movieFingerprints: [HashedFingerprint]) -> [HashedFingerprint]{
         // TODO
         var matchedFingerprints:[HashedFingerprint] = []
         return matchedFingerprints
     }
     
-    public func CompareFingerprintLists(fingerprints: [HashedFingerprint], toCompare: [HashedFingerprint]) -> Bool{
+    private func CompareFingerprintLists(fingerprints: [HashedFingerprint], toCompare: [HashedFingerprint]) -> Bool{
         // TODO
         return false
     }
     
-    public func CompareFingerprintListsHighest(fingerprints: [HashedFingerprint], toCompare: [HashedFingerprint]) -> Double {
+    private func CompareFingerprintListsHighest(fingerprints: [HashedFingerprint], toCompare: [HashedFingerprint]) -> Double {
         var fingerprintList = fingerprints
         var toCompareList = toCompare
         
@@ -382,7 +382,7 @@ public class FingerprintManager {
         return 0.0
     }
     
-    public func FindBestFingerprintList(allFingerprints: [HashedFingerprint], toCompare: [HashedFingerprint]) -> Int{
+    private func FindBestFingerprintList(allFingerprints: [HashedFingerprint], toCompare: [HashedFingerprint]) -> Int{
         // TODO
         return 0
     }

@@ -38,7 +38,6 @@
 		8B9A854A1CCA416F0070E94E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8B9A854C1CCA416F0070E94E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8BC18DA31CCE8FB9003A665B /* AudioRecognitionLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioRecognitionLibrary.framework; path = "../../../../Library/Developer/Xcode/DerivedData/MetaTracksAcoustic-cgefswfbxihzrpfrctowiyycyixg/Build/Products/Debug-iphoneos/AudioRecognitionLibrary.framework"; sourceTree = "<group>"; };
-		8BC18DA91CCE90AD003A665B /* Surge.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = Surge.framework; path = "/Users/metatracks/Library/Developer/Xcode/DerivedData/MetaTracksAcoustic-cgefswfbxihzrpfrctowiyycyixg/Build/Products/Debug-iphoneos/Surge.framework"; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,7 +55,6 @@
 		8B9A85341CCA416F0070E94E = {
 			isa = PBXGroup;
 			children = (
-				8BC18DA91CCE90AD003A665B /* Surge.framework */,
 				8BC18DA31CCE8FB9003A665B /* AudioRecognitionLibrary.framework */,
 				8B9A853F1CCA416F0070E94E /* iOSApplication053 */,
 				8B9A853E1CCA416F0070E94E /* Products */,
@@ -282,6 +280,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = mt.metatracks.iOSApplication053;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 2;
 			};
 			name = Debug;
 		};
@@ -298,6 +297,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = mt.metatracks.iOSApplication053;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 2;
 			};
 			name = Release;
 		};
