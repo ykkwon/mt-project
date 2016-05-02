@@ -122,7 +122,7 @@ namespace DatabasePopulationApplication_0._4._5
             FingerprintManager manager =
                 new FingerprintManager();
 
-            float[][] data = manager.CreateSpectrogram(Path.GetFullPath(_filename), 0, 0);
+            float[][] data = manager.CreateImageSpectrogram(Path.GetFullPath(_filename), 0, 0);
             Bitmap image = Imaging.GetSpectrogramImage(data, width, height);
             image.Save(sfd.FileName, ImageFormat.Jpeg);
             image.Dispose();

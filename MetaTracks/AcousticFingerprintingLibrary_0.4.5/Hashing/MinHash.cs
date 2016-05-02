@@ -15,29 +15,9 @@ namespace AcousticFingerprintingLibrary_0._4._5.Hashing
         
         // Highest primenumber
         private const long PrimeP = 2147483659;
-
-        /// <summary>
-        ///   A Constant used in computation of  hash bucket value
-        /// </summary>
-        private const int A = 1;
-
-        /// <summary>
-        ///   B Constant used in computation of hash bucket value
-        /// </summary>
-        private const int B = 0;
-
-        /// <summary>
-        ///   Permutations dictionary
-        /// </summary>
+        
+        
         private readonly int[][] _permutations;
-
-        /// <summary>
-        ///   Number of permutation read from the database
-        /// </summary>
-        /// <remarks>
-        ///   Default = 100
-        /// </remarks>
-        private readonly int _permutationsCount;
 
         /// <summary>
         ///   Public constructor 
@@ -49,14 +29,7 @@ namespace AcousticFingerprintingLibrary_0._4._5.Hashing
 
             if (_permutations == null || _permutations.Length == 0)
                 throw new Exception("Permutations are null or not enough to create the Min Hash signature");
-
-            _permutationsCount = _permutations.Length;
         }
-
-        /// <summary>
-        ///   Number of random permutations
-        /// </summary>
-        public int PermutationsCount => _permutationsCount;
 
         public byte[] ComputeMinHashSignatureByte(bool[] fingerprint)
         {
@@ -81,7 +54,11 @@ namespace AcousticFingerprintingLibrary_0._4._5.Hashing
 
         public Dictionary<int, long> GroupMinHashToLshBucketsByte(byte[] minHashes, int numberOfHashTables, int numberOfMinHashesPerKey)
         {
+            const int A = 1;
+            const int B = 0;
+            
             Dictionary<int, long> result = new Dictionary<int, long>();
+
             const int maxNumber = 8; /*Int64 biggest value for MinHash*/
             if (numberOfMinHashesPerKey > maxNumber)
                 throw new ArgumentException("numberOfMinHashesPerKey cannot be bigger than 8");

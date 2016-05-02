@@ -105,10 +105,6 @@ namespace AcousticFingerprintingLibrary_0._4._5
         /// <summary>
         ///   Get logarithmically spaced indices
         /// </summary>
-        /// <param name="fftSize">
-        ///     FFT Size
-        ///     FFT Size
-        /// </param>
         /// <returns>Gets an array of indexes</returns>
         /// <summary>
         ///   Get logarithmically spaced arrays
@@ -117,8 +113,8 @@ namespace AcousticFingerprintingLibrary_0._4._5
         /// <param name = "maxFrequencies">Max frequency</param>
         private int[] GetLogSpacedFrequencies(int minFrequencies, int maxFrequencies, int fftSize)
         {
-            var logMin = Math.Log(minFrequencies, LogBase);
-            var logMax = Math.Log(maxFrequencies, LogBase);
+            var logMin = Math.Log(minFrequencies, LogBase); // Logn(minFr...);
+            var logMax = Math.Log(maxFrequencies, LogBase); // Logn(maxFr...);
             var delta = (logMax - logMin)/LogBins;
 
             var indexes = new int[LogBins + 1];
@@ -147,7 +143,7 @@ namespace AcousticFingerprintingLibrary_0._4._5
         /// <param name = "milliseconds">Milliseconds to process</param>
         /// <param name = "startmilliseconds">Starting point of the processing</param>
         /// <returns>Spectrogram</returns>
-        public float[][] CreateSpectrogram(string filename, int milliseconds, int startmilliseconds)
+        public float[][] CreateImageSpectrogram(string filename, int milliseconds, int startmilliseconds)
         {
             //read 5512 Hz, Mono, PCM, with a specific bassproxy
             var samples = BassProxy.GetSamplesMono(filename, SampleRate);
@@ -181,9 +177,9 @@ namespace AcousticFingerprintingLibrary_0._4._5
             return frames;
         }
 
-        public float[][] CreateLogSpectrogram(float[] samples)
+        public float[][] CreateSpectrogram(float[] samples)
         {
-            Console.WriteLine("CreateLogSpectrogram");
+            Console.WriteLine("CreateSpectrogram");
             NormalizeInPlace(samples);
             var overlap = Overlap;
             var windowSize = WindowSize;
@@ -206,7 +202,6 @@ namespace AcousticFingerprintingLibrary_0._4._5
             }
             return frames;
         }
-
 
         // normalize power (volume) of a wave file.
         // minimum and maximum root-mean-square(RMS) to normalize from.
@@ -242,7 +237,38 @@ namespace AcousticFingerprintingLibrary_0._4._5
         }
 
         #endregion
+        
+        #region Frequency Manipulation
 
+        /// <summary>
+        ///   Logarithmic spaced frequency bins
+        /// </summary>
+        /// <param name = "spectrum">Spectrum to space</param>
+        public float[] ExtractLogBins(float[] spectrum)
+        {
+            // Safe Code:
+            if (spectrum == null)
+                throw new ArgumentNullException(nameof(spectrum));
+
+            var totalFreq = new float[LogBins]; /*32*/
+            for (var index = 0; index < LogBins; index++)
+            {
+                var low = _spacedLogFreq[index];
+                var high = _spacedLogFreq[index + 1];
+
+                for (var index2 = low; index2 < high; index2++)
+                {
+                    double re = spectrum[2 * index2];
+                    double img = spectrum[2 * index2 + 1];
+                    totalFreq[index] += (float)(Math.Sqrt(re * re + img * img));
+                }
+                totalFreq[index] = totalFreq[index] / (high - low);
+            }
+            return totalFreq;
+        }
+
+        #endregion
+        
         #region Fingerprinting
 
         /// <summary>
@@ -264,7 +290,7 @@ namespace AcousticFingerprintingLibrary_0._4._5
         /// <returns>Fingerprint signatures</returns>
         public List<Fingerprint> CreateFingerprints(float[] samples)
         {
-            var spectrum = CreateLogSpectrogram(samples);
+            var spectrum = CreateSpectrogram(samples);
             return CreateFingerprints(spectrum);
         }
 
@@ -310,44 +336,6 @@ namespace AcousticFingerprintingLibrary_0._4._5
 
         #endregion
 
-        #region Frequency Manipulation
-
-        /// <summary>
-        ///   Logarithmic spacing of a frequency in a linear domain
-        /// </summary>
-        /// <param name = "spectrum">Spectrum to space</param>
-        /// <returns>Logarithmically spaced signal</returns>
-        public float[] ExtractLogBins(float[] spectrum)
-        {
-            var logBins = LogBins; /*Local copy for performance reasons*/
-
-            // Safe Code:
-            if (spectrum == null)
-                throw new ArgumentNullException(nameof(spectrum));
-            if (MinFrequency >= MaxFrequency)
-                throw new ArgumentException("Minimal frequency cannot be bigger or equal to Maximum frequency");
-            if (SampleRate <= 0)
-                throw new ArgumentException("sampleRate cannot be less or equal to zero");
-
-            var totalFreq = new float[logBins]; /*32*/
-            for (var index = 0; index < logBins; index++)
-            {
-                var low = _spacedLogFreq[index];
-                var high = _spacedLogFreq[index + 1];
-
-                for (var index2 = low; index2 < high; index2++)
-                {
-                    double re = spectrum[2*index2];
-                    double img = spectrum[2*index2 + 1];
-                    totalFreq[index] += (float) (Math.Sqrt(re*re + img*img));
-                }
-                totalFreq[index] = totalFreq[index]/(high - low);
-            }
-            return totalFreq;
-        }
-
-        #endregion
-
         #region Wavelet Decomposition
 
         /// <summary>
@@ -357,292 +345,29 @@ namespace AcousticFingerprintingLibrary_0._4._5
         /// <returns>Fingerprint signature. Array of encoded Boolean elements (wavelet signature)</returns>
         public bool[] ExtractTopWavelets(float[][] frames)
         {
-            var topWavelets = TopWavelets; /*Local copy for performance reasons*/
-
             // Safe code:
             if (frames == null)
                 throw new ArgumentNullException(nameof(frames));
             for (var j = 0; j < frames.GetLength(0); j++)
                 if (frames[j] == null)
                     throw new ArgumentNullException(nameof(frames));
-            if (topWavelets < 0)
-                throw new ArgumentException("numberOfTopWaveletes cannot be less than 0");
-
-
+            
             var width = frames.GetLength(0); // 128
             var height = frames[0].Length; // 32
 
-            if (topWavelets >= width*height)
-                throw new ArgumentException("TopWaveletes cannot exceed the length of concatenated array");
+            if (TopWavelets >= width*height || TopWavelets < 0)
+                throw new ArgumentException("TopWaveletes cannot exceed the length of array or below 0");
 
             var concatenated = new float[width*height]; // 128, 32
             for (var row = 0; row < width; row++)
                 Array.Copy(frames[row], 0, concatenated, row*frames[row].Length, frames[row].Length);
 
             var indexes = Enumerable.Range(0, concatenated.Length).ToArray();
-            var abs = new AbsComparator();
-            ArraySort(concatenated, indexes, abs);
-
-            //var result = EncodeFingerprint(concatenated, indexes, topWavelets);
-            //return result;
-
+            var abs = new AbsComparer();
+            ArraySort(concatenated, indexes, abs); // Sorts concatenated into decending order, indexes contains indexes that was changed
+            
             var result = new bool[concatenated.Length*2]; /*Concatenated float array*/
-            for (var i = 0; i < topWavelets; i++)
-            {
-                var index = indexes[i];
-                double value = concatenated[i];
-                if (value > 0) /*positive wavelet*/
-                    result[index*2] = true;
-                else if (value < 0) /*negative wavelet*/
-                    result[index*2 + 1] = true;
-            }
-            return result;
-        }
-
-        #endregion
-
-        #region Sorting code taken from C# .NET sourcecode
-
-        private void ArraySort(Array keys, Array items, AbsComparator comparer)
-        {
-            if (keys == null)
-                throw new ArgumentNullException(nameof(keys));
-
-            Sort(keys, items, keys.GetLowerBound(0), keys.Length, comparer);
-
-        }
-
-        public static void Sort(Array keys, Array items, int index, int length, AbsComparator comparer)
-        {
-            /* //Error handling, fuck that
-            if (keys == null)
-                throw new ArgumentNullException("keys");
-            if (keys.Rank != 1 || (items != null && items.Rank != 1))
-                throw new RankException(Environment.GetResourceString("Rank_MultiDimNotSupported"));
-            if (items != null && keys.GetLowerBound(0) != items.GetLowerBound(0))
-                throw new ArgumentException(Environment.GetResourceString("Arg_LowerBoundsMustMatch"));
-            if (index < keys.GetLowerBound(0) || length < 0)
-                throw new ArgumentOutOfRangeException((length < 0 ? "length" : "index"), Environment.GetResourceString("ArgumentOutOfRange_NeedNonNegNum"));
-            if (keys.Length - (index - keys.GetLowerBound(0)) < length || (items != null && (index - items.GetLowerBound(0)) > items.Length - length))
-                throw new ArgumentException(Environment.GetResourceString("Argument_InvalidOffLen"));
-            */
-
-            if (length > 1)
-            {
-                var objKeys = keys as Object[];
-                Object[] objItems = null;
-                if (objKeys != null)
-                    objItems = items as Object[];
-                if (objKeys != null && (items == null || objItems != null))
-                {
-                    var sorter = new SorterObjectArray(objKeys, objItems, comparer);
-                    sorter.QuickSort(index, index + length - 1);
-                }
-                else
-                {
-                    var sorter = new SorterGenericArray(keys, items, comparer);
-                    sorter.QuickSort(index, index + length - 1);
-                }
-            }
-        }
-
-        private static int GetMedian(int low, int hi)
-        {
-            return low + ((hi - low) >> 1);
-        }
-
-        private struct SorterObjectArray
-        {
-            private readonly Object[] _keys;
-            private readonly Object[] _items;
-            private readonly AbsComparator _comparer;
-
-            internal SorterObjectArray(Object[] keys, Object[] items, AbsComparator comparer)
-            {
-                _keys = keys;
-                _items = items;
-                _comparer = comparer;
-            }
-
-            private void SwapIfGreaterWithItems(int a, int b)
-            {
-                if (a != b)
-                {
-                    if (_comparer.Compare((float) _keys[a], (float) _keys[b]) > 0)
-                    {
-                        var temp = _keys[a];
-                        _keys[a] = _keys[b];
-                        _keys[b] = temp;
-                        if (_items != null)
-                        {
-                            var item = _items[a];
-                            _items[a] = _items[b];
-                            _items[b] = item;
-                        }
-                    }
-                }
-            }
-
-
-            internal void QuickSort(int left, int right)
-            {
-                // Can use the much faster jit helpers for array access.
-                do
-                {
-                    var i = left;
-                    var j = right;
-
-                    // pre-sort the low, middle (pivot), and high values in place.
-                    // this improves performance in the face of already sorted data, or 
-                    // data that is made up of multiple sorted runs appended together.
-                    var middle = GetMedian(i, j);
-                    SwapIfGreaterWithItems(i, middle); // swap the low with the mid point
-                    SwapIfGreaterWithItems(i, j); // swap the low with the high 
-                    SwapIfGreaterWithItems(middle, j); // swap the middle with the high
-
-                    var x = _keys[middle];
-                    do
-                    {
-                        // Add a try block here to detect IComparers (or their 
-                        // underlying IComparables, etc) that are bogus.
-                        while (_comparer.Compare((float) _keys[i], (float) x) < 0) i++;
-                        while (_comparer.Compare((float) x, (float) _keys[j]) < 0) j--;
-                        if (i > j) break;
-                        if (i < j)
-                        {
-                            var key = _keys[i];
-                            _keys[i] = _keys[j];
-                            _keys[j] = key;
-                            if (_items != null)
-                            {
-                                var item = _items[i];
-                                _items[i] = _items[j];
-                                _items[j] = item;
-                            }
-                        }
-                        i++;
-                        j--;
-                    } while (i <= j);
-                    if (j - left <= right - i)
-                    {
-                        if (left < j) QuickSort(left, j);
-                        left = i;
-                    }
-                    else
-                    {
-                        if (i < right) QuickSort(i, right);
-                        right = j;
-                    }
-                } while (left < right);
-            }
-        }
-
-        // Private value used by the Sort methods for instances of Array. 
-        // This is slower than the one for Object[], since we can't use the JIT helpers 
-        // to access the elements.  We must use GetValue & SetValue.
-        private struct SorterGenericArray
-        {
-            private readonly Array _keys;
-            private readonly Array _items;
-            private readonly AbsComparator _comparer;
-
-            internal SorterGenericArray(Array keys, Array items, AbsComparator comparer)
-            {
-                _keys = keys;
-                _items = items;
-                _comparer = comparer;
-            }
-
-            internal void SwapIfGreaterWithItems(int a, int b)
-            {
-                if (a != b)
-                {
-                    if (_comparer.Compare((float) _keys.GetValue(a), (float) _keys.GetValue(b)) > 0)
-                    {
-                        var key = _keys.GetValue(a);
-                        _keys.SetValue(_keys.GetValue(b), a);
-                        _keys.SetValue(key, b);
-                        if (_items != null)
-                        {
-                            var item = _items.GetValue(a);
-                            _items.SetValue(_items.GetValue(b), a);
-                            _items.SetValue(item, b);
-                        }
-                    }
-                }
-            }
-
-            internal void QuickSort(int left, int right)
-            {
-                // Must use slow Array accessors (GetValue & SetValue)
-                do
-                {
-                    var i = left;
-                    var j = right;
-
-                    // pre-sort the low, middle (pivot), and high values in place. 
-                    // this improves performance in the face of already sorted data, or 
-                    // data that is made up of multiple sorted runs appended together.
-                    var middle = GetMedian(i, j);
-                    SwapIfGreaterWithItems(i, middle); // swap the low with the mid point
-                    SwapIfGreaterWithItems(i, j); // swap the low with the high
-                    SwapIfGreaterWithItems(middle, j); // swap the middle with the high
-
-                    var x = _keys.GetValue(middle);
-                    do
-                    {
-                        // Add a try block here to detect IComparers (or their 
-                        // underlying IComparables, etc) that are bogus.
-                        while (_comparer.Compare((float) _keys.GetValue(i), (float) x) < 0) i++;
-                        while (_comparer.Compare((float) x, (float) _keys.GetValue(j)) < 0) j--;
-                        if (i > j) break;
-                        if (i < j)
-                        {
-                            var key = _keys.GetValue(i);
-                            _keys.SetValue(_keys.GetValue(j), i);
-                            _keys.SetValue(key, j);
-                            if (_items != null)
-                            {
-                                var item = _items.GetValue(i);
-                                _items.SetValue(_items.GetValue(j), i);
-                                _items.SetValue(item, j);
-                            }
-                        }
-                        if (i != Int32.MaxValue) ++i;
-                        if (j != Int32.MinValue) --j;
-                    } while (i <= j);
-                    if (j - left <= right - i)
-                    {
-                        if (left < j) QuickSort(left, j);
-                        left = i;
-                    }
-                    else
-                    {
-                        if (i < right) QuickSort(i, right);
-                        right = j;
-                    }
-                } while (left < right);
-            }
-        }
-
-        #endregion
-
-        #region Fingerprint Encoding
-
-        /// <summary>
-        ///   Encode the integer representation of the fingerprint into Boolean array
-        /// </summary>
-        /// <param name = "concatenated">Concatenated fingerprint (frames concatenated)</param>
-        /// <param name = "indexes">Sorted indexes with the first one with the highest value in array</param>
-        /// <param name = "topWavelets">Number of top wavelets to encode</param>
-        /// <returns>Encoded fingerprint</returns>
-        public static bool[] EncodeFingerprint(float[] concatenated, int[] indexes, int topWavelets)
-        {
-            //   Negative Numbers = 01
-            //   Positive Numbers = 10
-            //   Zeros            = 00      
-            var result = new bool[concatenated.Length*2]; /*Concatenated float array*/
-            for (var i = 0; i < topWavelets; i++)
+            for (var i = 0; i < TopWavelets; i++)
             {
                 var index = indexes[i];
                 double value = concatenated[i];
@@ -663,12 +388,12 @@ namespace AcousticFingerprintingLibrary_0._4._5
             var listDb = listdb;
             var minHash = new MinHash();
             var minhashdb = new List<byte[]>();
-            foreach (Fingerprint fing in listDb)
+            foreach(Fingerprint fing in listDb)
             {
                 minhashdb.Add(minHash.ComputeMinHashSignatureByte(fing.Signature));
             }
             var lshBuckets = new List<long[]>();
-            foreach (byte[] fing in minhashdb)
+            foreach(byte[] fing in minhashdb)
             {
                 lshBuckets.Add(minHash.GroupMinHashToLshBucketsByte(fing, _lshTableSize, _lshKey).Values.ToArray());
             }
@@ -842,7 +567,6 @@ namespace AcousticFingerprintingLibrary_0._4._5
             return result > 5; // if result greater than 5, return true, else false
         }
 
-
         public double CompareFingerprintListsHighest(HashedFingerprint[] fingerprints, HashedFingerprint[] toCompare)
         {
             Console.WriteLine("NEED TO EXPAND? " + _needToExpandSearch);
@@ -931,25 +655,6 @@ namespace AcousticFingerprintingLibrary_0._4._5
             return _matchedFingerprints.Count; // if result greater than 5, return true, else false
         }
 
-        public double GetTimeStamps(HashedFingerprint[] fingerprints, HashedFingerprint[] toCompare)
-        {
-            if (CompareFingerprintLists(fingerprints, toCompare))
-            {
-                /*
-                // returns index of the best fingerprint matched
-                var max = _bestMatchedFingerprint.Max();
-                // index of the fingerprint with highest number of matches
-                var index = _bestMatchedFingerprint.IndexOf(max) - 1;
-                */
-
-                // returns timestamp of matched fingerprint
-                return _bestMatchedFingerprint.Timestamp;
-                //return _matchedFingerprints.Last().Timestamp;
-            }
-            // Returns -1 if the lists are not a match
-            return -1;
-        }
-
         /// <summary>
         /// Searches through all fingerprints from movie to find the section with most correct fingerprints.
         /// This is for faster searching later on
@@ -971,35 +676,244 @@ namespace AcousticFingerprintingLibrary_0._4._5
             return bestIndex;
         }
 
-        //public bool CheckIteration(double timestamp, HashedFingerprint[] nextIteration)
-        //{
-        //    (new Thread(() =>
-        //    {
-
-        //    })).Start();
-       // }
-   // }
-
     #endregion
-        /// <summary>
-        ///   Absolute value comparator
-        /// </summary>
-        public class AbsComparator : IComparer<float>
-        {
-            #region IComparer<float> Members
 
+        public class AbsComparer : IComparer<float>
+        {
             /// <summary>
-            ///   Compare descending
+            ///   Compare absolute decending numbers ( 15, -14, -13, 11, 10, -9, 6, 5, -4 etc...)
             /// </summary>
-            /// <returns>Return details related to magnitude comparison</returns>
             public int Compare(float x, float y)
             {
-                // Math.Abs(y).CompareTo(Math.Abs(x)); returns -1 or 1
-                // If X is bigger, return -1, if Y is bigger return 1
                 return Math.Abs(y).CompareTo(Math.Abs(x));
             }
-
-            #endregion
         }
+        
+        #region Sorting code taken from C# .NET sourcecode
+
+        private void ArraySort(Array keys, Array items, AbsComparer comparer)
+        {
+            if (keys == null)
+                throw new ArgumentNullException(nameof(keys));
+
+            Sort(keys, items, keys.GetLowerBound(0), keys.Length, comparer);
+
+        }
+
+        public static void Sort(Array keys, Array items, int index, int length, AbsComparer comparer)
+        {
+            /* //Error handling, fuck that
+            if (keys == null)
+                throw new ArgumentNullException("keys");
+            if (keys.Rank != 1 || (items != null && items.Rank != 1))
+                throw new RankException(Environment.GetResourceString("Rank_MultiDimNotSupported"));
+            if (items != null && keys.GetLowerBound(0) != items.GetLowerBound(0))
+                throw new ArgumentException(Environment.GetResourceString("Arg_LowerBoundsMustMatch"));
+            if (index < keys.GetLowerBound(0) || length < 0)
+                throw new ArgumentOutOfRangeException((length < 0 ? "length" : "index"), Environment.GetResourceString("ArgumentOutOfRange_NeedNonNegNum"));
+            if (keys.Length - (index - keys.GetLowerBound(0)) < length || (items != null && (index - items.GetLowerBound(0)) > items.Length - length))
+                throw new ArgumentException(Environment.GetResourceString("Argument_InvalidOffLen"));
+            */
+
+            if (length > 1)
+            {
+                var objKeys = keys as Object[];
+                Object[] objItems = null;
+                if (objKeys != null)
+                    objItems = items as Object[];
+                if (objKeys != null && (items == null || objItems != null))
+                {
+                    var sorter = new SorterObjectArray(objKeys, objItems, comparer);
+                    sorter.QuickSort(index, index + length - 1);
+                }
+                else
+                {
+                    var sorter = new SorterGenericArray(keys, items, comparer);
+                    sorter.QuickSort(index, index + length - 1);
+                }
+            }
+        }
+
+        private static int GetMedian(int low, int hi)
+        {
+            return low + ((hi - low) >> 1);
+        }
+
+        private struct SorterObjectArray
+        {
+            private readonly Object[] _keys;
+            private readonly Object[] _items;
+            private readonly AbsComparer _comparer;
+
+            internal SorterObjectArray(Object[] keys, Object[] items, AbsComparer comparer)
+            {
+                _keys = keys;
+                _items = items;
+                _comparer = comparer;
+            }
+
+            private void SwapIfGreaterWithItems(int a, int b)
+            {
+                if (a != b)
+                {
+                    if (_comparer.Compare((float)_keys[a], (float)_keys[b]) > 0)
+                    {
+                        var temp = _keys[a];
+                        _keys[a] = _keys[b];
+                        _keys[b] = temp;
+                        if (_items != null)
+                        {
+                            var item = _items[a];
+                            _items[a] = _items[b];
+                            _items[b] = item;
+                        }
+                    }
+                }
+            }
+
+
+            internal void QuickSort(int left, int right)
+            {
+                // Can use the much faster jit helpers for array access.
+                do
+                {
+                    var i = left;
+                    var j = right;
+
+                    // pre-sort the low, middle (pivot), and high values in place.
+                    // this improves performance in the face of already sorted data, or 
+                    // data that is made up of multiple sorted runs appended together.
+                    var middle = GetMedian(i, j);
+                    SwapIfGreaterWithItems(i, middle); // swap the low with the mid point
+                    SwapIfGreaterWithItems(i, j); // swap the low with the high 
+                    SwapIfGreaterWithItems(middle, j); // swap the middle with the high
+
+                    var x = _keys[middle];
+                    do
+                    {
+                        // Add a try block here to detect IComparers (or their 
+                        // underlying IComparables, etc) that are bogus.
+                        while (_comparer.Compare((float)_keys[i], (float)x) < 0) i++;
+                        while (_comparer.Compare((float)x, (float)_keys[j]) < 0) j--;
+                        if (i > j) break;
+                        if (i < j)
+                        {
+                            var key = _keys[i];
+                            _keys[i] = _keys[j];
+                            _keys[j] = key;
+                            if (_items != null)
+                            {
+                                var item = _items[i];
+                                _items[i] = _items[j];
+                                _items[j] = item;
+                            }
+                        }
+                        i++;
+                        j--;
+                    } while (i <= j);
+                    if (j - left <= right - i)
+                    {
+                        if (left < j) QuickSort(left, j);
+                        left = i;
+                    }
+                    else
+                    {
+                        if (i < right) QuickSort(i, right);
+                        right = j;
+                    }
+                } while (left < right);
+            }
+        }
+
+        // Private value used by the Sort methods for instances of Array. 
+        // This is slower than the one for Object[], since we can't use the JIT helpers 
+        // to access the elements.  We must use GetValue & SetValue.
+        private struct SorterGenericArray
+        {
+            private readonly Array _keys;
+            private readonly Array _items;
+            private readonly AbsComparer _comparer;
+
+            internal SorterGenericArray(Array keys, Array items, AbsComparer comparer)
+            {
+                _keys = keys;
+                _items = items;
+                _comparer = comparer;
+            }
+
+            internal void SwapIfGreaterWithItems(int a, int b)
+            {
+                if (a != b)
+                {
+                    if (_comparer.Compare((float)_keys.GetValue(a), (float)_keys.GetValue(b)) > 0)
+                    {
+                        var key = _keys.GetValue(a);
+                        _keys.SetValue(_keys.GetValue(b), a);
+                        _keys.SetValue(key, b);
+                        if (_items != null)
+                        {
+                            var item = _items.GetValue(a);
+                            _items.SetValue(_items.GetValue(b), a);
+                            _items.SetValue(item, b);
+                        }
+                    }
+                }
+            }
+
+            internal void QuickSort(int left, int right)
+            {
+                // Must use slow Array accessors (GetValue & SetValue)
+                do
+                {
+                    var i = left;
+                    var j = right;
+
+                    // pre-sort the low, middle (pivot), and high values in place. 
+                    // this improves performance in the face of already sorted data, or 
+                    // data that is made up of multiple sorted runs appended together.
+                    var middle = GetMedian(i, j);
+                    SwapIfGreaterWithItems(i, middle); // swap the low with the mid point
+                    SwapIfGreaterWithItems(i, j); // swap the low with the high
+                    SwapIfGreaterWithItems(middle, j); // swap the middle with the high
+
+                    var x = _keys.GetValue(middle);
+                    do
+                    {
+                        // Add a try block here to detect IComparers (or their 
+                        // underlying IComparables, etc) that are bogus.
+                        while (_comparer.Compare((float)_keys.GetValue(i), (float)x) < 0) i++;
+                        while (_comparer.Compare((float)x, (float)_keys.GetValue(j)) < 0) j--;
+                        if (i > j) break;
+                        if (i < j)
+                        {
+                            var key = _keys.GetValue(i);
+                            _keys.SetValue(_keys.GetValue(j), i);
+                            _keys.SetValue(key, j);
+                            if (_items != null)
+                            {
+                                var item = _items.GetValue(i);
+                                _items.SetValue(_items.GetValue(j), i);
+                                _items.SetValue(item, j);
+                            }
+                        }
+                        if (i != Int32.MaxValue) ++i;
+                        if (j != Int32.MinValue) --j;
+                    } while (i <= j);
+                    if (j - left <= right - i)
+                    {
+                        if (left < j) QuickSort(left, j);
+                        left = i;
+                    }
+                    else
+                    {
+                        if (i < right) QuickSort(i, right);
+                        right = j;
+                    }
+                } while (left < right);
+            }
+        }
+
+        #endregion
+
     }
 }

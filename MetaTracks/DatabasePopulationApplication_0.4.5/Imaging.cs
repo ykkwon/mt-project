@@ -167,7 +167,7 @@ namespace DatabasePopulationApplication_0._4._5
             List<float[][]> wavelets = new List<float[][]>();
             int sampleRate = manager.SampleRate;
             float[] samples = BassProxy.GetSamplesMono(pathToFile, sampleRate);
-            float[][] spectrum = manager.CreateLogSpectrogram(samples);
+            float[][] spectrum = manager.CreateSpectrogram(samples);
             int specLen = spectrum.GetLength(0);
             int start = 0 / manager.Overlap;
             int logbins = manager.LogBins;
