@@ -7,26 +7,25 @@ import Foundation
 
 public class HaarWavelet {
     
-    public static func Transform(var array: [Float]){
+    public static func Transform(var array: [Float]) -> [Float]{
         var haar = array.count
         for(var i = 0; i < haar; i++) {
             array[i] /= Float(sqrt(Float(haar)))
         }
-        var temp = [Any?](count: haar, repeatedValue: nil)
-        while haar > 1 {
+        var temp = [Float](count: haar, repeatedValue: 0)
+        while (haar > 1) {
             haar /= 2
             
-            
             for(var i = 0; i < haar; i++){
-                temp[i] = Float(array[2 * i] + array[2 * i + 1] / sqrt(2))
-                temp[haar + i]  = Float(array[2 * i] + array[2 * i + 1] / sqrt(2))
+                temp[i] = (array[2 * i] + array[2 * i + 1]) / sqrt(2)
+                temp[haar + i] = (array[2 * i] - array[2 * i + 1]) / sqrt(2)
             }
             for (var j = 0; j < 2 * haar; j++) {
-                var t = array[j] as! Float
-                // TODO: Possible bug here
-                temp[j] = t
+                array[j] = temp[j]
             }
+            
         }
+        return temp
     }
     public static func Transform(var array: [[Float]]){
         var rowWidth: Int = 128
@@ -35,12 +34,12 @@ public class HaarWavelet {
             Transform(array[row])
         }
         for (var col = 0; col < columnHeight; col++) {
-            var column = [Float](count: rowWidth, repeatedValue: 0.0)
+            var column:[Float] = [Float](count: rowWidth, repeatedValue: 0)
             for (var row = 0; row < rowWidth; row++) {
-                column.append(Float(row)) //TODO: possible bug
+                column[row] = array[row][col]
             }
-                Transform(column)
-                
+            var transformedArray = Transform(column)
+            
             for (var row = 0; row < rowWidth; row++) {
                 array[row][col] = column[row];
             }

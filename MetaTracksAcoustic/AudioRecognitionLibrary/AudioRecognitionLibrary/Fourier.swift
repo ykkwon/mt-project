@@ -141,7 +141,7 @@ public class Fourier{
         }
     }
 
-    public static func FFT(localData: [Float], length: Int, direction: FourierDirection){
+    public static func FFT(localData: [Float], length: Int, direction: FourierDirection) -> [Float]{
         var data = localData
         SyncLookupTableLength(length)
         var ln = log2(Double(length))
@@ -178,6 +178,6 @@ public class Fourier{
                 }
             }
         }
-        
+        return data
     }
 }

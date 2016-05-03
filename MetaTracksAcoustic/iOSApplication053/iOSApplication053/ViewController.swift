@@ -24,8 +24,8 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
     var receivedHashes:[String] = []
     var receivedTimestamps:[String] = []
     var matchCounter:Double = Double()
-    
-    
+   
+    @IBOutlet weak var foregroundLabel: UILabel!
     var tableView:UITableView = UITableView()
     var out:String = String()
     
@@ -64,6 +64,8 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         stopButton.addTarget(self, action: #selector(ViewController.stopButtonAction(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addSubview(stopButton)
 
+        
+        
         
         print(BASSVERSION);
         super.viewDidLoad()
@@ -117,7 +119,9 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
     
     func recordButtonAction(sender:UIButton!){
             let manager : RecordManager = RecordManager()
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
             manager.record()
+        }
     }
     
     func stopButtonAction(sender:UIButton!){
@@ -169,8 +173,9 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
             }
             let temp = String(data: data!, encoding: NSUTF8StringEncoding)!
             self.availableMovies = temp.componentsSeparatedByString(",")
-            print("Movies indexed")
+            
         }
         dataTask?.resume()
+        
     }
 }
