@@ -14,15 +14,13 @@ public class MinHash {
     var permutationsCount:Int = 0
     
     init(){
-        // TODO permutations = DefaultPermutations.GetDefaultPermutations
-        permutationsCount = permutations.count
+        permutations = DefaultPermutations.GetDefaultPermutations()
     }
 
     public func ComputeMinHashSignatureByte(fingerprint: [Bool]) -> [UInt8] {
-        // TODO
         var signature:[Bool] = fingerprint
-        var perms:[[Int]] = []
-        var minHash:[UInt8] = []
+        var perms:[[Int]] = permutations
+        var minHash:[UInt8] = [UInt8](count: perms.count, repeatedValue: 0)
         for (var i = 0; i < perms.count; i++){
             minHash[i] = 255
             for (var j = 0; j < perms[i].count; j++){
@@ -36,20 +34,25 @@ public class MinHash {
         return minHash
     }
 
-    public func GroupMinHashToLshBucketsByte(minHashes: [UInt8], numberOfHashTables: Int, numberOfMinHashesPerKey: Int) -> NSDictionary{
-        // TODO
-        var result:NSDictionary = NSDictionary()
+    public func GroupMinHashToLshBucketsByte(minHashes: [UInt8], numberOfHashTables: Int, numberOfMinHashesPerKey: Int) -> ([Int], [Int64]){
+        var iterator:[Int] = []
+        var result:[Int64] = []
+        
+        
         let maxNumber = 8
+        
         for (var i = 0; i < numberOfHashTables; i++){
-            var array = [UInt8?](count: maxNumber, repeatedValue: nil)
+            var array = [UInt8](count: maxNumber, repeatedValue: 0)
             for (var j = 0; j < numberOfMinHashesPerKey; j++){
-                array[j] = minHashes[i * numberOfMinHashesPerKey * j]
+                array[j] = minHashes[i * numberOfMinHashesPerKey + j]
             }
-            var hashbucket = UnsafePointer<UInt64>(array).memory
-            hashbucket = (UInt64(A) * hashbucket + UInt64(B) % UInt64(PrimeP)) % UInt64(HashBucketSize)
-            result.setValue(i, forKey:String(hashbucket))
+            
+            var hashbucket = UnsafePointer<Int64>(array).memory
+            hashbucket = (Int64(A) * hashbucket + Int64(B) % Int64(PrimeP)) % Int64(HashBucketSize)
+            iterator.append(i)
+            result.append(hashbucket)
         }
-        return result
+        return (iterator, result)
     }
 }
 

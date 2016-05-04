@@ -2,12 +2,12 @@ import UIKit
 import AVFoundation
 
 public class RecordManager {
-    var movie:[HashedFingerprint] = []
     var storedFingerprints:[HashedFingerprint] = []
     var audioPlayer : AVAudioPlayer?
     var audioRecorder : AVAudioRecorder?
     let baseString : String = NSTemporaryDirectory()
     let session = AVAudioSession.sharedInstance()
+    var manager:FingerprintManager = FingerprintManager()
     
     public init(){
     
@@ -35,23 +35,30 @@ public class RecordManager {
         }
     }
     public func record(){
-        var manager:FingerprintManager = FingerprintManager()
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
         var iterator = 0
         while(true){
             do{
-            var filePath = setRecorder(iterator)
-            audioRecorder?.record()
-            sleep(3)
-            audioRecorder?.stop()
+            var filePath = self.setRecorder(iterator)
+            self.audioRecorder?.record()
+            sleep(5)
+            self.audioRecorder?.stop()
             let monoArray = try BassProxy.GetSamplesMono(filePath, sampleRate: 5512)
-            var preliminaryFingerprints = manager.CreateFingerprints(monoArray)
-            //var test = manager.GetFingerHashes(preliminaryFingerprints)
-            //var result = manager.CompareFingerprintListsHighest(movie, toCompare: storedFingerprints)
+            var preliminaryFingerprints = self.manager.CreateFingerprints(monoArray)
+            var test = self.manager.GetFingerHashes(preliminaryFingerprints)
+            var result = self.manager.CompareFingerprintListsHighest(test, toCompare: self.storedFingerprints)
+            iterator++
             }catch (_) {
-                
+            
             }
-            }
- 
         }
+    }
+    }
+    
+    public func getFingerprints(receivedHashes: [String], receivedTimestamps: [String]){
+        var t = manager.GenerateHashedFingerprints(receivedHashes, receivedTimestamps: receivedTimestamps)
+        storedFingerprints = t
+        
+    }
         
     }

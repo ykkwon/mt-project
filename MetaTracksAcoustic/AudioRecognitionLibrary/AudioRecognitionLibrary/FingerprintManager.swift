@@ -28,6 +28,7 @@ public var searchFieldSize:Int = 15
 public var LatestTimeStamp:Double = Double()
 private var spacedLogFreq:[Int] = []
 private var windowArray:[Double] = []
+private var hasFingerprints = false
 
 public class FingerprintManager {
     init(){
@@ -82,7 +83,7 @@ public class FingerprintManager {
         for(var widthIndex = 0; widthIndex < width; widthIndex += 1){
             for(var windowIndex = 0; windowIndex < windowSize; windowIndex += 1){
                 fftSamples[2*windowIndex] = (Float(windowArray[windowIndex])*samples[widthIndex * overlap + windowIndex])
-                fftSamples[2*windowIndex + 1] = 0
+                fftSamples[2*windowIndex + 1] =  0
             }
             var res = Fourier.FFT(fftSamples, length: windowSize, direction: FourierDirection.Forward)
             frames[widthIndex] = ExtractLogBins(res)
@@ -129,11 +130,11 @@ public class FingerprintManager {
         let fingerprintHeight = LogBins
         var start = 0
         let sampleRate = SampleRate
-        let sequenceNr = 0
+        var sequenceNr = 0
         var fingerPrints:[Fingerprint] = []
         
         let length = spectrogram.count // TODO is this equal to GetLength(0)? Appearently.
-        while start + fingerprintWidth <= length {
+        while (start + fingerprintWidth <= length) {
             var frames:[[Float]] = [[Float]](count:fingerprintWidth, repeatedValue:[Float](count:fingerprintHeight, repeatedValue:0.0))
             
             for(var index = 0; index < fingerprintWidth; index += 1){
@@ -141,10 +142,16 @@ public class FingerprintManager {
                 frames[index] = [Float](count: fingerprintHeight, repeatedValue: 0.0)
                 frames[index] = (spectrogram[start+index])
             }
-            HaarWavelet.Transform(frames)
-            let image = ExtractTopWavelets(frames)
-            fingerPrints.append(Fingerprint(signature: image, sequenceNo: sequenceNr+1, timestamp: Double(start)*Double(overlap/sampleRate)))
+            
+            
+            var timestamp:Double = (Double(overlap)/Double(sampleRate))
+            
+            var temp = HaarWavelet.Transform(frames)
+            let image = ExtractTopWavelets(temp)
+            var fingerp:Fingerprint = Fingerprint(signature: image, sequenceNo: sequenceNr, timestamp: Double(start)*timestamp)
+            fingerPrints.append(fingerp)
             start += fingerprintWidth + (Stride/overlap)
+            sequenceNr++
         }
         return fingerPrints
     }
@@ -169,12 +176,11 @@ public class FingerprintManager {
     }
     
     public func ExtractTopWavelets(frames: [[Float]]) -> [Bool]{
-        let topWavelets = TopWavelets
         var width = 128
         var height = 32
         var concatenated:[Float] = []
         var concatenated2:[Float] = []
-        var it = 0;
+        
         for (var row = 0; row < width; row += 1)
         {
             for(var col = 0; col < height; col += 1){
@@ -182,24 +188,25 @@ public class FingerprintManager {
                 concatenated2.append(frames[row][col])
             }
         }
+        
         concatenated.sortInPlace()
-        var reversedConcatenated:[Float] = []
+        var reverseConcatenated:[Float] = []
         for(var i = concatenated.count-1; i >= 0; i--){
-            reversedConcatenated.append(concatenated[i])
+            reverseConcatenated.append(concatenated[i])
         }
-
-        var indexes = SortIndexes(reversedConcatenated, oldconcat: concatenated2)
-        // TODO COUNT CHANGED, IS THAT OKAY?
+        var indexes = SortIndexes(concatenated, oldconcat: concatenated2)
+        
         var result:[Bool] = [Bool](count: concatenated.count*2, repeatedValue: false)
-        for (var i = 0; i < reversedConcatenated.count; i += 1)
+        
+        for (var i = 0; i < TopWavelets; i += 1)
         {
             var index = indexes[i]
-            var value = reversedConcatenated[i]
+            var value = reverseConcatenated[i]
             if (value > 0){
-                result[i*2] = true;
+                result[index*2] = true;
             }
             else if (value < 0){
-                result[i*2 + 1] = true;
+                result[index*2 + 1] = true;
             }
         }
         return result;
@@ -209,7 +216,7 @@ public class FingerprintManager {
         var testArray:[Int] = [Int](count: concat.count, repeatedValue: 0)
         for(var index = 0; index < concat.count; index++){
             var newf = concat[index]
-            for(var index2 = 0; index < oldconcat.count; index++){
+            for(var index2 = 0; index2 < oldconcat.count; index2++){
                 var oldf = oldconcat[index2]
                 if(newf == oldf)
                 {
@@ -220,80 +227,185 @@ public class FingerprintManager {
         return testArray
     }
     
-    private func GetFingerHashes(listdb: [Fingerprint]) -> [HashedFingerprint]{
+    public func GetFingerHashes(listdb: [Fingerprint]) -> [HashedFingerprint]{
         var listDb = listdb
         var minHash:MinHash = MinHash()
-        var minhashdb:[BYTE] = []
+        var minhashdb:[[UInt8]] = [[]]
         
-        for fingerprint in listDb {
-            //  var fing:Fingerprint = Fingerprint()
+        for(var i = 0; i < listDb.count; i++){
+            var fing = listDb[i]
+            var fp = minHash.ComputeMinHashSignatureByte(fing.Signature)
+            minhashdb.append(fp)
         }
         
-        var lshbuckets:[u_long] = []
+        var lshBuckets:[[Int64]] = [[]]
+        minhashdb.removeFirst()
+        for(var i = 0; i < minhashdb.count; i++){
+            var fing = minhashdb[i]
+            var fp = minHash.GroupMinHashToLshBucketsByte(fing, numberOfHashTables: lshTableSize, numberOfMinHashesPerKey: lshKey)
+            var t = fp.1
+            lshBuckets.append(t)
+        }
         
+        lshBuckets.removeFirst()
         var hashedFinger:[HashedFingerprint] = []
-        for(var index = 0; index < listdb.count; index++){ // TODO fix this
-            //var hashfinger = HashedFingerprint(hashBins: lshbuckets[index].HashBins, sequenceNumber: listdb[index].SequenceNumber, sequenceAt: listdb[index].Timestamp)
-            //hashedFinger.append(hashfinger)
+        for(var index = 0; index < listdb.count; index++){
+            var hashfinger:HashedFingerprint = HashedFingerprint(hashBins: lshBuckets[index], sequenceNumber: listDb[index].SequenceNumber, sequenceAt: listDb[index].Timestamp)
+            hashedFinger.append(hashfinger)
         }
         return hashedFinger
     }
     
-    private func GenerateHashedFingerprints(receivedHashes: [String], receivedTimestamps: [String]) -> [HashedFingerprint]{
-        // TODO
-        var matchedFingerprints:[HashedFingerprint] = []
-        return matchedFingerprints
+    public func GenerateHashedFingerprints(receivedHashes: [String], receivedTimestamps: [String]) -> [HashedFingerprint]{
+        
+        var hashBins:[Int64] = []
+        var timestamps:[Double] = []
+        
+        for(var index = 0; index < receivedHashes.count - 1; index++ ){
+            var currentHash = Int64(receivedHashes[index])
+            var a = receivedTimestamps[index].stringByReplacingOccurrencesOfString(",", withString: ".")
+            var currentTimestamp = Double(a)
+            hashBins.append(currentHash!)
+            timestamps.append(currentTimestamp!)
+        }
+        
+        var hashBinsList:[[Int64]] = [[]]
+        var timestampsList:[Double] = []
+        for(var j = 0; j < timestamps.count - 1; j++){
+            if((j % lshTableSize == 0) && (hashBins.count > j + lshTableSize)){
+                var bins:[Int64] = [Int64](count: lshTableSize, repeatedValue: 0)
+                for(var i = 0; i < lshTableSize; i++){
+                    bins[i] = hashBins[i + j]
+                }
+                hashBinsList.append(bins)
+                timestampsList.append(timestamps[j])
+            }
+            
+        }
+        var list:[HashedFingerprint] = []
+        for(var i = 0; i < timestampsList.count; i++){
+            var t = hashBinsList[i]
+            var hash:HashedFingerprint = HashedFingerprint(hashBins: t, timestamp: timestampsList[i])
+            list.append(hash)
+        }
+        list.removeFirst()
+        return list
     }
     
-    private func SplitFingerprintLists(movieFingerprints: [HashedFingerprint]) -> [HashedFingerprint]{
-        // TODO
-        var matchedFingerprints:[HashedFingerprint] = []
-        return matchedFingerprints
-    }
-    
-    private func CompareFingerprintLists(fingerprints: [HashedFingerprint], toCompare: [HashedFingerprint]) -> Bool{
-        // TODO
-        return false
-    }
-    
-    private func CompareFingerprintListsHighest(fingerprints: [HashedFingerprint], toCompare: [HashedFingerprint]) -> Double {
+    public func CompareFingerprintListsHighest(fingerprints: [HashedFingerprint], toCompare: [HashedFingerprint]) -> Int {
         var fingerprintList = fingerprints
         var toCompareList = toCompare
         
         var commonCounter = 0
         var highestCommon = 0
         
-        //if(bestMatchedFingerprint.Timestamp != 0.0){
-        var foundAnyFingerprints:Bool = false
-        var timestamps:[Double] = []
-        for timestamp in fingerprints {
-            timestamps.append(timestamp.Timestamp)
-        }
-        var lastTime = LatestTimeStamp
-        var matchingIndexes:[Int] = []
-        if needToExpandSearch {
-            searchFieldSize *= 4
-        }
-        var seconds = searchFieldSize
-        var plusTime = min(Int(timestamps.last!), Int(lastTime) + seconds)
-        var minusTime = max(0, Int(lastTime) - seconds)
-        for(var i = 0; i < timestamps.count; i++){
-            if timestamps[i] < Double(plusTime) && timestamps[i] >= Double(minusTime) {
-                matchingIndexes.append(i)
+        if(false){
+            var foundAnyFingerprints:Bool = false
+            var timestamps:[Double] = []
+            for timestamp in fingerprints {
+                timestamps.append(timestamp.Timestamp)
             }
-            var currentList:[HashedFingerprint] = []
-            for(var i = 0; i < matchingIndexes.count; i++){
-                currentList[i] = fingerprints[matchingIndexes[i]]
+            
+            var lastTime = LatestTimeStamp
+            var matchingIndexes:[Int] = []
+            if needToExpandSearch {
+                searchFieldSize *= 4
             }
-            for list in currentList {
-                // TODO
+            
+            var seconds = searchFieldSize
+            var plusTime = min(Int(timestamps.last!), Int(lastTime) + seconds)
+            var minusTime = max(0, Int(lastTime) - seconds)
+            for(var i = 0; i < timestamps.count; i++){
+                if timestamps[i] < Double(plusTime) && timestamps[i] >= Double(minusTime) {
+                    matchingIndexes.append(i)
+                }
+                var currentList:[HashedFingerprint] = []
+                for(var i = 0; i < matchingIndexes.count; i++){
+                    currentList[i] = fingerprints[matchingIndexes[i]]
+                }
+                for list in currentList {
+                    for fingerprint2 in toCompareList{
+                        var set2 = fingerprint2.HashBins
+                        var i = 0
+                        for hash in list.HashBins{
+                            var searchIndex = binarySearch(set2, searchItem: hash);
+                            if searchIndex != -1{
+                                i++
+                            }
+                        }
+                        var count = i
+                        if(count >= 4){
+                            LatestTimeStamp = list.Timestamp
+                            matchedFingerprints.append(list)
+                            foundAnyFingerprints = true
+                            needToExpandSearch = false
+                            searchFieldSize = 15
+                            if(highestCommon <= count){
+                                bestMatchedFingerprint = list
+                                highestCommon = count
+                            }
+                            commonCounter++
+                            break
+                        }
+                        
+                    }
+                }
+                if(!foundAnyFingerprints){
+                    needToExpandSearch = true
+                }
             }
         }
-        return 0.0
+        else{
+            
+            for list in fingerprintList {
+                for fingerprint2 in toCompareList{
+                    var set2 = fingerprint2.HashBins
+                    var i = 0
+                    for hash in list.HashBins{
+                        var searchIndex = binarySearch(set2, searchItem: hash);
+                        if searchIndex != -1{
+                            i++
+                        }
+                    }
+                    var count = i
+                    if(count >= 4){
+                        hasFingerprints = true
+                        matchedFingerprints.append(list)
+                        
+                        if(highestCommon <= count){
+                            LatestTimeStamp = list.Timestamp
+                            bestMatchedFingerprint = list
+                            highestCommon = count
+                        }
+                        commonCounter++
+                        break
+                    }
+                    
+                }
+            }
+        }
+        print(matchedFingerprints.count)
+        return matchedFingerprints.count
     }
     
-    private func FindBestFingerprintList(allFingerprints: [HashedFingerprint], toCompare: [HashedFingerprint]) -> Int{
-        // TODO
-        return 0
+    
+    public func binarySearch<T:Comparable>(inputArr:Array<T>, searchItem: T)->Int{
+        var lowerIndex = 0;
+        var upperIndex = inputArr.count - 1
+        
+        while (true) {
+            var currentIndex = (lowerIndex + upperIndex)/2
+            if(inputArr[currentIndex] == searchItem) {
+                return currentIndex
+            } else if (lowerIndex > upperIndex) {
+                return -1
+            } else {
+                if (inputArr[currentIndex] > searchItem) {
+                    upperIndex = currentIndex - 1
+                } else {
+                    lowerIndex = currentIndex + 1
+                }
+            }
+        }
     }
 }

@@ -24,7 +24,7 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
     var receivedHashes:[String] = []
     var receivedTimestamps:[String] = []
     var matchCounter:Double = Double()
-   
+    let manager : RecordManager = RecordManager()
     @IBOutlet weak var foregroundLabel: UILabel!
     var tableView:UITableView = UITableView()
     var out:String = String()
@@ -112,15 +112,15 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
             print("Hashes: " + String(self.receivedHashes.count))
             print("Timestamps: " + String(self.receivedTimestamps.count))
             
+            self.manager.getFingerprints(self.receivedHashes, receivedTimestamps: self.receivedTimestamps)
         }
         dataTask?.resume()
         
     }
     
     func recordButtonAction(sender:UIButton!){
-            let manager : RecordManager = RecordManager()
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-            manager.record()
+            self.manager.record()
         }
     }
     
