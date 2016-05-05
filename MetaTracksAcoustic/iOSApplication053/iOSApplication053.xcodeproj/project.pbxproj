@@ -13,18 +13,19 @@
 		8B9A85481CCA416F0070E94E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8B9A85471CCA416F0070E94E /* Assets.xcassets */; };
 		8B9A854B1CCA416F0070E94E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8B9A85491CCA416F0070E94E /* LaunchScreen.storyboard */; };
 		8BC18DA41CCE8FB9003A665B /* AudioRecognitionLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BC18DA31CCE8FB9003A665B /* AudioRecognitionLibrary.framework */; };
-		8BC18DA61CCE8FE4003A665B /* AudioRecognitionLibrary.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8BC18DA31CCE8FB9003A665B /* AudioRecognitionLibrary.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		8BC18DA61CCE8FE4003A665B /* AudioRecognitionLibrary.framework in Copy Files */ = {isa = PBXBuildFile; fileRef = 8BC18DA31CCE8FB9003A665B /* AudioRecognitionLibrary.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		8BC18DA51CCE8FDB003A665B /* CopyFiles */ = {
+		8BC18DA51CCE8FDB003A665B /* Copy Files */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				8BC18DA61CCE8FE4003A665B /* AudioRecognitionLibrary.framework in CopyFiles */,
+				8BC18DA61CCE8FE4003A665B /* AudioRecognitionLibrary.framework in Copy Files */,
 			);
+			name = "Copy Files";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -92,7 +93,7 @@
 				8B9A85391CCA416F0070E94E /* Sources */,
 				8B9A853A1CCA416F0070E94E /* Frameworks */,
 				8B9A853B1CCA416F0070E94E /* Resources */,
-				8BC18DA51CCE8FDB003A665B /* CopyFiles */,
+				8BC18DA51CCE8FDB003A665B /* Copy Files */,
 			);
 			buildRules = (
 			);

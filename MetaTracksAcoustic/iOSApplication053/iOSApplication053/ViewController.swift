@@ -13,10 +13,8 @@ import AVFoundation
 
 class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSource {
 
-    // TODO: var hashedFingerprints: [HashedFingerprints]
     var sampleRate:Int = Int()
     var channels:Int = Int()
-    //TODO: var audioFormat:AudioFormatType = AudioFormatType
     var audioQuality:AVAudioQuality = AVAudioQuality.Max
     var selectedMovie:String = String()
     var availableMovies:[String] = []
@@ -28,7 +26,6 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
     @IBOutlet weak var foregroundLabel: UILabel!
     var tableView:UITableView = UITableView()
     var out:String = String()
-    
     
     override func viewDidLoad() {
         
@@ -64,9 +61,6 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         stopButton.addTarget(self, action: #selector(ViewController.stopButtonAction(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addSubview(stopButton)
 
-        
-        
-        
         print(BASSVERSION);
         super.viewDidLoad()
         BassProxy.Initialize()
@@ -119,21 +113,19 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
     }
     
     func recordButtonAction(sender:UIButton!){
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-            self.manager.record()
-        }
+        self.manager.record()
+        print("Done recording")
+        
     }
     
     func stopButtonAction(sender:UIButton!){
-       
+       self.manager.play()
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-    /* ----- TABLE ----- */
     
     let textCellIdentifier = "cell"
     
@@ -173,7 +165,7 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
             }
             let temp = String(data: data!, encoding: NSUTF8StringEncoding)!
             self.availableMovies = temp.componentsSeparatedByString(",")
-            
+            print("Indexed movies.")
         }
         dataTask?.resume()
         

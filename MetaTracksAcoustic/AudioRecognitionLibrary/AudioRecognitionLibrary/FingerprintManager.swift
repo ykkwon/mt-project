@@ -133,7 +133,7 @@ public class FingerprintManager {
         var sequenceNr = 0
         var fingerPrints:[Fingerprint] = []
         
-        let length = spectrogram.count // TODO is this equal to GetLength(0)? Appearently.
+        let length = spectrogram.count
         while (start + fingerprintWidth <= length) {
             var frames:[[Float]] = [[Float]](count:fingerprintWidth, repeatedValue:[Float](count:fingerprintHeight, repeatedValue:0.0))
             
@@ -298,7 +298,7 @@ public class FingerprintManager {
         
         var commonCounter = 0
         var highestCommon = 0
-        
+        /*
         if(false){
             var foundAnyFingerprints:Bool = false
             var timestamps:[Double] = []
@@ -334,7 +334,7 @@ public class FingerprintManager {
                             }
                         }
                         var count = i
-                        if(count >= 4){
+                        if(count >= 1){
                             LatestTimeStamp = list.Timestamp
                             matchedFingerprints.append(list)
                             foundAnyFingerprints = true
@@ -354,40 +354,45 @@ public class FingerprintManager {
                     needToExpandSearch = true
                 }
             }
-        }
-        else{
-            
-            for list in fingerprintList {
-                for fingerprint2 in toCompareList{
-                    var set2 = fingerprint2.HashBins
-                    var i = 0
-                    for hash in list.HashBins{
+            */
+        
+            for(var i = 0; i < fingerprintList.count; i++){
+                var list = fingerprintList[i]
+                
+                
+                for(var j = 0; j < toCompareList.count; j++){
+                        var fingerprint2 = toCompareList[j]
+                        var set2 = fingerprint2.HashBins
+                    
+                    for(var l = 0; l < set2.count; l++){
+                        var count = 0
+                        var hash = list.HashBins[l]
                         var searchIndex = binarySearch(set2, searchItem: hash);
-                        if searchIndex != -1{
-                            i++
-                        }
-                    }
-                    var count = i
-                    if(count >= 4){
-                        hasFingerprints = true
-                        matchedFingerprints.append(list)
-                        
-                        if(highestCommon <= count){
-                            LatestTimeStamp = list.Timestamp
+                        if searchIndex != -1 {
+                            count++
+                            if (count >= 3) {
+                                print("MATCHED!")
+                                LatestTimeStamp = fingerprint2.Timestamp
+                                print(LatestTimeStamp)
+                                //hasFingerprints = true
+                                //matchedFingerprints.append(hash)
+                    if (highestCommon <= count) {
                             bestMatchedFingerprint = list
                             highestCommon = count
                         }
                         commonCounter++
                         break
                     }
-                    
                 }
             }
         }
-        print(matchedFingerprints.count)
+        }
+        print("LatestTimeStamp: \(LatestTimeStamp)")
         return matchedFingerprints.count
     }
     
+    
+
     
     public func binarySearch<T:Comparable>(inputArr:Array<T>, searchItem: T)->Int{
         var lowerIndex = 0;

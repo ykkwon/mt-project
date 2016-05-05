@@ -1,4 +1,3 @@
-import UIKit
 import AVFoundation
 
 public class RecordManager {
@@ -8,7 +7,7 @@ public class RecordManager {
     let baseString : String = NSTemporaryDirectory()
     let session = AVAudioSession.sharedInstance()
     var manager:FingerprintManager = FingerprintManager()
-    
+    var currentFile = NSURL()
     public init(){
     
     }
@@ -18,41 +17,57 @@ public class RecordManager {
         do {
             let pathComponents = [baseString, "split" + String(iterator) + ".wav"]
             let audioURL = NSURL.fileURLWithPathComponents(pathComponents)!
-            try session.setCategory(AVAudioSessionCategoryPlayAndRecord)
-            try session.overrideOutputAudioPort(AVAudioSessionPortOverride.Speaker)
-            try session.setActive(true)
             var recordSettings = [String : AnyObject]()
             recordSettings[AVFormatIDKey] = Int(kAudioFormatLinearPCM)
             recordSettings[AVSampleRateKey] = 5512.0
             recordSettings[AVNumberOfChannelsKey] = 1
+            recordSettings[AVEncoderAudioQualityKey] = AVAudioQuality.Max.rawValue
             self.audioRecorder = try AVAudioRecorder(URL: audioURL, settings: recordSettings)
-            self.audioRecorder!.meteringEnabled = true
             self.audioRecorder!.prepareToRecord()
             print(audioURL)
+            currentFile = audioURL
             return audioURL
         } catch (_) {
             return NSURL(fileURLWithPath: "nil")
         }
     }
     public func record(){
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-        var iterator = 0
-        while(true){
-            do{
-            var filePath = self.setRecorder(iterator)
-            self.audioRecorder?.record()
-            sleep(5)
-            self.audioRecorder?.stop()
-            let monoArray = try BassProxy.GetSamplesMono(filePath, sampleRate: 5512)
-            var preliminaryFingerprints = self.manager.CreateFingerprints(monoArray)
-            var test = self.manager.GetFingerHashes(preliminaryFingerprints)
-            var result = self.manager.CompareFingerprintListsHighest(test, toCompare: self.storedFingerprints)
-            iterator++
-            }catch (_) {
-            
+        let queue = NSOperationQueue()
+        do {
+            try session.setCategory(AVAudioSessionCategoryRecord)
+            try session.setActive(true)
+        } catch (_) {
+
+        }
+        
+        queue.addOperationWithBlock() {
+            for(var i = 1; i <= 10000; i++){
+                do{
+                    var filePath = self.setRecorder(i)
+                    self.audioRecorder?.record()
+                    sleep(3)
+                    self.audioRecorder?.stop()
+                    let monoArray = try BassProxy.GetSamplesMono(filePath, sampleRate: 5512)
+                    var preliminaryFingerprints = self.manager.CreateFingerprints(monoArray)
+                    var test = self.manager.GetFingerHashes(preliminaryFingerprints)
+                    var result = self.manager.CompareFingerprintListsHighest(test, toCompare: self.storedFingerprints)
+                }catch (_) {
+                    
+                }
             }
+            
         }
     }
+    
+    public func play(){
+        var error:NSError?
+        do{
+        try audioPlayer = AVAudioPlayer(contentsOfURL: currentFile)
+        try audioPlayer?.prepareToPlay()
+        try audioPlayer?.play()
+        }catch (_){
+                
+        }
     }
     
     public func getFingerprints(receivedHashes: [String], receivedTimestamps: [String]){

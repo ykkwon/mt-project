@@ -2,8 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="10440fce-98e2-4601-a372-1d7504de9d55" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Surge" />
       <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.gitmodules" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/OSXApplication/OSXApplication/AppDelegate.swift" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/OSXApplication/OSXApplication/Assets.xcassets/AppIcon.appiconset/Contents.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/OSXApplication/OSXApplication/Base.lproj/Main.storyboard" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/OSXApplication/OSXApplication/FingerprintDatabaseManager.swift" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/OSXApplication/OSXApplication/Info.plist" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/OSXApplication/OSXApplication/ViewController.swift" />
     </list>
     <ignored path="MetaTracksAcoustic.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -28,12 +33,10 @@
         <entry file="file://$PROJECT_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/RecordManager.swift">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="360">
-              <caret line="28" column="31" selection-start-line="28" selection-start-column="31" selection-end-line="28" selection-end-column="31" />
+              <caret line="25" column="31" selection-start-line="25" selection-start-column="31" selection-end-line="25" selection-end-column="31" />
               <folding>
-                <marker date="1461941543000" expanded="true" signature="61:2145" placeholder="{...}" />
-                <marker date="1461941543000" expanded="true" signature="357:369" placeholder="{...}" />
-                <marker date="1461941543000" expanded="true" signature="427:1382" placeholder="{...}" />
-                <marker date="1461941543000" expanded="true" signature="1407:2130" placeholder="{...}" />
+                <marker date="1462451318000" expanded="true" signature="61:2752" placeholder="{...}" />
+                <marker date="1462451318000" expanded="true" signature="2732:2737" placeholder="{...}" />
               </folding>
             </state>
           </provider>
@@ -42,18 +45,30 @@
       <file leaf-file-name="BassProxy.swift" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/BassProxy.swift">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="135">
-              <caret line="21" column="16" selection-start-line="21" selection-start-column="16" selection-end-line="21" selection-end-column="16" />
+            <state relative-caret-position="255">
+              <caret line="17" column="16" selection-start-line="17" selection-start-column="16" selection-end-line="17" selection-end-column="16" />
+              <folding>
+                <marker date="1462449892000" expanded="true" signature="441:2393" placeholder="{...}" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="DefaultPermutations.swift" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/DefaultPermutations.swift">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="307">
+              <caret line="3132" column="33" selection-start-line="3132" selection-start-column="33" selection-end-line="3132" selection-end-column="33" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DefaultPermutations.swift" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/DefaultPermutations.swift">
+      <file leaf-file-name="FingerprintManager.swift" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/FingerprintManager.swift">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="397">
-              <caret line="3095" column="21" selection-start-line="3095" selection-start-column="21" selection-end-line="3095" selection-end-column="21" />
+            <state relative-caret-position="514">
+              <caret line="387" column="9" selection-start-line="387" selection-start-column="9" selection-end-line="387" selection-end-column="9" />
               <folding />
             </state>
           </provider>
@@ -62,9 +77,11 @@
       <file leaf-file-name="Fourier.swift" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/Fourier.swift">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1095">
-              <caret line="73" column="21" selection-start-line="73" selection-start-column="21" selection-end-line="73" selection-end-column="21" />
-              <folding />
+            <state relative-caret-position="1050">
+              <caret line="70" column="21" selection-start-line="70" selection-start-column="21" selection-end-line="70" selection-end-column="21" />
+              <folding>
+                <marker date="1462264346000" expanded="true" signature="5850:5856" placeholder="{...}" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -72,11 +89,11 @@
       <file leaf-file-name="ViewController.swift" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/iOSApplication053/iOSApplication053/ViewController.swift">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1710">
-              <caret line="117" column="22" selection-start-line="117" selection-start-column="22" selection-end-line="117" selection-end-column="22" />
+            <state relative-caret-position="1650">
+              <caret line="114" column="4" selection-start-line="114" selection-start-column="4" selection-end-line="114" selection-end-column="4" />
               <folding>
-                <marker date="1461748347000" expanded="true" signature="913:3036" placeholder="{...}" />
-                <marker date="1461748347000" expanded="true" signature="5406:5412" placeholder="{...}" />
+                <marker date="1462451181000" expanded="false" signature="150:233" placeholder="import ..." />
+                <marker date="1462451181000" expanded="true" signature="317:7530" placeholder="{...}" />
               </folding>
             </state>
           </provider>
@@ -97,6 +114,7 @@
         <option value="$PROJECT_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/Fourier.swift" />
         <option value="$PROJECT_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/RecordManager.swift" />
         <option value="$PROJECT_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/DefaultPermutations.swift" />
+        <option value="$PROJECT_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/FingerprintManager.swift" />
       </list>
     </option>
   </component>
@@ -321,13 +339,50 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/RecordManager.swift">
       <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="405">
+          <caret line="28" column="31" selection-start-line="28" selection-start-column="31" selection-end-line="28" selection-end-column="31" />
+          <folding>
+            <marker date="1462451318000" expanded="true" signature="61:2752" placeholder="{...}" />
+            <marker date="1462451318000" expanded="true" signature="2732:2737" placeholder="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/BassProxy.swift">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="315">
+          <caret line="21" column="16" selection-start-line="21" selection-start-column="16" selection-end-line="21" selection-end-column="16" />
+          <folding>
+            <marker date="1462449892000" expanded="true" signature="441:2393" placeholder="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/DefaultPermutations.swift">
+      <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/Fourier.swift">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1095">
+          <caret line="73" column="21" selection-start-line="73" selection-start-column="21" selection-end-line="73" selection-end-column="21" />
           <folding>
-            <marker date="1461941543000" expanded="true" signature="61:2145" placeholder="{...}" />
-            <marker date="1461941543000" expanded="true" signature="357:369" placeholder="{...}" />
-            <marker date="1461941543000" expanded="true" signature="427:1382" placeholder="{...}" />
-            <marker date="1461941543000" expanded="true" signature="1407:2130" placeholder="{...}" />
+            <marker date="1462264346000" expanded="true" signature="5850:5856" placeholder="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/iOSApplication053/iOSApplication053/ViewController.swift">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1710">
+          <caret line="117" column="22" selection-start-line="117" selection-start-column="22" selection-end-line="117" selection-end-column="22" />
+          <folding>
+            <marker date="1462451181000" expanded="false" signature="150:233" placeholder="import ..." />
+            <marker date="1462451181000" expanded="true" signature="317:7530" placeholder="{...}" />
           </folding>
         </state>
       </provider>
@@ -337,10 +392,8 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <marker date="1461941543000" expanded="true" signature="61:2145" placeholder="{...}" />
-            <marker date="1461941543000" expanded="true" signature="357:369" placeholder="{...}" />
-            <marker date="1461941543000" expanded="true" signature="427:1382" placeholder="{...}" />
-            <marker date="1461941543000" expanded="true" signature="1407:2130" placeholder="{...}" />
+            <marker date="1462451318000" expanded="true" signature="61:2752" placeholder="{...}" />
+            <marker date="1462451318000" expanded="true" signature="2732:2737" placeholder="{...}" />
           </folding>
         </state>
       </provider>
@@ -350,10 +403,19 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <marker date="1461941543000" expanded="true" signature="61:2145" placeholder="{...}" />
-            <marker date="1461941543000" expanded="true" signature="357:369" placeholder="{...}" />
-            <marker date="1461941543000" expanded="true" signature="427:1382" placeholder="{...}" />
-            <marker date="1461941543000" expanded="true" signature="1407:2130" placeholder="{...}" />
+            <marker date="1462451318000" expanded="true" signature="61:2752" placeholder="{...}" />
+            <marker date="1462451318000" expanded="true" signature="2732:2737" placeholder="{...}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/RecordManager.swift">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <marker date="1462451318000" expanded="true" signature="61:2752" placeholder="{...}" />
+            <marker date="1462451318000" expanded="true" signature="2732:2737" placeholder="{...}" />
           </folding>
         </state>
       </provider>
@@ -362,7 +424,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3240">
           <caret line="216" column="21" selection-start-line="216" selection-start-column="20" selection-end-line="216" selection-end-column="21" />
-          <folding />
+          <folding>
+            <marker date="1462264346000" expanded="true" signature="5850:5856" placeholder="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -371,8 +435,8 @@
         <state relative-caret-position="1785">
           <caret line="122" column="22" selection-start-line="122" selection-start-column="22" selection-end-line="122" selection-end-column="22" />
           <folding>
-            <marker date="1461748347000" expanded="true" signature="913:3036" placeholder="{...}" />
-            <marker date="1461748347000" expanded="true" signature="5406:5412" placeholder="{...}" />
+            <marker date="1462451181000" expanded="false" signature="150:233" placeholder="import ..." />
+            <marker date="1462451181000" expanded="true" signature="317:7530" placeholder="{...}" />
           </folding>
         </state>
       </provider>
@@ -382,10 +446,8 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <marker date="1461941543000" expanded="true" signature="61:2145" placeholder="{...}" />
-            <marker date="1461941543000" expanded="true" signature="357:369" placeholder="{...}" />
-            <marker date="1461941543000" expanded="true" signature="427:1382" placeholder="{...}" />
-            <marker date="1461941543000" expanded="true" signature="1407:2130" placeholder="{...}" />
+            <marker date="1462451318000" expanded="true" signature="61:2752" placeholder="{...}" />
+            <marker date="1462451318000" expanded="true" signature="2732:2737" placeholder="{...}" />
           </folding>
         </state>
       </provider>
@@ -395,10 +457,8 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <marker date="1461941543000" expanded="true" signature="61:2145" placeholder="{...}" />
-            <marker date="1461941543000" expanded="true" signature="357:369" placeholder="{...}" />
-            <marker date="1461941543000" expanded="true" signature="427:1382" placeholder="{...}" />
-            <marker date="1461941543000" expanded="true" signature="1407:2130" placeholder="{...}" />
+            <marker date="1462451318000" expanded="true" signature="61:2752" placeholder="{...}" />
+            <marker date="1462451318000" expanded="true" signature="2732:2737" placeholder="{...}" />
           </folding>
         </state>
       </provider>
@@ -408,10 +468,8 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <marker date="1461941543000" expanded="true" signature="61:2145" placeholder="{...}" />
-            <marker date="1461941543000" expanded="true" signature="357:369" placeholder="{...}" />
-            <marker date="1461941543000" expanded="true" signature="427:1382" placeholder="{...}" />
-            <marker date="1461941543000" expanded="true" signature="1407:2130" placeholder="{...}" />
+            <marker date="1462451318000" expanded="true" signature="61:2752" placeholder="{...}" />
+            <marker date="1462451318000" expanded="true" signature="2732:2737" placeholder="{...}" />
           </folding>
         </state>
       </provider>
@@ -459,57 +517,60 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/FingerprintManager.swift">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" column="0" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/RecordManager.swift">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="360">
-          <caret line="28" column="31" selection-start-line="28" selection-start-column="31" selection-end-line="28" selection-end-column="31" />
+          <caret line="25" column="31" selection-start-line="25" selection-start-column="31" selection-end-line="25" selection-end-column="31" />
           <folding>
-            <marker date="1461941543000" expanded="true" signature="61:2145" placeholder="{...}" />
-            <marker date="1461941543000" expanded="true" signature="357:369" placeholder="{...}" />
-            <marker date="1461941543000" expanded="true" signature="427:1382" placeholder="{...}" />
-            <marker date="1461941543000" expanded="true" signature="1407:2130" placeholder="{...}" />
+            <marker date="1462451318000" expanded="true" signature="61:2752" placeholder="{...}" />
+            <marker date="1462451318000" expanded="true" signature="2732:2737" placeholder="{...}" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/BassProxy.swift">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="21" column="16" selection-start-line="21" selection-start-column="16" selection-end-line="21" selection-end-column="16" />
-          <folding />
+        <state relative-caret-position="255">
+          <caret line="17" column="16" selection-start-line="17" selection-start-column="16" selection-end-line="17" selection-end-column="16" />
+          <folding>
+            <marker date="1462449892000" expanded="true" signature="441:2393" placeholder="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/Fourier.swift">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1095">
-          <caret line="73" column="21" selection-start-line="73" selection-start-column="21" selection-end-line="73" selection-end-column="21" />
-          <folding />
+        <state relative-caret-position="1050">
+          <caret line="70" column="21" selection-start-line="70" selection-start-column="21" selection-end-line="70" selection-end-column="21" />
+          <folding>
+            <marker date="1462264346000" expanded="true" signature="5850:5856" placeholder="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/iOSApplication053/iOSApplication053/ViewController.swift">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1710">
-          <caret line="117" column="22" selection-start-line="117" selection-start-column="22" selection-end-line="117" selection-end-column="22" />
+        <state relative-caret-position="1650">
+          <caret line="114" column="4" selection-start-line="114" selection-start-column="4" selection-end-line="114" selection-end-column="4" />
           <folding>
-            <marker date="1461748347000" expanded="true" signature="913:3036" placeholder="{...}" />
-            <marker date="1461748347000" expanded="true" signature="5406:5412" placeholder="{...}" />
+            <marker date="1462451181000" expanded="false" signature="150:233" placeholder="import ..." />
+            <marker date="1462451181000" expanded="true" signature="317:7530" placeholder="{...}" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/DefaultPermutations.swift">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="397">
-          <caret line="3095" column="21" selection-start-line="3095" selection-start-column="21" selection-end-line="3095" selection-end-column="21" />
+        <state relative-caret-position="307">
+          <caret line="3132" column="33" selection-start-line="3132" selection-start-column="33" selection-end-line="3132" selection-end-column="33" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/AudioRecognitionLibrary/AudioRecognitionLibrary/FingerprintManager.swift">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="514">
+          <caret line="387" column="9" selection-start-line="387" selection-start-column="9" selection-end-line="387" selection-end-column="9" />
           <folding />
         </state>
       </provider>

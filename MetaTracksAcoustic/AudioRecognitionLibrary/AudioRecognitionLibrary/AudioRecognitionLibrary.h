@@ -6,7 +6,7 @@
 //  Copyright © 2016 metatracks. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+
 #import <Foundation/Foundation.h>
 #import "bass.h"
 #import "bassmix.h"
