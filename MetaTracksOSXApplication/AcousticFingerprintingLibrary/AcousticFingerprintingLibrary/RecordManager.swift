@@ -5,7 +5,7 @@ public class RecordManager {
     var audioPlayer : AVAudioPlayer?
     var audioRecorder : AVAudioRecorder?
     let baseString : String = NSTemporaryDirectory()
-    let session = AVAudioSession.sharedInstance()
+    //let session = AVAudioSession.sharedInstance()
     var manager:FingerprintManager = FingerprintManager()
     var currentFile = NSURL()
     public init(){
@@ -32,8 +32,8 @@ public class RecordManager {
     }
     public func record(){
         do {
-            try session.setCategory(AVAudioSessionCategoryRecord)
-            try session.setActive(true)
+            //try session.setCategory(AVAudioSessionCategoryRecord)
+            //try session.setActive(true)
         } catch (_) {
 
         }

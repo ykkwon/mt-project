@@ -31,7 +31,7 @@ private var windowArray:[Double] = []
 private var hasFingerprints = false
 
 public class FingerprintManager {
-    init(){
+    public init(){
         lshTableSize = 33
         lshKey = 3
         WindowFunction = HanningWindow()
@@ -69,9 +69,9 @@ public class FingerprintManager {
         return indexes
     }
     
-    public func CreateLogSpectrogram(samples: [Float]) -> [[Float]]{
+    public func CreateLogSpectrogram(beforeNormalized: [Float]) -> [[Float]]{
         
-        NormalizeInPlace(samples)
+        var samples = NormalizeInPlace(beforeNormalized)
         let overlap = Overlap
         let windowSize = WindowSize
         var windowArray = WindowFunction.GetWindow(windowSize)
@@ -92,7 +92,7 @@ public class FingerprintManager {
         return frames
     }
     
-    public func NormalizeInPlace(samples: [Float]){
+    public func NormalizeInPlace(samples: [Float]) -> [Float]{
         var internalSamples:[Float] = samples
         let Minrms:Double = 0.1
         let Maxrms:Double = 3.0
@@ -115,14 +115,29 @@ public class FingerprintManager {
             internalSamples[i] = internalSamples[i] / Float(rms)
             internalSamples[i] = min(internalSamples[i], 1)
             internalSamples[i] = max(internalSamples[i], -1)
-            internalSamples = samples
+            
         }
+        return internalSamples
     }
     
     public func CreateFingerprints(samples: [Float]) -> [Fingerprint] {
         let spectrum = CreateLogSpectrogram(samples)
         return CreateFingerprints(spectrum)
     }
+    
+    public func CreateFingerprints(filename: NSURL) -> [Fingerprint]
+    {
+        var t:[Fingerprint] = []
+        var samples:[Float] = []
+        do{
+            samples = try BassProxy.GetSamplesMono(filename, sampleRate: SampleRate);
+            t = CreateFingerprints(samples)
+        }catch(_){
+            
+        }
+        return t
+    }
+
     
     public func CreateFingerprints(spectrogram: [[Float]]) -> [Fingerprint]{
         let fingerprintWidth = FingerprintWidth
