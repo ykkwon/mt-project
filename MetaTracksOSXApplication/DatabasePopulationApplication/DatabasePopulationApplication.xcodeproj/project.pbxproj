@@ -11,15 +11,12 @@
 		8B99B9801CDBC49200B274A5 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B99B97F1CDBC49200B274A5 /* ViewController.swift */; };
 		8B99B9821CDBC49200B274A5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8B99B9811CDBC49200B274A5 /* Assets.xcassets */; };
 		8B99B9851CDBC49200B274A5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8B99B9831CDBC49200B274A5 /* Main.storyboard */; };
-		8B99B9B81CDBC63900B274A5 /* AcousticFingerprintingLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B99B9B71CDBC63900B274A5 /* AcousticFingerprintingLibrary.framework */; };
-		8BA0B02F1CDBCFE100364964 /* AcousticFingerprintingLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B99B9B71CDBC63900B274A5 /* AcousticFingerprintingLibrary.framework */; };
-		8BA0B0301CDBCFE100364964 /* AcousticFingerprintingLibrary.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8B99B9B71CDBC63900B274A5 /* AcousticFingerprintingLibrary.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		8BA0B0351CDBD0BE00364964 /* FingerprintDatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BA0B0341CDBD0BE00364964 /* FingerprintDatabaseManager.swift */; };
 		8BA0B0381CDBDF1300364964 /* libbass.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BA0B0361CDBDF1300364964 /* libbass.dylib */; };
 		8BA0B0391CDBDF1300364964 /* libbassmix.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BA0B0371CDBDF1300364964 /* libbassmix.dylib */; };
 		8BA0B03A1CDBDFAE00364964 /* libbass.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8BA0B0361CDBDF1300364964 /* libbass.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		8BA0B03B1CDBDFAE00364964 /* libbassmix.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8BA0B0371CDBDF1300364964 /* libbassmix.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		8BA0B03C1CDBDFAE00364964 /* AcousticFingerprintingLibrary.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8B99B9B71CDBC63900B274A5 /* AcousticFingerprintingLibrary.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		8BC038421CDFCA1B00F404CC /* AcousticFingerprintingLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BC038411CDFCA1B00F404CC /* AcousticFingerprintingLibrary.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -31,7 +28,6 @@
 			files = (
 				8BA0B03A1CDBDFAE00364964 /* libbass.dylib in CopyFiles */,
 				8BA0B03B1CDBDFAE00364964 /* libbassmix.dylib in CopyFiles */,
-				8BA0B03C1CDBDFAE00364964 /* AcousticFingerprintingLibrary.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -41,7 +37,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				8BA0B0301CDBCFE100364964 /* AcousticFingerprintingLibrary.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -59,6 +54,7 @@
 		8BA0B0341CDBD0BE00364964 /* FingerprintDatabaseManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FingerprintDatabaseManager.swift; sourceTree = "<group>"; };
 		8BA0B0361CDBDF1300364964 /* libbass.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libbass.dylib; sourceTree = "<group>"; };
 		8BA0B0371CDBDF1300364964 /* libbassmix.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libbassmix.dylib; sourceTree = "<group>"; };
+		8BC038411CDFCA1B00F404CC /* AcousticFingerprintingLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AcousticFingerprintingLibrary.framework; path = "../../../../Library/Developer/Xcode/DerivedData/DatabasePopulationApplicationOSX-beolojsubzrzidckwmnsooodrqav/Build/Products/Debug/AcousticFingerprintingLibrary.framework"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,10 +62,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8BC038421CDFCA1B00F404CC /* AcousticFingerprintingLibrary.framework in Frameworks */,
 				8BA0B0391CDBDF1300364964 /* libbassmix.dylib in Frameworks */,
 				8BA0B0381CDBDF1300364964 /* libbass.dylib in Frameworks */,
-				8B99B9B81CDBC63900B274A5 /* AcousticFingerprintingLibrary.framework in Frameworks */,
-				8BA0B02F1CDBCFE100364964 /* AcousticFingerprintingLibrary.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -79,6 +74,7 @@
 		8B99B9711CDBC49200B274A5 = {
 			isa = PBXGroup;
 			children = (
+				8BC038411CDFCA1B00F404CC /* AcousticFingerprintingLibrary.framework */,
 				8BA0B0361CDBDF1300364964 /* libbass.dylib */,
 				8BA0B0371CDBDF1300364964 /* libbassmix.dylib */,
 				8B99B9B71CDBC63900B274A5 /* AcousticFingerprintingLibrary.framework */,

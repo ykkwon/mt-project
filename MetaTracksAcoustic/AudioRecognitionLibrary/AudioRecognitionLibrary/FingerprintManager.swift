@@ -293,102 +293,35 @@ public class FingerprintManager {
     }
     
     public func CompareFingerprintListsHighest(fingerprints: [HashedFingerprint], toCompare: [HashedFingerprint]) -> Int {
+        var offsetCounter = Int()
         var fingerprintList = toCompare
         var toCompareList = fingerprints
-        
-        
         var commonCounter = 0
         var highestCommon = 0
-        /*
-        if(false){
-            var foundAnyFingerprints:Bool = false
-            var timestamps:[Double] = []
-            for timestamp in fingerprints {
-                timestamps.append(timestamp.Timestamp)
-            }
-            
-            var lastTime = LatestTimeStamp
-            var matchingIndexes:[Int] = []
-            if needToExpandSearch {
-                searchFieldSize *= 4
-            }
-            
-            var seconds = searchFieldSize
-            var plusTime = min(Int(timestamps.last!), Int(lastTime) + seconds)
-            var minusTime = max(0, Int(lastTime) - seconds)
-            for(var i = 0; i < timestamps.count; i++){
-                if timestamps[i] < Double(plusTime) && timestamps[i] >= Double(minusTime) {
-                    matchingIndexes.append(i)
-                }
-                var currentList:[HashedFingerprint] = []
-                for(var i = 0; i < matchingIndexes.count; i++){
-                    currentList[i] = fingerprints[matchingIndexes[i]]
-                }
-                for list in currentList {
-                    for fingerprint2 in toCompareList{
-                        var set2 = fingerprint2.HashBins
-                        var i = 0
-                        for hash in list.HashBins{
-                            var searchIndex = binarySearch(set2, searchItem: hash);
-                            if searchIndex != -1{
-                                i++
-                            }
-                        }
-                        var count = i
-                        if(count >= 1){
-                            LatestTimeStamp = list.Timestamp
-                            matchedFingerprints.append(list)
-                            foundAnyFingerprints = true
-                            needToExpandSearch = false
-                            searchFieldSize = 15
-                            if(highestCommon <= count){
-                                bestMatchedFingerprint = list
-                                highestCommon = count
-                            }
-                            commonCounter++
-                            break
-                        }
-                        
-                    }
-                }
-                if(!foundAnyFingerprints){
-                    needToExpandSearch = true
-                }
-            }
-            */
+        
         for(var i = 0; i < fingerprintList.count; i++){
             var list = fingerprintList[i]
-            
             
             for(var j = 0; j < toCompareList.count; j++){
                 var fingerprint2 = toCompareList[j]
                 var set2 = fingerprint2.HashBins
                 var count = 0
-                for(var l = 0; l < set2.count; l++){
+                
+                for(var l = 0; l < list.HashBins.count; l++){
                     var hash = list.HashBins[l]
                     var searchIndex = binarySearch(set2, searchItem: hash);
-                    if searchIndex != -1 {
+                    
+                    if (searchIndex != -1) {
                         count++
+                        }
                     }
-                }
                     if (count >= 3) {
-                        LatestTimeStamp = list.Timestamp
-                        
-                        //hasFingerprints = true
-                        //matchedFingerprints.append(hash)
-                        /*
-                         if (highestCommon <= count) {
-                         bestMatchedFingerprint = list
-                         highestCommon = count
-                         count = 0
-                         }
-                         */
-                        count = 0
-                        //commonCounter++
-                        break
+                    LatestTimeStamp = list.Timestamp
+                    break
                     }
                 }
-            }
+        }
+        
         print("LatestTimeStamp: \(LatestTimeStamp)")
         return matchedFingerprints.count
     }

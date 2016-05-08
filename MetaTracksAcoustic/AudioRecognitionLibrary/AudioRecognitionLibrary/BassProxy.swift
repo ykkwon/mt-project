@@ -10,7 +10,6 @@ public class BassProxy{
     
     public static func Initialize(){
         BASS_Init(-1, 44100, 0, nil, nil)
-        print("BASS initialized.")
     }
     public static func GetSamplesMono(filename: NSURL!, sampleRate: Int) throws -> Array<Float>{
         Initialize()
@@ -23,7 +22,6 @@ public class BassProxy{
             print(BASS_ErrorGetCode())
         }
         let mixerStream = BASS_Mixer_StreamCreate(5512, 1, flags)
-        print(BASS_GetVersion())
         if BASS_Mixer_StreamAddChannel(mixerStream, bassStream, flags) {
             let bufferSizeInt = sampleRate * 20 * 4
             var buffer:[Float] = [Float](count: bufferSizeInt, repeatedValue: 0)
@@ -55,7 +53,6 @@ public class BassProxy{
             BASS_StreamFree(mixerStream)
             BASS_StreamFree(bassStream)
             
-            //samples = samples.filter{$0 != 0}
             return samples
         }
         print(BASS_ErrorGetCode())

@@ -8,6 +8,7 @@ public class RecordManager {
     let session = AVAudioSession.sharedInstance()
     var manager:FingerprintManager = FingerprintManager()
     var currentFile = NSURL()
+    
     public init(){
     
     }
@@ -40,7 +41,7 @@ public class RecordManager {
             for(var i = 1; i <= 10000; i++){
                 do{
                     var filePath = self.setRecorder(i)
-                    self.audioRecorder?.record()
+                    self.audioRecorder?.recordForDuration(5)
                     sleep(4)
                     self.audioRecorder?.stop()
                     let monoArray = try BassProxy.GetSamplesMono(filePath, sampleRate: 5512)
