@@ -41,7 +41,7 @@ public class RecordManager {
                 do{
                     var filePath = self.setRecorder(i)
                     self.audioRecorder?.record()
-                    sleep(3)
+                    sleep(4)
                     self.audioRecorder?.stop()
                     let monoArray = try BassProxy.GetSamplesMono(filePath, sampleRate: 5512)
                     var preliminaryFingerprints = self.manager.CreateFingerprints(monoArray)

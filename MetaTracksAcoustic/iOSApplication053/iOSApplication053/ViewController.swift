@@ -113,7 +113,7 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
     }
     
     func recordButtonAction(sender:UIButton!){
-        self.manager.record()
+        manager.record()
         print("Done recording")
         
     }

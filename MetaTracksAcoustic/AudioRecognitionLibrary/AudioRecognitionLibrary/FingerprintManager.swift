@@ -293,8 +293,9 @@ public class FingerprintManager {
     }
     
     public func CompareFingerprintListsHighest(fingerprints: [HashedFingerprint], toCompare: [HashedFingerprint]) -> Int {
-        var fingerprintList = fingerprints
-        var toCompareList = toCompare
+        var fingerprintList = toCompare
+        var toCompareList = fingerprints
+        
         
         var commonCounter = 0
         var highestCommon = 0
@@ -355,7 +356,6 @@ public class FingerprintManager {
                 }
             }
             */
-        var count = 0
         for(var i = 0; i < fingerprintList.count; i++){
             var list = fingerprintList[i]
             
@@ -363,15 +363,16 @@ public class FingerprintManager {
             for(var j = 0; j < toCompareList.count; j++){
                 var fingerprint2 = toCompareList[j]
                 var set2 = fingerprint2.HashBins
-                
+                var count = 0
                 for(var l = 0; l < set2.count; l++){
                     var hash = list.HashBins[l]
                     var searchIndex = binarySearch(set2, searchItem: hash);
                     if searchIndex != -1 {
                         count++
                     }
-                    if (count >= 14) {
-                        LatestTimeStamp = fingerprint2.Timestamp
+                }
+                    if (count >= 3) {
+                        LatestTimeStamp = list.Timestamp
                         
                         //hasFingerprints = true
                         //matchedFingerprints.append(hash)
@@ -388,8 +389,6 @@ public class FingerprintManager {
                     }
                 }
             }
-        }
-        count = 0
         print("LatestTimeStamp: \(LatestTimeStamp)")
         return matchedFingerprints.count
     }
