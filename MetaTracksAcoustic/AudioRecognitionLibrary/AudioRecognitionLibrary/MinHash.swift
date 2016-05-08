@@ -12,6 +12,7 @@ public class MinHash {
     var B:Int = 0
     var permutations:[[Int]] = []
     var permutationsCount:Int = 0
+    let maxNumber = 8
     
     init(){
         permutations = DefaultPermutations.GetDefaultPermutations()
@@ -39,7 +40,7 @@ public class MinHash {
         var result:[Int64] = []
         
         
-        let maxNumber = 8
+ 
         
         for (var i = 0; i < numberOfHashTables; i++){
             var array = [UInt8](count: maxNumber, repeatedValue: 0)

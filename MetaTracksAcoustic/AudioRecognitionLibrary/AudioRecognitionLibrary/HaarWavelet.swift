@@ -43,7 +43,7 @@ public class HaarWavelet {
         
         for (var col = 0; col < columnHeight; col++) // Transformation of each column
         {
-            var column:[Float] = [Float](count: rowWidth, repeatedValue: 0) /*Length of each column is equal to number of rows*/
+            var column:[Float] = [Float](count: rowWidth, repeatedValue: 0) // Length of each column is equal to number of rows
             
             for (var row = 0; row < rowWidth; row++){
                 column[row] = retArray[row][col]

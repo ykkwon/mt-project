@@ -12,7 +12,6 @@ public class BassProxy{
         BASS_Init(-1, 44100, 0, nil, nil)
     }
     public static func GetSamplesMono(filename: NSURL!, sampleRate: Int) throws -> Array<Float>{
-        Initialize()
         let totalMilliseconds:Int = 2147483647
         var samples:[Float] = []
         let newPath = filename.relativePath!
@@ -56,7 +55,7 @@ public class BassProxy{
             return samples
         }
         print(BASS_ErrorGetCode())
-        print("An error occured.")
+        print("An error occured while initializing BASS.")
         return [0.0]
     }
 }

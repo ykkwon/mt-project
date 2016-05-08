@@ -292,7 +292,7 @@ public class FingerprintManager {
         return list
     }
     
-    public func CompareFingerprintListsHighest(fingerprints: [HashedFingerprint], toCompare: [HashedFingerprint]) -> Int {
+    public func CompareFingerprintListsHighest(fingerprints: [HashedFingerprint], toCompare: [HashedFingerprint]) -> Double {
         var offsetCounter = Int()
         var fingerprintList = toCompare
         var toCompareList = fingerprints
@@ -322,12 +322,9 @@ public class FingerprintManager {
                 }
         }
         
-        print("LatestTimeStamp: \(LatestTimeStamp)")
-        return matchedFingerprints.count
+        print("Latest matched timestamp: \(LatestTimeStamp)")
+        return LatestTimeStamp
     }
-    
-    
-    
     
     public func binarySearch<T:Comparable>(inputArr:Array<T>, searchItem: T)->Int{
         var lowerIndex = 0;

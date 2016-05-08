@@ -44,7 +44,7 @@ public class Fourier{
     }
     
     private static func GetReversedBits(numberOfBits: Int) -> [Int]{
-        if reverseBits[numberOfBits-1].isEmpty { // TODO: equivalent to == null?
+        if reverseBits[numberOfBits-1].isEmpty {
             var maxBits:Int = Pow2(numberOfBits)
             var reversedBitsTwo:[Int] = [Int](count: maxBits, repeatedValue: 0)
             for (var i = 0; i < maxBits; i++){
@@ -128,12 +128,9 @@ public class Fourier{
             var wR = cos(angle)
             var wI = sin(angle)
             
-            // TODO
             for(var j = 0; j < M; j++){
                 uRLookupF[level].append(Float(uR))
                 uILookupF[level].append(Float(uI))
-                //uRLookupF[level][j] += Float(uR)
-                //uILookupF[level][j] += Float(uI)
                 var uwI:Double = Double(uR) * wI + Double(uI) * wR
                 uI = uwI
             }

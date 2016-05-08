@@ -1,11 +1,3 @@
-//
-//  ViewController.swift
-//  iOSApplication053
-//
-//  Created by metatracks on 22/04/16.
-//  Copyright © 2016 metatracks. All rights reserved.
-//
-
 import UIKit
 import AudioRecognitionLibrary
 import AudioToolbox
@@ -16,7 +8,6 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
     var sampleRate:Int = Int()
     var channels:Int = Int()
     var audioQuality:AVAudioQuality = AVAudioQuality.Max
-    var selectedMovie:String = String()
     var availableMovies:[String] = []
     var mediaTypes:[String] = []
     var receivedHashes:[String] = []
@@ -30,7 +21,8 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
     override func viewDidLoad() {
         
         super.viewDidLoad()
-        IndexMovies()
+        
+        RecordManager.indexMovies()
         tableView = UITableView(frame: UIScreen.mainScreen().bounds, style: UITableViewStyle.Plain)
         tableView.delegate      =   self
         tableView.dataSource    =   self
@@ -60,10 +52,9 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
         stopButton.setTitle("Stop", forState: UIControlState.Normal)
         stopButton.addTarget(self, action: #selector(ViewController.stopButtonAction(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addSubview(stopButton)
-
-        print(BASSVERSION);
         super.viewDidLoad()
-        BassProxy.Initialize()
+        RecordManager.initialize()
+        
     }
 
     func moviePickerButtonAction(sender:UIButton!){
@@ -72,59 +63,24 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
     }
     
     func getFingerprintsButtonAction(sender:UIButton!){
-        let defaultSession = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
-        var dataTask: NSURLSessionDataTask?
-        let orig = "http://webapi-1.bwjyuhcr5p.eu-west-1.elasticbeanstalk.com/Fingerprints/GetAllFingerprintsSQL?inputTitle='" + selectedMovie + "'"
-        let spacesEscaped :String = orig.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
-        
-        let url = NSURL(string: spacesEscaped)
-        
-        dataTask = defaultSession.dataTaskWithURL(url!) {
-            data, response, error in
-            
-            dispatch_async(dispatch_get_main_queue()) {
-                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-            }
-            let hashtemp = String(data: data!, encoding: NSUTF8StringEncoding)!
-            self.receivedHashes = hashtemp.componentsSeparatedByString(";")
-        }
-        dataTask?.resume()
-        let orig2 = "http://webapi-1.bwjyuhcr5p.eu-west-1.elasticbeanstalk.com/Fingerprints/GetAllTimestampsSQL?inputTitle='" + self.selectedMovie + "'"
-        let spacesEscaped2 :String = orig2.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
-        
-        let url2 = NSURL(string: spacesEscaped2)
-        
-        dataTask = defaultSession.dataTaskWithURL(url2!) {
-            data, response, error in
-            
-            dispatch_async(dispatch_get_main_queue()) {
-                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-            }
-            let timestamptemp = String(data: data!, encoding: NSUTF8StringEncoding)!
-            self.receivedTimestamps = timestamptemp.componentsSeparatedByString(";")
-            print("Received hashes and timestamps for " + self.selectedMovie + ".")
-            print("Hashes: " + String(self.receivedHashes.count))
-            print("Timestamps: " + String(self.receivedTimestamps.count))
-            
-            self.manager.getFingerprints(self.receivedHashes, receivedTimestamps: self.receivedTimestamps)
-        }
-        dataTask?.resume()
-        
+        RecordManager.getFingerprintsFull()
     }
     
     func recordButtonAction(sender:UIButton!){
-        manager.record()
-        print("Done recording")
-        
+        let qualityOfServiceClass = QOS_CLASS_BACKGROUND
+        let backgroundQueue = dispatch_get_global_queue(qualityOfServiceClass, 0)
+        dispatch_async(backgroundQueue, {
+            RecordManager.startSyncing()
+        })
+   
     }
     
     func stopButtonAction(sender:UIButton!){
-       self.manager.play()
+       RecordManager.stopSyncing()
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     let textCellIdentifier = "cell"
@@ -135,39 +91,20 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.availableMovies.count
+        return RecordManager.availableMovies.count
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        selectedMovie = availableMovies[indexPath.row]
+        RecordManager.selectedMovie = RecordManager.availableMovies[indexPath.row]
         tableView.hidden = true
-        print("Selected movie: " + selectedMovie)
+        print("Selected movie: " + RecordManager.selectedMovie)
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell{
         let cell = tableView.dequeueReusableCellWithIdentifier(textCellIdentifier, forIndexPath: indexPath)
         let row = indexPath.row
-        out = availableMovies[indexPath.row]
-        cell.textLabel?.text = availableMovies[row]
+        out = RecordManager.availableMovies[indexPath.row]
+        cell.textLabel?.text = RecordManager.availableMovies[row]
         return cell
-    }
-    
-    func IndexMovies(){
-        let defaultSession = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
-        var dataTask: NSURLSessionDataTask?
-        let url = NSURL(string: "http://webapi-1.bwjyuhcr5p.eu-west-1.elasticbeanstalk.com/Fingerprints/GetAllTitlesSQL")
-        
-        dataTask = defaultSession.dataTaskWithURL(url!) {
-            data, response, error in
-            
-            dispatch_async(dispatch_get_main_queue()) {
-                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-            }
-            let temp = String(data: data!, encoding: NSUTF8StringEncoding)!
-            self.availableMovies = temp.componentsSeparatedByString(",")
-            print("Indexed movies.")
-        }
-        dataTask?.resume()
-        
     }
 }
