@@ -13,7 +13,7 @@ public var WindowSize:Int = 2048
 public var MinFrequency:Int = 318
 public var MaxFrequency:Int = 2000
 public var TopWavelets:Int = 200
-public var SampleRate:Int = 11025
+public var SampleRate:Int = 5512
 public var LogBase:Double = M_E
 public var FingerprintWidth = 128
 public var Stride:Int = -(Overlap * FingerprintWidth) + 1024
@@ -43,7 +43,7 @@ public class FingerprintManager {
         MinFrequency = 318
         MaxFrequency = 2000
         TopWavelets = 200
-        SampleRate = 11025
+        SampleRate = 5512
         LogBase = M_E
         Stride = -(Overlap * FingerprintWidth) + 1024
         if spacedLogFreq.isEmpty {
@@ -161,7 +161,7 @@ public class FingerprintManager {
             
             var timestamp:Double = (Double(overlap)/Double(sampleRate))
             
-            var temp = HaarWavelet.Transform(frames)
+            var temp = HaarWavelet.TransformImage(frames)
             let image = ExtractTopWavelets(temp)
             var fingerp:Fingerprint = Fingerprint(signature: image, sequenceNo: sequenceNr, timestamp: Double(start)*timestamp)
             fingerPrints.append(fingerp)

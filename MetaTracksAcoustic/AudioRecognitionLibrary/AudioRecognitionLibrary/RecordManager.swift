@@ -8,7 +8,7 @@ public class RecordManager {
     private static let session = AVAudioSession.sharedInstance()
     private static var manager:FingerprintManager = FingerprintManager()
     private static var currentFile = NSURL()
-    
+    public static var LatestTimestamp:Double = 0
     public static var selectedMovie:String = String()
     public static var availableMovies:[String] = []
     private static var receivedHashes:[String] = []
@@ -74,7 +74,7 @@ public class RecordManager {
             let audioURL = NSURL.fileURLWithPathComponents(pathComponents)!
             var recordSettings = [String : AnyObject]()
             recordSettings[AVFormatIDKey] = Int(kAudioFormatLinearPCM)
-            recordSettings[AVSampleRateKey] = 11025
+            recordSettings[AVSampleRateKey] = 5512
             recordSettings[AVNumberOfChannelsKey] = 1
             recordSettings[AVEncoderAudioQualityKey] = AVAudioQuality.Max.rawValue
             self.audioRecorder = try AVAudioRecorder(URL: audioURL, settings: recordSettings)
@@ -104,10 +104,11 @@ public class RecordManager {
                 self.audioRecorder?.recordForDuration(5)
                 sleep(4)
                 self.audioRecorder?.stop()
-                let monoArray = try BassProxy.GetSamplesMono(filePath, sampleRate: 11025)
+                let monoArray = try BassProxy.GetSamplesMono(filePath, sampleRate: 5512)
                 var preliminaryFingerprints = self.manager.CreateFingerprints(monoArray)
                 var test = self.manager.GetFingerHashes(preliminaryFingerprints)
                 var result = self.manager.CompareFingerprintListsHighest(test, toCompare: self.storedFingerprints)
+                LatestTimeStamp = result
             }catch (_) {
                 
                 }

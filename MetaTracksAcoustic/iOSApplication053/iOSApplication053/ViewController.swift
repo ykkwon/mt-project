@@ -67,12 +67,12 @@ class ViewController: UIViewController,UITableViewDelegate, UITableViewDataSourc
     }
     
     func recordButtonAction(sender:UIButton!){
-        let qualityOfServiceClass = QOS_CLASS_BACKGROUND
-        let backgroundQueue = dispatch_get_global_queue(qualityOfServiceClass, 0)
-        dispatch_async(backgroundQueue, {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
             RecordManager.startSyncing()
-        })
-   
+            dispatch_async(dispatch_get_main_queue()) {
+                self.foregroundLabel.text = String(RecordManager.LatestTimestamp)
+            }
+        }
     }
     
     func stopButtonAction(sender:UIButton!){

@@ -13,7 +13,7 @@ public var WindowSize:Int = 2048
 public var MinFrequency:Int = 318
 public var MaxFrequency:Int = 2000
 public var TopWavelets:Int = 200
-public var SampleRate:Int = 11025
+public var SampleRate:Int = 5512
 public var LogBase:Double = M_E
 public var FingerprintWidth = 128
 public var Stride:Int = -(Overlap * FingerprintWidth) + 1024
@@ -43,7 +43,7 @@ public class FingerprintManager {
         MinFrequency = 318
         MaxFrequency = 2000
         TopWavelets = 200
-        SampleRate = 11025
+        SampleRate = 5512
         LogBase = M_E
         Stride = -(Overlap * FingerprintWidth) + 1024
         if spacedLogFreq.isEmpty {
@@ -69,9 +69,8 @@ public class FingerprintManager {
         return indexes
     }
     
-    public func CreateLogSpectrogram(samples: [Float]) -> [[Float]]{
-        
-        NormalizeInPlace(samples)
+    public func CreateLogSpectrogram(internalSamples: [Float]) -> [[Float]]{
+        var samples = NormalizeInPlace(internalSamples)
         let overlap = Overlap
         let windowSize = WindowSize
         var windowArray = WindowFunction.GetWindow(windowSize)
@@ -92,7 +91,8 @@ public class FingerprintManager {
         return frames
     }
     
-    public func NormalizeInPlace(samples: [Float]){
+    public func NormalizeInPlace(samples: [Float]) -> [Float]{
+        
         var internalSamples:[Float] = samples
         let Minrms:Double = 0.1
         let Maxrms:Double = 3.0
@@ -115,8 +115,8 @@ public class FingerprintManager {
             internalSamples[i] = internalSamples[i] / Float(rms)
             internalSamples[i] = min(internalSamples[i], 1)
             internalSamples[i] = max(internalSamples[i], -1)
-            internalSamples = samples
         }
+        return internalSamples
     }
     
     public func CreateFingerprints(samples: [Float]) -> [Fingerprint] {
@@ -146,7 +146,7 @@ public class FingerprintManager {
             
             var timestamp:Double = (Double(overlap)/Double(sampleRate))
             
-            var temp = HaarWavelet.Transform(frames)
+            var temp = HaarWavelet.TransformImage(frames)
             let image = ExtractTopWavelets(temp)
             var fingerp:Fingerprint = Fingerprint(signature: image, sequenceNo: sequenceNr, timestamp: Double(start)*timestamp)
             fingerPrints.append(fingerp)
@@ -293,7 +293,6 @@ public class FingerprintManager {
     }
     
     public func CompareFingerprintListsHighest(fingerprints: [HashedFingerprint], toCompare: [HashedFingerprint]) -> Double {
-        var offsetCounter = Int()
         var fingerprintList = toCompare
         var toCompareList = fingerprints
         var commonCounter = 0
@@ -301,20 +300,21 @@ public class FingerprintManager {
         
         for(var i = 0; i < fingerprintList.count; i++){
             var list = fingerprintList[i]
-            
+            var count = 0
             for(var j = 0; j < toCompareList.count; j++){
                 var fingerprint2 = toCompareList[j]
                 var set2 = fingerprint2.HashBins
-                var count = 0
+                
                 
                 for(var l = 0; l < list.HashBins.count; l++){
                     var hash = list.HashBins[l]
                     var searchIndex = binarySearch(set2, searchItem: hash);
-                    
+                
                     if (searchIndex != -1) {
                         count++
                         }
                     }
+
                     if (count >= 3) {
                     LatestTimeStamp = list.Timestamp
                     break
@@ -323,6 +323,7 @@ public class FingerprintManager {
         }
         
         print("Latest matched timestamp: \(LatestTimeStamp)")
+        RecordManager.LatestTimestamp = LatestTimeStamp
         return LatestTimeStamp
     }
     
