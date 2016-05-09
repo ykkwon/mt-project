@@ -37,7 +37,7 @@ class ViewController: NSViewController {
 
     @IBAction func openAction(sender: AnyObject) {
         let openPanel = NSOpenPanel()
-        openPanel.title = "Choose a file"
+        openPanel.title = "Choose a movie or music file."
         openPanel.beginWithCompletionHandler({(result:Int) in
             if(result == NSFileHandlingPanelOKButton)
             {
@@ -50,9 +50,10 @@ class ViewController: NSViewController {
 
     @IBAction func sendAction(sender: AnyObject) {
         var fullmessage:String = String()
-        let fileName = "sample.csv"
+        let fileName = "samples.csv"
         var filePath = "/Users/metatracks/Desktop/"
         let fullPath = filePath + fileName
+        
         let fingerprints:Array<Fingerprint> = manager.CreateFingerprints(fileURL);
         let test = manager.GetFingerHashes(fingerprints);
         inputTitle = titleField.stringValue
@@ -81,26 +82,17 @@ class ViewController: NSViewController {
  
         do {
             try fullmessage.writeToFile(fullPath, atomically: true, encoding: NSUTF8StringEncoding)
-            //
+            
         } catch {
             
             print("Failed to create file")
             print("\(error)")
         }
-
-        
-        
-    
+            
+            
         }
     }
-    
-    
-        
-        
-        //Main.Status = "Printed CSV file to: " + Path.GetTempPath() + _entryName + "fingerprints.csv";
-        //Main.Status = "Wrapping up. . .";
-        //_fdbm.WriteToMySql(Path.GetTempPath() + _entryName + "fingerprints.csv");
-        //Main.Status = "Done.";
 }
+
 
 
