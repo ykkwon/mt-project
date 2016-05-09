@@ -60,5 +60,6 @@
             </Rectangle.RenderTransform>
         </Rectangle>
         <ProgressBar x:Name="ProgressBar" HorizontalAlignment="Left" Height="25" Margin="20,264,0,0" Grid.Row="1" VerticalAlignment="Top" Width="190" Value="-1"/>
+        <Button x:Name="sendFullCSVFile" Content="CSV" HorizontalAlignment="Left" Margin="20,390,0,0" Grid.Row="1" VerticalAlignment="Top" Width="75" Click="sendFullCSVFile_Click"/>
     </Grid>
 </Window>

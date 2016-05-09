@@ -32,6 +32,33 @@ namespace DatabasePopulationApplication_0._4._5
         private string _tmdbId;
         private string _filename;
         private bool _fileopened;
+        private string csvFileName;
+
+        private void sendFullCSVFile_Click(object sender, RoutedEventArgs e)
+        {
+            (new Thread(() =>
+            {
+                try
+                {
+                    OpenFileDialog ofdcsv = new OpenFileDialog();
+                    if (ofdcsv.ShowDialog() == true)
+                    {
+                        _fileopened = true;
+                        csvFileName = ofdcsv.FileName;
+                        Main.Status = "Opened file: " + _filename;
+                        Main.Status = "Writing to MySQL.";
+                        _fdbm.WriteToMySql(csvFileName);
+                        Main.Status = "Done.";
+                    }
+                }
+                catch (TypeInitializationException exception)
+                {
+                    Console.WriteLine(exception);
+                    Main.Status = "Not connected to database. Connect through AWS Explorer.";
+                }
+            })).Start();
+            foregroundLabelCounter += 4;
+        }    
 
         private void openButton_Click(object sender, RoutedEventArgs e)
         {
