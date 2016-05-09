@@ -364,18 +364,16 @@ namespace DatabasePopulationApplication_0._4._5
                             string[] receivedtime = new string[receivedHashes.Length];
 
                             var fingerprints2 = manager.CreateFingerprints(_filename);
-
-
+                            
                             var toCompare = manager.GetFingerHashes(fingerprints2);
                             var movie = manager.GenerateHashedFingerprints(receivedHashes, receivedtime);
 
                             // Splits the list of fingerprints into smaller chunks, for faster searching
-                            var newList = manager.SplitFingerprintLists(movie);
-                            var result = 0.0;
-                            foreach (var movieChunk in newList)
+                            ///var newList = manager.SplitFingerprintLists(movie);
+                            /*foreach (var movieChunk in newList)
                             {
                                 result += manager.CompareFingerprintListsHighest(movieChunk, toCompare);
-                            }
+                            }*/
 
                             // NOTE TO SELF: We should split up fingerprints of movie into different lists, 
                             // ie. fingerprints from timestamp 0 - 600 seconds (10min) goes in one list, next 600seconds go to next list.

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-
 namespace AcousticFingerprintingLibrary_0._4._5.FFT
 {
     /// <summary>
@@ -324,6 +323,7 @@ namespace AcousticFingerprintingLibrary_0._4._5.FFT
                     }
                 }
             }
+            //
         }
     }
 }

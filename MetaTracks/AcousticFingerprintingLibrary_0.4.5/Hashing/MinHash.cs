@@ -26,9 +26,6 @@ namespace AcousticFingerprintingLibrary_0._4._5.Hashing
         public MinHash()
         {
             _permutations = DefaultPermutations.GetDefaultPermutations();
-
-            if (_permutations == null || _permutations.Length == 0)
-                throw new Exception("Permutations are null or not enough to create the Min Hash signature");
         }
 
         public byte[] ComputeMinHashSignatureByte(bool[] fingerprint)
@@ -38,7 +35,7 @@ namespace AcousticFingerprintingLibrary_0._4._5.Hashing
             byte[] minHash = new byte[perms.Length]; /*100*/
             for (int i = 0; i < perms.Length /*100*/; i++)
             {
-                minHash[i] = 255; /*The probability of occurrence of 1 after position 255 is very insignificant*/
+                minHash[i] = 255;
                 for (int j = 0; j < perms[i].Length /*256*/; j++)
                 {
                     if (signature[perms[i][j]])

@@ -7,25 +7,45 @@ namespace AcousticFingerprintingLibrary_0._4._5.Hashing
     /// </summary>
     public class HaarWavelet
     {
+        private float[][] globalArrays;
         /// <summary>
         ///   Apply Haar Wavelet transformation on the 2d array
         /// </summary>
         /// <param name = "array">Array being transformed</param>
-        public void TransformImage(float[][] array)
+        public float[][] TransformImage(float[][] array)
         {
-            Transform(array);
+            globalArrays = array; // Use a global variable to avoid using pointers
+            TwoHaarWavelet();
+            return globalArrays;
         }
 
-        /// <summary>
-        ///   Transformation taken from
-        ///   Wavelets for Computer Graphics: A Primer Part by Eric J. Stollnitz Tony D. DeRose David H. Salesin
-        /// </summary>
-        /// <param name = "array">Array to be decomposed</param>
-        private static void Transform(float[] array)
+        public void TwoHaarWavelet()
         {
+            var rowWidth = globalArrays.GetLength(0);
+            var columnHeight = globalArrays[0].Length;
+
+            for (var row = 0; row < rowWidth; row++) // Transformation of each row
+                globalArrays[row] = OneHaarWavelet(globalArrays[row]);
+
+            for (var col = 0; col < columnHeight; col++) // Transformation of each column
+            {
+                var column = new float[rowWidth]; /*Length of each column is equal to number of rows*/
+                for (var row = 0; row < rowWidth; row++)
+                    column[row] = globalArrays[row][col]; // Saves values into temp array "column"
+
+                var colm = OneHaarWavelet(column); // 1d Transforms column
+
+                for (var row = 0; row < rowWidth; row++)
+                    globalArrays[row][col] = colm[row]; // Saves results into array
+            }
+        }
+
+        public float[] OneHaarWavelet(float[] arrayNN)
+        {
+            var array = arrayNN; // Avoid pointers
             var haar = array.Length;
-            for (var index0 = 0; index0 < haar; index0++) /*doesn't introduce any change in the final fingerprint array*/
-                array[index0] /= (float)Math.Sqrt(haar); /*because works as a linear normalize*/
+            for (var index0 = 0; index0 < haar; index0++)
+                array[index0] /= (float)Math.Sqrt(haar);
             var temp = new float[haar];
 
             while (haar > 1)
@@ -41,32 +61,7 @@ namespace AcousticFingerprintingLibrary_0._4._5.Hashing
                     array[index] = temp[index];
                 }
             }
-        }
-
-        /// <summary>
-        /// The two dimensional haar wavelet transform. It uses the one-dimensional transform for each row,
-        /// then a one-dimensional transform for each column
-        /// </summary>
-        /// <param name = "array"> Array to be transformed</param>
-        private static void Transform(float[][] array)
-        {
-            var rowWidth = array.GetLength(0);
-            var columnHeight = array[0].Length; 
-
-            for (var row = 0; row < rowWidth; row++) // Transformation of each row
-                Transform(array[row]);
-
-            for (var col = 0; col < columnHeight; col++) // Transformation of each column
-            {
-                var column = new float[rowWidth]; /*Length of each column is equal to number of rows*/
-                for (var row = 0; row < rowWidth; row++)
-                    column[row] = array[row][col]; // Saves values into temp array "column"
-
-                Transform(column); // 1d Transforms column
-
-                for (var row = 0; row < rowWidth; row++)
-                    array[row][col] = column[row]; // Saves results into array
-            }
+            return array;
         }
     }
 }
