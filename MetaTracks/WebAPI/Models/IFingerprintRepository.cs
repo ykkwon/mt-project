@@ -11,5 +11,6 @@ namespace WebAPI.Models
         string GetAllFingerprintsSQL(string title);
         string GetAllTimestampsSQL(string title);
         string GetAllMediaTypesSQL();
+        void WriteToMySql(string filepath);
     }
 }

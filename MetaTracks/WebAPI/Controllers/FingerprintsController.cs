@@ -1,7 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Web;
+using System.Web.Hosting;
+using System.Web.Http;
 using System.Web.Mvc;
 using WebAPI.Models;
 
@@ -16,17 +22,27 @@ namespace WebAPI.Controllers
             return View();
         }
 
+        [System.Web.Mvc.HttpPost]
+        public ActionResult Index(HttpPostedFileBase file)
+        {
+
+            if (file.ContentLength > 0)
+            {
+                var fileName = Path.GetFileName(file.FileName);
+                var path = Path.Combine(HostingEnvironment.MapPath("~/App_Data/uploads"), fileName);
+                _repository.WriteToMySql(path);
+            }
+
+            return RedirectToAction("Index");
+        }
+
         public ActionResult GetFingerprintsByTitle(string inputTitle)
         {
             if (_repository.GetFingerprintsByTitle(inputTitle) != null)
             {
                 return PartialView(_repository.GetFingerprintsByTitle(inputTitle));
             }
-            else
-            {
-                return null;
-            }
-
+            return null;
         }
 
         public string GetSingleFingerprintByHash(string inputHash)

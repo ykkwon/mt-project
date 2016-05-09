@@ -14,6 +14,43 @@ namespace WebAPI.Models
         Table table = Table.LoadTable(client, tableName);
         ScanFilter scanFilter = new ScanFilter();
 
+        public void WriteToMySql(string filepath)
+        {
+
+
+            var newFilePath = filepath.Replace('\\', '/');
+            string cs = @"server=webapidb.c7tab1cc7vsa.eu-west-1.rds.amazonaws.com;user=glennskjong;database=system_users;password=Bachelor2016!";
+            MySqlConnection conn = null;
+
+            try
+            {
+                conn = new MySqlConnection(cs);
+                conn.Open();
+
+                using (MySqlCommand cmd = new MySqlCommand(
+                             string.Format("LOAD DATA LOCAL INFILE '{0}' INTO TABLE fingerprintTable FIELDS TERMINATED BY ';' LINES TERMINATED BY '\n';", newFilePath), conn))
+                {
+
+                    cmd.CommandTimeout = 99999;
+                    cmd.ExecuteNonQuery();
+                }
+                Console.WriteLine(@"Done");
+
+            }
+            catch (MySqlException ex)
+            {
+                Console.WriteLine("Error: {0}", ex);
+
+            }
+
+            finally
+            {
+                conn?.Close();
+            }
+        }
+
+
+
         public string GetSingleFingerprintByHash(string hash)
         {
             scanFilter.AddCondition("Fingerprint", ScanOperator.Equal, hash);
