@@ -13,7 +13,6 @@ import AcousticFingerprintingLibrary
 class ViewController: NSViewController {
     
     var fileURL:NSURL = NSURL()
-    var fdbm:FingerprintDatabaseManager = FingerprintDatabaseManager()
     var manager:FingerprintManager = FingerprintManager()
     var inputTitle:String = String()
     var inputType:String = String()

@@ -128,12 +128,9 @@ public class Fourier{
             var wR = cos(angle)
             var wI = sin(angle)
             
-            // TODO
             for(var j = 0; j < M; j++){
                 uRLookupF[level].append(Float(uR))
                 uILookupF[level].append(Float(uI))
-                //uRLookupF[level][j] += Float(uR)
-                //uILookupF[level][j] += Float(uI)
                 var uwI:Double = Double(uR) * wI + Double(uI) * wR
                 uI = uwI
             }

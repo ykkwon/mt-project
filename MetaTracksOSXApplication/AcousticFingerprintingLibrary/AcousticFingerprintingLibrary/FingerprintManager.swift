@@ -13,7 +13,7 @@ public var WindowSize:Int = 2048
 public var MinFrequency:Int = 318
 public var MaxFrequency:Int = 2000
 public var TopWavelets:Int = 200
-public var SampleRate:Int = 5512
+public var SampleRate:Int = 11025
 public var LogBase:Double = M_E
 public var FingerprintWidth = 128
 public var Stride:Int = -(Overlap * FingerprintWidth) + 1024
@@ -43,7 +43,7 @@ public class FingerprintManager {
         MinFrequency = 318
         MaxFrequency = 2000
         TopWavelets = 200
-        SampleRate = 5512
+        SampleRate = 11025
         LogBase = M_E
         Stride = -(Overlap * FingerprintWidth) + 1024
         if spacedLogFreq.isEmpty {
@@ -305,130 +305,5 @@ public class FingerprintManager {
         }
         list.removeFirst()
         return list
-    }
-    
-    public func CompareFingerprintListsHighest(fingerprints: [HashedFingerprint], toCompare: [HashedFingerprint]) -> Int {
-        var fingerprintList = fingerprints
-        var toCompareList = toCompare
-        
-        var commonCounter = 0
-        var highestCommon = 0
-        /*
-        if(false){
-            var foundAnyFingerprints:Bool = false
-            var timestamps:[Double] = []
-            for timestamp in fingerprints {
-                timestamps.append(timestamp.Timestamp)
-            }
-            
-            var lastTime = LatestTimeStamp
-            var matchingIndexes:[Int] = []
-            if needToExpandSearch {
-                searchFieldSize *= 4
-            }
-            
-            var seconds = searchFieldSize
-            var plusTime = min(Int(timestamps.last!), Int(lastTime) + seconds)
-            var minusTime = max(0, Int(lastTime) - seconds)
-            for(var i = 0; i < timestamps.count; i++){
-                if timestamps[i] < Double(plusTime) && timestamps[i] >= Double(minusTime) {
-                    matchingIndexes.append(i)
-                }
-                var currentList:[HashedFingerprint] = []
-                for(var i = 0; i < matchingIndexes.count; i++){
-                    currentList[i] = fingerprints[matchingIndexes[i]]
-                }
-                for list in currentList {
-                    for fingerprint2 in toCompareList{
-                        var set2 = fingerprint2.HashBins
-                        var i = 0
-                        for hash in list.HashBins{
-                            var searchIndex = binarySearch(set2, searchItem: hash);
-                            if searchIndex != -1{
-                                i++
-                            }
-                        }
-                        var count = i
-                        if(count >= 1){
-                            LatestTimeStamp = list.Timestamp
-                            matchedFingerprints.append(list)
-                            foundAnyFingerprints = true
-                            needToExpandSearch = false
-                            searchFieldSize = 15
-                            if(highestCommon <= count){
-                                bestMatchedFingerprint = list
-                                highestCommon = count
-                            }
-                            commonCounter++
-                            break
-                        }
-                        
-                    }
-                }
-                if(!foundAnyFingerprints){
-                    needToExpandSearch = true
-                }
-            }
-            */
-        var count = 0
-        for(var i = 0; i < fingerprintList.count; i++){
-            var list = fingerprintList[i]
-            
-            
-            for(var j = 0; j < toCompareList.count; j++){
-                var fingerprint2 = toCompareList[j]
-                var set2 = fingerprint2.HashBins
-                
-                for(var l = 0; l < set2.count; l++){
-                    var hash = list.HashBins[l]
-                    var searchIndex = binarySearch(set2, searchItem: hash);
-                    if searchIndex != -1 {
-                        count++
-                    }
-                    if (count >= 14) {
-                        LatestTimeStamp = fingerprint2.Timestamp
-                        
-                        //hasFingerprints = true
-                        //matchedFingerprints.append(hash)
-                        /*
-                         if (highestCommon <= count) {
-                         bestMatchedFingerprint = list
-                         highestCommon = count
-                         count = 0
-                         }
-                         */
-                        count = 0
-                        //commonCounter++
-                        break
-                    }
-                }
-            }
-        }
-        count = 0
-        print("LatestTimeStamp: \(LatestTimeStamp)")
-        return matchedFingerprints.count
-    }
-    
-    
-    
-    
-    public func binarySearch<T:Comparable>(inputArr:Array<T>, searchItem: T)->Int{
-        var lowerIndex = 0;
-        var upperIndex = inputArr.count - 1
-        
-        while (true) {
-            var currentIndex = (lowerIndex + upperIndex)/2
-            if(inputArr[currentIndex] == searchItem) {
-                return currentIndex
-            } else if (lowerIndex > upperIndex) {
-                return -1
-            } else {
-                if (inputArr[currentIndex] > searchItem) {
-                    upperIndex = currentIndex - 1
-                } else {
-                    lowerIndex = currentIndex + 1
-                }
-            }
-        }
     }
 }

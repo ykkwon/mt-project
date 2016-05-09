@@ -21,7 +21,7 @@ public class BassProxy{
         if (bassStream == 0){
             print(BASS_ErrorGetCode())
         }
-        let mixerStream = BASS_Mixer_StreamCreate(5512, 1, flags)
+        let mixerStream = BASS_Mixer_StreamCreate(11025, 1, flags)
         if BASS_Mixer_StreamAddChannel(mixerStream, bassStream, flags) {
             let bufferSizeInt = sampleRate * 20 * 4
             var buffer:[Float] = [Float](count: bufferSizeInt, repeatedValue: 0)

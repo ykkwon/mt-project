@@ -74,7 +74,7 @@ public class RecordManager {
             let audioURL = NSURL.fileURLWithPathComponents(pathComponents)!
             var recordSettings = [String : AnyObject]()
             recordSettings[AVFormatIDKey] = Int(kAudioFormatLinearPCM)
-            recordSettings[AVSampleRateKey] = 5512.0
+            recordSettings[AVSampleRateKey] = 11025
             recordSettings[AVNumberOfChannelsKey] = 1
             recordSettings[AVEncoderAudioQualityKey] = AVAudioQuality.Max.rawValue
             self.audioRecorder = try AVAudioRecorder(URL: audioURL, settings: recordSettings)
@@ -104,7 +104,7 @@ public class RecordManager {
                 self.audioRecorder?.recordForDuration(5)
                 sleep(4)
                 self.audioRecorder?.stop()
-                let monoArray = try BassProxy.GetSamplesMono(filePath, sampleRate: 5512)
+                let monoArray = try BassProxy.GetSamplesMono(filePath, sampleRate: 11025)
                 var preliminaryFingerprints = self.manager.CreateFingerprints(monoArray)
                 var test = self.manager.GetFingerHashes(preliminaryFingerprints)
                 var result = self.manager.CompareFingerprintListsHighest(test, toCompare: self.storedFingerprints)

@@ -17,7 +17,6 @@
 		8B99B9BD1CDBC6DD00B274A5 /* BassProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B99B9B91CDBC6DD00B274A5 /* BassProxy.swift */; };
 		8B99B9BE1CDBC6DD00B274A5 /* Fingerprint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B99B9BA1CDBC6DD00B274A5 /* Fingerprint.swift */; };
 		8B99B9BF1CDBC6DD00B274A5 /* FingerprintManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B99B9BB1CDBC6DD00B274A5 /* FingerprintManager.swift */; };
-		8B99B9C01CDBC6DD00B274A5 /* RecordManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B99B9BC1CDBC6DD00B274A5 /* RecordManager.swift */; };
 		8B99B9C51CDBC73D00B274A5 /* Complex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B99B9C11CDBC73D00B274A5 /* Complex.swift */; };
 		8B99B9C61CDBC73D00B274A5 /* Fourier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B99B9C21CDBC73D00B274A5 /* Fourier.swift */; };
 		8B99B9C71CDBC73D00B274A5 /* FourierDirection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B99B9C31CDBC73D00B274A5 /* FourierDirection.swift */; };
@@ -58,7 +57,6 @@
 		8B99B9B91CDBC6DD00B274A5 /* BassProxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BassProxy.swift; sourceTree = "<group>"; };
 		8B99B9BA1CDBC6DD00B274A5 /* Fingerprint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fingerprint.swift; sourceTree = "<group>"; };
 		8B99B9BB1CDBC6DD00B274A5 /* FingerprintManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FingerprintManager.swift; sourceTree = "<group>"; };
-		8B99B9BC1CDBC6DD00B274A5 /* RecordManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordManager.swift; sourceTree = "<group>"; };
 		8B99B9C11CDBC73D00B274A5 /* Complex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Complex.swift; sourceTree = "<group>"; };
 		8B99B9C21CDBC73D00B274A5 /* Fourier.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fourier.swift; sourceTree = "<group>"; };
 		8B99B9C31CDBC73D00B274A5 /* FourierDirection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FourierDirection.swift; sourceTree = "<group>"; };
@@ -109,7 +107,6 @@
 				8B99B9B91CDBC6DD00B274A5 /* BassProxy.swift */,
 				8B99B9BA1CDBC6DD00B274A5 /* Fingerprint.swift */,
 				8B99B9BB1CDBC6DD00B274A5 /* FingerprintManager.swift */,
-				8B99B9BC1CDBC6DD00B274A5 /* RecordManager.swift */,
 				8B99B9A31CDBC4D600B274A5 /* Frameworks */,
 				8B99B9A61CDBC4E900B274A5 /* Hashing */,
 				8B99B9A51CDBC4E200B274A5 /* Fourier */,
@@ -262,7 +259,6 @@
 			files = (
 				8B99B9C61CDBC73D00B274A5 /* Fourier.swift in Sources */,
 				8B99B9C81CDBC73D00B274A5 /* HanningWindow.swift in Sources */,
-				8B99B9C01CDBC6DD00B274A5 /* RecordManager.swift in Sources */,
 				8B99B9CC1CDBC7A200B274A5 /* DefaultPermutations.swift in Sources */,
 				8B99B9CD1CDBC7A200B274A5 /* HaarWavelet.swift in Sources */,
 				8B99B9C71CDBC73D00B274A5 /* FourierDirection.swift in Sources */,
