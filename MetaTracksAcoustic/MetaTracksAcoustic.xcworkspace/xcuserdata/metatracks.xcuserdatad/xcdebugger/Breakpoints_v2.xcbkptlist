@@ -167,40 +167,8 @@
             timestampString = "484430646.09947"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "9"
-            endingLineNumber = "9"
-            landmarkName = "ViewController"
-            landmarkType = "3">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "iOSApplication053/iOSApplication053/ViewController.swift"
-            timestampString = "484430646.09947"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
             startingLineNumber = "7"
             endingLineNumber = "7"
-            landmarkName = "ViewController"
-            landmarkType = "3">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "iOSApplication053/iOSApplication053/ViewController.swift"
-            timestampString = "484430646.09947"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "11"
-            endingLineNumber = "11"
             landmarkName = "ViewController"
             landmarkType = "3">
          </BreakpointContent>
@@ -408,11 +376,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AudioRecognitionLibrary/AudioRecognitionLibrary/RecordManager.swift"
-            timestampString = "484488087.705322"
+            timestampString = "484677797.501835"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "149"
-            endingLineNumber = "149"
+            startingLineNumber = "172"
+            endingLineNumber = "172"
             landmarkName = "RecordManager"
             landmarkType = "3">
          </BreakpointContent>
@@ -1131,22 +1099,6 @@
             startingLineNumber = "148"
             endingLineNumber = "148"
             landmarkName = "FFT(_:length:direction:)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "iOSApplication053/iOSApplication053/ViewController.swift"
-            timestampString = "484430973.333764"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "47"
-            endingLineNumber = "47"
-            landmarkName = "viewDidLoad()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -2074,8 +2026,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "56"
             endingLineNumber = "56"
-            landmarkName = "GroupMinHashToLshBucketsByte(_:numberOfHashTables:numberOfMinHashesPerKey:)"
-            landmarkType = "5">
+            landmarkName = "MinHash"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2129,7 +2081,7 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "No"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AudioRecognitionLibrary/AudioRecognitionLibrary/FingerprintManager.swift"
@@ -2197,13 +2149,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AudioRecognitionLibrary/AudioRecognitionLibrary/RecordManager.swift"
-            timestampString = "484488087.705322"
+            timestampString = "484677797.501835"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "138"
-            endingLineNumber = "138"
-            landmarkName = "RecordManager"
-            landmarkType = "3">
+            startingLineNumber = "161"
+            endingLineNumber = "161"
+            landmarkName = "getFingerprints(_:receivedTimestamps:)"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2213,11 +2165,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AudioRecognitionLibrary/AudioRecognitionLibrary/RecordManager.swift"
-            timestampString = "484488087.705322"
+            timestampString = "484677797.501835"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "137"
-            endingLineNumber = "137"
+            startingLineNumber = "160"
+            endingLineNumber = "160"
             landmarkName = "getFingerprints(_:receivedTimestamps:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -2293,11 +2245,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AudioRecognitionLibrary/AudioRecognitionLibrary/RecordManager.swift"
-            timestampString = "484432548.769923"
+            timestampString = "484677797.501835"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "103"
-            endingLineNumber = "103"
+            startingLineNumber = "126"
+            endingLineNumber = "126"
             landmarkName = "startSyncing()"
             landmarkType = "5">
          </BreakpointContent>
@@ -2389,11 +2341,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AudioRecognitionLibrary/AudioRecognitionLibrary/RecordManager.swift"
-            timestampString = "484432548.769923"
+            timestampString = "484677797.501835"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "109"
-            endingLineNumber = "109"
+            startingLineNumber = "132"
+            endingLineNumber = "132"
             landmarkName = "startSyncing()"
             landmarkType = "5">
          </BreakpointContent>
@@ -2485,11 +2437,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AudioRecognitionLibrary/AudioRecognitionLibrary/RecordManager.swift"
-            timestampString = "484488087.705322"
+            timestampString = "484677797.501835"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "112"
-            endingLineNumber = "112"
+            startingLineNumber = "135"
+            endingLineNumber = "135"
             landmarkName = "startSyncing()"
             landmarkType = "5">
          </BreakpointContent>
@@ -2501,11 +2453,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AudioRecognitionLibrary/AudioRecognitionLibrary/RecordManager.swift"
-            timestampString = "484488087.705322"
+            timestampString = "484677797.501835"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "113"
-            endingLineNumber = "113"
+            startingLineNumber = "136"
+            endingLineNumber = "136"
             landmarkName = "startSyncing()"
             landmarkType = "5">
          </BreakpointContent>
@@ -2709,11 +2661,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "AudioRecognitionLibrary/AudioRecognitionLibrary/RecordManager.swift"
-            timestampString = "484432548.769923"
+            timestampString = "484677797.501835"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "105"
-            endingLineNumber = "105"
+            startingLineNumber = "128"
+            endingLineNumber = "128"
             landmarkName = "startSyncing()"
             landmarkType = "5">
          </BreakpointContent>
@@ -2725,11 +2677,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "iOSApplication053/iOSApplication053/ViewController.swift"
-            timestampString = "484431651.242365"
+            timestampString = "484660663.690683"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "22"
-            endingLineNumber = "22"
+            startingLineNumber = "18"
+            endingLineNumber = "18"
             landmarkName = "viewDidLoad()"
             landmarkType = "5">
          </BreakpointContent>
@@ -2756,13 +2708,45 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "iOSApplication053/iOSApplication053/ViewController.swift"
-            timestampString = "484488087.705322"
+            filePath = "AudioRecognitionLibrary/AudioRecognitionLibrary/RecordManager.swift"
+            timestampString = "484659979.231259"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "69"
-            endingLineNumber = "69"
-            landmarkName = "recordButtonAction(_:)"
+            startingLineNumber = "31"
+            endingLineNumber = "31"
+            landmarkName = "indexMovies(_:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "iOSApplication053/iOSApplication053/ViewController.swift"
+            timestampString = "484677843.400754"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "27"
+            endingLineNumber = "27"
+            landmarkName = "viewDidLoad()"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "AudioRecognitionLibrary/AudioRecognitionLibrary/FingerprintManager.swift"
+            timestampString = "484678000.114705"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "156"
+            endingLineNumber = "156"
+            landmarkName = "CreateFingerprints(_:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

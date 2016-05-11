@@ -7,7 +7,7 @@ import Foundation
 
 public class MinHash {
     var HashBucketSize:Int = 100000
-    var PrimeP:CLong = 2147483659
+    var PrimeP:Int64 = 2147483659
     var A:Int = 1
     var B:Int = 0
     var permutations:[[Int]] = []
@@ -39,8 +39,6 @@ public class MinHash {
         var iterator:[Int] = []
         var result:[Int64] = []
         
-        
- 
         
         for (var i = 0; i < numberOfHashTables; i++){
             var array = [UInt8](count: maxNumber, repeatedValue: 0)

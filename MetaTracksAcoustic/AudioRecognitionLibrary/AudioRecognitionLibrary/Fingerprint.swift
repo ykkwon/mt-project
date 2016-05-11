@@ -17,8 +17,6 @@ public class Fingerprint {
     }
 }
 
-
-
 public class HashedFingerprint {
     init(hashBins: [Int64], sequenceNumber: Int, sequenceAt: Double){
         HashBins = hashBins;

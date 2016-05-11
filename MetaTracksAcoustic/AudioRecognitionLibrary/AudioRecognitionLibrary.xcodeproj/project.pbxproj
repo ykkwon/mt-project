@@ -35,7 +35,7 @@
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
-			dstSubfolderSpec = 6;
+			dstSubfolderSpec = 10;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -370,6 +370,7 @@
 		8B50B29E1CCA07800019F8A7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -383,7 +384,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/AudioRecognitionLibrary",
 				);
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "$(inherited)";
 				"OTHER_LDFLAGS[arch=*]" = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = mt.metatracks.AudioRecognitionLibrary;
@@ -393,12 +394,14 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = "arm64 armv7 armv7s x86_64";
 			};
 			name = Debug;
 		};
 		8B50B29F1CCA07800019F8A7 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -412,7 +415,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/AudioRecognitionLibrary",
 				);
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "$(inherited)";
 				"OTHER_LDFLAGS[arch=*]" = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = mt.metatracks.AudioRecognitionLibrary;
@@ -421,6 +424,7 @@
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos macosx";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = "arm64 armv7 armv7s x86_64";
 			};
 			name = Release;
 		};

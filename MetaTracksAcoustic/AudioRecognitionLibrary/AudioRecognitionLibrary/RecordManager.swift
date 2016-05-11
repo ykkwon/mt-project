@@ -1,6 +1,6 @@
 import AVFoundation
 
-public class RecordManager {
+@objc public class RecordManager:NSObject {
     public static var storedFingerprints:[HashedFingerprint] = []
     private static var audioPlayer : AVAudioPlayer?
     private static var audioRecorder : AVAudioRecorder?
@@ -15,26 +15,40 @@ public class RecordManager {
     private static var receivedTimestamps:[String] = []
     private static var ableToRecord:Bool = true
     
-    public init(){
+    public override init(){
         
     }
-    public static func indexMovies(){
+    
+    public static func setStoredFingerprints(inputHashes: [String], inputTimestamps: [String]){
+        self.storedFingerprints = getFingerprints(inputHashes, timestamps: inputTimestamps)
+        
+    }
+    
+    public static func setMovie(inputMovie: String){
+        self.selectedMovie = inputMovie
+    }
+    
+    public static func indexMovies(successHandler: (response: [String]) -> Void) {
         let defaultSession = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
         var dataTask: NSURLSessionDataTask?
         let url = NSURL(string: "http://webapi-1.bwjyuhcr5p.eu-west-1.elasticbeanstalk.com/Fingerprints/GetAllTitlesSQL")
         
         dataTask = defaultSession.dataTaskWithURL(url!) {
             data, response, error in
+
             
+            if error != nil {
+                return
+            }
             let temp = String(data: data!, encoding: NSUTF8StringEncoding)!
-            availableMovies = temp.componentsSeparatedByString(",")
-            print("Indexed movies.")
+            let responseString = temp.componentsSeparatedByString(",")
+            successHandler(response: responseString)
         }
-        dataTask?.resume()
-        
+        dataTask!.resume();
     }
     
-    public static func getFingerprintsFull(){
+    
+    public static func getHashes(successHandler: (response: [String]) -> Void) {
         let defaultSession = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
         var dataTask: NSURLSessionDataTask?
         let orig = "http://webapi-1.bwjyuhcr5p.eu-west-1.elasticbeanstalk.com/Fingerprints/GetAllFingerprintsSQL?inputTitle='" + selectedMovie + "'"
@@ -46,8 +60,16 @@ public class RecordManager {
             data, response, error in
             
             let hashtemp = String(data: data!, encoding: NSUTF8StringEncoding)!
-            self.receivedHashes = hashtemp.componentsSeparatedByString(";")
+            let responseString = hashtemp.componentsSeparatedByString(";")
+            successHandler(response: responseString)
         }
+         dataTask?.resume()
+    }
+    
+    
+    public static func getTimestamps(successHandler: (response: [String]) -> Void) {
+        let defaultSession = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
+        var dataTask: NSURLSessionDataTask?
         dataTask?.resume()
         let orig2 = "http://webapi-1.bwjyuhcr5p.eu-west-1.elasticbeanstalk.com/Fingerprints/GetAllTimestampsSQL?inputTitle='" + self.selectedMovie + "'"
         let spacesEscaped2 :String = orig2.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
@@ -58,20 +80,22 @@ public class RecordManager {
             data, response, error in
             
             let timestamptemp = String(data: data!, encoding: NSUTF8StringEncoding)!
-            self.receivedTimestamps = timestamptemp.componentsSeparatedByString(";")
-            print("Received hashes and timestamps for " + self.selectedMovie + ".")
-            print("Hashes: " + String(self.receivedHashes.count))
-            print("Timestamps: " + String(self.receivedTimestamps.count))
-            getFingerprints(receivedHashes, receivedTimestamps: receivedTimestamps)
-            
+            let responseString = timestamptemp.componentsSeparatedByString(";")
+            successHandler(response: responseString)
         }
         dataTask?.resume()
     }
+
+    private static func getFingerprints(hashes: [String], timestamps: [String]) -> [HashedFingerprint]{
+        var t = getFingerprints(hashes, receivedTimestamps: timestamps)
+        return t
+    }
     
-    public static func setRecorder(iterator: Int) -> NSURL {
+    private static func setRecorder(iterator: Int) -> NSURL {
         do {
             let pathComponents = [baseString, "split" + String(iterator) + ".wav"]
             let audioURL = NSURL.fileURLWithPathComponents(pathComponents)!
+            print(audioURL)
             var recordSettings = [String : AnyObject]()
             recordSettings[AVFormatIDKey] = Int(kAudioFormatLinearPCM)
             recordSettings[AVSampleRateKey] = 5512
@@ -85,7 +109,7 @@ public class RecordManager {
             return NSURL(fileURLWithPath: "nil")
         }
     }
-    public static func initialize(){
+    public override static func initialize(){
         BassProxy.Initialize()
     }
     public static func startSyncing(){
@@ -130,9 +154,9 @@ public class RecordManager {
     }
 
     
-    private static func getFingerprints(receivedHashes: [String], receivedTimestamps: [String]){
+    private static func getFingerprints(receivedHashes: [String], receivedTimestamps: [String]) -> [HashedFingerprint]{
         var t = manager.GenerateHashedFingerprints(receivedHashes, receivedTimestamps: receivedTimestamps)
-        storedFingerprints = t
+        return t
         
     }
     

@@ -322,7 +322,6 @@ public class FingerprintManager {
                 }
         }
         
-        print("Latest matched timestamp: \(LatestTimeStamp)")
         RecordManager.LatestTimestamp = LatestTimeStamp
         return LatestTimeStamp
     }
