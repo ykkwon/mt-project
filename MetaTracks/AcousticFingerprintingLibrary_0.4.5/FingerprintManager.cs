@@ -444,16 +444,16 @@ namespace AcousticFingerprintingLibrary_0._4._5
             }
 
             //List<HashedFingerprint> hashedFinger = new List<HashedFingerprint>();
-            var hashedFinger = new HashedFingerprint[listDb.Count];
-            for(var index = 0; index < hashedFinger.Length; index++)
+            var hashedFingerprintList = new HashedFingerprint[listDb.Count];
+            for(var index = 0; index < hashedFingerprintList.Length; index++)
             {
                 var hashfinger = new HashedFingerprint(lshBuckets[index], listDb[index].SequenceNumber,
                     listDb[index].Timestamp);
                 //hashedFinger.Add(hashfinger);
-                hashedFinger[index] = hashfinger;
+                hashedFingerprintList[index] = hashfinger;
             }
 
-            return hashedFinger;
+            return hashedFingerprintList;
         }
 
         /// <summary>
