@@ -118,6 +118,9 @@ namespace iOSApplication_0._5._3
         /// <param name="filePath">Current wave recording file path</param>
         /// <param name="list">List of all possible sublist chunks</param>
         /// <returns>The index of the most probable playback section.</returns>
+        /// 
+
+            /*
         public static int RecordLongFirst(string filePath, List<HashedFingerprint[]> list)
         {
             var monoArray = BassProxy.GetSamplesMono(filePath, 5512);
@@ -132,6 +135,7 @@ namespace iOSApplication_0._5._3
             _secondaryIndex = Manager.FindBestFingerprintList(list, StoredFingerprints.ToArray());
             return _secondaryIndex;
         }
+        */
 
         /// <summary>
         /// Processes wave files continuously, only used in ViewController's Record (LONG).

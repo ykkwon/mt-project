@@ -35,20 +35,23 @@ namespace AcousticFingerprintingLibrary_0._4._5
             BassMix.BASS_Mixer_GetVersion();
 
             // Initialize Bass.ll and set config to floating parameters
-            if (!Bass.BASS_Init(-1, DefaultSampleRate, BASSInit.BASS_DEVICE_DEFAULT | BASSInit.BASS_DEVICE_MONO, IntPtr.Zero)) //Set Sample Rate / MONO
-                throw new Exception(Bass.BASS_ErrorGetCode().ToString());
-            if (!Bass.BASS_SetConfig(BASSConfig.BASS_CONFIG_FLOATDSP, true)) /*Set floating parameters to be passed*/
-                throw new Exception(Bass.BASS_ErrorGetCode().ToString());
+           
         }
 
         #endregion
 
         public static float[] GetSamplesMono(string filename, int samplerate)
         {
+            if (!Bass.BASS_Init(-1, DefaultSampleRate, BASSInit.BASS_DEVICE_DEFAULT | BASSInit.BASS_DEVICE_MONO, IntPtr.Zero)) 
+                throw new Exception(Bass.BASS_ErrorGetCode().ToString());
+            if (!Bass.BASS_SetConfig(BASSConfig.BASS_CONFIG_FLOATDSP, true)) 
+                throw new Exception(Bass.BASS_ErrorGetCode().ToString());
+            Console.WriteLine(Bass.BASS_GetVersion());
+            Console.WriteLine(BassMix.BASS_Mixer_GetVersion());
             int totalmilliseconds = int.MaxValue;
             float[] samples;
-            //create streams for re-sampling
-            var bassStream = Bass.BASS_StreamCreateFile(filename, 0, 0, BASSFlag.BASS_STREAM_DECODE | BASSFlag.BASS_SAMPLE_MONO | BASSFlag.BASS_SAMPLE_FLOAT); //Decode the stream
+     
+            var bassStream = Bass.BASS_StreamCreateFile(filename, 0, 0, BASSFlag.BASS_STREAM_DECODE | BASSFlag.BASS_SAMPLE_MONO | BASSFlag.BASS_SAMPLE_FLOAT ); 
             if (bassStream == 0)
                 throw new Exception(Bass.BASS_ErrorGetCode().ToString());
 
@@ -58,26 +61,24 @@ namespace AcousticFingerprintingLibrary_0._4._5
 
             if (BassMix.BASS_Mixer_StreamAddChannel(mixerStream, bassStream, BASSFlag.BASS_STREAM_DECODE | BASSFlag.BASS_SAMPLE_MONO | BASSFlag.BASS_SAMPLE_FLOAT))
             {
-                var bufferSize = samplerate * 20 * 4; /*read 10 seconds at each iteration*/
+                var bufferSize = samplerate * 20 * 4;
                 var buffer = new float[bufferSize];
                 var chunks = new List<float[]>();
                 var size = 0;
                 while ((float)size / samplerate * 1000 < totalmilliseconds)
                 {
-                    //get re-sampled/mono data
                     var bytesToRead = Bass.BASS_ChannelGetData(mixerStream, buffer, bufferSize);
                     if (bytesToRead == 0)
                         break;
 
-                    var chunk = new float[bytesToRead / 4]; //each float contains 4 bytes
+                    var chunk = new float[bytesToRead / 4];
                     Array.Copy(buffer, chunk, bytesToRead / 4);
                     chunks.Add(chunk);
-                    size += bytesToRead / 4; //size of the data
+                    size += bytesToRead / 4; 
                 }
 
                 samples = new float[size];
 
-                /*Concatenate*/
                 var cursor = 0;
                 for (var i = 0; i < chunks.Count; i++)
                 {
@@ -89,7 +90,7 @@ namespace AcousticFingerprintingLibrary_0._4._5
             else
                 throw new Exception(Bass.BASS_ErrorGetCode().ToString());
 
-            // Free bass from memory
+        // Free bass from memory
             Bass.BASS_StreamFree(mixerStream);
             Bass.BASS_StreamFree(bassStream);
             return samples;

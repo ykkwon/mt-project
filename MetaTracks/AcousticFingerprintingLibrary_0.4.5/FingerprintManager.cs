@@ -94,7 +94,7 @@ namespace AcousticFingerprintingLibrary_0._4._5
             MinFrequency = 318; // Lowest Frequency
             MaxFrequency = 2000; // Highest Frequency
             TopWavelets = 200;
-            SampleRate = 5512;
+            SampleRate = 8000;
             LogBase = Math.E;
             Stride = -(Overlap*FingerprintWidth) + 1024;
             if (_spacedLogFreq == null)
@@ -186,6 +186,7 @@ namespace AcousticFingerprintingLibrary_0._4._5
             var overlap = Overlap;
             var windowSize = WindowSize;
             var width = (samples.Length - windowSize)/overlap; /*width of the image*/
+
             var frames = new float[width][];
             var fftSamples = new float[2*windowSize]; /*even - Re, odd - Img*/
             for (var widthIndex = 0; widthIndex < width; widthIndex++)
@@ -527,7 +528,7 @@ namespace AcousticFingerprintingLibrary_0._4._5
             //return hashBinsList.Select((t, i) => new HashedFingerprint(t, timestampList[i])).ToArray();
         }
 
-        /*
+
         public List<HashedFingerprint[]> SplitFingerprintLists(HashedFingerprint[] movieFingerprints)
         {
             var chunkSize = 1000;
@@ -541,7 +542,8 @@ namespace AcousticFingerprintingLibrary_0._4._5
                 result.Add(buffer);
             }
             return result;
-        }*/
+
+        }
 
         #endregion
 
