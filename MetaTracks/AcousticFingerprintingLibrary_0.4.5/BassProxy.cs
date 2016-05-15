@@ -42,6 +42,7 @@ namespace AcousticFingerprintingLibrary_0._4._5
 
         public static float[] GetSamplesMono(string filename, int samplerate)
         {
+            BassNet.Registration("kristian.stoylen93@gmail.com", "2X20371028152222");
             if (!Bass.BASS_Init(-1, DefaultSampleRate, BASSInit.BASS_DEVICE_DEFAULT | BASSInit.BASS_DEVICE_MONO, IntPtr.Zero)) 
                 throw new Exception(Bass.BASS_ErrorGetCode().ToString());
             if (!Bass.BASS_SetConfig(BASSConfig.BASS_CONFIG_FLOATDSP, true)) 
@@ -59,7 +60,7 @@ namespace AcousticFingerprintingLibrary_0._4._5
             if (mixerStream == 0)
                 throw new Exception(Bass.BASS_ErrorGetCode().ToString());
 
-            if (BassMix.BASS_Mixer_StreamAddChannel(mixerStream, bassStream, BASSFlag.BASS_STREAM_DECODE | BASSFlag.BASS_SAMPLE_MONO | BASSFlag.BASS_SAMPLE_FLOAT))
+            if (BassMix.BASS_Mixer_StreamAddChannel(mixerStream, bassStream, BASSFlag.BASS_MIXER_DOWNMIX))
             {
                 var bufferSize = samplerate * 20 * 4;
                 var buffer = new float[bufferSize];
