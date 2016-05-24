@@ -43,7 +43,7 @@
     <Folder Include="Resources\" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BassProxy.cs" />
+    <Compile Include="BassLoader.cs" />
     <Compile Include="FFT\Complex.cs" />
     <Compile Include="FFT\Fourier.cs" />
     <Compile Include="FFT\FourierDirection.cs" />

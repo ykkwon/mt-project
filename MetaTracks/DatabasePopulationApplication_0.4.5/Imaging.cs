@@ -162,11 +162,11 @@ namespace DatabasePopulationApplication_0._4._5
         /// <param name = "proxy">Proxy manager</param>
         /// <param name = "manager">Fingerprint manager</param>
         /// <returns>Image to be saved</returns>
-        public static Image GetWaveletSpectralImage(string pathToFile, BassProxy proxy, FingerprintManager manager)
+        public static Image GetWaveletSpectralImage(string pathToFile, BassLoader proxy, FingerprintManager manager)
         {
             List<float[][]> wavelets = new List<float[][]>();
             int sampleRate = manager.SampleRate;
-            float[] samples = BassProxy.GetSamplesMono(pathToFile, sampleRate);
+            float[] samples = BassLoader.GetSamplesMono(pathToFile, sampleRate);
             float[][] spectrum = manager.CreateSpectrogram(samples);
             int specLen = spectrum.GetLength(0);
             int start = 0 / manager.Overlap;

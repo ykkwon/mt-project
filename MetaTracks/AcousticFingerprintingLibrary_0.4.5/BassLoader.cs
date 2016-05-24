@@ -13,7 +13,7 @@ namespace AcousticFingerprintingLibrary_0._4._5
     ///   This class containts all methods using bass.net. Bass.net is a c# wrapper for the bass.dll DSP framework. It is used
     ///   for audio processing.
     /// </remarks>
-    public class BassProxy : IDisposable
+    public class BassLoader : IDisposable
     {
         /// <summary>
         ///   Default sample rate used at initialization
@@ -27,7 +27,7 @@ namespace AcousticFingerprintingLibrary_0._4._5
         
         #region Constructors
 
-        static BassProxy()
+        static BassLoader()
         {
             //Call to avoid the freeware splash screen. Didn't see it, but maybe it will appear if the Forms are used :D
             BassNet.Registration("kristian.stoylen93@gmail.com", "2X20371028152222");

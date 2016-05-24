@@ -269,7 +269,7 @@ namespace AcousticFingerprintingLibrary_0._4._5.FFT
             }
         }
 
-        public static void FFT(float[] data, int length, FourierDirection direction)
+        public static void FFT(float[] data, int length/*, FourierDirection direction*/)
         {
             Debug.Assert(data != null);
             Debug.Assert(data.Length >= length * 2);
@@ -285,8 +285,8 @@ namespace AcousticFingerprintingLibrary_0._4._5.FFT
             // successive doubling
             int N = 1;
             int signIndex;
-            if (direction == FourierDirection.Forward) signIndex = 0;
-            else signIndex = 1;
+            //if (direction == FourierDirection.Forward) signIndex = 0;
+            //else signIndex = 1;
 
             for (int level = 1; level <= ln; level++)
             {

@@ -123,7 +123,7 @@ namespace iOSApplication_0._5._3
             /*
         public static int RecordLongFirst(string filePath, List<HashedFingerprint[]> list)
         {
-            var monoArray = BassProxy.GetSamplesMono(filePath, 5512);
+            var monoArray = BassLoader.GetSamplesMono(filePath, 5512);
             // Create an array of fingerprints to be hashed.
             var preliminaryFingerprints = Manager.CreateFingerprints(monoArray);
 
@@ -146,7 +146,7 @@ namespace iOSApplication_0._5._3
         public static double RecordLongSecond(string filePath, int index)
         {
             // Read all the mono values from the input file.
-            var monoArray = BassProxy.GetSamplesMono(filePath, 5512);
+            var monoArray = BassLoader.GetSamplesMono(filePath, 5512);
             // Create an array of fingerprints to be hashed.
             var preliminaryFingerprints = Manager.CreateFingerprints(monoArray);
 
@@ -168,7 +168,7 @@ namespace iOSApplication_0._5._3
         public static double RecordShortFirst(string filePath)
         {
             // Read all the mono values from the input file.
-            var monoArray = BassProxy.GetSamplesMono(filePath, 5512);
+            var monoArray = BassLoader.GetSamplesMono(filePath, 5512);
             // Create an array of fingerprints to be hashed.
             var preliminaryFingerprints = Manager.CreateFingerprints(monoArray);
 

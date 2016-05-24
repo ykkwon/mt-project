@@ -148,7 +148,7 @@ namespace AcousticFingerprintingLibrary_0._4._5
         public float[][] CreateImageSpectrogram(string filename, int milliseconds, int startmilliseconds)
         {
             //read 5512 Hz, Mono, PCM, with a specific bassproxy
-            var samples = BassProxy.GetSamplesMono(filename, SampleRate);
+            var samples = BassLoader.GetSamplesMono(filename, SampleRate);
             NormalizeInPlace(samples);
             var overlap = Overlap;
             var windowSize = WindowSize;
@@ -164,7 +164,7 @@ namespace AcousticFingerprintingLibrary_0._4._5
                     fourierSignal[2*j + 1] = 0;
                 }
                 //FFT transform for gathering the spectrogram
-                Fourier.FFT(fourierSignal, windowSize, FourierDirection.Forward);
+                Fourier.FFT(fourierSignal, windowSize/*, FourierDirection.Forward*/);
                 var temp = new float[windowSize/2 + 1];
                 for (var j = 0; j < windowSize/2 + 1; j++)
                 {
@@ -182,7 +182,7 @@ namespace AcousticFingerprintingLibrary_0._4._5
         public float[][] CreateSpectrogram(float[] samples)
         {
             Console.WriteLine("CreateSpectrogram");
-            NormalizeInPlace(samples);
+            samples = NormalizeInPlace(samples); // OG DITTA ---------------------------------------------------------------------------------
             var overlap = Overlap;
             var windowSize = WindowSize;
             var width = (samples.Length - windowSize)/overlap; /*width of the image*/
@@ -200,7 +200,7 @@ namespace AcousticFingerprintingLibrary_0._4._5
                     fftSamples[2*windowIndex + 1] = 0;
                 }
                 //FFT transform for gathering the spectrogram
-                Fourier.FFT(fftSamples, windowSize, FourierDirection.Forward);
+                Fourier.FFT(fftSamples, windowSize/*, FourierDirection.Forward*/);
                 frames[widthIndex] = ExtractLogBins(fftSamples);
             }
             return frames;
@@ -215,10 +215,11 @@ namespace AcousticFingerprintingLibrary_0._4._5
         ///   Normalizing volume
         /// </summary>
         /// <param name = "samples">Samples of a file to be normalized</param>
-        private static void NormalizeInPlace(IList<float> samples)
+        public static float[] NormalizeInPlace(float[] array)
         {
+            var samples = array; /// DITTA---------------------------------------------------------------------------------
             double squares = 0;
-            var nsamples = samples.Count;
+            var nsamples = samples.Length;
             for (var i = 0; i < nsamples; i++)
             {
                 squares += samples[i]*samples[i];
@@ -237,10 +238,11 @@ namespace AcousticFingerprintingLibrary_0._4._5
                 samples[i] = Math.Min(samples[i], 1);
                 samples[i] = Math.Max(samples[i], -1);
             }
+            return samples; /// OG DOTTA---------------------------------------------------------------------------------
         }
 
         #endregion
-        
+
         #region Frequency Manipulation
 
         /// <summary>
@@ -282,7 +284,7 @@ namespace AcousticFingerprintingLibrary_0._4._5
         public List<Fingerprint> CreateFingerprints(string filename)
         {
             Console.WriteLine("GetSamplesMono");
-            var samples = BassProxy.GetSamplesMono(filename, SampleRate);
+            var samples = BassLoader.GetSamplesMono(filename, SampleRate);
             return CreateFingerprints(samples);
         }
 
@@ -558,75 +560,34 @@ namespace AcousticFingerprintingLibrary_0._4._5
         // Call this to get the newest timestamp found
         public static double LatestTimeStamp { get; set; }
 
-        public bool CompareFingerprintLists(HashedFingerprint[] fingerprints, HashedFingerprint[] toCompare)
+        public double CompareFingerprintLists(HashedFingerprint[] fingerprints, HashedFingerprint[] toCompare)
         {
             var fingerprintList = fingerprints;
             var toCompareList = toCompare;
             //
             var commonCounter = 0;
             var highestCommon = 0;
-            if (LatestTimeStamp > 0)
+            foreach (var fingerprint1 in fingerprintList)
             {
-                bool foundAnyFingerprints = false;
-                List<double> timeStamps = fingerprints.Select(hash => hash.Timestamp).ToList();
-                var lastTime = LatestTimeStamp;
-                List<int> matchingIndexes = new List<int>();
-                if (_needToExpandSearch) // If we need to expand search, multiply searchfield by 4
+                foreach (var fingerprint2 in toCompareList)
                 {
-                    _searchFieldSize *= 4;
-                }
-                var seconds = _searchFieldSize;
-
-                var plusTime = Math.Min(timeStamps.Last(), lastTime + seconds);
-                var minusTime = Math.Max(0, lastTime - seconds);
-                for (var i = 0; i < timeStamps.Count; i++)
-                {
-                    if (timeStamps[i] < plusTime && timeStamps[i] >= minusTime)
-                        matchingIndexes.Add(i);
-                }
-
-                HashedFingerprint[] currentList = new HashedFingerprint[matchingIndexes.Count];
-                for (var i = 0; i < matchingIndexes.Count; i++)
-                {
-                    currentList[i] = fingerprints[matchingIndexes[i]];
-                }
-                foreach (var list in currentList)
-                {
-                    foreach (var count in toCompareList.Select(fingerprint2 => new HashSet<long>(fingerprint2.HashBins)).Select(set2 => list.HashBins.Select(hash => set2.Contains(hash)).Count(qwe => qwe)).Select(i => i).Where(count => count >= 4))
+                    var set2 = new HashSet<long>(fingerprint2.HashBins);
+                    var i = 0;
+                    foreach (var hash in fingerprint1.HashBins)
                     {
-                        LatestTimeStamp = list.Timestamp;
-                        _matchedFingerprints.Add(list);
-
-                        foundAnyFingerprints = true; // Found a fingerprint
-                        _needToExpandSearch = false; // found a fingerprint, so no need to expand searchfield
-                        _searchFieldSize = 15; // Reset searchfield to 15 seconds.
-
-                        // Best matched fingerprint is the fingerprint with the highest number of hashes being equal to original fingerprint
-                        if (highestCommon <= count)
-                        {
-                            _bestMatchedFingerprint = list;
-                            highestCommon = count;
-                        }
-                        // potential match
-                        commonCounter++;
-                        break; // jumps out of loop and on to next fingerprint
+                        var qwe = set2.Contains(hash);
+                        if (qwe) i++;
                     }
-                }
-                if (!foundAnyFingerprints)
-                    _needToExpandSearch = true;
-            }
-            else
-            { // Searches entire list if no fingerprint has been found
-                foreach (var fingerprint1 in fingerprintList)
-                {
-                    foreach (var count in toCompareList.Select(fingerprint2 => new HashSet<long>(fingerprint2.HashBins)).Select(set2 => fingerprint1.HashBins.Select(hash => set2.Contains(hash)).Count(qwe => qwe)).Select(i => i).Where(count => count >= 4))
+                    var count = i;
+                    if (count >= 4)
                     {
-                        LatestTimeStamp = fingerprint1.Timestamp;
                         _matchedFingerprints.Add(fingerprint1);
                         // Best matched fingerprint is the fingerprint with the highest number of hashes being equal to original fingerprint
                         if (highestCommon <= count)
                         {
                             _bestMatchedFingerprint = fingerprint1;
+                            hasFingerprint = true;
+                            LatestTimeStamp = _bestMatchedFingerprint.Timestamp;
                             highestCommon = count;
                         }
                         // potential match
@@ -637,7 +598,7 @@ namespace AcousticFingerprintingLibrary_0._4._5
             }
             // If result is greater than 5% it is a potential match
             var result = (double) (100*commonCounter)/fingerprints.Length;
-            return result > 5; // if result greater than 5, return true, else false
+            return result; // if result greater than 5, return true, else false
         }
 
         public double CompareFingerprintListsHighest(HashedFingerprint[] fingerprints, HashedFingerprint[] toCompare)

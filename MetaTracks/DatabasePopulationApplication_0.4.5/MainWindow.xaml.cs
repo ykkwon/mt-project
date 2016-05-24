@@ -161,7 +161,7 @@ namespace DatabasePopulationApplication_0._4._5
         private void DrawWavelets(SaveFileDialog sfd)
         {
             string path = Path.GetFullPath(sfd.FileName);
-            using (BassProxy proxy = new BassProxy())
+            using (BassLoader proxy = new BassLoader())
             {
                 Main.Status = "Generating wavelet visualization.";
                 FingerprintManager manager = new FingerprintManager();
@@ -364,7 +364,7 @@ namespace DatabasePopulationApplication_0._4._5
 
                 (new Thread(async () =>
                 {
-                    using (BassProxy proxy = new BassProxy())
+                    using (BassLoader proxy = new BassLoader())
                     {
 
                         Main.Status = "Comparing chosen digital file with fingerprints from database.";
@@ -390,8 +390,10 @@ namespace DatabasePopulationApplication_0._4._5
 
                             string[] receivedtime = new string[receivedHashes.Length];
 
+                            Main.Status = "Generating fingerprints";
                             var fingerprints2 = manager.CreateFingerprints(_filename);
-                            
+
+                            Main.Status = fingerprints2.Count + " fingerprints generated, generating hashes.";
                             var toCompare = manager.GetFingerHashes(fingerprints2);
                             var movie = manager.GenerateHashedFingerprints(receivedHashes, receivedtime);
 
@@ -409,7 +411,7 @@ namespace DatabasePopulationApplication_0._4._5
                             // sends in two lists of HashedFingerprints, returns timestamp if they match
                             // Assuming first list is a section of fingerprints from the movie (say a list of fingerprints for 10minutes)
                             //var results = manager.GetTimeStamps(movie, toCompare);
-                            var totalMatch = manager.CompareFingerprintListsHighest(movie, toCompare);
+                            var totalMatch = manager.CompareFingerprintLists(movie, toCompare);
                             Main.Status = "Percentage of matched fingerprints: " + totalMatch;
                         }
                     }

@@ -3,9 +3,9 @@
     /// <summary>
     /// The direction of the fourier transform.
     /// </summary>
-    public enum FourierDirection
+    /*public enum FourierDirection
     {
         Forward = 1,
         Backward = -1,
-    }
+    }*/
 }
